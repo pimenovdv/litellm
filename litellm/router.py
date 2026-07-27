@@ -1208,8 +1208,6 @@ class Router:
     def _initialize_core_endpoints(self):
         """Helper to initialize core router endpoints."""
         self.amoderation = self.factory_function(litellm.amoderation, call_type="moderation")
-        self.aanthropic_messages = self.factory_function(litellm.anthropic_messages, call_type="anthropic_messages")
-        self.anthropic_messages = self.factory_function(litellm.anthropic_messages, call_type="anthropic_messages")
         self.agenerate_content = self.factory_function(litellm.agenerate_content, call_type="agenerate_content")
         self.aadapter_generate_content = self.factory_function(
             litellm.aadapter_generate_content, call_type="aadapter_generate_content"
@@ -5689,7 +5687,7 @@ class Router:
                 if custom_llm_provider and "custom_llm_provider" not in kwargs:
                     kwargs["custom_llm_provider"] = custom_llm_provider
                 if "custom_llm_provider" not in kwargs:
-                    kwargs["custom_llm_provider"] = "gemini"
+                    kwargs["custom_llm_provider"] = "openai"
                 return original_function(**kwargs)
 
             return managed_agents_sync_wrapper
@@ -5964,7 +5962,7 @@ class Router:
             kwargs["custom_llm_provider"] = custom_llm_provider
         # Default to gemini for interactions API
         if "custom_llm_provider" not in kwargs:
-            kwargs["custom_llm_provider"] = "gemini"
+            kwargs["custom_llm_provider"] = "openai"
         # If the proxy accidentally passed agent name as model, clear it
         if kwargs.get("agent") and kwargs.get("model") == kwargs.get("agent"):
             kwargs["model"] = None
@@ -5992,7 +5990,7 @@ class Router:
         if custom_llm_provider and "custom_llm_provider" not in kwargs:
             kwargs["custom_llm_provider"] = custom_llm_provider
         if "custom_llm_provider" not in kwargs:
-            kwargs["custom_llm_provider"] = "gemini"
+            kwargs["custom_llm_provider"] = "openai"
         return await original_function(**kwargs)
 
     async def _pass_through_assistants_endpoint_factory(
@@ -8007,11 +8005,45 @@ class Router:
         # Deferred: build the AdaptiveRouter strategy now that all underlying
         # deployments have been registered.
         self._finalize_adaptive_router_if_configured()
-
     def _add_deployment(self, deployment: Deployment) -> Deployment:
         import os
+        import urllib.parse
+
+        provider = getattr(deployment.litellm_params, "custom_llm_provider", None)
+        if not provider:
+            model = getattr(deployment.litellm_params, "model", "")
+            if model.startswith("custom_openai/"):
+                provider = "custom_openai"
+            elif model.startswith("openai/"):
+                provider = "openai"
+            elif "/" in model:
+                provider = model.split("/")[0]
+            else:
+                provider = "openai"
+
+        if provider and "openai" not in provider:
+            raise ValueError(f"Offline Gateway: External provider {provider} is disabled. Only openai/custom_openai allowed.")
+
+        api_base = getattr(deployment.litellm_params, "api_base", "")
+        if api_base:
+            parsed = urllib.parse.urlparse(api_base)
+            hostname = parsed.hostname or ""
+            is_local = (
+                "localhost" in hostname or
+                "127.0.0.1" in hostname or
+                hostname.endswith(".local") or
+                hostname.startswith("192.168.") or
+                hostname.startswith("10.") or
+                hostname.startswith("172.") or
+                not hostname # allow local paths or empty hostnames
+            )
+
+            if not is_local:
+                raise ValueError(f"Offline Gateway: Cloud endpoints are disabled. Use local api_base. Provided: {api_base}")
 
         #### VALIDATE MODEL ########
+
+
         # Check if this is a prompt management model before validating as LLM provider
         litellm_model = deployment.litellm_params.model
         is_prompt_management_model = False
@@ -11051,8 +11083,43 @@ class Router:
                         request_kwargs.setdefault(key, value)
 
         return pre_routing_hook_response
-
     def get_available_deployment(
+        self,
+        model: str,
+        messages: Optional[List[Dict[str, str]]] = None,
+        specific_deployment: Optional[bool] = False,
+        request_kwargs: Optional[Dict] = None,
+    ) -> Deployment:
+        import urllib.parse
+
+        # Original logic with strict validation added
+        res = self._get_available_deployment_impl(model, messages, specific_deployment, request_kwargs)
+
+        provider = getattr(res.litellm_params, "custom_llm_provider", "openai")
+        if not provider or "openai" not in provider:
+            raise ValueError(f"Offline Gateway: External provider {provider} is disabled. Only openai/custom_openai allowed.")
+
+        api_base = getattr(res.litellm_params, "api_base", "")
+        if api_base:
+            parsed = urllib.parse.urlparse(api_base)
+            hostname = parsed.hostname or ""
+            is_local = (
+                "localhost" in hostname or
+                "127.0.0.1" in hostname or
+                hostname.endswith(".local") or
+                hostname.startswith("192.168.") or
+                hostname.startswith("10.") or
+                hostname.startswith("172.") or
+                not hostname
+            )
+
+            if not is_local:
+                raise ValueError(f"Offline Gateway: Cloud endpoints are disabled. Use local api_base. Provided: {api_base}")
+
+        return res
+
+    def _get_available_deployment_impl(
+
         self,
         model: str,
         messages: Optional[List[Dict[str, str]]] = None,
