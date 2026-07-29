@@ -1241,12 +1241,7 @@ def _get_thought_signature_from_tool(tool: dict, model: Optional[str] = None) ->
             _, signature = parts
             return signature
     # If no signature found and model is gemini-3, return dummy signature
-    from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
-        VertexGeminiConfig,
-    )
 
-    if model and VertexGeminiConfig._is_gemini_3_or_newer(model):
-        return _get_dummy_thought_signature()
     return None
 
 
@@ -1312,13 +1307,7 @@ def convert_to_gemini_tool_call_invoke(
         tool_calls = message.get("tool_calls", None)
         function_call = message.get("function_call", None)
 
-        from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
-            VertexGeminiConfig,
-        )
-
-        forward_tool_call_id = bool(
-            model and VertexGeminiConfig._forward_gemini_function_call_id(model, custom_llm_provider)
-        )
+        forward_tool_call_id = False
 
         if tool_calls is not None:
             for idx, tool in enumerate(tool_calls):
@@ -1502,18 +1491,7 @@ def convert_to_gemini_tool_call_result(
     # Echo the OpenAI tool_call_id on functionResponse (strip thought-signature suffix).
     # Only Google AI Studio Gemini 3+ accepts `id` on function_response parts.
     # Vertex AI and older Gemini models reject the field with HTTP 400.
-    from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
-        VertexGeminiConfig,
-    )
-
     gemini_call_id: Optional[str] = None
-    if model and VertexGeminiConfig._forward_gemini_function_call_id(model, custom_llm_provider):
-        raw_tool_call_id = message.get("tool_call_id")
-        if raw_tool_call_id and isinstance(raw_tool_call_id, str):
-            stripped_id = raw_tool_call_id.split(THOUGHT_SIGNATURE_SEPARATOR, 1)[0]
-            if stripped_id:
-                gemini_call_id = stripped_id
-
     if not name:
         raise Exception(
             "Missing corresponding tool call for tool response message. Received - message={}, last_message_with_tool_calls={}".format(
@@ -4972,7 +4950,6 @@ def make_valid_bedrock_tool_name(input_tool_name: str) -> str:
 
 
 def add_cache_point_tool_block(tool: dict, model: Optional[str] = None) -> Optional[BedrockToolBlock]:
-    from litellm.llms.bedrock.common_utils import is_claude_4_5_on_bedrock
 
     cache_control = tool.get("cache_control", None)
     if cache_control is not None:
@@ -4981,7 +4958,7 @@ def add_cache_point_tool_block(tool: dict, model: Optional[str] = None) -> Optio
             cache_point_block: CachePointBlock = {"type": "default"}
             if isinstance(cache_control, dict) and "ttl" in cache_control:
                 ttl = cache_control["ttl"]
-                if ttl in ["5m", "1h"] and model is not None and is_claude_4_5_on_bedrock(model):
+                if ttl in ["5m", "1h"] and model is not None:
                     cache_point_block["ttl"] = ttl
             return {"cachePoint": cache_point_block}
     return None
@@ -5060,10 +5037,6 @@ def _bedrock_tools_pt(tools: List, model: Optional[str] = None) -> List[BedrockT
         }
     ]
     """
-    from litellm.llms.bedrock.common_utils import (
-        bedrock_converse_supports_strict_tools,
-        normalize_json_schema_custom_types_to_object,
-    )
     from litellm.litellm_core_utils.prompt_templates.common_utils import unpack_defs
 
     _valid_json_schema_root_types = frozenset(("array", "boolean", "integer", "null", "number", "object", "string"))
@@ -5072,7 +5045,7 @@ def _bedrock_tools_pt(tools: List, model: Optional[str] = None) -> List[BedrockT
     # also reject `strict` on Bedrock Converse (see #31582) — their validator
     # maps toolSpec to the native Anthropic tool shape, which has no strict
     # field, even though Anthropic's native API accepts it as a top-level key.
-    supports_strict_tools = bool(model and bedrock_converse_supports_strict_tools(model))
+    supports_strict_tools = False
     tool_block_list: List[BedrockToolBlock] = []
     for tool_idx, tool in enumerate(tools):
         # Check if tool is already a BedrockToolBlock (e.g., systemTool for Nova grounding)
@@ -5115,7 +5088,6 @@ def _bedrock_tools_pt(tools: List, model: Optional[str] = None) -> List[BedrockT
         # with circular references (see issue #19098). unpack_defs handles nested
         # refs recursively and correctly detects/skips circular references.
         unpack_defs(parameters, defs_copy)
-        normalize_json_schema_custom_types_to_object(parameters)
         if parameters.get("type") not in _valid_json_schema_root_types:
             parameters["type"] = "object"
         tool_block = cast(
@@ -5296,10 +5268,6 @@ def prompt_factory(
         return messages
     elif custom_llm_provider == "azure_text":
         return azure_text_pt(messages=messages)
-    elif custom_llm_provider == "watsonx":
-        from litellm.llms.watsonx.chat.transformation import IBMWatsonXChatConfig
-
-        return IBMWatsonXChatConfig.apply_prompt_template(model=model, messages=messages)
 
     try:
         if "meta-llama/llama-2" in model and "chat" in model:
@@ -5516,10 +5484,9 @@ def resolve_structured_messages(
     from litellm.litellm_core_utils.api_route_to_call_types import (
         get_call_types_for_route,
     )
-    from litellm.llms import load_guardrail_translation_mappings
     from litellm.types.utils import CallTypes
 
-    mappings = load_guardrail_translation_mappings()
+    mappings = {}
     call_type: CallTypes | None = None
 
     # 1. Try route-based inference from proxy metadata

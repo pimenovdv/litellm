@@ -86,7 +86,6 @@ class StandardBuiltInToolCostTracking:
         response_object: object = None,
     ) -> float:
         """Handle web search cost calculation."""
-        from litellm.llms import get_cost_for_web_search_request
 
         model_info = StandardBuiltInToolCostTracking._safe_get_model_info(
             model=model, custom_llm_provider=custom_llm_provider
@@ -108,14 +107,6 @@ class StandardBuiltInToolCostTracking:
             usage=usage, response_object=response_object
         )
 
-        if model_info is not None and resolved_usage is not None and custom_llm_provider is not None:
-            result = get_cost_for_web_search_request(
-                custom_llm_provider=custom_llm_provider,
-                usage=resolved_usage,
-                model_info=model_info,
-            )
-            if result is not None:
-                return result
 
         return StandardBuiltInToolCostTracking.get_cost_for_web_search(
             web_search_options=standard_built_in_tools_params.get("web_search_options", None),
@@ -297,15 +288,10 @@ class StandardBuiltInToolCostTracking:
         raw Anthropic /v1/messages response dict when the reconstructed Usage dropped
         it (or was never supplied). The original Usage is returned unchanged when it
         already exposes the field or the response is not an Anthropic dict."""
-        from litellm.llms.anthropic.cost_calculation import (
-            get_anthropic_web_search_requests_from_response,
-        )
 
         if usage is not None and (_get_web_search_requests(getattr(usage, "server_tool_use", None)) is not None):
             return usage
-        web_search_requests = get_anthropic_web_search_requests_from_response(response_object)
-        if web_search_requests is None:
-            return usage
+        return usage
         server_tool_use = ServerToolUse(web_search_requests=web_search_requests)
         if usage is None:
             return Usage(server_tool_use=server_tool_use)
@@ -321,13 +307,8 @@ class StandardBuiltInToolCostTracking:
         - ResponsesAPIResponse (streaming + non-streaming)
         - Anthropic /v1/messages raw response dict
         """
-        from litellm.llms.anthropic.cost_calculation import (
-            get_anthropic_web_search_requests_from_response,
-        )
         from litellm.types.utils import PromptTokensDetailsWrapper
 
-        if get_anthropic_web_search_requests_from_response(response_object) is not None:
-            return True
 
         if isinstance(response_object, ModelResponse):
             # chat completions only include url_citation annotations when a web search call is made
