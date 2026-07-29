@@ -1037,17 +1037,7 @@ def calculate_image_response_web_search_cost(
     if not web_search_requests:
         return 0.0
 
-    from litellm.llms import get_cost_for_web_search_request
-
-    synthetic_usage = Usage(prompt_tokens_details=PromptTokensDetailsWrapper(web_search_requests=web_search_requests))
-    return (
-        get_cost_for_web_search_request(
-            custom_llm_provider=custom_llm_provider,
-            usage=synthetic_usage,
-            model_info=model_info,
-        )
-        or 0.0
-    )
+    return 0.0
 
 
 class CostCalculatorUtils:
@@ -1078,22 +1068,6 @@ class CostCalculatorUtils:
         Route the image generation cost calculator based on the custom_llm_provider
         """
         from litellm.cost_calculator import default_image_cost_calculator
-        from litellm.llms.azure_ai.image_generation.cost_calculator import (
-            cost_calculator as azure_ai_image_cost_calculator,
-        )
-        from litellm.llms.bedrock.image_generation.cost_calculator import (
-            cost_calculator as bedrock_image_cost_calculator,
-        )
-        from litellm.llms.gemini.image_generation.cost_calculator import (
-            cost_calculator as gemini_image_cost_calculator,
-        )
-        from litellm.llms.recraft.cost_calculator import (
-            cost_calculator as recraft_image_cost_calculator,
-        )
-        from litellm.llms.vertex_ai.image_generation.cost_calculator import (
-            cost_calculator as vertex_ai_image_cost_calculator,
-        )
-
         if size is None:
             size = completion_response.size or "1024-x-1024"
         if quality is None:
@@ -1101,115 +1075,7 @@ class CostCalculatorUtils:
         if n is None:
             n = len(completion_response.data) if completion_response.data else 0
 
-        if custom_llm_provider == litellm.LlmProviders.VERTEX_AI.value:
-            if isinstance(completion_response, ImageResponse):
-                return vertex_ai_image_cost_calculator(
-                    model=model,
-                    image_response=completion_response,
-                )
-        elif custom_llm_provider == litellm.LlmProviders.BEDROCK.value:
-            if isinstance(completion_response, ImageResponse):
-                return bedrock_image_cost_calculator(
-                    model=model,
-                    size=size,
-                    image_response=completion_response,
-                    optional_params=optional_params,
-                )
-            raise TypeError("completion_response must be of type ImageResponse for bedrock image cost calculation")
-        elif custom_llm_provider == litellm.LlmProviders.RECRAFT.value:
-            from litellm.llms.recraft.cost_calculator import (
-                cost_calculator as recraft_image_cost_calculator,
-            )
-
-            return recraft_image_cost_calculator(
-                model=model,
-                image_response=completion_response,
-            )
-        elif custom_llm_provider == litellm.LlmProviders.AIML.value:
-            from litellm.llms.aiml.image_generation.cost_calculator import (
-                cost_calculator as aiml_image_cost_calculator,
-            )
-
-            return aiml_image_cost_calculator(
-                model=model,
-                image_response=completion_response,
-            )
-        elif custom_llm_provider == litellm.LlmProviders.COMETAPI.value:
-            from litellm.llms.cometapi.image_generation.cost_calculator import (
-                cost_calculator as cometapi_image_cost_calculator,
-            )
-
-            return cometapi_image_cost_calculator(
-                model=model,
-                image_response=completion_response,
-            )
-        elif custom_llm_provider == litellm.LlmProviders.GEMINI.value:
-            if call_type in (
-                CallTypes.image_edit.value,
-                CallTypes.aimage_edit.value,
-            ):
-                from litellm.llms.gemini.image_edit.cost_calculator import (
-                    cost_calculator as gemini_image_edit_cost_calculator,
-                )
-
-                return gemini_image_edit_cost_calculator(
-                    model=model,
-                    image_response=completion_response,
-                )
-            from litellm.llms.gemini.image_generation.cost_calculator import (
-                cost_calculator as gemini_image_cost_calculator,
-            )
-
-            return gemini_image_cost_calculator(
-                model=model,
-                image_response=completion_response,
-            )
-        elif custom_llm_provider == litellm.LlmProviders.AZURE_AI.value:
-            return azure_ai_image_cost_calculator(
-                model=model,
-                image_response=completion_response,
-            )
-        elif custom_llm_provider == litellm.LlmProviders.FAL_AI.value:
-            from litellm.llms.fal_ai.cost_calculator import (
-                cost_calculator as fal_ai_image_cost_calculator,
-            )
-
-            return fal_ai_image_cost_calculator(
-                model=model,
-                image_response=completion_response,
-            )
-        elif custom_llm_provider == litellm.LlmProviders.RUNWAYML.value:
-            from litellm.llms.runwayml.cost_calculator import (
-                cost_calculator as runwayml_image_cost_calculator,
-            )
-
-            return runwayml_image_cost_calculator(
-                model=model,
-                image_response=completion_response,
-            )
-        elif custom_llm_provider == litellm.LlmProviders.OPENAI.value:
-            # gpt-image models use token-based pricing.
-            model_lower = model.lower()
-            if "gpt-image" in model_lower:
-                from litellm.llms.openai.image_generation.cost_calculator import (
-                    cost_calculator as openai_gpt_image_cost_calculator,
-                )
-
-                return openai_gpt_image_cost_calculator(
-                    model=model,
-                    image_response=completion_response,
-                    custom_llm_provider=custom_llm_provider,
-                )
-            # Fall through to default for DALL-E models
-            return default_image_cost_calculator(
-                model=model,
-                quality=quality,
-                custom_llm_provider=custom_llm_provider,
-                n=n,
-                size=size,
-                optional_params=optional_params,
-            )
-        elif custom_llm_provider == litellm.LlmProviders.AZURE.value:
+        if custom_llm_provider == litellm.LlmProviders.OPENAI.value:
             # gpt-image models use token-based pricing.
             model_lower = model.lower()
             if "gpt-image" in model_lower:

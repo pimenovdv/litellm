@@ -493,13 +493,6 @@ def _get_batch_job_usage_from_response_body(response_body: dict, custom_llm_prov
     """
     Get the tokens of a batch job from the response body
     """
-    if custom_llm_provider in ("anthropic", "bedrock"):
-        from litellm.llms.anthropic.chat.transformation import AnthropicConfig
-
-        return AnthropicConfig().calculate_usage(
-            usage_object=response_body.get("usage", None) or {},
-            reasoning_content=None,
-        )
     _usage_dict = response_body.get("usage", None) or {}
     usage: Usage = Usage(**_usage_dict)
     return usage

@@ -40,12 +40,6 @@ def get_provider_interactions_api_config(
     """
     from litellm.types.utils import LlmProviders
 
-    if provider == LlmProviders.GEMINI.value or provider == "gemini":
-        from litellm.llms.gemini.interactions.transformation import (
-            GoogleAIStudioInteractionsConfig,
-        )
-
-        return GoogleAIStudioInteractionsConfig()
 
     return None
 
