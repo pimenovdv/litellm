@@ -1,0 +1,1 @@
+class PredibaseChatCompletion: pass
