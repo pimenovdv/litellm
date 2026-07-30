@@ -146,11 +146,9 @@ def get_supported_openai_params(
         elif request_type == "embeddings":
             return litellm.MistralEmbeddingConfig().get_supported_openai_params()
         elif request_type == "transcription":
-            from litellm.llms.mistral.audio_transcription.transformation import (
-                MistralAudioTranscriptionConfig,
-            )
+            pass
 
-            return MistralAudioTranscriptionConfig().get_supported_openai_params(model=model)
+            return None
     elif custom_llm_provider == "text-completion-codestral":
         return litellm.CodestralTextCompletionConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider == "sambanova":
@@ -255,25 +253,19 @@ def get_supported_openai_params(
             return litellm.DeepgramAudioTranscriptionConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider == "ovhcloud":
         if request_type == "transcription":
-            from litellm.llms.ovhcloud.audio_transcription.transformation import (
-                OVHCloudAudioTranscriptionConfig,
-            )
+            pass
 
-            return OVHCloudAudioTranscriptionConfig().get_supported_openai_params(model=model)
+            return None
     elif custom_llm_provider == "scaleway":
         if request_type == "transcription":
-            from litellm.llms.scaleway.audio_transcription.transformation import (
-                ScalewayAudioTranscriptionConfig,
-            )
+            pass
 
-            return ScalewayAudioTranscriptionConfig().get_supported_openai_params(model=model)
+            return None
     elif custom_llm_provider == "elevenlabs":
         if request_type == "transcription":
-            from litellm.llms.elevenlabs.audio_transcription.transformation import (
-                ElevenLabsAudioTranscriptionConfig,
-            )
+            pass
 
-            return ElevenLabsAudioTranscriptionConfig().get_supported_openai_params(model=model)
+            return None
     elif custom_llm_provider == "soniox":
         if request_type == "transcription":
             return litellm.SonioxAudioTranscriptionConfig().get_supported_openai_params(model=model)

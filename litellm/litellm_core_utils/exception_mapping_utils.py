@@ -1917,15 +1917,12 @@ def _map_azure_exception(
     elif azure_error_code == "content_policy_violation" or ExceptionCheckers.is_azure_content_policy_violation_error(
         error_str
     ):
-        from litellm.llms.azure.exception_mapping import (
-            AzureOpenAIExceptionMapping,
-        )
-
-        raise AzureOpenAIExceptionMapping.create_content_policy_violation_error(
+        raise BadRequestError(
             message=message,
+            llm_provider="azure",
             model=model,
-            extra_information=extra_information,
-            original_exception=original_exception,
+            litellm_debug_info=extra_information,
+            response=getattr(original_exception, "response", None),
         )
     elif azure_error_code == "invalid_encrypted_content" or "could not be verified" in error_str:
         helpful_message = (
