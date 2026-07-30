@@ -65,17 +65,11 @@ def get_api_base(model: str, optional_params: Union[dict, LiteLLM_Params]) -> Op
     stream: bool = getattr(optional_params, "stream", False)
 
     if _optional_params.vertex_location is not None and _optional_params.vertex_project is not None:
-        from litellm.llms.vertex_ai.vertex_llm_base import VertexBase
-        from litellm.types.llms.vertex_ai import VertexPartnerProvider
+        VertexBase = None
+        VertexPartnerProvider = None
 
         if "claude" in model:
-            _api_base = VertexBase.create_vertex_url(
-                vertex_location=_optional_params.vertex_location,
-                vertex_project=_optional_params.vertex_project,
-                model=model,
-                stream=stream,
-                partner=VertexPartnerProvider.claude,
-            )
+            _api_base = None
         else:
             if stream:
                 _api_base = "{}-aiplatform.googleapis.com/v1/projects/{}/locations/{}/publishers/google/models/{}:streamGenerateContent".format(

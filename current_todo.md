@@ -8,7 +8,7 @@
 - [x] Шаг 5.1.1: Удаление импортов удаленных провайдеров в litellm/main.py.
 - [x] Шаг 5.1.2: Удаление импортов удаленных провайдеров в litellm/utils.py.
 - [x] Шаг 5.1.3: Удаление импортов удаленных провайдеров в litellm/cost_calculator.py и других корневых файлах.
-- [ ] Шаг 5.2.1: Удаление импортов в litellm/litellm_core_utils/get_supported_openai_params.py, get_api_base.py, redact_messages.py, exception_mapping_utils.py
+- [x] Шаг 5.2.1: Удаление импортов в litellm/litellm_core_utils/get_supported_openai_params.py, get_api_base.py, redact_messages.py, exception_mapping_utils.py
 - [x] Шаг 5.2.2: Удаление импортов в litellm/litellm_core_utils/llm_cost_calc/ и prompt_templates/
 - [x] Шаг 5.2.3: Удаление импортов в litellm/interactions/ и litellm/batches/
 - [ ] Шаг 5.3: Удаление импортов в litellm/proxy/ (включая pass_through_endpoints, hooks, guardrails и endpoints).
