@@ -36,7 +36,6 @@ from pydantic import BaseModel
 import litellm
 from litellm._logging import print_verbose, verbose_logger
 from litellm.caching import InMemoryCache
-from litellm.caching.caching import S3Cache
 from litellm.litellm_core_utils.llm_response_utils.response_metadata import (
     update_response_metadata,
 )

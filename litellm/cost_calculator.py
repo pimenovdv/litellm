@@ -33,52 +33,12 @@ from litellm.litellm_core_utils.llm_cost_calc.utils import (
     get_billable_input_tokens,
     select_cost_metric_for_model,
 )
-from litellm.llms.anthropic.cost_calculation import (
-    cost_per_token as anthropic_cost_per_token,
-)
-from litellm.llms.azure.cost_calculation import (
-    cost_per_token as azure_openai_cost_per_token,
-)
-from litellm.llms.azure_ai.cost_calculator import (
-    cost_per_token as azure_ai_cost_per_token,
-)
 from litellm.llms.base_llm.search.transformation import SearchResponse
-from litellm.llms.bedrock.cost_calculation import (
-    cost_per_token as bedrock_cost_per_token,
-)
-from litellm.llms.databricks.cost_calculator import (
-    cost_per_token as databricks_cost_per_token,
-)
-from litellm.llms.deepseek.cost_calculator import (
-    cost_per_token as deepseek_cost_per_token,
-)
-from litellm.llms.tencent.cost_calculator import (
-    cost_per_token as tencent_cost_per_token,
-)
-from litellm.llms.fireworks_ai.cost_calculator import (
-    cost_per_token as fireworks_ai_cost_per_token,
-)
-from litellm.llms.gemini.cost_calculator import cost_per_token as gemini_cost_per_token
-from litellm.llms.lemonade.cost_calculator import (
-    cost_per_token as lemonade_cost_per_token,
-)
 from litellm.llms.openai.cost_calculation import (
     _video_output_cost_per_second,
     cost_per_second as openai_cost_per_second,
     cost_per_token as openai_cost_per_token,
 )
-from litellm.llms.perplexity.cost_calculator import (
-    cost_per_token as perplexity_cost_per_token,
-)
-from litellm.llms.together_ai.cost_calculator import get_model_params_and_category
-from litellm.llms.vertex_ai.cost_calculator import (
-    cost_per_character as google_cost_per_character,
-)
-from litellm.llms.vertex_ai.cost_calculator import (
-    cost_per_token as google_cost_per_token,
-)
-from litellm.llms.vertex_ai.cost_calculator import cost_router as google_cost_router
-from litellm.llms.xai.cost_calculator import cost_per_token as xai_cost_per_token
 from litellm.responses.utils import ResponseAPILoggingUtils
 from litellm.types.agents import LiteLLMSendMessageResponse
 from litellm.types.llms.openai import (
@@ -255,7 +215,6 @@ def _get_additional_costs(
     try:
         config_class = None
         if custom_llm_provider == "azure_ai":
-            from litellm.llms.azure_ai.common_utils import AzureFoundryModelInfo
 
             config_class = AzureFoundryModelInfo.get_azure_ai_config_for_model(model)
         # Add more providers here as needed
@@ -637,9 +596,6 @@ def cost_per_token(
     elif custom_llm_provider == "lemonade":
         return lemonade_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "dashscope":
-        from litellm.llms.dashscope.cost_calculator import (
-            cost_per_token as dashscope_cost_per_token,
-        )
 
         return dashscope_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "azure_ai":

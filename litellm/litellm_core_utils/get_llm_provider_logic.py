@@ -6,7 +6,7 @@ from litellm.constants import REPLICATE_MODEL_NAME_WITH_ID_LENGTH
 from litellm.litellm_core_utils.fallback_generalizations import (
     match_routing_generalization,
 )
-from litellm.llms.openai_like.json_loader import JSONProviderRegistry
+
 from litellm.secret_managers.main import get_secret, get_secret_str
 
 from ..types.router import GenericLiteLLMParams, LiteLLM_Params
@@ -533,7 +533,7 @@ def _get_openai_compatible_provider_info(
 
     # Check JSON providers FIRST (before hardcoded ones)
     from litellm.llms.openai_like.dynamic_config import create_config_class
-    from litellm.llms.openai_like.json_loader import JSONProviderRegistry
+
 
     if JSONProviderRegistry.exists(custom_llm_provider):
         provider_config = JSONProviderRegistry.get(custom_llm_provider)
