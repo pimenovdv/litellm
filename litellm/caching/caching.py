@@ -24,17 +24,11 @@ from litellm.litellm_core_utils.model_param_helper import ModelParamHelper
 from litellm.types.caching import *
 from litellm.types.utils import EmbeddingResponse, all_litellm_params
 
-from .azure_blob_cache import AzureBlobCache
 from .base_cache import BaseCache
-from .disk_cache import DiskCache
 from .dual_cache import DualCache  # noqa: F401
-from .gcs_cache import GCSCache
 from .in_memory_cache import InMemoryCache
-from .qdrant_semantic_cache import QdrantSemanticCache
 from .redis_cache import RedisCache
 from .redis_cluster_cache import RedisClusterCache
-from .redis_semantic_cache import RedisSemanticCache
-from .s3_cache import S3Cache
 
 
 def print_verbose(print_statement):
@@ -211,7 +205,6 @@ class Cache:
         elif type == LiteLLMCacheType.VALKEY_SEMANTIC:
             # Imported here, not at module top, so the optional redis dependency
             # is only required when this backend is actually selected.
-            from .valkey_semantic_cache import ValkeySemanticCache
 
             self.cache = ValkeySemanticCache(
                 host=host,

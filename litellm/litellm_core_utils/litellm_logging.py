@@ -1,3 +1,4 @@
+from typing import Any
 # What is this?
 ## Common Utility file for Logging handler
 # Logging function -> log the exact model details + what's being sent | Non-Blocking
@@ -56,14 +57,6 @@ from litellm.cost_calculator import (
     RealtimeAPITokenUsageProcessor,
     _select_model_name_for_cost_calc,
 )
-from litellm.integrations.agentops import AgentOps
-from litellm.integrations.anthropic_cache_control_hook import AnthropicCacheControlHook
-from litellm.integrations.arize.arize import ArizeLogger
-from litellm.integrations.custom_guardrail import CustomGuardrail
-from litellm.integrations.custom_logger import CustomLogger
-from litellm.integrations.deepeval.deepeval import DeepEvalLogger
-from litellm.integrations.mlflow import MlflowLogger
-from litellm.integrations.sqs import SQSLogger
 from litellm.litellm_core_utils.core_helpers import reconstruct_model_name
 from litellm.litellm_core_utils.get_litellm_params import get_litellm_params
 from litellm.litellm_core_utils.llm_cost_calc.tool_call_cost_tracking import (
@@ -134,41 +127,6 @@ from litellm.types.utils import (
 from litellm.types.videos.main import VideoObject
 from litellm.utils import _get_base_model_from_metadata, executor, print_verbose
 
-from ..integrations.argilla import ArgillaLogger
-from ..integrations.arize.arize_phoenix import ArizePhoenixLogger
-from ..integrations.athina import AthinaLogger
-from ..integrations.azure_sentinel.azure_sentinel import AzureSentinelLogger
-from ..integrations.azure_storage.azure_storage import AzureBlobStorageLogger
-from ..integrations.custom_prompt_management import CustomPromptManagement
-from ..integrations.datadog.datadog import DataDogLogger
-from ..integrations.datadog.datadog_llm_obs import DataDogLLMObsLogger
-from ..integrations.datadog.datadog_metrics import DatadogMetricsLogger
-from ..integrations.dotprompt import DotpromptManager
-from ..integrations.dynamodb import DyanmoDBLogger
-from ..integrations.galileo import GalileoObserve
-from ..integrations.gcs_bucket.gcs_bucket import GCSBucketLogger
-from ..integrations.gcs_pubsub.pub_sub import GcsPubSubLogger
-from ..integrations.greenscale import GreenscaleLogger
-from ..integrations.helicone import HeliconeLogger
-from ..integrations.humanloop import HumanloopLogger
-from ..integrations.lago import LagoLogger
-from ..integrations.langfuse.langfuse import LangFuseLogger
-from ..integrations.langfuse.langfuse_handler import LangFuseHandler
-from ..integrations.langfuse.langfuse_prompt_management import LangfusePromptManagement
-from ..integrations.langsmith import LangsmithLogger
-from ..integrations.litellm_agent import LiteLLMAgentModelResolver
-from ..integrations.literal_ai import LiteralAILogger
-from ..integrations.logfire_logger import LogfireLevel, LogfireLogger
-from ..integrations.lunary import LunaryLogger
-from ..integrations.newrelic import NewRelicLogger
-from ..integrations.openmeter import OpenMeterLogger
-from ..integrations.opik.opik import OpikLogger
-from ..integrations.posthog import PostHogLogger
-from ..integrations.prompt_layer import PromptLayerLogger
-from ..integrations.s3 import S3Logger
-from ..integrations.s3_v2 import S3Logger as S3V2Logger
-from ..integrations.supabase import Supabase
-from ..integrations.traceloop import TraceloopLogger
 from .exception_mapping_utils import _get_response_headers
 from .initialize_dynamic_callback_params import (
     initialize_standard_callback_dynamic_params as _initialize_standard_callback_dynamic_params,
@@ -197,18 +155,17 @@ try:
         StandardLoggingPayloadSetup as EnterpriseStandardLoggingPayloadSetup,
     )
 
-    from litellm.integrations.generic_api.generic_api_callback import GenericAPILogger
 
     EnterpriseStandardLoggingPayloadSetupVAR: Optional[Type[EnterpriseStandardLoggingPayloadSetup]] = (
         EnterpriseStandardLoggingPayloadSetup
     )
 except Exception as e:
     verbose_logger.debug(f"[Non-Blocking] Unable to import GenericAPILogger - LiteLLM Enterprise Feature - {str(e)}")
-    GenericAPILogger = CustomLogger  # type: ignore
-    ResendEmailLogger = CustomLogger  # type: ignore
-    SendGridEmailLogger = CustomLogger  # type: ignore
-    SMTPEmailLogger = CustomLogger  # type: ignore
-    PagerDutyAlerting = CustomLogger  # type: ignore
+    GenericAPILogger = None  # type: ignore
+    ResendEmailLogger = None  # type: ignore
+    SendGridEmailLogger = None  # type: ignore
+    SMTPEmailLogger = None  # type: ignore
+    PagerDutyAlerting = None  # type: ignore
     EnterpriseCallbackControls = None  # type: ignore
     EnterpriseStandardLoggingPayloadSetupVAR = None
 _in_memory_loggers: List[Any] = []
@@ -282,7 +239,6 @@ def _get_cached_prometheus_logger():
     """
     global _PrometheusLogger
     if _PrometheusLogger is None:
-        from litellm.integrations.prometheus import PrometheusLogger
 
         _PrometheusLogger = PrometheusLogger
     return _PrometheusLogger
@@ -314,11 +270,11 @@ class Logging(LiteLLMLoggingBaseClass):
         litellm_call_id: str,
         function_id: str,
         litellm_trace_id: Optional[str] = None,
-        dynamic_input_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = None,
-        dynamic_success_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = None,
-        dynamic_async_success_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = None,
-        dynamic_failure_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = None,
-        dynamic_async_failure_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = None,
+        dynamic_input_callbacks: Optional[List[Union[str, Callable, Any]]] = None,
+        dynamic_success_callbacks: Optional[List[Union[str, Callable, Any]]] = None,
+        dynamic_async_success_callbacks: Optional[List[Union[str, Callable, Any]]] = None,
+        dynamic_failure_callbacks: Optional[List[Union[str, Callable, Any]]] = None,
+        dynamic_async_failure_callbacks: Optional[List[Union[str, Callable, Any]]] = None,
         applied_guardrails: Optional[List[str]] = None,
         kwargs: Optional[Dict] = None,
         log_raw_request_response: bool = False,
@@ -353,13 +309,13 @@ class Logging(LiteLLMLoggingBaseClass):
         self.log_raw_request_response = log_raw_request_response
 
         # Initialize dynamic callbacks
-        self.dynamic_input_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = dynamic_input_callbacks
-        self.dynamic_success_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = dynamic_success_callbacks
-        self.dynamic_async_success_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = (
+        self.dynamic_input_callbacks: Optional[List[Union[str, Callable, Any]]] = dynamic_input_callbacks
+        self.dynamic_success_callbacks: Optional[List[Union[str, Callable, Any]]] = dynamic_success_callbacks
+        self.dynamic_async_success_callbacks: Optional[List[Union[str, Callable, Any]]] = (
             dynamic_async_success_callbacks
         )
-        self.dynamic_failure_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = dynamic_failure_callbacks
-        self.dynamic_async_failure_callbacks: Optional[List[Union[str, Callable, CustomLogger]]] = (
+        self.dynamic_failure_callbacks: Optional[List[Union[str, Callable, Any]]] = dynamic_failure_callbacks
+        self.dynamic_async_failure_callbacks: Optional[List[Union[str, Callable, Any]]] = (
             dynamic_async_failure_callbacks
         )
 
@@ -412,7 +368,7 @@ class Logging(LiteLLMLoggingBaseClass):
 
     def process_dynamic_callbacks(self):
         """
-        Initializes CustomLogger compatible callbacks in self.dynamic_* callbacks
+        Initializes Any compatible callbacks in self.dynamic_* callbacks
 
         If a callback is in litellm._known_custom_logger_compatible_callbacks, it needs to be intialized and added to the respective dynamic_* callback list.
         """
@@ -443,11 +399,11 @@ class Logging(LiteLLMLoggingBaseClass):
 
     def _process_dynamic_callback_list(
         self,
-        callback_list: Optional[List[Union[str, Callable, CustomLogger]]],
-        dynamic_callbacks_type: Literal["input", "success", "failure", "async_success", "async_failure"],
-    ) -> Optional[List[Union[str, Callable, CustomLogger]]]:
+        callback_list: Optional[List[Union[str, Callable, Any]]],
+        dynamic_callbacks_type: str,
+    ) -> Optional[List[Union[str, Callable, Any]]]:
         """
-        Helper function to initialize CustomLogger compatible callbacks in self.dynamic_* callbacks
+        Helper function to initialize Any compatible callbacks in self.dynamic_* callbacks
 
         - If a callback is in litellm._known_custom_logger_compatible_callbacks,
         replace the string with the initialized callback class.
@@ -457,7 +413,7 @@ class Logging(LiteLLMLoggingBaseClass):
         if callback_list is None:
             return None
 
-        processed_list: List[Union[str, Callable, CustomLogger]] = []
+        processed_list: List[Union[str, Callable, Any]] = []
         for callback in callback_list:
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 # For callbacks that support team-scoped credentials (e.g. datadog),
@@ -688,7 +644,7 @@ class Logging(LiteLLMLoggingBaseClass):
         prompt_variables: Optional[dict],
         prompt_id: Optional[str] = None,
         prompt_spec: Optional[PromptSpec] = None,
-        prompt_management_logger: Optional[CustomLogger] = None,
+        prompt_management_logger: Optional[Any] = None,
         prompt_label: Optional[str] = None,
         prompt_version: Optional[int] = None,
     ) -> Tuple[str, List[AllMessageValues], dict]:
@@ -727,7 +683,7 @@ class Logging(LiteLLMLoggingBaseClass):
         prompt_variables: Optional[dict],
         prompt_id: Optional[str] = None,
         prompt_spec: Optional[PromptSpec] = None,
-        prompt_management_logger: Optional[CustomLogger] = None,
+        prompt_management_logger: Optional[Any] = None,
         tools: Optional[List[Dict]] = None,
         prompt_label: Optional[str] = None,
         prompt_version: Optional[int] = None,
@@ -767,7 +723,7 @@ class Logging(LiteLLMLoggingBaseClass):
         prompt_id: str,
         prompt_spec: Optional[PromptSpec],
         dynamic_callback_params: StandardCallbackDynamicParams,
-    ) -> Optional[CustomLogger]:
+    ) -> Optional[Any]:
         """
         Auto-detect which prompt management system owns the given prompt_id.
 
@@ -778,7 +734,7 @@ class Logging(LiteLLMLoggingBaseClass):
             dynamic_callback_params: Dynamic callback parameters for should_run_prompt_management checks
 
         Returns:
-            A CustomLogger instance if a matching prompt management system is found, None otherwise
+            A Any instance if a matching prompt management system is found, None otherwise
         """
         prompt_management_loggers = litellm.logging_callback_manager.get_custom_loggers_for_type(
             callback_type=CustomPromptManagement
@@ -808,7 +764,7 @@ class Logging(LiteLLMLoggingBaseClass):
         prompt_id: Optional[str] = None,
         prompt_spec: Optional[PromptSpec] = None,
         dynamic_callback_params: Optional[StandardCallbackDynamicParams] = None,
-    ) -> Optional[CustomLogger]:
+    ) -> Optional[Any]:
         """
         Get a custom logger for prompt management based on model name or available callbacks.
 
@@ -820,7 +776,7 @@ class Logging(LiteLLMLoggingBaseClass):
             dynamic_callback_params: Dynamic callback parameters for should_run_prompt_management checks
 
         Returns:
-            A CustomLogger instance if one is found, None otherwise
+            A Any instance if one is found, None otherwise
         """
         # First check if model starts with a known custom logger compatible callback
         # This takes precedence for backward compatibility
@@ -879,7 +835,7 @@ class Logging(LiteLLMLoggingBaseClass):
 
         return None
 
-    def get_custom_logger_for_anthropic_cache_control_hook(self, non_default_params: Dict) -> Optional[CustomLogger]:
+    def get_custom_logger_for_anthropic_cache_control_hook(self, non_default_params: Dict) -> Optional[Any]:
         if non_default_params.get("cache_control_injection_points", None):
             custom_logger = _init_custom_logger_compatible_class(
                 logging_integration="anthropic_cache_control_hook",
@@ -1028,7 +984,7 @@ class Logging(LiteLLMLoggingBaseClass):
                             level="info",
                         )
 
-                    elif isinstance(callback, CustomLogger):  # custom logger class
+                    elif isinstance(callback, Any):  # custom logger class
                         callback.log_pre_api_call(
                             model=self.model,
                             messages=self.messages,
@@ -1198,7 +1154,7 @@ class Logging(LiteLLMLoggingBaseClass):
                             message=f"Model Call Details post-call: {details_to_log}",
                             level="info",
                         )
-                    elif isinstance(callback, CustomLogger):  # custom logger class
+                    elif isinstance(callback, Any):  # custom logger class
                         callback.log_post_api_call(
                             kwargs=self.model_call_details,
                             response_obj=None,
@@ -1245,7 +1201,7 @@ class Logging(LiteLLMLoggingBaseClass):
         )
         for callback in callbacks:
             try:
-                if isinstance(callback, CustomLogger):
+                if isinstance(callback, Any):
                     response: Optional[MCPPostCallResponseObject] = await callback.async_post_mcp_tool_call_hook(
                         kwargs=kwargs,
                         response_obj=post_mcp_tool_call_response_obj,
@@ -1643,7 +1599,7 @@ class Logging(LiteLLMLoggingBaseClass):
 
     def should_run_logging(
         self,
-        event_type: Literal["async_success", "sync_success", "async_failure", "sync_failure"],
+        event_type: str,
         stream: bool = False,
     ) -> bool:
         try:
@@ -1656,7 +1612,7 @@ class Logging(LiteLLMLoggingBaseClass):
 
     def has_run_logging(
         self,
-        event_type: Literal["async_success", "sync_success", "async_failure", "sync_failure"],
+        event_type: str,
     ) -> None:
         if self.stream is not None and self.stream is True:
             """
@@ -1673,7 +1629,7 @@ class Logging(LiteLLMLoggingBaseClass):
         if litellm_params.get("no-log", False) is True:
             # proxy cost tracking cal backs should run
 
-            if not (isinstance(callback, CustomLogger) and "_PROXY_" in callback.__class__.__name__):
+            if not (isinstance(callback, Any) and "_PROXY_" in callback.__class__.__name__):
                 verbose_logger.debug(f"no-log request, skipping logging for {event_hook} event")
                 return False
 
@@ -2069,7 +2025,7 @@ class Logging(LiteLLMLoggingBaseClass):
                         result=result,
                         call_type=self.call_type,
                     )
-                elif isinstance(callback, CustomLogger):
+                elif isinstance(callback, Any):
                     self.model_call_details, result = callback.logging_hook(
                         kwargs=self.model_call_details,
                         result=result,
@@ -2348,7 +2304,7 @@ class Logging(LiteLLMLoggingBaseClass):
                                 end_time=end_time,
                             )
                     if (
-                        isinstance(callback, CustomLogger)
+                        isinstance(callback, Any)
                         and is_sync_request
                         and self.call_type
                         != CallTypes.pass_through.value  # pass-through endpoints call async_log_success_event
@@ -2564,7 +2520,7 @@ class Logging(LiteLLMLoggingBaseClass):
                     result=result,
                     call_type=self.call_type,
                 )
-            elif isinstance(callback, CustomLogger):
+            elif isinstance(callback, Any):
                 result = redact_message_input_output_from_custom_logger(
                     result=result, litellm_logging_obj=self, custom_logger=callback
                 )
@@ -2611,7 +2567,7 @@ class Logging(LiteLLMLoggingBaseClass):
                             end_time=end_time,
                         )
 
-                if isinstance(callback, CustomLogger):  # custom logger class
+                if isinstance(callback, Any):  # custom logger class
                     model_call_details: Dict = self.model_call_details
                     ##################################
                     # call redaction hook for custom logger
@@ -2647,7 +2603,7 @@ class Logging(LiteLLMLoggingBaseClass):
                 if callable(callback):  # custom logger functions
                     global customLogger
                     if customLogger is None:
-                        customLogger = CustomLogger()
+                        customLogger = Any()
                     if self.stream:
                         if "async_complete_streaming_response" in self.model_call_details:
                             await customLogger.async_log_event(
@@ -2789,7 +2745,7 @@ class Logging(LiteLLMLoggingBaseClass):
 
         model_group = metadata.get("model_group") or None
         for callback in litellm._async_failure_callback:
-            if isinstance(callback, CustomLogger):  # custom logger class
+            if isinstance(callback, Any):  # custom logger class
                 await callback.log_model_group_rate_limit_error(
                     exception=exception,
                     original_model_group=model_group,
@@ -2875,7 +2831,7 @@ class Logging(LiteLLMLoggingBaseClass):
                     if callable(callback):  # custom logger functions
                         global customLogger
                         if customLogger is None:
-                            customLogger = CustomLogger()
+                            customLogger = Any()
                         customLogger.log_event(
                             kwargs=self.model_call_details,
                             response_obj=result,
@@ -2885,7 +2841,7 @@ class Logging(LiteLLMLoggingBaseClass):
                             callback_func=callback,
                         )
                     if (
-                        isinstance(callback, CustomLogger)
+                        isinstance(callback, Any)
                         and is_sync_request
                         and self.call_type != CallTypes.pass_through.value
                     ):  # custom logger class
@@ -2997,7 +2953,7 @@ class Logging(LiteLLMLoggingBaseClass):
                 )
                 if not should_run:
                     continue
-                if isinstance(callback, CustomLogger):  # custom logger class
+                if isinstance(callback, Any):  # custom logger class
                     await callback.async_log_failure_event(
                         kwargs=self.model_call_details,
                         response_obj=result,
@@ -3007,7 +2963,7 @@ class Logging(LiteLLMLoggingBaseClass):
                 if callable(callback):  # custom logger functions
                     global customLogger
                     if customLogger is None:
-                        customLogger = CustomLogger()
+                        customLogger = Any()
                     await customLogger.async_log_event(
                         kwargs=self.model_call_details,
                         response_obj=result,
@@ -3024,7 +2980,7 @@ class Logging(LiteLLMLoggingBaseClass):
                 # Track callback logging failures in Prometheus
                 self._handle_callback_failure(callback=callback)
 
-    def _get_trace_id(self, service_name: Literal["langfuse"]) -> Optional[str]:
+    def _get_trace_id(self, service_name: str) -> Optional[str]:
         """
         For the given service (e.g. langfuse), return the trace_id actually logged.
 
@@ -3042,7 +2998,7 @@ class Logging(LiteLLMLoggingBaseClass):
 
         return trace_id
 
-    def _get_callback_object(self, service_name: Literal["langfuse"]) -> Optional[Any]:
+    def _get_callback_object(self, service_name: str) -> Optional[Any]:
         """
         Return dynamic callback object.
 
@@ -3192,7 +3148,7 @@ class Logging(LiteLLMLoggingBaseClass):
         """
         _new_callbacks = []
         for _c in callbacks:
-            if isinstance(_c, CustomLogger):
+            if isinstance(_c, Any):
                 continue
             elif isinstance(_c, str) and _c in litellm._known_custom_logger_compatible_callbacks:
                 continue
@@ -3543,7 +3499,6 @@ def set_callbacks(callback_list, function_id=None):
             elif callback == "s3":
                 s3Logger = S3Logger()
             elif callback == "wandb":
-                from litellm.integrations.weights_biases import WeightsBiasesLogger
 
                 weightsBiasesLogger = WeightsBiasesLogger()
             elif callback == "logfire":
@@ -3555,7 +3510,7 @@ def set_callbacks(callback_list, function_id=None):
                 greenscaleLogger = GreenscaleLogger()
                 print_verbose("Initialized Greenscale Logger")
             elif callable(callback):
-                customLogger = CustomLogger()
+                customLogger = Any()
     except Exception as e:
         raise e
     return None
@@ -3566,7 +3521,7 @@ def _init_custom_logger_compatible_class(
     internal_usage_cache: Optional[DualCache],
     llm_router: Optional[Any],  # expect litellm.Router, but typing errors due to circular import
     custom_logger_init_args: Optional[dict] = {},
-) -> Optional[CustomLogger]:
+) -> Optional[Any]:
     """
     Initialize a custom logger compatible class
     """
@@ -3608,7 +3563,6 @@ def _init_custom_logger_compatible_class(
             _in_memory_loggers.append(_posthog_logger)
             return _posthog_logger  # type: ignore
         elif logging_integration == "braintrust":
-            from litellm.integrations.braintrust_logging import BraintrustLogger
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, BraintrustLogger):
@@ -3668,9 +3622,6 @@ def _init_custom_logger_compatible_class(
 
             if _dd_api_key or _dd_site or _dd_agent_host:
                 # Team-scoped credentials: use DynamicLoggingCache for per-credential isolation
-                from litellm.integrations.datadog.datadog_team_handler import (
-                    DataDogHandler,
-                )
 
                 return DataDogHandler.get_datadog_logger_for_request(
                     standard_callback_dynamic_params=custom_logger_init_args,  # type: ignore
@@ -3749,10 +3700,6 @@ def _init_custom_logger_compatible_class(
             _v2 = _maybe_construct_otel_v2("arize", _in_memory_loggers)
             if _v2 is not None:
                 return _v2  # type: ignore
-            from litellm.integrations.opentelemetry import (
-                OpenTelemetry,
-                OpenTelemetryConfig,
-            )
 
             arize_config = ArizeLogger.get_arize_config()
             if arize_config.endpoint is None:
@@ -3778,10 +3725,6 @@ def _init_custom_logger_compatible_class(
             _v2 = _maybe_construct_otel_v2("arize_phoenix", _in_memory_loggers)
             if _v2 is not None:
                 return _v2  # type: ignore
-            from litellm.integrations.opentelemetry import (
-                OpenTelemetry,
-                OpenTelemetryConfig,
-            )
 
             arize_phoenix_config = ArizePhoenixLogger.get_arize_phoenix_config()
             otel_config = OpenTelemetryConfig(
@@ -3804,11 +3747,6 @@ def _init_custom_logger_compatible_class(
             _v2 = _maybe_construct_otel_v2("levo", _in_memory_loggers)
             if _v2 is not None:
                 return _v2  # type: ignore
-            from litellm.integrations.levo.levo import LevoLogger
-            from litellm.integrations.opentelemetry import (
-                OpenTelemetry,
-                OpenTelemetryConfig,
-            )
 
             levo_config = LevoLogger.get_levo_config()
             otel_config = OpenTelemetryConfig(
@@ -3831,10 +3769,8 @@ def _init_custom_logger_compatible_class(
             # never registered simultaneously — the dedup loop below treats
             # any module under ``litellm.integrations.otel`` or
             # ``litellm.integrations.opentelemetry`` as "the OTel callback".
-            from litellm.integrations.otel.model.config import is_otel_v2_enabled
 
             if is_otel_v2_enabled():
-                from litellm.integrations.otel.logger import OpenTelemetryV2
 
                 for callback in _in_memory_loggers:
                     if type(callback) is OpenTelemetryV2:
@@ -3846,7 +3782,6 @@ def _init_custom_logger_compatible_class(
                 _maybe_auto_initialize_arize_phoenix(_in_memory_loggers)
                 return otel_logger_v2  # type: ignore
 
-            from litellm.integrations.opentelemetry import OpenTelemetry
 
             for callback in _in_memory_loggers:
                 if type(callback) is OpenTelemetry:
@@ -3872,7 +3807,6 @@ def _init_custom_logger_compatible_class(
             _in_memory_loggers.append(galileo_logger)
             return galileo_logger  # type: ignore
         elif logging_integration == "cloudzero":
-            from litellm.integrations.cloudzero.cloudzero import CloudZeroLogger
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, CloudZeroLogger):
@@ -3881,7 +3815,6 @@ def _init_custom_logger_compatible_class(
             _in_memory_loggers.append(cloudzero_logger)
             return cloudzero_logger  # type: ignore
         elif logging_integration == "focus":
-            from litellm.integrations.focus.focus_logger import FocusLogger
 
             for callback in _in_memory_loggers:
                 if type(callback) is FocusLogger:  # exact match; exclude subclasses like VantageLogger
@@ -3890,9 +3823,6 @@ def _init_custom_logger_compatible_class(
             _in_memory_loggers.append(focus_logger)
             return focus_logger  # type: ignore
         elif logging_integration == "mavvrik":
-            from litellm.integrations.mavvrik_focus.mavvrik_focus_logger import (
-                MavvrikFocusLogger,
-            )
 
             for callback in _in_memory_loggers:
                 if type(callback) is MavvrikFocusLogger:
@@ -3901,7 +3831,6 @@ def _init_custom_logger_compatible_class(
             _in_memory_loggers.append(mavvrik_focus_logger)
             return mavvrik_focus_logger  # type: ignore
         elif logging_integration == "vantage":
-            from litellm.integrations.vantage.vantage_logger import VantageLogger
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, VantageLogger):
@@ -3920,10 +3849,6 @@ def _init_custom_logger_compatible_class(
         elif logging_integration == "logfire":
             if "LOGFIRE_TOKEN" not in os.environ:
                 raise ValueError("LOGFIRE_TOKEN not found in environment variables")
-            from litellm.integrations.opentelemetry import (
-                OpenTelemetry,
-                OpenTelemetryConfig,
-            )
 
             logfire_base_url = os.getenv("LOGFIRE_BASE_URL", "https://logfire-api.pydantic.dev")
             otel_config = OpenTelemetryConfig(
@@ -3985,10 +3910,6 @@ def _init_custom_logger_compatible_class(
             if _v2 is not None:
                 return _v2  # type: ignore
 
-            from litellm.integrations.opentelemetry import (
-                OpenTelemetry,
-                OpenTelemetryConfig,
-            )
 
             otel_config = OpenTelemetryConfig(
                 exporter="otlp_http",
@@ -4022,7 +3943,6 @@ def _init_custom_logger_compatible_class(
             _v2 = _maybe_construct_otel_v2("langfuse_otel", _in_memory_loggers)
             if _v2 is not None:
                 return _v2  # type: ignore
-            from litellm.integrations.langfuse.langfuse_otel import LangfuseOtelLogger
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, LangfuseOtelLogger) and callback.callback_name == "langfuse_otel":
@@ -4036,11 +3956,6 @@ def _init_custom_logger_compatible_class(
             _v2 = _maybe_construct_otel_v2("weave_otel", _in_memory_loggers)
             if _v2 is not None:
                 return _v2  # type: ignore
-            from litellm.integrations.opentelemetry import OpenTelemetryConfig
-            from litellm.integrations.weave.weave_otel import (
-                WeaveOtelLogger,
-                get_weave_otel_config,
-            )
 
             weave_otel_config = get_weave_otel_config()
 
@@ -4071,9 +3986,6 @@ def _init_custom_logger_compatible_class(
             _in_memory_loggers.append(anthropic_cache_control_hook)
             return anthropic_cache_control_hook  # type: ignore
         elif logging_integration == "vector_store_pre_call_hook":
-            from litellm.integrations.vector_store_integrations.vector_store_pre_call_hook import (
-                VectorStorePreCallHook,
-            )
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, VectorStorePreCallHook):
@@ -4133,9 +4045,6 @@ def _init_custom_logger_compatible_class(
             _in_memory_loggers.append(dotprompt_logger)
             return dotprompt_logger  # type: ignore
         elif logging_integration == "bitbucket":
-            from litellm.integrations.bitbucket.bitbucket_prompt_manager import (
-                BitBucketPromptManager,
-            )
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, BitBucketPromptManager):
@@ -4150,9 +4059,6 @@ def _init_custom_logger_compatible_class(
             _in_memory_loggers.append(bitbucket_logger)
             return bitbucket_logger  # type: ignore
         elif logging_integration == "gitlab":
-            from litellm.integrations.gitlab.gitlab_prompt_manager import (
-                GitLabPromptManager,
-            )
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, GitLabPromptManager):
@@ -4187,12 +4093,9 @@ def _maybe_construct_otel_v2(callback_name: str, _in_memory_loggers: list) -> Op
     Returns ``None`` when V2 is off OR when there's no preset registered for
     ``callback_name`` — callers should then fall through to the legacy path.
     """
-    from litellm.integrations.otel.model.config import is_otel_v2_enabled
 
     if not is_otel_v2_enabled():
         return None
-    from litellm.integrations.otel.logger import OpenTelemetryV2
-    from litellm.integrations.otel.presets import PRESET_BY_CALLBACK
 
     preset_fn = PRESET_BY_CALLBACK.get(callback_name)
     if preset_fn is None:
@@ -4232,7 +4135,6 @@ def _maybe_auto_initialize_arize_phoenix(_in_memory_loggers: list) -> None:
         return
 
     try:
-        from litellm.integrations.opentelemetry import OpenTelemetryConfig
 
         arize_phoenix_config = ArizePhoenixLogger.get_arize_phoenix_config()
         otel_config = OpenTelemetryConfig(
@@ -4256,7 +4158,7 @@ def _maybe_auto_initialize_arize_phoenix(_in_memory_loggers: list) -> None:
 
 def get_custom_logger_compatible_class(
     logging_integration: _custom_logger_compatible_callbacks_literal,
-) -> Optional[CustomLogger]:
+) -> Optional[Any]:
     try:
         if logging_integration == "lago":
             for callback in _in_memory_loggers:
@@ -4267,7 +4169,6 @@ def get_custom_logger_compatible_class(
                 if isinstance(callback, OpenMeterLogger):
                     return callback
         elif logging_integration == "braintrust":
-            from litellm.integrations.braintrust_logging import BraintrustLogger
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, BraintrustLogger):
@@ -4277,19 +4178,16 @@ def get_custom_logger_compatible_class(
                 if isinstance(callback, GalileoObserve):
                     return callback
         elif logging_integration == "cloudzero":
-            from litellm.integrations.cloudzero.cloudzero import CloudZeroLogger
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, CloudZeroLogger):
                     return callback
         elif logging_integration == "focus":
-            from litellm.integrations.focus.focus_logger import FocusLogger
 
             for callback in _in_memory_loggers:
                 if type(callback) is FocusLogger:  # exact match; exclude subclasses like VantageLogger
                     return callback
         elif logging_integration == "vantage":
-            from litellm.integrations.vantage.vantage_logger import VantageLogger
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, VantageLogger):
@@ -4363,7 +4261,6 @@ def get_custom_logger_compatible_class(
                 if isinstance(callback, LangfusePromptManagement):
                     return callback
         elif logging_integration == "otel":
-            from litellm.integrations.opentelemetry import OpenTelemetry
 
             for callback in _in_memory_loggers:
                 # Use exact type check to avoid matching ArizePhoenixLogger (subclass)
@@ -4378,7 +4275,6 @@ def get_custom_logger_compatible_class(
         elif logging_integration == "logfire":
             if "LOGFIRE_TOKEN" not in os.environ:
                 raise ValueError("LOGFIRE_TOKEN not found in environment variables")
-            from litellm.integrations.opentelemetry import OpenTelemetry
 
             for callback in _in_memory_loggers:
                 # Use exact type check to avoid matching ArizePhoenixLogger (subclass)
@@ -4403,7 +4299,6 @@ def get_custom_logger_compatible_class(
                     return callback  # type: ignore
 
         elif logging_integration == "langtrace":
-            from litellm.integrations.opentelemetry import OpenTelemetry
 
             if "LANGTRACE_API_KEY" not in os.environ:
                 raise ValueError("LANGTRACE_API_KEY not found in environment variables")
@@ -4425,9 +4320,6 @@ def get_custom_logger_compatible_class(
                 if isinstance(callback, AnthropicCacheControlHook):
                     return callback
         elif logging_integration == "vector_store_pre_call_hook":
-            from litellm.integrations.vector_store_integrations.vector_store_pre_call_hook import (
-                VectorStorePreCallHook,
-            )
 
             for callback in _in_memory_loggers:
                 if isinstance(callback, VectorStorePreCallHook):
@@ -4925,7 +4817,6 @@ class StandardLoggingPayloadSetup:
             Optional[str]: The generated object key or None if cold storage not configured
         """
         # Generate object key in same format as S3Logger
-        from litellm.integrations.s3 import get_s3_object_key
 
         # Only generate object key if cold storage is configured
         cold_storage_custom_logger = litellm.cold_storage_custom_logger
