@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING, Any, Optional
 import httpx
 
 import litellm
-from litellm import token_counter
+from litellm.utils import token_counter
 from litellm._logging import verbose_router_logger
 from litellm.caching.dual_cache import DualCache
 from litellm.types.router import RouterCacheEnum, RouterErrors

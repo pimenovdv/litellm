@@ -15,7 +15,8 @@ sys.path.insert(
 
 import litellm
 from pydantic import BaseModel
-from litellm import utils, Router
+from litellm import utils
+from litellm.router import Router
 
 COMPLETION_TOKENS = 5
 base_model_list = [
