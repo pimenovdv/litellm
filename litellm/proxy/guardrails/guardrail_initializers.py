@@ -7,8 +7,7 @@ from litellm.types.guardrails import *
 
 
 def initialize_bedrock(litellm_params: LitellmParams, guardrail: Guardrail):
-    from litellm.proxy.guardrails.guardrail_hooks.bedrock_guardrails import (
-        BedrockGuardrail,
+            BedrockGuardrail,
     )
 
     _bedrock_callback = BedrockGuardrail(
@@ -42,7 +41,6 @@ def initialize_bedrock(litellm_params: LitellmParams, guardrail: Guardrail):
 
 
 def initialize_lakera(litellm_params: LitellmParams, guardrail: Guardrail):
-    from litellm.proxy.guardrails.guardrail_hooks.lakera_ai import lakeraAI_Moderation
 
     _lakera_callback = lakeraAI_Moderation(
         api_base=litellm_params.api_base,
@@ -57,7 +55,6 @@ def initialize_lakera(litellm_params: LitellmParams, guardrail: Guardrail):
 
 
 def initialize_lakera_v2(litellm_params: LitellmParams, guardrail: Guardrail):
-    from litellm.proxy.guardrails.guardrail_hooks.lakera_ai_v2 import LakeraAIGuardrail
 
     _lakera_v2_callback = LakeraAIGuardrail(
         api_base=litellm_params.api_base,
@@ -77,8 +74,7 @@ def initialize_lakera_v2(litellm_params: LitellmParams, guardrail: Guardrail):
 
 
 def initialize_presidio(litellm_params: LitellmParams, guardrail: Guardrail):
-    from litellm.proxy.guardrails.guardrail_hooks.presidio import (
-        _OPTIONAL_PresidioPIIMasking,
+            _OPTIONAL_PresidioPIIMasking,
     )
 
     filter_scope = getattr(litellm_params, "presidio_filter_scope", None) or "both"

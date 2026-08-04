@@ -1,1 +1,0 @@
-class OVHCloudChatConfig: pass

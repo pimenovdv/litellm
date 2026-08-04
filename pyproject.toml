@@ -113,7 +113,6 @@ stt-nvidia-riva = [
     "audioread>=3.0.1",
     "numpy>=1.26.0",
 ]
-google = ["google-cloud-aiplatform>=1.133.0,<2.0"]
 bedrock-realtime = [
     # Bedrock Nova Sonic realtime (speech-to-speech) uses the
     # InvokeModelWithBidirectionalStream API, which boto3 cannot do. This
@@ -167,9 +166,7 @@ dev = [
     "types-requests==2.32.4.20260107",
     "types-setuptools==75.8.0.20250225",
     "types-redis==4.6.0.20241004",
-    "types-PyYAML==6.0.12.20250915",
-        "types-boto3[bedrock,bedrock-agent,bedrock-runtime,kms,s3,sagemaker-runtime,sts]==1.43.30",
-    "opentelemetry-api==1.28.0",
+    "types-PyYAML==6.0.12.20250915",    "opentelemetry-api==1.28.0",
     "opentelemetry-sdk==1.28.0",
     "opentelemetry-exporter-otlp==1.28.0",
     "opentelemetry-instrumentation-fastapi==0.49b0",

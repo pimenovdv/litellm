@@ -59,7 +59,6 @@ def _build_retrieval_tools(keys: List[str], call_type: str) -> List[dict]:
 
     # Lazy import to avoid introducing provider transformation imports during
     # module import for non-Anthropic call paths.
-    from litellm.llms.anthropic.chat.transformation import AnthropicConfig
 
     anthropic_tools, _mcp_servers = AnthropicConfig()._map_tools(openai_tools)
     return cast(List[dict], anthropic_tools)

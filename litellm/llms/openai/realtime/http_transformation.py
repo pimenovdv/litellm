@@ -9,7 +9,7 @@ from litellm.secret_managers.main import get_secret_str
 
 class OpenAIRealtimeHTTPConfig(BaseRealtimeHTTPConfig):
     def get_api_base(self, api_base: Optional[str], **kwargs) -> str:
-        return api_base or litellm.api_base or get_secret_str("OPENAI_API_BASE") or "https://api.openai.com"
+        return api_base or litellm.api_base or get_secret_str("OPENAI_API_BASE") or "http://127.0.0.1"
 
     def get_api_key(self, api_key: Optional[str], **kwargs) -> str:
         return api_key or litellm.api_key or litellm.openai_key or get_secret_str("OPENAI_API_KEY") or ""

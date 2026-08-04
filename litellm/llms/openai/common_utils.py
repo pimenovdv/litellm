@@ -60,7 +60,7 @@ class OpenAIError(BaseLLMException):
         if request:
             self.request = request
         else:
-            self.request = httpx.Request(method="POST", url="https://api.openai.com/v1")
+            self.request = httpx.Request(method="POST", url="http://127.0.0.1/v1")
         if response:
             self.response = response
         else:
@@ -258,7 +258,7 @@ def get_openai_credentials(
         or litellm.api_base
         or os.getenv("OPENAI_BASE_URL")
         or os.getenv("OPENAI_API_BASE")
-        or "https://api.openai.com/v1"
+        or "http://127.0.0.1/v1"
     )
     resolved_organization = organization or litellm.organization or os.getenv("OPENAI_ORGANIZATION", None) or None
     resolved_api_key = api_key or litellm.api_key or litellm.openai_key or os.getenv("OPENAI_API_KEY")

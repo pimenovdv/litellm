@@ -1,1 +1,0 @@
-class NvidiaRivaAudioTranscription: pass

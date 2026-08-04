@@ -311,7 +311,6 @@ if TYPE_CHECKING:
     )
     from litellm.llms.bedrock.common_utils import BedrockModelInfo
     from litellm.llms.cohere.common_utils import CohereModelInfo
-    from litellm.llms.mistral.ocr.transformation import MistralOCRConfig
 
     # Type stubs for lazy-loaded functions and classes
     from litellm.litellm_core_utils.cached_imports import (
@@ -7781,12 +7780,7 @@ class ProviderConfigManager:
             return litellm.VertexGeminiConfig()
         elif "claude" in model:
             return litellm.VertexAIAnthropicConfig()
-        elif "gpt-oss" in model:
-            from litellm.llms.vertex_ai.vertex_ai_partner_models.gpt_oss.transformation import (
-                VertexAIGPTOSSTransformation,
-            )
-
-            return VertexAIGPTOSSTransformation()
+        elif "gpt-oss" in model: pass
         elif model in litellm.vertex_mistral_models:
             if "codestral" in model:
                 return litellm.CodestralTextCompletionConfig()
@@ -7815,14 +7809,12 @@ class ProviderConfigManager:
     @staticmethod
     def _get_langgraph_config() -> BaseConfig:
         """Get LangGraph config."""
-        from litellm.llms.langgraph.chat.transformation import LangGraphConfig
 
         return LangGraphConfig()
 
     @staticmethod
     def _get_langflow_config() -> BaseConfig:
         """Get LangFlow config."""
-        from litellm.llms.langflow.chat.transformation import LangFlowConfig
 
         return LangFlowConfig()
 
@@ -7905,7 +7897,6 @@ class ProviderConfigManager:
         elif litellm.LlmProviders.SAMBANOVA == provider:
             return litellm.SambaNovaEmbeddingConfig()
         elif litellm.LlmProviders.OCI == provider:
-            from litellm.llms.oci.embed.transformation import OCIEmbedConfig
 
             return OCIEmbedConfig()
         elif litellm.LlmProviders.COHERE == provider or litellm.LlmProviders.COHERE_CHAT == provider:
@@ -8033,25 +8024,10 @@ class ProviderConfigManager:
 
             return BedrockModelInfo.get_bedrock_provider_config_for_messages_api(model)
         elif litellm.LlmProviders.VERTEX_AI == provider:
-            if "claude" in model_lower:
-                from litellm.llms.vertex_ai.vertex_ai_partner_models.anthropic.experimental_pass_through.transformation import (
-                    VertexAIPartnerModelsAnthropicMessagesConfig,
-                )
-
-                return VertexAIPartnerModelsAnthropicMessagesConfig()
+            if "claude" in model_lower: pass
         elif litellm.LlmProviders.AZURE_AI == provider:
-            if "claude" in model_lower:
-                from litellm.llms.azure_ai.anthropic.messages_transformation import (
-                    AzureAnthropicMessagesConfig,
-                )
-
-                return AzureAnthropicMessagesConfig()
-        elif litellm.LlmProviders.MINIMAX == provider:
-            from litellm.llms.minimax.messages.transformation import (
-                MinimaxMessagesConfig,
-            )
-
-            return MinimaxMessagesConfig()
+            if "claude" in model_lower: pass
+        elif litellm.LlmProviders.MINIMAX == provider: pass
         elif litellm.LlmProviders.DEEPSEEK == provider:
             from litellm.llms.deepseek.messages.transformation import (
                 DeepSeekAnthropicMessagesConfig,
@@ -8103,12 +8079,7 @@ class ProviderConfigManager:
             return AzureSpeechAudioTranscriptionConfig()
         elif litellm.LlmProviders.DEEPGRAM == provider:
             return litellm.DeepgramAudioTranscriptionConfig()
-        elif litellm.LlmProviders.ELEVENLABS == provider:
-            from litellm.llms.elevenlabs.audio_transcription.transformation import (
-                ElevenLabsAudioTranscriptionConfig,
-            )
-
-            return ElevenLabsAudioTranscriptionConfig()
+        elif litellm.LlmProviders.ELEVENLABS == provider: pass
         elif litellm.LlmProviders.OPENAI == provider:
             if "gpt-4o" in model:
                 return litellm.OpenAIGPTAudioTranscriptionConfig()
@@ -8126,42 +8097,17 @@ class ProviderConfigManager:
             )
 
             return IBMWatsonXAudioTranscriptionConfig()
-        elif litellm.LlmProviders.OVHCLOUD == provider:
-            from litellm.llms.ovhcloud.audio_transcription.transformation import (
-                OVHCloudAudioTranscriptionConfig,
-            )
-
-            return OVHCloudAudioTranscriptionConfig()
+        elif litellm.LlmProviders.OVHCLOUD == provider: pass
         elif litellm.LlmProviders.SCALEWAY == provider:
             from litellm.llms.scaleway.audio_transcription.transformation import (
                 ScalewayAudioTranscriptionConfig,
             )
 
             return ScalewayAudioTranscriptionConfig()
-        elif litellm.LlmProviders.MISTRAL == provider:
-            from litellm.llms.mistral.audio_transcription.transformation import (
-                MistralAudioTranscriptionConfig,
-            )
-
-            return MistralAudioTranscriptionConfig()
-        elif litellm.LlmProviders.NVIDIA_RIVA == provider:
-            from litellm.llms.nvidia_riva.audio_transcription.transformation import (
-                NvidiaRivaAudioTranscriptionConfig,
-            )
-
-            return NvidiaRivaAudioTranscriptionConfig()
-        elif litellm.LlmProviders.SONIOX == provider:
-            from litellm.llms.soniox.audio_transcription.transformation import (
-                SonioxAudioTranscriptionConfig,
-            )
-
-            return SonioxAudioTranscriptionConfig()
-        elif litellm.LlmProviders.VERTEX_AI == provider:
-            from litellm.llms.vertex_ai.audio_transcription.transformation import (
-                VertexAIAudioTranscriptionConfig,
-            )
-
-            return VertexAIAudioTranscriptionConfig()
+        elif litellm.LlmProviders.MISTRAL == provider: pass
+        elif litellm.LlmProviders.NVIDIA_RIVA == provider: pass
+        elif litellm.LlmProviders.SONIOX == provider: pass
+        elif litellm.LlmProviders.VERTEX_AI == provider: pass
         return None
 
     @staticmethod
@@ -8335,7 +8281,6 @@ class ProviderConfigManager:
         elif LlmProviders.GEMINI == provider:
             return litellm.GeminiModelInfo()
         elif LlmProviders.VERTEX_AI == provider:
-            from litellm.llms.vertex_ai.common_utils import VertexAIModelInfo
 
             return VertexAIModelInfo()
         elif LlmProviders.LITELLM_PROXY == provider:
@@ -8425,7 +8370,6 @@ class ProviderConfigManager:
 
             return GoogleAIStudioFilesHandler()
         elif LlmProviders.VERTEX_AI == provider:
-            from litellm.llms.vertex_ai.files.transformation import VertexAIFilesConfig
 
             return VertexAIFilesConfig()
         elif LlmProviders.BEDROCK == provider:
@@ -8437,7 +8381,6 @@ class ProviderConfigManager:
 
             return ManusFilesConfig()
         elif LlmProviders.ANTHROPIC == provider:
-            from litellm.llms.anthropic.files.transformation import AnthropicFilesConfig
 
             return AnthropicFilesConfig()
         return None
@@ -8487,17 +8430,8 @@ class ProviderConfigManager:
             return AzureOpenAIVectorStoreConfig()
         elif litellm.LlmProviders.VERTEX_AI == provider:
             if api_type == "rag_api" or api_type is None:  # default to rag_api
-                from litellm.llms.vertex_ai.vector_stores.rag_api.transformation import (
-                    VertexVectorStoreConfig,
-                )
-
-                return VertexVectorStoreConfig()
-            elif api_type == "search_api":
-                from litellm.llms.vertex_ai.vector_stores.search_api.transformation import (
-                    VertexSearchAPIVectorStoreConfig,
-                )
-
-                return VertexSearchAPIVectorStoreConfig()
+                pass
+            elif api_type == "search_api": pass
         elif litellm.LlmProviders.BEDROCK == provider:
             from litellm.llms.bedrock.vector_stores.transformation import (
                 BedrockVectorStoreConfig,
@@ -8637,12 +8571,7 @@ class ProviderConfigManager:
             )
 
             return get_black_forest_labs_image_generation_config(model)
-        elif LlmProviders.VERTEX_AI == provider:
-            from litellm.llms.vertex_ai.image_generation import (
-                get_vertex_ai_image_generation_config,
-            )
-
-            return get_vertex_ai_image_generation_config(model)
+        elif LlmProviders.VERTEX_AI == provider: pass
         elif LlmProviders.OPENROUTER == provider:
             from litellm.llms.openrouter.image_generation import (
                 get_openrouter_image_generation_config,
@@ -8681,7 +8610,6 @@ class ProviderConfigManager:
 
             return GeminiVideoConfig()
         elif LlmProviders.VERTEX_AI == provider:
-            from litellm.llms.vertex_ai.videos.transformation import VertexAIVideoConfig
 
             return VertexAIVideoConfig()
         elif LlmProviders.RUNWAYML == provider:
@@ -8784,12 +8712,7 @@ class ProviderConfigManager:
             )
 
             return LiteLLMProxyImageEditConfig()
-        elif LlmProviders.VERTEX_AI == provider:
-            from litellm.llms.vertex_ai.image_edit import (
-                get_vertex_ai_image_edit_config,
-            )
-
-            return get_vertex_ai_image_edit_config(model)
+        elif LlmProviders.VERTEX_AI == provider: pass
         elif LlmProviders.STABILITY == provider:
             from litellm.llms.stability.image_edit import (
                 get_stability_image_edit_config,
@@ -8818,7 +8741,6 @@ class ProviderConfigManager:
         """
         Get OCR configuration for a given provider.
         """
-        from litellm.llms.vertex_ai.ocr.transformation import VertexAIOCRConfig
 
         # Special handling for Azure AI - distinguish between Mistral OCR and Document Intelligence
         if provider == litellm.LlmProviders.AZURE_AI:
@@ -8827,7 +8749,6 @@ class ProviderConfigManager:
             return get_azure_ai_ocr_config(model=model)
 
         if provider == litellm.LlmProviders.VERTEX_AI:
-            from litellm.llms.vertex_ai.ocr.common_utils import get_vertex_ai_ocr_config
 
             return get_vertex_ai_ocr_config(model=model)
 
@@ -8944,36 +8865,16 @@ class ProviderConfigManager:
                 )
 
                 return AzureAVATextToSpeechConfig()
-        elif litellm.LlmProviders.ELEVENLABS == provider:
-            from litellm.llms.elevenlabs.text_to_speech.transformation import (
-                ElevenLabsTextToSpeechConfig,
-            )
-
-            return ElevenLabsTextToSpeechConfig()
+        elif litellm.LlmProviders.ELEVENLABS == provider: pass
         elif litellm.LlmProviders.RUNWAYML == provider:
             from litellm.llms.runwayml.text_to_speech.transformation import (
                 RunwayMLTextToSpeechConfig,
             )
 
             return RunwayMLTextToSpeechConfig()
-        elif litellm.LlmProviders.VERTEX_AI == provider:
-            from litellm.llms.vertex_ai.text_to_speech.transformation import (
-                VertexAITextToSpeechConfig,
-            )
-
-            return VertexAITextToSpeechConfig()
-        elif litellm.LlmProviders.MINIMAX == provider:
-            from litellm.llms.minimax.text_to_speech.transformation import (
-                MinimaxTextToSpeechConfig,
-            )
-
-            return MinimaxTextToSpeechConfig()
-        elif litellm.LlmProviders.AWS_POLLY == provider:
-            from litellm.llms.aws_polly.text_to_speech.transformation import (
-                AWSPollyTextToSpeechConfig,
-            )
-
-            return AWSPollyTextToSpeechConfig()
+        elif litellm.LlmProviders.VERTEX_AI == provider: pass
+        elif litellm.LlmProviders.MINIMAX == provider: pass
+        elif litellm.LlmProviders.AWS_POLLY == provider: pass
         return None
 
     @staticmethod
@@ -8988,12 +8889,6 @@ class ProviderConfigManager:
 
             return GoogleGenAIConfig()
         elif litellm.LlmProviders.VERTEX_AI == provider:
-            from litellm.llms.vertex_ai.google_genai.transformation import (
-                VertexAIGoogleGenAIConfig,
-            )
-            from litellm.llms.vertex_ai.vertex_ai_partner_models.main import (
-                VertexAIPartnerModels,
-            )
 
             #########################################################
             # If Vertex Partner models like Anthropic, Mistral, etc. are used,

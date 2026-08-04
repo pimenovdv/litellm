@@ -1,2 +1,0 @@
-class TopazModelInfo:
-    pass

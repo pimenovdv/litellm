@@ -82,7 +82,7 @@ class OpenAIVectorStoreConfig(BaseVectorStoreConfig):
             or litellm.api_base
             or get_secret_str("OPENAI_BASE_URL")
             or get_secret_str("OPENAI_API_BASE")
-            or "https://api.openai.com/v1"
+            or "http://127.0.0.1/v1"
         )
 
         # Remove trailing slashes
