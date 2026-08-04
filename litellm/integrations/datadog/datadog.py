@@ -1,0 +1,1 @@
+class DataDogLogger: pass
