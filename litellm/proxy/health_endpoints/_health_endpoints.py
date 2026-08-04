@@ -267,7 +267,6 @@ async def health_services_endpoint(
                 ),
             }
         elif service == "arize":
-            from litellm.integrations.arize.arize import ArizeLogger
 
             arize_logger = ArizeLogger()
             response = await arize_logger.async_health_check()
@@ -276,7 +275,6 @@ async def health_services_endpoint(
                 "message": (response["error_message"] if response["status"] == "unhealthy" else "Arize is healthy"),
             }
         elif service == "galileo":
-            from litellm.integrations.galileo import GalileoObserve
 
             galileo_logger = GalileoObserve()
             response = await galileo_logger.async_health_check()
@@ -305,7 +303,6 @@ async def health_services_endpoint(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail={"error": "Only proxy admins can trigger the New Relic test event."},
                 )
-            from litellm.integrations.newrelic.newrelic import NewRelicLogger
 
             newrelic_logger = NewRelicLogger()
             response = await newrelic_logger.async_health_check()
@@ -333,7 +330,6 @@ async def health_services_endpoint(
                 user_info=user_info,
             )
         elif service == "sqs":
-            from litellm.integrations.sqs import SQSLogger
 
             sqs_logger = SQSLogger()
             response = await sqs_logger.async_health_check()

@@ -15,8 +15,8 @@ from urllib.parse import urlparse
 # https://developers.openai.com/api/docs/pricing for the regional-processing
 # uplift these hostnames trigger.
 _OPENAI_REGIONAL_HOSTS: Dict[str, str] = {
-    "eu.api.openai.com": "eu",
-    "us.api.openai.com": "us",
+    "eu.127.0.0.1": "eu",
+    "us.127.0.0.1": "us",
 }
 
 

@@ -11,14 +11,6 @@ This is an __init__.py file to allow the following interface
 """
 
 from typing import Any, AsyncIterator, Coroutine, Dict, Iterator, List, Optional, Union
-
-from litellm.llms.anthropic.experimental_pass_through.messages.handler import (
-    anthropic_messages as _async_anthropic_messages,
-)
-from litellm.llms.anthropic.experimental_pass_through.messages.handler import (
-    anthropic_messages_handler as _sync_anthropic_messages,
-)
-from litellm.types.llms.anthropic_messages.anthropic_response import (
     AnthropicMessagesResponse,
 )
 
@@ -143,3 +135,7 @@ def create(
         container=container,
         **kwargs,
     )
+def _async_anthropic_messages(*args, **kwargs):
+    pass
+def _sync_anthropic_messages(*args, **kwargs):
+    pass

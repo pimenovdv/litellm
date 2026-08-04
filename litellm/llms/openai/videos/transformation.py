@@ -97,7 +97,7 @@ class OpenAIVideoConfig(BaseVideoConfig):
         Get the complete URL for OpenAI video generation.
         """
         if api_base is None:
-            api_base = "https://api.openai.com/v1"
+            api_base = "http://127.0.0.1/v1"
 
         return f"{api_base.rstrip('/')}/videos"
 

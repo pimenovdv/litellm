@@ -67,7 +67,7 @@ class OpenAIEvalsConfig(BaseEvalsAPIConfig):
     ) -> str:
         """Get complete URL for OpenAI Evals API"""
         if api_base is None:
-            api_base = "https://api.openai.com"
+            api_base = "http://127.0.0.1"
 
         if eval_id:
             encoded_eval_id = encode_url_path_segment(eval_id, field_name="eval_id")
@@ -106,7 +106,7 @@ class OpenAIEvalsConfig(BaseEvalsAPIConfig):
         headers: dict,
     ) -> Tuple[str, Dict]:
         """Transform list evals request for OpenAI"""
-        api_base = "https://api.openai.com"
+        api_base = "http://127.0.0.1"
         if litellm_params and litellm_params.api_base:
             api_base = litellm_params.api_base
 
@@ -259,7 +259,7 @@ class OpenAIEvalsConfig(BaseEvalsAPIConfig):
         headers: dict,
     ) -> Tuple[str, Dict]:
         """Transform create run request for OpenAI"""
-        api_base = "https://api.openai.com"
+        api_base = "http://127.0.0.1"
         if litellm_params and litellm_params.api_base:
             api_base = litellm_params.api_base
 
@@ -292,7 +292,7 @@ class OpenAIEvalsConfig(BaseEvalsAPIConfig):
         headers: dict,
     ) -> Tuple[str, Dict]:
         """Transform list runs request for OpenAI"""
-        api_base = "https://api.openai.com"
+        api_base = "http://127.0.0.1"
         if litellm_params and litellm_params.api_base:
             api_base = litellm_params.api_base
 

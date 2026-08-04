@@ -23,8 +23,6 @@ from litellm.constants import (
     ALLOWED_VERTEX_AI_PASSTHROUGH_HEADERS,
     BEDROCK_AGENT_RUNTIME_PASS_THROUGH_ROUTES,
 )
-from litellm.llms.anthropic.common_utils import AnthropicModelInfo
-from litellm.llms.vertex_ai.vertex_llm_base import VertexBase
 from litellm.proxy._types import *
 from litellm.proxy.auth.route_checks import RouteChecks
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
@@ -1651,8 +1649,7 @@ async def _base_vertex_proxy_route(
         user_api_key_dict: User API key authentication dict
         router_credentials: Optional vector store credentials from registry (LiteLLM_ManagedVectorStore)
     """
-    from litellm.llms.vertex_ai.common_utils import (
-        construct_target_url,
+            construct_target_url,
         get_vertex_location_from_url,
         get_vertex_model_id_from_url,
         get_vertex_project_id_from_url,

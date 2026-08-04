@@ -256,7 +256,6 @@ from litellm.litellm_core_utils.sensitive_data_masker import (
     mask_sensitive_keys,
 )
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
-from litellm.llms.vertex_ai.vertex_llm_base import VertexBase
 from litellm.proxy._lazy_features import attach_lazy_features
 from litellm.proxy._types import *
 from litellm.proxy.analytics_endpoints.analytics_endpoints import (
@@ -557,8 +556,6 @@ from litellm.router import (
     ModelGroupInfo,
 )
 from litellm.scheduler import FlowItem, Scheduler
-from litellm.secret_managers.aws_secret_manager import load_aws_kms
-from litellm.secret_managers.google_kms import load_google_kms
 from litellm.secret_managers.main import (
     get_secret,
     get_secret_bool,
@@ -5198,8 +5195,7 @@ class ProxyConfig:
             elif (
                 key_management_system == KeyManagementSystem.AWS_SECRET_MANAGER.value  # noqa: F405
             ):
-                from litellm.secret_managers.aws_secret_manager_v2 import (
-                    AWSSecretsManagerV2,
+                                    AWSSecretsManagerV2,
                 )
 
                 AWSSecretsManagerV2.load_aws_secret_manager(
@@ -5209,20 +5205,17 @@ class ProxyConfig:
             elif key_management_system == KeyManagementSystem.AWS_KMS.value:
                 load_aws_kms(use_aws_kms=True)
             elif key_management_system == KeyManagementSystem.GOOGLE_SECRET_MANAGER.value:
-                from litellm.secret_managers.google_secret_manager import (
-                    GoogleSecretManager,
+                                    GoogleSecretManager,
                 )
 
                 GoogleSecretManager()
             elif key_management_system == KeyManagementSystem.HASHICORP_VAULT.value:
-                from litellm.secret_managers.hashicorp_secret_manager import (
-                    HashicorpSecretManager,
+                                    HashicorpSecretManager,
                 )
 
                 HashicorpSecretManager()
             elif key_management_system == KeyManagementSystem.CYBERARK.value:
-                from litellm.secret_managers.cyberark_secret_manager import (
-                    CyberArkSecretManager,
+                                    CyberArkSecretManager,
                 )
 
                 CyberArkSecretManager()
@@ -8209,7 +8202,6 @@ class ProxyStartupEvent:
         ########################################################
         from litellm.integrations.cloudzero.cloudzero import CloudZeroLogger
         from litellm.integrations.focus.focus_logger import FocusLogger
-        from litellm.proxy.spend_tracking.cloudzero_endpoints import is_cloudzero_setup
 
         if await is_cloudzero_setup():
             await CloudZeroLogger.init_cloudzero_background_job(scheduler=scheduler)
@@ -8223,8 +8215,7 @@ class ProxyStartupEvent:
         # Vantage Background Job
         ########################################################
         from litellm.integrations.vantage.vantage_logger import VantageLogger
-        from litellm.proxy.spend_tracking.vantage_endpoints import (
-            _get_vantage_settings,
+                    _get_vantage_settings,
             is_vantage_setup,
             is_vantage_setup_in_config,
             is_vantage_setup_in_db,
@@ -10753,7 +10744,6 @@ def _get_provider_token_counter(
     except Exception:
         # If provider detection fails, fall back to manual checks
         if full_model.startswith("anthropic/") or "anthropic" in full_model.lower():
-            from litellm.llms.anthropic.common_utils import AnthropicModelInfo
 
             anthropic_model_info = AnthropicModelInfo()
             return anthropic_model_info.get_token_counter(), model, custom_llm_provider

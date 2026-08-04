@@ -669,7 +669,6 @@ def clean_headers(
     Returns:
         Cleaned headers dict
     """
-    from litellm.llms.anthropic.common_utils import is_anthropic_oauth_key
 
     clean_headers = {}
     litellm_key_lower = litellm_key_header_name.lower() if litellm_key_header_name is not None else None
@@ -2685,7 +2684,6 @@ def add_provider_specific_headers_to_request(
     data: dict,
     headers: dict,
 ):
-    from litellm.llms.anthropic.common_utils import is_anthropic_oauth_key
 
     anthropic_headers = {}
     # boolean to indicate if a header was added

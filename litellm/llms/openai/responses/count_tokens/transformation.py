@@ -12,12 +12,12 @@ class OpenAICountTokensConfig:
     Configuration and transformation logic for OpenAI Responses API token counting.
 
     OpenAI Responses API Token Counting Specification:
-    - Endpoint: POST https://api.openai.com/v1/responses/input_tokens
+    - Endpoint: POST http://127.0.0.1/v1/responses/input_tokens
     - Response: {"input_tokens": <number>}
     """
 
     def get_openai_count_tokens_endpoint(self, api_base: Optional[str] = None) -> str:
-        base = api_base or "https://api.openai.com/v1"
+        base = api_base or "http://127.0.0.1/v1"
         base = base.rstrip("/")
         return f"{base}/responses/input_tokens"
 

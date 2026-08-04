@@ -89,7 +89,7 @@ class OpenAIVectorStoreFilesConfig(BaseVectorStoreFilesConfig):
             or litellm.api_base
             or get_secret_str("OPENAI_BASE_URL")
             or get_secret_str("OPENAI_API_BASE")
-            or "https://api.openai.com/v1"
+            or "http://127.0.0.1/v1"
         )
         base_url = base_url.rstrip("/")
         encoded_vector_store_id = encode_url_path_segment(vector_store_id, field_name="vector_store_id")

@@ -13,18 +13,12 @@ from litellm._logging import verbose_proxy_logger
 from litellm._uuid import uuid
 from litellm.integrations.custom_guardrail import CustomGuardrail
 from litellm.litellm_core_utils.safe_json_dumps import safe_dumps
-from litellm.proxy.guardrails.guardrail_hooks.bedrock_guardrails import (
     BedrockGuardrail,
 )
-from litellm.proxy.guardrails.guardrail_hooks.grayswan import (
     GraySwanGuardrail,
 )
-from litellm.proxy.guardrails.guardrail_hooks.grayswan import (
     initialize_guardrail as initialize_grayswan,
 )
-from litellm.proxy.guardrails.guardrail_hooks.lakera_ai import lakeraAI_Moderation
-from litellm.proxy.guardrails.guardrail_hooks.lakera_ai_v2 import LakeraAIGuardrail
-from litellm.proxy.guardrails.guardrail_hooks.presidio import (
     _OPTIONAL_PresidioPIIMasking,
 )
 from litellm.proxy.guardrails.guardrail_hooks.tool_permission import (

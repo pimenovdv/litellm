@@ -1,2 +1,0 @@
-class TopazConfig:
-    pass

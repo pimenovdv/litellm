@@ -163,8 +163,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-    from litellm.llms.anthropic.experimental_pass_through.messages.streaming_iterator import (
-        AnthropicMessagesStreamingResponse,
+            AnthropicMessagesStreamingResponse,
     )
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
@@ -2158,8 +2157,7 @@ class BaseLLMHTTPHandler:
 
         initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
         if stream:
-            from litellm.llms.anthropic.experimental_pass_through.messages.streaming_iterator import (
-                AnthropicMessagesStreamingResponse,
+                            AnthropicMessagesStreamingResponse,
                 anthropic_messages_stream_hidden_params,
             )
 
@@ -2182,8 +2180,7 @@ class BaseLLMHTTPHandler:
                     hidden_params=stream_hidden_params,
                 )
 
-            from litellm.llms.anthropic.experimental_pass_through.messages.agentic_streaming_iterator import (
-                AgenticAnthropicStreamingIterator,
+                            AgenticAnthropicStreamingIterator,
             )
 
             initial_response = AgenticAnthropicStreamingIterator(
@@ -2310,11 +2307,9 @@ class BaseLLMHTTPHandler:
     def _rust_anthropic_messages_fake_stream(
         rust_response: AnthropicMessagesResponse,
     ) -> "AnthropicMessagesStreamingResponse":
-        from litellm.llms.anthropic.experimental_pass_through.messages.fake_stream_iterator import (
-            FakeAnthropicMessagesStreamIterator,
+                    FakeAnthropicMessagesStreamIterator,
         )
-        from litellm.llms.anthropic.experimental_pass_through.messages.streaming_iterator import (
-            AnthropicMessagesStreamHiddenParams,
+                    AnthropicMessagesStreamHiddenParams,
             AnthropicMessagesStreamingResponse,
         )
 
@@ -5354,8 +5349,7 @@ class BaseLLMHTTPHandler:
             from typing import cast
 
             from litellm._logging import verbose_logger
-            from litellm.llms.anthropic.experimental_pass_through.messages.fake_stream_iterator import (
-                FakeAnthropicMessagesStreamIterator,
+                            FakeAnthropicMessagesStreamIterator,
             )
             from litellm.types.llms.anthropic_messages.anthropic_response import (
                 AnthropicMessagesResponse,
