@@ -21,7 +21,7 @@ def test_enterprise_routes_all_imports_exist():
     # Path to the enterprise_routes.py source file
     enterprise_routes_path = os.path.join(
         os.path.dirname(__file__),
-        "..", "..", "..", "..", 
+        "..", "..", "..", "..", "Backend",
         "enterprise", "litellm_enterprise", "proxy", "enterprise_routes.py"
     )
     
