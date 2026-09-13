@@ -1,0 +1,12 @@
+pytest
+python-dotenv
+aiohttp
+requests
+pydantic
+openai
+httpx
+fastapi
+tiktoken
+tokenizers
+fastuuid
+pytest-asyncio
