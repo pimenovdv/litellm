@@ -16,11 +16,11 @@ WORKDIR /app
 
 # Layer the lockfile-only install above the source copy so source-only
 # edits don't bust the install cache.
-COPY ui/litellm-dashboard/package.json ui/litellm-dashboard/package-lock.json ./
+COPY frontend/litellm-dashboard/package.json frontend/litellm-dashboard/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
     npm ci --prefer-offline
 
-COPY ui/litellm-dashboard/ ./
+COPY frontend/litellm-dashboard/ ./
 RUN npm run build
 
 # ---------- runtime ----------
@@ -32,8 +32,8 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 # Static export → web root.
 COPY --from=builder /app/out /usr/share/nginx/html
 
-# Routing rules — see ui/nginx.conf for the full description.
-COPY ui/nginx.conf /etc/nginx/nginx.conf
+# Routing rules — see frontend/nginx.conf for the full description.
+COPY frontend/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 3000/tcp
 
