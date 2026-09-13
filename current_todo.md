@@ -1,4 +1,4 @@
-# Текущие задачи (Создание frontend)
-- [x] Создать корневую директорию `frontend` и перенести в неё `ui/Dockerfile` и `ui/nginx.conf`.
-- [ ] Перенести папку `ui/litellm-dashboard` в директорию `frontend/litellm-dashboard`.
-- [ ] Удалить пустую директорию `ui`.
+# Текущие задачи (Обновление Dockerfile и docker-compose)
+- [ ] Обновить корневой `docker-compose.yml` (пути к Dockerfile, context).
+- [ ] Обновить `frontend/Dockerfile` (изменить пути `ui/` на `frontend/`).
+- [ ] Обновить корневой `Dockerfile` для `Backend` (если требуется).
