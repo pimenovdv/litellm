@@ -18,7 +18,7 @@ services:
 
   frontend:
     build:
-      context: ./ui/litellm-dashboard
+      context: ./frontend/litellm-dashboard
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
