@@ -1,5 +1,7 @@
 # Текущие задачи (Очистка репозитория от мусора - интеграции)
-- [ ] Удалить файлы интеграций, связанные с Langfuse, Datadog и Sentry из Backend/litellm/integrations/.
-- [ ] Удалить файлы интеграций, связанные со Slack из Backend/litellm/integrations/.
-- [ ] Удалить неиспользуемые папки интеграций из Backend/litellm/integrations/ (opentelemetry, prometheus_helpers и др. по частям).
-- [ ] Очистить код импортов в Backend/litellm/_logging.py от удаленных интеграций.
+- [ ] Список файлов и папок в Backend/litellm/integrations/, которые относятся к Langfuse, Datadog и Sentry и могут быть неиспользуемыми (не удалять):
+  - Backend/litellm/integrations/callback_configs.json (содержит конфигурации datadog, datadog_metrics, datadog_cost_management, langfuse, langfuse_otel)
+  - Backend/litellm/integrations/litellm_agent/litellm_agent_model_resolver.py (содержит упоминание langfuse в комментариях/документации)
+  - Backend/litellm/integrations/generic_api/generic_api_callback.py (содержит комментарий-ссылку на langfuse.py)
+  - Backend/litellm/integrations/opentelemetry/ (папка, потенциально неиспользуемая)
+  - Backend/litellm/integrations/prometheus_helpers/ (папка, потенциально неиспользуемая)
