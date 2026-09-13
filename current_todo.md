@@ -1,6 +1,4 @@
-# Текущие задачи (Создание Backend)
-- [x] Создать директорию `Backend` и перенести туда папку `backend`.
-- [x] Перенести папку `gateway` в `Backend`.
-- [x] Перенести папку `enterprise` в `Backend`.
-- [x] Перенести папку `litellm` в `Backend`.
-- [x] Перенести основные конфигурации (proxy_server_config.yaml, pyproject.toml, pytest.ini, ruff.toml, ruff-strict.toml, uv.lock) в `Backend`.
+# Текущие задачи (Создание frontend)
+- [ ] Создать корневую директорию `frontend` и перенести в неё `ui/Dockerfile` и `ui/nginx.conf`.
+- [ ] Перенести папку `ui/litellm-dashboard` в директорию `frontend/litellm-dashboard`.
+- [ ] Удалить пустую директорию `ui`.
