@@ -1,14 +1,14 @@
-import { handleAddModelSubmit } from '../../../ui/litellm-dashboard/src/components/add_model/handle_add_model_submit';
-import { modelCreateCall } from '../../../ui/litellm-dashboard/src/components/networking';
+import { handleAddModelSubmit } from '../../../frontend/litellm-dashboard/src/components/add_model/handle_add_model_submit';
+import { modelCreateCall } from '../../../frontend/litellm-dashboard/src/components/networking';
 
 // Mock the dependencies
 const mockModelCreateCall = jest.fn().mockResolvedValue({ data: 'success' });
-jest.mock('../../../ui/litellm-dashboard/src/components/networking', () => ({
+jest.mock('../../../frontend/litellm-dashboard/src/components/networking', () => ({
   modelCreateCall: async (accessToken: string, formValues: any) => mockModelCreateCall(formValues)
 }));
 
 // Also need to mock provider_map
-jest.mock('../../../ui/litellm-dashboard/src/components/provider_info_helpers', () => ({
+jest.mock('../../../frontend/litellm-dashboard/src/components/provider_info_helpers', () => ({
   provider_map: {
     'openai': 'openai'
   }

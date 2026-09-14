@@ -2627,30 +2627,30 @@ jobs:
       - setup_google_dns
       - restore_cache:
           keys:
-            - ui-build-deps-v1-{{ checksum "ui/litellm-dashboard/package-lock.json" }}
+            - ui-build-deps-v1-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}
             - ui-build-deps-v1-
       - restore_cache:
           keys:
-            - ui-nextjs-cache-v1-{{ checksum "ui/litellm-dashboard/package-lock.json" }}
+            - ui-nextjs-cache-v1-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}
             - ui-nextjs-cache-v1-
       - run:
           name: Install dependencies
           command: |
-            cd ui/litellm-dashboard
+            cd frontend/litellm-dashboard
             npm ci
       - save_cache:
-          key: ui-build-deps-v1-{{ checksum "ui/litellm-dashboard/package-lock.json" }}
+          key: ui-build-deps-v1-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}
           paths:
-            - ui/litellm-dashboard/node_modules
+            - frontend/litellm-dashboard/node_modules
       - run:
           name: Build UI
           command: |
-            cd ui/litellm-dashboard
+            cd frontend/litellm-dashboard
             source ./build_ui.sh
       - save_cache:
-          key: ui-nextjs-cache-v1-{{ checksum "ui/litellm-dashboard/package-lock.json" }}
+          key: ui-nextjs-cache-v1-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}
           paths:
-            - ui/litellm-dashboard/.next/cache
+            - frontend/litellm-dashboard/.next/cache
       - persist_to_workspace:
           root: .
           paths:
@@ -2671,21 +2671,21 @@ jobs:
       - setup_google_dns
       - restore_cache:
           keys:
-            - ui-unit-deps-v1-{{ checksum "ui/litellm-dashboard/package-lock.json" }}
+            - ui-unit-deps-v1-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}
             - ui-unit-deps-v1-
       - run:
           name: Install dependencies
           command: |
-            cd ui/litellm-dashboard
+            cd frontend/litellm-dashboard
             npm ci
       - save_cache:
-          key: ui-unit-deps-v1-{{ checksum "ui/litellm-dashboard/package-lock.json" }}
+          key: ui-unit-deps-v1-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}
           paths:
-            - ui/litellm-dashboard/node_modules
+            - frontend/litellm-dashboard/node_modules
       - run:
           name: Run UI unit tests (Vitest)
           command: |
-            cd ui/litellm-dashboard
+            cd frontend/litellm-dashboard
 
             CI=true npm run test -- --run \
               --pool forks --poolOptions.forks.maxForks=6
@@ -2731,7 +2731,7 @@ jobs:
             - ~/.cache/uv
       - restore_cache:
           keys:
-            - ui-e2e-node-deps-v3-{{ checksum "ui/litellm-dashboard/package-lock.json" }}-{{ checksum "tests/e2e/ui/package-lock.json" }}
+            - ui-e2e-node-deps-v3-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}-{{ checksum "tests/e2e/ui/package-lock.json" }}
       - run:
           name: Install Node dependencies and Playwright
           # The cimg/python:3.12-browsers image already ships the Chromium system
@@ -2740,15 +2740,15 @@ jobs:
           # 5-10 minutes to the job and frequently stalls on flaky Ubuntu mirrors,
           # so we install just the browser binary.
           command: |
-            cd ui/litellm-dashboard
+            cd frontend/litellm-dashboard
             npm ci
             cd ../../tests/e2e/ui
             npm ci
             npx playwright install chromium
       - save_cache:
-          key: ui-e2e-node-deps-v3-{{ checksum "ui/litellm-dashboard/package-lock.json" }}-{{ checksum "tests/e2e/ui/package-lock.json" }}
+          key: ui-e2e-node-deps-v3-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}-{{ checksum "tests/e2e/ui/package-lock.json" }}
           paths:
-            - ui/litellm-dashboard/node_modules
+            - frontend/litellm-dashboard/node_modules
             - tests/e2e/ui/node_modules
             - ~/.cache/ms-playwright
       - run:
@@ -2762,7 +2762,7 @@ jobs:
           # the pre-build bundle on every run. Replace-and-move guarantees the
           # freshly built bundle is what the proxy actually serves.
           command: |
-            cd ui/litellm-dashboard
+            cd frontend/litellm-dashboard
             npm run build
             rm -rf ../../litellm/proxy/_experimental/out
             mv out ../../litellm/proxy/_experimental/out
@@ -2873,25 +2873,25 @@ jobs:
             - ~/.cache/uv
       - restore_cache:
           keys:
-            - ui-e2e-node-deps-v3-{{ checksum "ui/litellm-dashboard/package-lock.json" }}-{{ checksum "tests/e2e/ui/package-lock.json" }}
+            - ui-e2e-node-deps-v3-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}-{{ checksum "tests/e2e/ui/package-lock.json" }}
       - run:
           name: Install Node dependencies and Playwright
           command: |
-            cd ui/litellm-dashboard
+            cd frontend/litellm-dashboard
             npm ci
             cd ../../tests/e2e/ui
             npm ci
             npx playwright install chromium
       - save_cache:
-          key: ui-e2e-node-deps-v3-{{ checksum "ui/litellm-dashboard/package-lock.json" }}-{{ checksum "tests/e2e/ui/package-lock.json" }}
+          key: ui-e2e-node-deps-v3-{{ checksum "frontend/litellm-dashboard/package-lock.json" }}-{{ checksum "tests/e2e/ui/package-lock.json" }}
           paths:
-            - ui/litellm-dashboard/node_modules
+            - frontend/litellm-dashboard/node_modules
             - tests/e2e/ui/node_modules
             - ~/.cache/ms-playwright
       - run:
           name: Build UI from source
           command: |
-            cd ui/litellm-dashboard
+            cd frontend/litellm-dashboard
             npm run build
             rm -rf ../../litellm/proxy/_experimental/out
             mv out ../../litellm/proxy/_experimental/out

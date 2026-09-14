@@ -7,7 +7,7 @@ This project is a customized, offline-first branch of [LiteLLM](https://github.c
 The project consists of two main components separated for independent scaling:
 
 1.  **Backend (Python)**: A lightweight API gateway built on FastAPI that handles routing, rate limiting (Redis), budget management (PostgreSQL), and exact-match caching. It connects exclusively to your internal or custom endpoints (`api_base`).
-2.  **Frontend (Next.js)**: A dashboard (`ui/litellm-dashboard`) for managing users, keys, and budgets, completely decoupled from the backend codebase and communicating strictly via REST API.
+2.  **Frontend (Next.js)**: A dashboard (`frontend/litellm-dashboard`) for managing users, keys, and budgets, completely decoupled from the backend codebase and communicating strictly via REST API.
 
 ## Features Kept
 - **OpenAI Provider Support**: Fully supports custom `api_base` targets.
