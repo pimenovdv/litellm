@@ -70,6 +70,7 @@ async def chat_completion(session, key, model="azure-gpt-3.5", request_metadata=
 @pytest.mark.skip(
     reason="langfuse apis are flaky, we unit test team / key based logging in test_langfuse_unit_tests.py"
 )
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 async def test_team_logging():
     """
     1. Add Langfuse as a callback with /config/update

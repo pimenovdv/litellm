@@ -98,7 +98,7 @@ def verify_member_in_team(team_info: Dict, user_email: str) -> bool:
     )
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 def test_team_creation(api_client):
     """Test team creation"""
     team_alias = f"Test Team {uuid.uuid4().hex[:6]}"
@@ -111,7 +111,7 @@ def test_team_creation(api_client):
     assert "o3-mini" in team_info["team_info"]["models"]
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 def test_add_single_member(api_client, new_team):
     """Test adding a single member to a new team"""
     # Get initial team info
@@ -141,7 +141,7 @@ def test_add_single_member(api_client, new_team):
 @pytest.mark.skip(
     reason="Flaky in CI: /team/info?team_id=... intermittently returns 404/400 mid-loop after add_team_member calls. Single-member coverage in test_add_single_member is sufficient; team-member CRUD is also covered by tests/test_litellm/proxy/management_endpoints/."
 )
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 def test_add_multiple_members(api_client, new_team):
     """Test adding multiple members to a new team"""
     # Get initial team size
@@ -186,7 +186,7 @@ def test_add_multiple_members(api_client, new_team):
         ), f"Member {email} not found in final team check"
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 def test_team_info_structure(api_client, new_team):
     """Test the structure of team info response"""
     team_info = api_client.get_team_info(new_team)
@@ -204,7 +204,7 @@ def test_team_info_structure(api_client, new_team):
         assert "role" in member
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 def test_error_handling(api_client):
     """Test error handling for invalid team ID"""
     with pytest.raises(requests.exceptions.HTTPError):
@@ -214,7 +214,7 @@ def test_error_handling(api_client):
 @pytest.mark.skip(
     reason="Flaky in CI: /team/info?team_id=... intermittently returns 404 after add_team_member calls, same race documented for test_add_multiple_members. Duplicate-prevention is covered by test_update_team_members_list_duplicate_prevention in tests/test_litellm/proxy/management_endpoints/test_team_endpoints.py."
 )
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 def test_duplicate_user_addition(api_client, new_team):
     """Test that adding the same user twice is handled appropriately"""
     # Add user first time
@@ -258,7 +258,7 @@ def test_duplicate_user_addition(api_client, new_team):
     logger.info(f"Number of times user appears in team: {user_count}")
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 def test_member_deletion(api_client, new_team):
     """Test that member deletion works correctly and removes all instances of a user"""
     # Add a test user
@@ -306,7 +306,7 @@ def test_member_deletion(api_client, new_team):
     ), f"Team size changed unexpectedly (was {initial_size}, now {final_size})"
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 def test_delete_nonexistent_member(api_client, new_team):
     """Test that attempting to delete a nonexistent member raises appropriate error"""
     nonexistent_user = f"nonexistent_{uuid.uuid4().hex[:6]}"

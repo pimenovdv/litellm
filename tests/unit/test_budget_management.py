@@ -71,7 +71,7 @@ async def budget_setup():
         await delete_budget(session, budget_id)
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_create_budget_with_duration(budget_setup):
     """

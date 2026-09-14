@@ -286,7 +286,7 @@ async def image_generation(session, key):
         )  # calling the function to check response headers
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_chat_completion():
     """
@@ -313,7 +313,7 @@ async def test_chat_completion():
 
 @pytest.mark.asyncio
 @pytest.mark.flaky(retries=3, delay=1)
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.skip(reason="Flaky test, this works locally but not on CI")
 async def test_chat_completion_ratelimit():
     """
@@ -341,7 +341,7 @@ async def test_chat_completion_ratelimit():
                 pytest.fail(f"Wrong error received - {str(e)}")
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 @pytest.mark.skip(reason="Flaky test")
 async def test_chat_completion_different_deployments():
@@ -373,7 +373,7 @@ async def test_chat_completion_different_deployments():
             pass
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_chat_completion_streaming():
     """
@@ -397,7 +397,7 @@ async def test_chat_completion_streaming():
     print(f"response_str: {response_str}")
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_completion_streaming_usage_metrics():
     """
@@ -428,7 +428,7 @@ async def test_completion_streaming_usage_metrics():
     assert last_chunk.usage.total_tokens > 0, "Total tokens should be greater than 0"
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_chat_completion_anthropic_structured_output():
     """
@@ -462,7 +462,7 @@ async def test_chat_completion_anthropic_structured_output():
         print(message.parsed.events)
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_completion():
     """
@@ -490,7 +490,7 @@ async def test_completion():
     )
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_embeddings():
     """
@@ -512,7 +512,7 @@ async def test_embeddings():
 
 
 @pytest.mark.flaky(retries=5, delay=1)
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_image_generation():
     """
@@ -531,7 +531,7 @@ async def test_image_generation():
 
 
 @pytest.mark.flaky(retries=5, delay=1)
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_openai_wildcard_chat_completion():
     """
@@ -548,7 +548,7 @@ async def test_openai_wildcard_chat_completion():
         await chat_completion(session=session, key=key, model="gpt-3.5-turbo-0125")
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_proxy_all_models():
     """
@@ -571,7 +571,7 @@ async def test_proxy_all_models():
         )
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_batch_chat_completions():
     """
@@ -593,7 +593,7 @@ async def test_batch_chat_completions():
         assert isinstance(response, list)
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_moderations_endpoint():
     """

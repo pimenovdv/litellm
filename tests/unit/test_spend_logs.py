@@ -103,7 +103,7 @@ async def get_spend_logs(session, request_id=None, api_key=None):
 @pytest.mark.skip(
     reason="Flaky in CI: /spend/logs?request_id=... returns 500 even after a 20s wait for the spend log to be written. Spend-log accuracy is covered by tests/test_litellm/proxy/spend_tracking/ and the proxy_spend_accuracy_tests CircleCI job."
 )
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_spend_logs():
     """
@@ -162,7 +162,7 @@ async def generate_team(session: aiohttp.ClientSession, org_id: str) -> dict:
 @pytest.mark.skip(
     reason="Flaky in CI: /spend/logs?request_id=... returns 500 even after a 20s wait for the spend log to be written. Same write-then-read race against the spend logs DB as test_spend_logs. Spend-log accuracy is covered by tests/test_litellm/proxy/spend_tracking/ and the proxy_spend_accuracy_tests CircleCI job."
 )
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_spend_logs_with_org_id():
     """
@@ -241,7 +241,7 @@ async def get_spend_report(session, start_date, end_date):
 
 
 @pytest.mark.skip(reason="datetime in ci/cd gets set weirdly")
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_get_predicted_spend_logs():
     """
@@ -258,7 +258,7 @@ async def test_get_predicted_spend_logs():
 
 
 @pytest.mark.skip(reason="High traffic load test, meant to be run locally")
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_spend_logs_high_traffic():
     """
@@ -312,7 +312,7 @@ async def test_spend_logs_high_traffic():
         raise Exception("it worked!")
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 async def test_spend_report_endpoint():
     async with aiohttp.ClientSession(

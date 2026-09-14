@@ -238,7 +238,7 @@ async def get_current_routing_strategy(session):
         return routing_strategy
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 @pytest.mark.order1
 @pytest.mark.flaky(reruns=2, reruns_delay=5)
@@ -267,7 +267,7 @@ async def test_check_num_callbacks():
         assert not leaks, f"Callback leak detected.\n{report}"
 
 
-@pytest.mark.skip(reason="Offline environment lacks local proxy server")
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.asyncio
 @pytest.mark.order2
 @pytest.mark.flaky(reruns=2, reruns_delay=5)
