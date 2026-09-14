@@ -12,6 +12,7 @@ import litellm
 import subprocess
 
 
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.skip(reason="local test")
 def test_decrypt_and_reset_env():
     os.environ["DATABASE_URL"] = (
@@ -30,6 +31,7 @@ def test_decrypt_and_reset_env():
     print("DATABASE_URL={}".format(os.environ["DATABASE_URL"]))
 
 
+@pytest.mark.skip(reason="Offline environment lacks local proxy server and dynamic configs")
 @pytest.mark.skip(reason="local test")
 def test_entrypoint_decrypt_and_reset():
     os.environ["DATABASE_URL"] = (
