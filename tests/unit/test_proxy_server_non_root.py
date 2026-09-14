@@ -2,6 +2,7 @@ from unittest.mock import patch
 import pytest
 
 
+@pytest.mark.skip(reason="Offline environment lacks local proxy server")
 @pytest.mark.skip(reason="Very Flaky in CI, will debug later")
 def test_restructure_ui_html_files_skipped_in_non_root(monkeypatch):
     """
@@ -40,6 +41,7 @@ def test_restructure_ui_html_files_skipped_in_non_root(monkeypatch):
         mock_restructure.assert_not_called()
 
 
+@pytest.mark.skip(reason="Offline environment lacks local proxy server")
 @pytest.mark.skip(reason="Very Flaky in CI, will debug later")
 def test_restructure_ui_html_files_NOT_skipped_locally(monkeypatch):
     """
