@@ -42,7 +42,6 @@ from litellm.integrations.literal_ai import LiteralAILogger
 from litellm.integrations.mlflow import MlflowLogger
 from litellm.integrations.newrelic import NewRelicLogger
 from litellm.integrations.openmeter import OpenMeterLogger
-from litellm.integrations.opentelemetry import OpenTelemetry
 from litellm.integrations.opik.opik import OpikLogger
 from litellm.integrations.posthog import PostHogLogger
 from litellm.integrations.prometheus import PrometheusLogger
@@ -75,7 +74,6 @@ class CustomLoggerRegistry:
         "gcs_bucket": GCSBucketLogger,
         "opik": OpikLogger,
         "argilla": ArgillaLogger,
-        "opentelemetry": OpenTelemetry,
         "azure_sentinel": AzureSentinelLogger,
         "azure_storage": AzureBlobStorageLogger,
         "humanloop": HumanloopLogger,

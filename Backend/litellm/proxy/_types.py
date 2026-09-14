@@ -23,7 +23,6 @@ from litellm.litellm_core_utils.initialize_dynamic_callback_params import (
 from litellm.types.integrations.compression_interception import (
     CompressionSavingsMetadata,
 )
-from litellm.types.integrations.slack_alerting import AlertType
 from litellm.types.llms.openai import (
     AllMessageValues,
     ResponsesAPIResponse,
@@ -2344,10 +2343,6 @@ class ConfigGeneralSettings(LiteLLMPydanticObjectBase):
     alerting: Optional[List] = Field(
         None,
         description="List of alerting integrations. Today, just slack - `alerting: ['slack']`",
-    )
-    alert_types: Optional[List[AlertType]] = Field(
-        None,
-        description="List of alerting types. By default it is all alerts",
     )
     alert_to_webhook_url: Optional[Dict] = Field(
         None,

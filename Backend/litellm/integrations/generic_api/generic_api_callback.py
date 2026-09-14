@@ -408,7 +408,7 @@ class GenericAPILogger(CustomBatchLogger):
         verbose_logger.debug(f"GenericAPILogger Logging - Enters logging function for model {kwargs}")
 
         # construct payload to send custom logger
-        # follows the same params as langfuse.py
+
         litellm_params = kwargs.get("litellm_params", {})
         metadata = litellm_params.get("metadata", {}) or {}  # if litellm_params['metadata'] == None
         messages = kwargs.get("messages")

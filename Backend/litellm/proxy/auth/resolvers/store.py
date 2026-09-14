@@ -34,7 +34,6 @@ from litellm.proxy.auth.roles import TeamRole, map_role, team_role
 
 if TYPE_CHECKING:
     from litellm.caching.caching import DualCache
-    from litellm.integrations.opentelemetry import Span
     from litellm.proxy.utils import PrismaClient, ProxyLogging
 
 

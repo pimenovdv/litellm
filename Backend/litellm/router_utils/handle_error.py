@@ -5,7 +5,6 @@ from litellm.constants import MAX_EXCEPTION_MESSAGE_LENGTH
 from litellm.router_utils.cooldown_handlers import (
     _async_get_cooldown_deployments_with_debug_info,
 )
-from litellm.types.integrations.slack_alerting import AlertType
 from litellm.types.router import RouterRateLimitError
 
 if TYPE_CHECKING:
@@ -63,7 +62,6 @@ async def send_llm_exception_alert(
     await litellm_router_instance.slack_alerting_logger.send_alert(
         message=f"LLM API call failed: `{exception_str}`",
         level="High",
-        alert_type=AlertType.llm_exceptions,
         alerting_metadata={},
     )
 
