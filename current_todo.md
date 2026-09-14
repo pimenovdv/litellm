@@ -1,8 +1,5 @@
-# Текущие задачи (Вырезать лишний функционал из ядра системы)
-- [x] Вырезать функционал RAG из `Backend/litellm`.
-- [ ] Удалить директорию `Backend/litellm/proxy/guardrails/`.
-- [ ] Удалить типы `Backend/litellm/types/guardrails.py`, `Backend/litellm/types/proxy/guardrails/` и `Backend/litellm/types/proxy/policy_engine/`.
-- [ ] Очистить `Backend/litellm/proxy/proxy_server.py` и `Backend/litellm/router.py` от импортов и логики Guardrails.
-- [ ] Отметить удаление Guardrails в `todo.md`.
-- [ ] Вырезать сторонние менеджеры секретов из `Backend/litellm`.
-- [ ] Вырезать телеметрию из `Backend/litellm`.
+# Текущие задачи (Удаление поддержки сторонних LLM-провайдеров)
+- [x] Вырезать все импорты и ссылки, связанные с `anthropic_messages` / `Anthropic` из `Backend/litellm/router.py` и `Backend/litellm/llms/__init__.py`.
+- [x] Удалить папку `Backend/litellm/llms/base_llm/google_genai` и связанные с ней импорты/логику из `router.py`.
+- [x] Удалить папку `Backend/litellm/llms/base_llm/anthropic_messages` и связанные с ней импорты.
+- [ ] Очистить другие LLM-провайдеры (Cohere, Vertex, и т.д.) из `Backend/litellm/llms/base_llm/` и `router.py`.
