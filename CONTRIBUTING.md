@@ -292,7 +292,7 @@ git clone https://github.com/YOUR_USERNAME/litellm.git
 cd litellm
 
 # Navigate to the UI dashboard directory
-cd ui/litellm-dashboard
+cd frontend/litellm-dashboard
 
 # Install dependencies
 npm install

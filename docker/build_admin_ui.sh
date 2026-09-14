@@ -58,8 +58,8 @@ nvm install v18.17.0
 nvm use v18.17.0
 
 
-# cd in to /ui/litellm-dashboard
-cd ui/litellm-dashboard
+# cd in to /frontend/litellm-dashboard
+cd frontend/litellm-dashboard
 
 # ensure have access to build_ui.sh
 chmod +x ./build_ui.sh
