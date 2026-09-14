@@ -1,7 +1,5 @@
-# Текущие задачи (Очистка репозитория от мусора - интеграции)
-- [ ] Список файлов и папок в Backend/litellm/integrations/, которые относятся к Langfuse, Datadog и Sentry и могут быть неиспользуемыми (не удалять):
-  - Backend/litellm/integrations/callback_configs.json (содержит конфигурации datadog, datadog_metrics, datadog_cost_management, langfuse, langfuse_otel)
-  - Backend/litellm/integrations/litellm_agent/litellm_agent_model_resolver.py (содержит упоминание langfuse в комментариях/документации)
-  - Backend/litellm/integrations/generic_api/generic_api_callback.py (содержит комментарий-ссылку на langfuse.py)
-  - Backend/litellm/integrations/opentelemetry/ (папка, потенциально неиспользуемая)
-  - Backend/litellm/integrations/prometheus_helpers/ (папка, потенциально неиспользуемая)
+# Текущие задачи (Удаление поддержки сторонних LLM-провайдеров)
+- [x] Вырезать все импорты и ссылки, связанные с `anthropic_messages` / `Anthropic` из `Backend/litellm/router.py` и `Backend/litellm/llms/__init__.py`.
+- [x] Удалить папку `Backend/litellm/llms/base_llm/google_genai` и связанные с ней импорты/логику из `router.py`.
+- [x] Удалить папку `Backend/litellm/llms/base_llm/anthropic_messages` и связанные с ней импорты.
+- [ ] Очистить другие LLM-провайдеры (Cohere, Vertex, и т.д.) из `Backend/litellm/llms/base_llm/` и `router.py`.

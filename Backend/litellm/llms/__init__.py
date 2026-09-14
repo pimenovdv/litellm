@@ -107,7 +107,7 @@ def get_guardrail_translation_mapping(call_type: CallTypes) -> Type["BaseTransla
     Get the guardrail translation handler for a given call type.
 
     Args:
-        call_type: The type of call (e.g., completion, acompletion, anthropic_messages)
+        call_type: The type of call (e.g., completion, acompletion, completion)
 
     Returns:
         The translation handler class for the given call type

@@ -434,44 +434,9 @@ async def send_management_endpoint_alert(
     - A team is created, updated, or deleted
     """
     from litellm.proxy.proxy_server import proxy_logging_obj
-    from litellm.types.integrations.slack_alerting import AlertType
 
-    management_function_to_event_name = {
-        "generate_key_fn": AlertType.new_virtual_key_created,
-        "update_key_fn": AlertType.virtual_key_updated,
-        "delete_key_fn": AlertType.virtual_key_deleted,
-        # Team events
-        "new_team": AlertType.new_team_created,
-        "update_team": AlertType.team_updated,
-        "delete_team": AlertType.team_deleted,
-        # Internal User events
-        "new_user": AlertType.new_internal_user_created,
-        "user_update": AlertType.internal_user_updated,
-        "delete_user": AlertType.internal_user_deleted,
-    }
 
     # Check if alerting is enabled
-    if proxy_logging_obj is not None and proxy_logging_obj.slack_alerting_instance is not None:
-        # Virtual Key Events
-        if function_name in management_function_to_event_name:
-            _event_name: AlertType = management_function_to_event_name[function_name]
-
-            key_event = VirtualKeyEvent(
-                created_by_user_id=user_api_key_dict.user_id or "Unknown",
-                created_by_user_role=user_api_key_dict.user_role or "Unknown",
-                created_by_key_alias=user_api_key_dict.key_alias,
-                request_kwargs=request_kwargs,
-            )
-
-            # replace all "_" with " " and capitalize
-            event_name = _event_name.replace("_", " ").title()
-            await proxy_logging_obj.slack_alerting_instance.send_virtual_key_event_slack(
-                key_event=key_event,
-                event_name=event_name,
-                alert_type=_event_name,
-            )
-
-
 def _redacted_env_var(entry: Any) -> dict:
     get = entry.get if isinstance(entry, dict) else lambda k: getattr(entry, k, None)
     return {

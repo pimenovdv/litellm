@@ -17,7 +17,6 @@ from litellm.constants import HEALTH_CHECK_TIMEOUT_SECONDS
 from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler
 from litellm.proxy._types import (
-    AlertType,
     CallInfo,
     EnterpriseLicenseData,
     Litellm_EntityType,
@@ -352,31 +351,14 @@ async def health_services_endpoint(
                             continue
 
                         test_message = "default test message"
-                        if alert_type == AlertType.llm_exceptions:
-                            test_message = "LLM Exception test alert"
-                        elif alert_type == AlertType.llm_too_slow:
-                            test_message = "LLM Too Slow test alert"
-                        elif alert_type == AlertType.llm_requests_hanging:
-                            test_message = "LLM Requests Hanging test alert"
-                        elif alert_type == AlertType.budget_alerts:
-                            test_message = "Budget Alert test alert"
-                        elif alert_type == AlertType.db_exceptions:
-                            test_message = "DB Exception test alert"
-                        elif alert_type == AlertType.outage_alerts:
-                            test_message = "Outage Alert Exception test alert"
-                        elif alert_type == AlertType.daily_reports:
-                            test_message = "Daily Reports test alert"
-                        else:
-                            test_message = "Budget Alert test alert"
 
                         await proxy_logging_obj.alerting_handler(
-                            message=test_message, level="Low", alert_type=alert_type
+                            message=test_message, level="Low"
                         )
                 else:
                     await proxy_logging_obj.alerting_handler(
                         message="This is a test slack alert message",
                         level="Low",
-                        alert_type=AlertType.budget_alerts,
                     )
 
                 if prisma_client is not None:
@@ -412,9 +394,6 @@ async def health_services_endpoint(
             )
 
             # use create task - this can take 10 seconds. don't keep ui users waiting for notification to check their email
-            await proxy_logging_obj.slack_alerting_instance.send_key_created_or_user_invited_email(
-                webhook_event=webhook_event
-            )
 
             return {
                 "status": "success",

@@ -130,7 +130,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from opentelemetry.trace import Span as _Span
 
-    from litellm.integrations.opentelemetry import OpenTelemetry
+    OpenTelemetry = Any
 
     Span = Union[_Span, Any]
 else:
@@ -5195,7 +5195,8 @@ class ProxyConfig:
             elif (
                 key_management_system == KeyManagementSystem.AWS_SECRET_MANAGER.value  # noqa: F405
             ):
-                                    AWSSecretsManagerV2,
+                from litellm.types.secret_managers.main import (
+                    AWSSecretsManagerV2,
                 )
 
                 AWSSecretsManagerV2.load_aws_secret_manager(
@@ -5205,17 +5206,20 @@ class ProxyConfig:
             elif key_management_system == KeyManagementSystem.AWS_KMS.value:
                 load_aws_kms(use_aws_kms=True)
             elif key_management_system == KeyManagementSystem.GOOGLE_SECRET_MANAGER.value:
-                                    GoogleSecretManager,
+                from litellm.types.secret_managers.main import (
+                    GoogleSecretManager,
                 )
 
                 GoogleSecretManager()
             elif key_management_system == KeyManagementSystem.HASHICORP_VAULT.value:
-                                    HashicorpSecretManager,
+                from litellm.types.secret_managers.main import (
+                    HashicorpSecretManager,
                 )
 
                 HashicorpSecretManager()
             elif key_management_system == KeyManagementSystem.CYBERARK.value:
-                                    CyberArkSecretManager,
+                from litellm.types.secret_managers.main import (
+                    CyberarkSecretManager as CyberArkSecretManager,
                 )
 
                 CyberArkSecretManager()
@@ -8214,8 +8218,9 @@ class ProxyStartupEvent:
         ########################################################
         # Vantage Background Job
         ########################################################
-        from litellm.integrations.vantage.vantage_logger import VantageLogger
-                    _get_vantage_settings,
+        from litellm.integrations.vantage.vantage_logger import (
+            VantageLogger,
+            _get_vantage_settings,
             is_vantage_setup,
             is_vantage_setup_in_config,
             is_vantage_setup_in_db,

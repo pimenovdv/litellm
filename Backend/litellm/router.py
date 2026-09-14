@@ -1208,8 +1208,6 @@ class Router:
     def _initialize_core_endpoints(self):
         """Helper to initialize core router endpoints."""
         self.amoderation = self.factory_function(litellm.amoderation, call_type="moderation")
-        self.aanthropic_messages = self.factory_function(litellm.anthropic_messages, call_type="anthropic_messages")
-        self.anthropic_messages = self.factory_function(litellm.anthropic_messages, call_type="anthropic_messages")
         self.agenerate_content = self.factory_function(litellm.agenerate_content, call_type="agenerate_content")
         self.aadapter_generate_content = self.factory_function(
             litellm.aadapter_generate_content, call_type="aadapter_generate_content"
@@ -1354,24 +1352,6 @@ class Router:
             vector_store_file_delete_fn, call_type="vector_store_file_delete"
         )
 
-    def _initialize_google_genai_endpoints(self):
-        """Initialize Google GenAI endpoints."""
-        from litellm.google_genai import (
-            agenerate_content,
-            agenerate_content_stream,
-            generate_content,
-            generate_content_stream,
-        )
-
-        self.agenerate_content = self.factory_function(agenerate_content, call_type="agenerate_content")
-        self.generate_content = self.factory_function(generate_content, call_type="generate_content")
-        self.agenerate_content_stream = self.factory_function(
-            agenerate_content_stream, call_type="agenerate_content_stream"
-        )
-        self.generate_content_stream = self.factory_function(
-            generate_content_stream, call_type="generate_content_stream"
-        )
-
     def _initialize_ocr_search_endpoints(self):
         """Initialize OCR and search endpoints."""
         from litellm.ocr import aocr, ocr
@@ -1512,7 +1492,6 @@ class Router:
         """Helper to initialize specialized router endpoints (vector store, OCR, search, video, container, skills, interactions)."""
         self._initialize_vector_store_endpoints()
         self._initialize_vector_store_file_endpoints()
-        self._initialize_google_genai_endpoints()
         self._initialize_ocr_search_endpoints()
         # Override vector store methods with router-aware implementations
         self._override_vector_store_methods_for_router()
@@ -5482,7 +5461,6 @@ class Router:
         call_type: Literal[
             "assistants",
             "moderation",
-            "anthropic_messages",
             "aresponses",
             "acancel_responses",
             "acompact_responses",
@@ -5745,7 +5723,6 @@ class Router:
                     **kwargs,
                 )
             elif call_type in (
-                "anthropic_messages",
                 "_arealtime",
                 "_aresponses_websocket",
                 "acreate_fine_tuning_job",

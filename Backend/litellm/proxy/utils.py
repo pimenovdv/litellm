@@ -108,7 +108,6 @@ from litellm.litellm_core_utils.safe_json_dumps import safe_dumps
 from litellm.litellm_core_utils.safe_json_loads import safe_json_loads
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler
 from litellm.proxy._types import (
-    AlertType,
     CallInfo,
     LiteLLM_VerificationTokenView,
     Member,
@@ -159,7 +158,6 @@ from litellm.repositories.verification_token_repository import (
     VerificationTokenRepository,
 )
 from litellm.secret_managers.main import str_to_bool
-from litellm.types.integrations.slack_alerting import DEFAULT_ALERT_TYPES
 from litellm.types.mcp import (
     MCPDuringCallResponseObject,
     MCPPreCallRequestObject,
@@ -422,13 +420,9 @@ class ProxyLogging:
         self.cache_control_check = _PROXY_CacheControlCheck()
         self.alerting: Optional[List] = None
         self.alerting_threshold: float = 300  # default to 5 min. threshold
-        self.alert_types: List[AlertType] = DEFAULT_ALERT_TYPES
+        self.alert_types = []
         self.alert_to_webhook_url: Optional[dict] = None
-        self.slack_alerting_instance: SlackAlerting = SlackAlerting(
-            alerting_threshold=self.alerting_threshold,
-            alerting=self.alerting,
-            internal_usage_cache=self.internal_usage_cache.dual_cache,
-        )
+        self.slack_alerting_instance = None
         self.email_logging_instance: Optional[Any] = None
         if BaseEmailLogger is not None:
             email_logger_class = _get_email_logger_class()
@@ -453,7 +447,8 @@ class ProxyLogging:
     ):
         """Initialize logging and alerting on proxy startup"""
         ## UPDATE SLACK ALERTING ##
-        self.slack_alerting_instance.update_values(llm_router=llm_router)
+
+        pass
 
         ## UPDATE INTERNAL USAGE CACHE ##
         self.update_values(
@@ -464,19 +459,12 @@ class ProxyLogging:
             llm_router=llm_router
         )  # INITIALIZE LITELLM CALLBACKS ON SERVER STARTUP <- do this to catch any logging errors on startup, not when calls are being made
 
-        if (
-            self.slack_alerting_instance is not None
-            and "daily_reports" in self.slack_alerting_instance.alert_types
-            and not self.daily_report_started
-        ):
-            asyncio.create_task(
-                self.slack_alerting_instance._run_scheduled_daily_report(llm_router=llm_router)
-            )  # RUN DAILY REPORT (if scheduled)
-            self.daily_report_started = True
+
+        pass
 
         if (
             self.slack_alerting_instance is not None
-            and AlertType.llm_requests_hanging in self.slack_alerting_instance.alert_types
+
             and not self.hanging_requests_check_started
         ):
             asyncio.create_task(
@@ -489,7 +477,6 @@ class ProxyLogging:
         alerting: Optional[List] = None,
         alerting_threshold: Optional[float] = None,
         redis_cache: Optional[RedisCache] = None,
-        alert_types: Optional[List[AlertType]] = None,
         alerting_args: Optional[dict] = None,
         alert_to_webhook_url: Optional[dict] = None,
         alert_type_config: Optional[dict] = None,
@@ -510,15 +497,9 @@ class ProxyLogging:
         if alert_type_config is not None:
             updated_slack_alerting = True
 
-        if updated_slack_alerting is True:
-            self.slack_alerting_instance.update_values(
-                alerting=self.alerting,
-                alerting_threshold=self.alerting_threshold,
-                alert_types=self.alert_types,
-                alerting_args=alerting_args,
-                alert_to_webhook_url=self.alert_to_webhook_url,
-                alert_type_config=alert_type_config,
-            )
+
+        if updated_slack_alerting:
+            pass
 
             if self.alerting is not None and "slack" in self.alerting:
                 # NOTE: ENSURE we only add callbacks when alerting is on
@@ -528,10 +509,10 @@ class ProxyLogging:
                     or "outage_alerts" in self.alert_types
                     or "region_outage_alerts" in self.alert_types
                 ):
-                    litellm.logging_callback_manager.add_litellm_callback(self.slack_alerting_instance)  # type: ignore
-                litellm.logging_callback_manager.add_litellm_success_callback(
-                    self.slack_alerting_instance.response_taking_too_long_callback
-                )
+
+                    pass
+
+                pass
 
         if redis_cache is not None:
             self.internal_usage_cache.dual_cache.redis_cache = redis_cache
@@ -1880,11 +1861,8 @@ class ProxyLogging:
         if self.alerting is None:
             return
 
-        if self.slack_alerting_instance:
-            await self.slack_alerting_instance.failed_tracking_alert(
-                error_message=error_message,
-                failing_model=failing_model,
-            )
+
+        pass
 
     async def budget_alerts(
         self,
@@ -1913,12 +1891,8 @@ class ProxyLogging:
             # do nothing if alerting is not switched on (unless it's a soft_budget alert with team-specific emails)
             return
 
-        if self.alerting is not None and "slack" in self.alerting:
-            if self.slack_alerting_instance is not None:
-                await self.slack_alerting_instance.budget_alerts(
-                    type=type,
-                    user_info=user_info,
-                )
+
+        pass
 
         # Call email_logging_instance if:
         # 1. "email" is in alerting config, OR
@@ -1935,7 +1909,7 @@ class ProxyLogging:
         self,
         message: str,
         level: Literal["Low", "Medium", "High"],
-        alert_type: AlertType,
+
         request_data: Optional[dict] = None,
     ):
         """
@@ -1979,15 +1953,9 @@ class ProxyLogging:
             ):
                 alerting_metadata = request_data["metadata"]["alerting_metadata"]
         for client in self.alerting:
+
             if client == "slack":
-                await self.slack_alerting_instance.send_alert(
-                    message=message,
-                    level=level,
-                    alert_type=alert_type,
-                    user_info=None,
-                    alerting_metadata=alerting_metadata,
-                    **extra_kwargs,
-                )
+                pass
             elif client == "sentry":
                 if litellm.utils.sentry_sdk_instance is not None:
                     litellm.utils.sentry_sdk_instance.capture_message(formatted_message)
@@ -2001,8 +1969,6 @@ class ProxyLogging:
         Currently only logs exceptions to sentry
         """
         ### ALERTING ###
-        if AlertType.db_exceptions not in self.alert_types:
-            return
         if isinstance(original_exception, HTTPException):
             if isinstance(original_exception.detail, str):
                 error_message = original_exception.detail
@@ -2019,7 +1985,6 @@ class ProxyLogging:
             self.alerting_handler(
                 message=f"DB read/write call failed: {error_message}",
                 level="High",
-                alert_type=AlertType.db_exceptions,
                 request_data={},
             )
         )
@@ -2068,28 +2033,6 @@ class ProxyLogging:
 
         ### ALERTING ###
         await self.update_request_status(litellm_call_id=request_data.get("litellm_call_id", ""), status="fail")
-        if AlertType.llm_exceptions in self.alert_types and not isinstance(
-            original_exception, (HTTPException, ProxyException)
-        ):
-            """
-            Just alert on LLM API exceptions. Do not alert on user errors
-
-            Related issue - https://github.com/BerriAI/litellm/issues/3395
-            """
-            litellm_debug_info = getattr(original_exception, "litellm_debug_info", None)
-            exception_str = str(original_exception)
-            if litellm_debug_info is not None:
-                exception_str += litellm_debug_info
-
-            asyncio.create_task(
-                self.alerting_handler(
-                    message=_redact_string(f"LLM API call failed: `{exception_str}`"),
-                    level="High",
-                    alert_type=AlertType.llm_exceptions,
-                    request_data=request_data,
-                )
-            )
-
         ### LOGGING ###
         if self._is_proxy_only_llm_api_error(
             original_exception=original_exception,
@@ -2757,8 +2700,8 @@ class ProxyLogging:
         This handles checking for if a request is hanging for too long
         """
         ## ALERTING ###
-        if self.slack_alerting_instance and self.slack_alerting_instance.alerting is not None:
-            asyncio.create_task(self.slack_alerting_instance.response_taking_too_long(request_data=data))
+
+        pass
 
 
 ### DB CONNECTOR ###

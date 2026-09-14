@@ -1,4 +1,3 @@
-from .anthropic_messages.transformation import BaseAnthropicMessagesConfig
 from .audio_transcription.transformation import BaseAudioTranscriptionConfig
 from .batches.transformation import BaseBatchesConfig
 from .chat.transformation import BaseConfig
