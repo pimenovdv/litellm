@@ -2,7 +2,7 @@
 Hook for LiteLLM that strips the litellm_agent/ prefix from model names.
 
 When model is litellm_agent/gpt-3.5-turbo, this hook replaces it with gpt-3.5-turbo
-before the completion call, similar to langfuse/model resolution.
+before the completion call, similar to other model resolution.
 """
 
 from typing import Dict, List, Optional, Tuple
