@@ -151,7 +151,7 @@ def _rust_responses_websocket_enabled(
     return custom_llm_provider == "openai" and litellm_params.get("rust") is True
 
 
-from .http_handler import get_shared_realtime_ssl_context
+from litellm.llms.custom_httpx.http_handler import get_shared_realtime_ssl_context
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
@@ -1879,7 +1879,7 @@ class BaseLLMHTTPHandler:
         request_body: dict,
         stream: bool,
         logging_obj: LiteLLMLoggingObj,
-        provider_config: BaseAnthropicMessagesConfig,
+        provider_config: "BaseAnthropicMessagesConfig",
         litellm_params: GenericLiteLLMParams,
         api_key: Optional[str],
         model: str,
@@ -1961,7 +1961,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseAnthropicMessagesConfig",
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -2210,7 +2210,7 @@ class BaseLLMHTTPHandler:
         initial_response: AnthropicMessagesResponse,
         model: str,
         messages: list[dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseAnthropicMessagesConfig",
         anthropic_messages_optional_request_params: dict,
         logging_obj: LiteLLMLoggingObj,
         custom_llm_provider: str,
@@ -2306,7 +2306,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseAnthropicMessagesConfig",
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         _is_async: bool,
@@ -5678,8 +5678,8 @@ class BaseLLMHTTPHandler:
             BaseImageGenerationConfig,
             BaseVectorStoreConfig,
             BaseVectorStoreFilesConfig,
-            BaseGoogleGenAIGenerateContentConfig,
-            BaseAnthropicMessagesConfig,
+            "BaseGoogleGenAIGenerateContentConfig",
+            "BaseAnthropicMessagesConfig",
             BaseBatchesConfig,
             BaseOCRConfig,
             BaseVideoConfig,
@@ -11043,7 +11043,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         contents: Any,
-        generate_content_provider_config: BaseGoogleGenAIGenerateContentConfig,
+        generate_content_provider_config: "BaseGoogleGenAIGenerateContentConfig",
         generate_content_config_dict: Dict,
         tools: Any,
         custom_llm_provider: str,
@@ -11175,7 +11175,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         contents: Any,
-        generate_content_provider_config: BaseGoogleGenAIGenerateContentConfig,
+        generate_content_provider_config: "BaseGoogleGenAIGenerateContentConfig",
         generate_content_config_dict: Dict,
         tools: Any,
         custom_llm_provider: str,
