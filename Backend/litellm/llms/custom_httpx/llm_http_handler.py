@@ -34,9 +34,6 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES
 from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.realtime_streaming import RealTimeStreaming
 from litellm.litellm_core_utils.url_utils import encode_url_path_segment
-from litellm.llms.base_llm.anthropic_messages.transformation import (
-    BaseAnthropicMessagesConfig,
-)
 from litellm.llms.base_llm.audio_transcription.transformation import (
     BaseAudioTranscriptionConfig,
 )
@@ -52,9 +49,6 @@ from litellm.llms.base_llm.evals.transformation import BaseEvalsAPIConfig
 from litellm.llms.base_llm.files.transformation import (
     BaseFilesConfig,
     BaseFileUploadStream,
-)
-from litellm.llms.base_llm.google_genai.transformation import (
-    BaseGoogleGenAIGenerateContentConfig,
 )
 from litellm.llms.base_llm.image_edit.transformation import BaseImageEditConfig
 from litellm.llms.base_llm.image_generation.transformation import (
@@ -163,8 +157,6 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-            AnthropicMessagesStreamingResponse,
-    )
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
         CancelEvalResponse,
@@ -2157,9 +2149,6 @@ class BaseLLMHTTPHandler:
 
         initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
         if stream:
-                            AnthropicMessagesStreamingResponse,
-                anthropic_messages_stream_hidden_params,
-            )
 
             completion_stream = anthropic_messages_provider_config.get_async_streaming_response_iterator(
                 model=model,
@@ -2180,8 +2169,6 @@ class BaseLLMHTTPHandler:
                     hidden_params=stream_hidden_params,
                 )
 
-                            AgenticAnthropicStreamingIterator,
-            )
 
             initial_response = AgenticAnthropicStreamingIterator(
                 completion_stream=completion_stream,
@@ -2307,11 +2294,6 @@ class BaseLLMHTTPHandler:
     def _rust_anthropic_messages_fake_stream(
         rust_response: AnthropicMessagesResponse,
     ) -> "AnthropicMessagesStreamingResponse":
-                    FakeAnthropicMessagesStreamIterator,
-        )
-                    AnthropicMessagesStreamHiddenParams,
-            AnthropicMessagesStreamingResponse,
-        )
 
         completion_stream = cast(AsyncIterator[bytes], FakeAnthropicMessagesStreamIterator(response=rust_response))
         hidden_params = AnthropicMessagesStreamHiddenParams(additional_headers={"x-litellm-rust": "true"})
@@ -5349,8 +5331,6 @@ class BaseLLMHTTPHandler:
             from typing import cast
 
             from litellm._logging import verbose_logger
-                            FakeAnthropicMessagesStreamIterator,
-            )
             from litellm.types.llms.anthropic_messages.anthropic_response import (
                 AnthropicMessagesResponse,
             )
