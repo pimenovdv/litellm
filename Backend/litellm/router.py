@@ -8125,37 +8125,20 @@ class Router:
             else:
                 credential_values = {}
 
-            if custom_llm_provider == "vertex_ai":
-                vertex_project = credential_values.get("vertex_project") or deployment.litellm_params.vertex_project
-                vertex_location = credential_values.get("vertex_location") or deployment.litellm_params.vertex_location
-                vertex_credentials = (
-                    credential_values.get("vertex_credentials") or deployment.litellm_params.vertex_credentials
+            api_base = credential_values.get("api_base") or deployment.litellm_params.api_base
+            api_key = credential_values.get("api_key") or deployment.litellm_params.api_key
+            if api_key is None:
+                verbose_router_logger.debug(
+                    "Skipping pass-through credential setup for deployment model=%s, custom_llm_provider=%s; no api_key set. Providers like bedrock resolve credentials at request time.",
+                    model,
+                    custom_llm_provider,
                 )
-
-                if vertex_project is None or vertex_location is None:
-                    raise ValueError(
-                        "vertex_project, and vertex_location must be set in litellm_params for pass-through endpoints."
-                    )
-                passthrough_endpoint_router.add_vertex_credentials(
-                    project_id=vertex_project,
-                    location=vertex_location,
-                    vertex_credentials=vertex_credentials,
-                )
-            else:
-                api_base = credential_values.get("api_base") or deployment.litellm_params.api_base
-                api_key = credential_values.get("api_key") or deployment.litellm_params.api_key
-                if api_key is None:
-                    verbose_router_logger.debug(
-                        "Skipping pass-through credential setup for deployment model=%s, custom_llm_provider=%s; no api_key set. Providers like bedrock resolve credentials at request time.",
-                        model,
-                        custom_llm_provider,
-                    )
-                    return
-                passthrough_endpoint_router.set_pass_through_credentials(
-                    custom_llm_provider=custom_llm_provider,
-                    api_base=api_base,
-                    api_key=api_key,
-                )
+                return
+            passthrough_endpoint_router.set_pass_through_credentials(
+                custom_llm_provider=custom_llm_provider,
+                api_base=api_base,
+                api_key=api_key,
+            )
             pass
         pass
 
