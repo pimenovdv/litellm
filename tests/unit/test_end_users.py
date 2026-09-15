@@ -155,8 +155,7 @@ async def new_budget(session, i, budget_id=None):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_end_user_new():
+async def test_end_user_new():
     """
     Make 20 parallel calls to /user/new. Assert all worked.
     """
@@ -167,8 +166,7 @@ def test_end_user_new():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_aaaend_user_specific_region():
+async def test_aaaend_user_specific_region():
     """
     - Specify region user can make calls in
     - Make a generic call
@@ -208,8 +206,7 @@ def test_aaaend_user_specific_region():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_enduser_tpm_limits_non_master_key():
+async def test_enduser_tpm_limits_non_master_key():
     """
     1. budget_id = Create Budget with tpm_limit = 10
     2. create end_user with budget_id
@@ -258,8 +255,7 @@ def test_enduser_tpm_limits_non_master_key():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_enduser_tpm_limits_with_master_key():
+async def test_enduser_tpm_limits_with_master_key():
     """
     1. budget_id = Create Budget with tpm_limit = 10
     2. create end_user with budget_id

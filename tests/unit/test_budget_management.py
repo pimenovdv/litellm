@@ -77,8 +77,7 @@ async def budget_setup():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_create_budget_with_duration(budget_setup):
+async def test_create_budget_with_duration(budget_setup):
     """
     Test creating a budget with a specified duration and verify that 'budget_reset_at'
     matches the next standardized reset (see get_budget_reset_time / new_budget), not

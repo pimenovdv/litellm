@@ -53,8 +53,7 @@ async def generate_key(session):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_health():
+async def test_health():
     """
     - Call /health
     """
@@ -69,8 +68,7 @@ def test_health():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_health_readiness():
+async def test_health_readiness():
     """
     Check if 200
     """
@@ -89,8 +87,7 @@ def test_health_readiness():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_health_readiness_details():
+async def test_health_readiness_details():
     """
     Check if authenticated readiness diagnostics expose version metadata.
     """
@@ -111,8 +108,7 @@ def test_health_readiness_details():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_health_liveliness():
+async def test_health_liveliness():
     """
     Check if 200
     """
@@ -131,8 +127,7 @@ def test_health_liveliness():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_routes():
+async def test_routes():
     """
     Check if 200
     """

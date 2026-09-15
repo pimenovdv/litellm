@@ -92,8 +92,7 @@ async def generate_key(
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_user_new():
+async def test_user_new():
     """
     Make 20 parallel calls to /user/new. Assert all worked.
     """
@@ -132,8 +131,7 @@ async def get_user_info(session, get_user, call_user, view_all: Optional[bool] =
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_user_info():
+async def test_user_info():
     """
     Get user info
     - as admin
@@ -165,8 +163,7 @@ def test_user_info():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_user_update():
+async def test_user_update():
     """
     Create user
     Update user access to new model
@@ -178,8 +175,7 @@ def test_user_update():
 @pytest.mark.skip(reason="Frequent check on ci/cd leads to read timeout issue.")
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_users_budgets_reset():
+async def test_users_budgets_reset():
     """
     - Create key with budget and 5s duration
     - Get 'reset_at' value
@@ -242,8 +238,7 @@ async def chat_completion_streaming(session, key, model="gpt-4"):
 @pytest.mark.skip(reason="Global proxy now tracked via `/global/spend/logs`")
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_global_proxy_budget_update():
+async def test_global_proxy_budget_update():
     """
     - Get proxy current spend
     - Make chat completion call (normal)
@@ -277,8 +272,7 @@ def test_global_proxy_budget_update():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_user_model_access():
+async def test_user_model_access():
     """
     - Create user with model access
     - Create key with user
@@ -418,8 +412,7 @@ async def print_response_details(response: aiohttp.ClientResponse) -> None:
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_update_user_isolation():
+async def test_key_update_user_isolation():
     """Test that a user cannot update a key that belongs to another user"""
     async with aiohttp.ClientSession() as session:
         user1_data, user2_data = await setup_test_users(session)
@@ -450,8 +443,7 @@ def test_key_update_user_isolation():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_delete_user_isolation():
+async def test_key_delete_user_isolation():
     """Test that a user cannot delete a key that belongs to another user"""
     async with aiohttp.ClientSession() as session:
         user1_data, user2_data = await setup_test_users(session)

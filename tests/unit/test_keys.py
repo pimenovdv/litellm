@@ -108,8 +108,7 @@ async def generate_key(
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_gen():
+async def test_key_gen():
     async with aiohttp.ClientSession() as session:
         tasks = [generate_key(session, i) for i in range(1, 11)]
         await asyncio.gather(*tasks)
@@ -117,8 +116,7 @@ def test_key_gen():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_simple_key_gen():
+async def test_simple_key_gen():
     async with aiohttp.ClientSession() as session:
         key_data = await generate_key(session, i=0)
         key = key_data["key"]
@@ -131,8 +129,7 @@ def test_simple_key_gen():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_gen_bad_key():
+async def test_key_gen_bad_key():
     """
     Test if you can create a key with a non-admin key, even with UI setup
     """
@@ -308,8 +305,7 @@ async def chat_completion_streaming(session, key, model="gpt-4"):
 @pytest.mark.parametrize("metadata", [{"test": "new"}, {}])
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_update(metadata):
+async def test_key_update(metadata):
     """
     Create key
     Update key with new model
@@ -354,8 +350,7 @@ async def delete_key(session, get_key, auth_key="sk-1234"):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_delete():
+async def test_key_delete():
     """
     Delete key
     """
@@ -446,8 +441,7 @@ async def get_model_info(session, call_key):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_info():
+async def test_key_info():
     """
     Get key info
     - as admin -> 200
@@ -472,8 +466,7 @@ def test_key_info():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_model_info():
+async def test_model_info():
     """
     Get model info for models key has access to
     """
@@ -510,8 +503,7 @@ async def get_spend_logs(session, request_id):
 @pytest.mark.skip(reason="Hanging on ci/cd")
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_info_spend_values():
+async def test_key_info_spend_values():
     """
     Test to ensure spend is correctly calculated
     - create key
@@ -570,8 +562,7 @@ def test_key_info_spend_values():
 @pytest.mark.skip(
     reason="Temporarily skipping due to model change. Will be updated soon."
 )
-async @proxy_skip
-def test_aaaaakey_info_spend_values_streaming():
+async def test_aaaaakey_info_spend_values_streaming():
     """
     Test to ensure spend is correctly calculated.
     - create key
@@ -610,8 +601,7 @@ def test_aaaaakey_info_spend_values_streaming():
 @pytest.mark.flaky(retries=3, delay=1)
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_info_spend_values_image_generation():
+async def test_key_info_spend_values_image_generation():
     """
     Test to ensure spend is correctly calculated
     - create key
@@ -667,8 +657,7 @@ def test_key_info_spend_values_image_generation():
 @pytest.mark.skip(reason="Frequent check on ci/cd leads to read timeout issue.")
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_with_budgets():
+async def test_key_with_budgets():
     """
     - Create key with budget and 5min duration
     - Get 'reset_at' value
@@ -714,8 +703,7 @@ def test_key_with_budgets():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_crossing_budget():
+async def test_key_crossing_budget():
     """
     - Create key with budget with budget=0.00000001
     - make a /chat/completions call
@@ -745,8 +733,7 @@ def test_key_crossing_budget():
 @pytest.mark.skip(reason="AWS Suspended Account")
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_info_spend_values_sagemaker():
+async def test_key_info_spend_values_sagemaker():
     """
     Tests the sync streaming loop to ensure spend is correctly calculated.
     - create key
@@ -771,8 +758,7 @@ def test_key_info_spend_values_sagemaker():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_rate_limit():
+async def test_key_rate_limit():
     """
     Tests backoff/retry logic on parallel request error.
     - Create key with max parallel requests 0
@@ -799,8 +785,7 @@ def test_key_rate_limit():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_delete_ui():
+async def test_key_delete_ui():
     """
     Admin UI flow - DO NOT DELETE
     -> Create a key with user_id = "ishaan"
@@ -836,8 +821,7 @@ def test_key_delete_ui():
 @pytest.mark.parametrize("model_endpoint", ["/v1/models", "/model/info"])
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_model_list(model_access, model_access_level, model_endpoint):
+async def test_key_model_list(model_access, model_access_level, model_endpoint):
     """
     Test if `/v1/models` works as expected.
     """
@@ -885,8 +869,7 @@ def test_key_model_list(model_access, model_access_level, model_endpoint):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_user_not_in_db():
+async def test_key_user_not_in_db():
     """
     - Create a key with unique user-id (not in db)
     - Check if key can make `/chat/completion` call
@@ -907,8 +890,7 @@ def test_key_user_not_in_db():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_key_over_budget():
+async def test_key_over_budget():
     """
     Test if key over budget is handled as expected.
     """

@@ -198,8 +198,7 @@ async def list_organization(session, i):
 @pytest.mark.flaky(retries=5, delay=1)
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_organization_new():
+async def test_organization_new():
     """
     Make 20 parallel calls to /organization/new. Assert all worked.
     """
@@ -216,8 +215,7 @@ def test_organization_new():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_organization_list():
+async def test_organization_list():
     """
     create 2 new Organizations
     check if the Organization list is not empty
@@ -241,8 +239,7 @@ def test_organization_list():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_organization_delete():
+async def test_organization_delete():
     """
     create a new organization
     delete the organization
@@ -269,8 +266,7 @@ def test_organization_delete():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_organization_member_flow():
+async def test_organization_member_flow():
     """
     create a new organization
     add a new member to the organization

@@ -109,8 +109,7 @@ async def get_spend_logs(session, request_id=None, api_key=None):
 )
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_spend_logs():
+async def test_spend_logs():
     """
     - Create key
     - Make call (makes sure it's in spend logs)
@@ -169,8 +168,7 @@ async def generate_team(session: aiohttp.ClientSession, org_id: str) -> dict:
 )
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_spend_logs_with_org_id():
+async def test_spend_logs_with_org_id():
     """
     - Create Organization
     - Create Team in organization
@@ -249,8 +247,7 @@ async def get_spend_report(session, start_date, end_date):
 @pytest.mark.skip(reason="datetime in ci/cd gets set weirdly")
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_get_predicted_spend_logs():
+async def test_get_predicted_spend_logs():
     """
     - Create key
     - Make call (makes sure it's in spend logs)
@@ -267,8 +264,7 @@ def test_get_predicted_spend_logs():
 @pytest.mark.skip(reason="High traffic load test, meant to be run locally")
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_spend_logs_high_traffic():
+async def test_spend_logs_high_traffic():
     """
     - Create key
     - Make 30 concurrent calls
@@ -322,8 +318,7 @@ def test_spend_logs_high_traffic():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_spend_report_endpoint():
+async def test_spend_report_endpoint():
     async with aiohttp.ClientSession(
         timeout=aiohttp.ClientTimeout(total=600)
     ) as session:

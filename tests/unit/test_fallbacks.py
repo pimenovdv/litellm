@@ -82,8 +82,7 @@ async def chat_completion(
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion():
+async def test_chat_completion():
     """
     make chat completion call with prompt > context window. expect it to work with fallback
     """
@@ -101,8 +100,7 @@ def test_chat_completion():
 @pytest.mark.parametrize("has_access", [True, False])
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_client_fallbacks(has_access):
+async def test_chat_completion_client_fallbacks(has_access):
     """
     make chat completion call with prompt > context window. expect it to work with fallback
     """
@@ -142,8 +140,7 @@ def test_chat_completion_client_fallbacks(has_access):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_with_retries():
+async def test_chat_completion_with_retries():
     """
     make chat completion call with prompt > context window. expect it to work with fallback
     """
@@ -168,8 +165,7 @@ def test_chat_completion_with_retries():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_with_fallbacks():
+async def test_chat_completion_with_fallbacks():
     """
     make chat completion call with prompt > context window. expect it to work with fallback
     """
@@ -193,8 +189,7 @@ def test_chat_completion_with_fallbacks():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_with_timeout():
+async def test_chat_completion_with_timeout():
     """
     make chat completion call with low timeout and `mock_timeout`: true. Expect it to fail and correct timeout to be set in headers.
     """
@@ -223,8 +218,7 @@ def test_chat_completion_with_timeout():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_with_timeout_from_request():
+async def test_chat_completion_with_timeout_from_request():
     """
     make chat completion call with low timeout and `mock_timeout`: true. Expect it to fail and correct timeout to be set in headers.
     """
@@ -258,8 +252,7 @@ def test_chat_completion_with_timeout_from_request():
 @pytest.mark.parametrize("has_access", [True, False])
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_client_fallbacks_with_custom_message(has_access):
+async def test_chat_completion_client_fallbacks_with_custom_message(has_access):
     """
     make chat completion call with prompt > context window. expect it to work with fallback
     """
@@ -333,8 +326,7 @@ async def run_good_model_test(client: AsyncOpenAI, num_requests: int) -> bool:
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_bad_and_good_model():
+async def test_chat_completion_bad_and_good_model():
     """
     Prod test - ensure even if bad model is down, good model is still working.
     """

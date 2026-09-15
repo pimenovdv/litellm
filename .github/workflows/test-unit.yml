@@ -32,4 +32,4 @@ jobs:
         env:
           PYTHONPATH: Backend:./
         run: |
-          pytest Backend/litellm/llms/custom_httpx/llm_http_handler.py tests/unit/test_models.py -v --cov=Backend/litellm
+          pytest Backend/litellm/llms/custom_httpx/llm_http_handler.py tests/unit/ -v --cov=Backend/litellm

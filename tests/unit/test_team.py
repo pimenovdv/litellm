@@ -382,8 +382,7 @@ async def list_teams(
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_team_new():
+async def test_team_new():
     """
     Make 20 parallel calls to /user/new. Assert all worked.
     """
@@ -419,8 +418,7 @@ async def get_team_info(session, get_team, call_key):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_team_info():
+async def test_team_info():
     """
     Scenario 1:
     - test with admin key -> expect to work
@@ -478,8 +476,7 @@ def test_team_info():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_team_update_sc_2():
+async def test_team_update_sc_2():
     """
     - Create team
     - Add 3 users (doesn't exist in db)
@@ -546,8 +543,7 @@ def test_team_update_sc_2():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_team_member_add_email():
+async def test_team_member_add_email():
     from tests.test_users import get_user_info
 
     async with aiohttp.ClientSession() as session:
@@ -584,8 +580,7 @@ def test_team_member_add_email():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_team_delete():
+async def test_team_delete():
     """
     - Create team
     - Create key for team
@@ -636,8 +631,7 @@ def test_team_delete():
 @pytest.mark.parametrize("dimension", ["user_id", "user_email"])
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_member_delete(dimension):
+async def test_member_delete(dimension):
     """
     - Create team
     - Add member
@@ -708,8 +702,7 @@ def test_member_delete(dimension):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_team_alias():
+async def test_team_alias():
     """
     - Create team w/ model alias
     - Create key for team
@@ -744,8 +737,7 @@ def test_team_alias():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_users_in_team_budget():
+async def test_users_in_team_budget():
     """
     - Create User
     - Create Team with User

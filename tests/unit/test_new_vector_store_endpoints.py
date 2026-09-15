@@ -22,8 +22,7 @@ from litellm.proxy._types import UserAPIKeyAuth
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_vector_store_retrieve_basic():
+async def test_vector_store_retrieve_basic():
     """Test basic vector store retrieve functionality."""
     mock_response = {
         "id": "vs_test123",
@@ -59,8 +58,7 @@ def test_vector_store_retrieve_basic():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_vector_store_list_basic():
+async def test_vector_store_list_basic():
     """Test basic vector store list functionality."""
     mock_response = {
         "object": "list",
@@ -102,8 +100,7 @@ def test_vector_store_list_basic():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_vector_store_update_basic():
+async def test_vector_store_update_basic():
     """Test basic vector store update functionality."""
     mock_response = {
         "id": "vs_test123",
@@ -134,8 +131,7 @@ def test_vector_store_update_basic():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_vector_store_delete_basic():
+async def test_vector_store_delete_basic():
     """Test basic vector store delete functionality."""
     mock_response = {
         "id": "vs_test123",
@@ -161,8 +157,7 @@ def test_vector_store_delete_basic():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_async_vector_store_retrieve():
+async def test_async_vector_store_retrieve():
     """Test async vector store retrieve."""
     mock_response = {
         "id": "vs_async123",
@@ -186,8 +181,7 @@ def test_async_vector_store_retrieve():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_async_vector_store_list():
+async def test_async_vector_store_list():
     """Test async vector store list."""
     mock_response = {
         "object": "list",
@@ -210,8 +204,7 @@ def test_async_vector_store_list():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_async_vector_store_update():
+async def test_async_vector_store_update():
     """Test async vector store update."""
     mock_response = {
         "id": "vs_async123",
@@ -235,8 +228,7 @@ def test_async_vector_store_update():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_async_vector_store_delete():
+async def test_async_vector_store_delete():
     """Test async vector store delete."""
     mock_response = {
         "id": "vs_async123",
@@ -259,8 +251,7 @@ def test_async_vector_store_delete():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_vector_store_list_with_pagination():
+async def test_vector_store_list_with_pagination():
     """Test vector store list with pagination parameters."""
     mock_response = {
         "object": "list",
@@ -294,8 +285,7 @@ def test_vector_store_list_with_pagination():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_vector_store_update_with_expires_after():
+async def test_vector_store_update_with_expires_after():
     """Test vector store update with expiration policy."""
     expires_after = {
         "anchor": "last_active_at",

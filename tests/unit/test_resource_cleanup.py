@@ -18,8 +18,7 @@ import litellm
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_acompletion_resource_cleanup():
+async def test_acompletion_resource_cleanup():
     """Test that acompletion doesn't leave unclosed client sessions."""
     # Suppress warnings to check for them later
     with warnings.catch_warnings(record=True) as w:
@@ -62,8 +61,7 @@ def test_acompletion_resource_cleanup():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_multiple_acompletion_calls_cleanup():
+async def test_multiple_acompletion_calls_cleanup():
     """Test that multiple acompletion calls reuse clients and don't leak resources."""
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter("always")
@@ -101,8 +99,7 @@ def test_multiple_acompletion_calls_cleanup():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_cleanup_function_is_safe_to_call_multiple_times():
+async def test_cleanup_function_is_safe_to_call_multiple_times():
     """Test that the cleanup function can be called multiple times safely."""
     # This should not raise any errors
     await litellm.close_litellm_async_clients()

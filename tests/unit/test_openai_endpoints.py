@@ -292,8 +292,7 @@ async def image_generation(session, key):
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion():
+async def test_chat_completion():
     """
     - Create key
     Make chat completion call
@@ -319,8 +318,7 @@ def test_chat_completion():
 @pytest.mark.asyncio
 @pytest.mark.flaky(retries=3, delay=1)
 @pytest.mark.skip(reason="Flaky test, this works locally but not on CI")
-async @proxy_skip
-def test_chat_completion_ratelimit():
+async def test_chat_completion_ratelimit():
     """
     - call model with rpm 1
     - make 2 parallel calls
@@ -348,8 +346,7 @@ def test_chat_completion_ratelimit():
 
 @pytest.mark.asyncio
 @pytest.mark.skip(reason="Flaky test")
-async @proxy_skip
-def test_chat_completion_different_deployments():
+async def test_chat_completion_different_deployments():
     """
     - call model group with 2 deployments
     - make 5 calls
@@ -380,8 +377,7 @@ def test_chat_completion_different_deployments():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_streaming():
+async def test_chat_completion_streaming():
     """
     [PROD Test] Ensures logprobs are returned correctly
     """
@@ -405,8 +401,7 @@ def test_chat_completion_streaming():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_completion_streaming_usage_metrics():
+async def test_completion_streaming_usage_metrics():
     """
     [PROD Test] Ensures usage metrics are returned correctly when `include_usage` is set to `True`
     """
@@ -437,8 +432,7 @@ def test_completion_streaming_usage_metrics():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_chat_completion_anthropic_structured_output():
+async def test_chat_completion_anthropic_structured_output():
     """
     Ensure nested pydantic output is returned correctly
     """
@@ -472,8 +466,7 @@ def test_chat_completion_anthropic_structured_output():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_completion():
+async def test_completion():
     """
     - Create key
     Make chat completion call
@@ -501,8 +494,7 @@ def test_completion():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_embeddings():
+async def test_embeddings():
     """
     - Create key
     Make embeddings call
@@ -524,8 +516,7 @@ def test_embeddings():
 @pytest.mark.flaky(retries=5, delay=1)
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_image_generation():
+async def test_image_generation():
     """
     - Create key
     Make embeddings call
@@ -544,8 +535,7 @@ def test_image_generation():
 @pytest.mark.flaky(retries=5, delay=1)
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_openai_wildcard_chat_completion():
+async def test_openai_wildcard_chat_completion():
     """
     - Create key for model = "*" -> this has access to all models
     - proxy_server_config.yaml has model = *
@@ -562,8 +552,7 @@ def test_openai_wildcard_chat_completion():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_proxy_all_models():
+async def test_proxy_all_models():
     """
     - proxy_server_config.yaml has model = * / *
     - Make chat completion call
@@ -586,8 +575,7 @@ def test_proxy_all_models():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_batch_chat_completions():
+async def test_batch_chat_completions():
     """
     - Make chat completion call using
 
@@ -609,8 +597,7 @@ def test_batch_chat_completions():
 
 @proxy_skip
 @pytest.mark.asyncio
-async @proxy_skip
-def test_moderations_endpoint():
+async def test_moderations_endpoint():
     """
     - Make chat completion call using
 
