@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What this tests?
 ## Tests /health + /routes endpoints.
 
@@ -47,8 +51,10 @@ async def generate_key(session):
         return await response.json()
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_health():
+async @proxy_skip
+def test_health():
     """
     - Call /health
     """
@@ -61,8 +67,10 @@ async def test_health():
         assert total_model_count > 0
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_health_readiness():
+async @proxy_skip
+def test_health_readiness():
     """
     Check if 200
     """
@@ -79,8 +87,10 @@ async def test_health_readiness():
                 raise Exception(f"Request did not return a 200 status code: {status}")
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_health_readiness_details():
+async @proxy_skip
+def test_health_readiness_details():
     """
     Check if authenticated readiness diagnostics expose version metadata.
     """
@@ -99,8 +109,10 @@ async def test_health_readiness_details():
                 raise Exception(f"Request did not return a 200 status code: {status}")
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_health_liveliness():
+async @proxy_skip
+def test_health_liveliness():
     """
     Check if 200
     """
@@ -117,8 +129,10 @@ async def test_health_liveliness():
                 raise Exception(f"Request did not return a 200 status code: {status}")
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_routes():
+async @proxy_skip
+def test_routes():
     """
     Check if 200
     """

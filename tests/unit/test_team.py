@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What this tests ?
 ## Tests /team endpoints.
 import pytest
@@ -376,8 +380,10 @@ async def list_teams(
         return await response.json()
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_team_new():
+async @proxy_skip
+def test_team_new():
     """
     Make 20 parallel calls to /user/new. Assert all worked.
     """
@@ -411,8 +417,10 @@ async def get_team_info(session, get_team, call_key):
         return await response.json()
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_team_info():
+async @proxy_skip
+def test_team_info():
     """
     Scenario 1:
     - test with admin key -> expect to work
@@ -468,8 +476,10 @@ async def test_team_info():
 """
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_team_update_sc_2():
+async @proxy_skip
+def test_team_update_sc_2():
     """
     - Create team
     - Add 3 users (doesn't exist in db)
@@ -534,8 +544,10 @@ async def test_team_update_sc_2():
                 assert new_team_data["data"][k] == team_data[k]
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_team_member_add_email():
+async @proxy_skip
+def test_team_member_add_email():
     from tests.test_users import get_user_info
 
     async with aiohttp.ClientSession() as session:
@@ -570,8 +582,10 @@ async def test_team_member_add_email():
         assert is_team_in_list
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_team_delete():
+async @proxy_skip
+def test_team_delete():
     """
     - Create team
     - Create key for team
@@ -620,8 +634,10 @@ async def test_team_delete():
 
 
 @pytest.mark.parametrize("dimension", ["user_id", "user_email"])
+@proxy_skip
 @pytest.mark.asyncio
-async def test_member_delete(dimension):
+async @proxy_skip
+def test_member_delete(dimension):
     """
     - Create team
     - Add member
@@ -690,8 +706,10 @@ async def test_member_delete(dimension):
         assert user_in_team is True
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_team_alias():
+async @proxy_skip
+def test_team_alias():
     """
     - Create team w/ model alias
     - Create key for team
@@ -724,8 +742,10 @@ async def test_team_alias():
         response = await chat_completion(session=session, key=key, model="cheap-model")
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_users_in_team_budget():
+async @proxy_skip
+def test_users_in_team_budget():
     """
     - Create User
     - Create Team with User

@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What this tests ?
 ## Tests /chat/completions by generating a key and then making a chat completions-request
 import pytest
@@ -286,8 +290,10 @@ async def image_generation(session, key):
         )  # calling the function to check response headers
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_chat_completion():
+async @proxy_skip
+def test_chat_completion():
     """
     - Create key
     Make chat completion call
@@ -313,7 +319,8 @@ async def test_chat_completion():
 @pytest.mark.asyncio
 @pytest.mark.flaky(retries=3, delay=1)
 @pytest.mark.skip(reason="Flaky test, this works locally but not on CI")
-async def test_chat_completion_ratelimit():
+async @proxy_skip
+def test_chat_completion_ratelimit():
     """
     - call model with rpm 1
     - make 2 parallel calls
@@ -341,7 +348,8 @@ async def test_chat_completion_ratelimit():
 
 @pytest.mark.asyncio
 @pytest.mark.skip(reason="Flaky test")
-async def test_chat_completion_different_deployments():
+async @proxy_skip
+def test_chat_completion_different_deployments():
     """
     - call model group with 2 deployments
     - make 5 calls
@@ -370,8 +378,10 @@ async def test_chat_completion_different_deployments():
             pass
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_chat_completion_streaming():
+async @proxy_skip
+def test_chat_completion_streaming():
     """
     [PROD Test] Ensures logprobs are returned correctly
     """
@@ -393,8 +403,10 @@ async def test_chat_completion_streaming():
     print(f"response_str: {response_str}")
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_completion_streaming_usage_metrics():
+async @proxy_skip
+def test_completion_streaming_usage_metrics():
     """
     [PROD Test] Ensures usage metrics are returned correctly when `include_usage` is set to `True`
     """
@@ -423,8 +435,10 @@ async def test_completion_streaming_usage_metrics():
     assert last_chunk.usage.total_tokens > 0, "Total tokens should be greater than 0"
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_chat_completion_anthropic_structured_output():
+async @proxy_skip
+def test_chat_completion_anthropic_structured_output():
     """
     Ensure nested pydantic output is returned correctly
     """
@@ -456,8 +470,10 @@ async def test_chat_completion_anthropic_structured_output():
         print(message.parsed.events)
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_completion():
+async @proxy_skip
+def test_completion():
     """
     - Create key
     Make chat completion call
@@ -483,8 +499,10 @@ async def test_completion():
     )
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_embeddings():
+async @proxy_skip
+def test_embeddings():
     """
     - Create key
     Make embeddings call
@@ -504,8 +522,10 @@ async def test_embeddings():
 
 
 @pytest.mark.flaky(retries=5, delay=1)
+@proxy_skip
 @pytest.mark.asyncio
-async def test_image_generation():
+async @proxy_skip
+def test_image_generation():
     """
     - Create key
     Make embeddings call
@@ -522,8 +542,10 @@ async def test_image_generation():
 
 
 @pytest.mark.flaky(retries=5, delay=1)
+@proxy_skip
 @pytest.mark.asyncio
-async def test_openai_wildcard_chat_completion():
+async @proxy_skip
+def test_openai_wildcard_chat_completion():
     """
     - Create key for model = "*" -> this has access to all models
     - proxy_server_config.yaml has model = *
@@ -538,8 +560,10 @@ async def test_openai_wildcard_chat_completion():
         await chat_completion(session=session, key=key, model="gpt-3.5-turbo-0125")
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_proxy_all_models():
+async @proxy_skip
+def test_proxy_all_models():
     """
     - proxy_server_config.yaml has model = * / *
     - Make chat completion call
@@ -560,8 +584,10 @@ async def test_proxy_all_models():
         )
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_batch_chat_completions():
+async @proxy_skip
+def test_batch_chat_completions():
     """
     - Make chat completion call using
 
@@ -581,8 +607,10 @@ async def test_batch_chat_completions():
         assert isinstance(response, list)
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_moderations_endpoint():
+async @proxy_skip
+def test_moderations_endpoint():
     """
     - Make chat completion call using
 

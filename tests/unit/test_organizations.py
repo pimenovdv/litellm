@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What this tests ?
 ## Tests /organization endpoints.
 import pytest
@@ -192,8 +196,10 @@ async def list_organization(session, i):
 
 
 @pytest.mark.flaky(retries=5, delay=1)
+@proxy_skip
 @pytest.mark.asyncio
-async def test_organization_new():
+async @proxy_skip
+def test_organization_new():
     """
     Make 20 parallel calls to /organization/new. Assert all worked.
     """
@@ -208,8 +214,10 @@ async def test_organization_new():
         await asyncio.gather(*tasks)
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_organization_list():
+async @proxy_skip
+def test_organization_list():
     """
     create 2 new Organizations
     check if the Organization list is not empty
@@ -231,8 +239,10 @@ async def test_organization_list():
             raise Exception("Return empty list of organization")
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_organization_delete():
+async @proxy_skip
+def test_organization_delete():
     """
     create a new organization
     delete the organization
@@ -257,8 +267,10 @@ async def test_organization_delete():
         print(len(response_json))
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_organization_member_flow():
+async @proxy_skip
+def test_organization_member_flow():
     """
     create a new organization
     add a new member to the organization

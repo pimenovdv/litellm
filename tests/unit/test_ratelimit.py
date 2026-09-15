@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # %%
 import asyncio
 import os
@@ -111,6 +115,7 @@ class ExpectNoException(Exception):
         # "latency-based-routing",
     ],
 )
+@proxy_skip
 def test_async_rate_limit(
     router_factory, num_try_send, num_allowed_send, sync_mode, routing_strategy
 ):

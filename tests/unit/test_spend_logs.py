@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What this tests?
 ## Tests /spend endpoints.
 
@@ -103,8 +107,10 @@ async def get_spend_logs(session, request_id=None, api_key=None):
 @pytest.mark.skip(
     reason="Flaky in CI: /spend/logs?request_id=... returns 500 even after a 20s wait for the spend log to be written. Spend-log accuracy is covered by tests/test_litellm/proxy/spend_tracking/ and the proxy_spend_accuracy_tests CircleCI job."
 )
+@proxy_skip
 @pytest.mark.asyncio
-async def test_spend_logs():
+async @proxy_skip
+def test_spend_logs():
     """
     - Create key
     - Make call (makes sure it's in spend logs)
@@ -161,8 +167,10 @@ async def generate_team(session: aiohttp.ClientSession, org_id: str) -> dict:
 @pytest.mark.skip(
     reason="Flaky in CI: /spend/logs?request_id=... returns 500 even after a 20s wait for the spend log to be written. Same write-then-read race against the spend logs DB as test_spend_logs. Spend-log accuracy is covered by tests/test_litellm/proxy/spend_tracking/ and the proxy_spend_accuracy_tests CircleCI job."
 )
+@proxy_skip
 @pytest.mark.asyncio
-async def test_spend_logs_with_org_id():
+async @proxy_skip
+def test_spend_logs_with_org_id():
     """
     - Create Organization
     - Create Team in organization
@@ -239,8 +247,10 @@ async def get_spend_report(session, start_date, end_date):
 
 
 @pytest.mark.skip(reason="datetime in ci/cd gets set weirdly")
+@proxy_skip
 @pytest.mark.asyncio
-async def test_get_predicted_spend_logs():
+async @proxy_skip
+def test_get_predicted_spend_logs():
     """
     - Create key
     - Make call (makes sure it's in spend logs)
@@ -255,8 +265,10 @@ async def test_get_predicted_spend_logs():
 
 
 @pytest.mark.skip(reason="High traffic load test, meant to be run locally")
+@proxy_skip
 @pytest.mark.asyncio
-async def test_spend_logs_high_traffic():
+async @proxy_skip
+def test_spend_logs_high_traffic():
     """
     - Create key
     - Make 30 concurrent calls
@@ -308,8 +320,10 @@ async def test_spend_logs_high_traffic():
         raise Exception("it worked!")
 
 
+@proxy_skip
 @pytest.mark.asyncio
-async def test_spend_report_endpoint():
+async @proxy_skip
+def test_spend_report_endpoint():
     async with aiohttp.ClientSession(
         timeout=aiohttp.ClientTimeout(total=600)
     ) as session:

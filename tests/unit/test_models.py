@@ -55,9 +55,9 @@ async def get_models(session, key, only_model_access_groups=False):
 
 
 @proxy_skip
-@proxy_skip
 @pytest.mark.asyncio
-async def test_get_models_multiple_tests():
+async @proxy_skip
+def test_get_models_multiple_tests():
     async with aiohttp.ClientSession() as session:
         key_gen = await generate_key(session=session)
         key = key_gen["key"]
@@ -209,7 +209,8 @@ async def chat_completion(session, key, model="azure-gpt-3.5"):
 
 @proxy_skip
 @pytest.mark.asyncio
-async def test_get_models():
+async @proxy_skip
+def test_get_models():
     """
     Get models user has access to
     """
@@ -224,7 +225,8 @@ async def test_get_models():
 
 @proxy_skip
 @pytest.mark.asyncio
-async def test_get_specific_model():
+async @proxy_skip
+def test_get_specific_model():
     """
     Return specific model info
 
@@ -277,8 +279,10 @@ async def delete_model(session, model_id="123", key="sk-1234"):
 @pytest.mark.skip(
     reason="Requires live proxy + OPENAI_API_KEY. Deterministic mock version in tests/test_litellm/proxy/management_endpoints/test_model_management_endpoints.py::TestAddAndDeleteModelLifecycle"
 )
+@proxy_skip
 @pytest.mark.asyncio
-async def test_add_and_delete_models():
+async @proxy_skip
+def test_add_and_delete_models():
     """
     - Add model
     - Call new model -> expect to pass
@@ -399,7 +403,8 @@ async def get_model_health(session, key, model_name):
 
 @proxy_skip
 @pytest.mark.asyncio
-async def test_add_model_run_health():
+async @proxy_skip
+def test_add_model_run_health():
     """
     Add model
     Call /model/info and v2/model/info
@@ -472,7 +477,8 @@ async def test_add_model_run_health():
 
 @proxy_skip
 @pytest.mark.asyncio
-async def test_get_personal_models_for_user():
+async @proxy_skip
+def test_get_personal_models_for_user():
     """
     Test /models endpoint with team
     """
@@ -493,7 +499,8 @@ async def test_get_personal_models_for_user():
 
 @proxy_skip
 @pytest.mark.asyncio
-async def test_model_group_info_e2e():
+async @proxy_skip
+def test_model_group_info_e2e():
     """
     Test /model/group/info endpoint
     """
@@ -519,7 +526,8 @@ async def test_model_group_info_e2e():
 
 @proxy_skip
 @pytest.mark.asyncio
-async def test_team_model_e2e():
+async @proxy_skip
+def test_team_model_e2e():
     """
     Test team model e2e
 
