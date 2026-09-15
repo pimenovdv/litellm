@@ -233,25 +233,11 @@ healthcheck = [
 ]
 
 [build-system]
-requires = ["maturin==1.9.4"]
-build-backend = "maturin"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
-[tool.maturin]
-manifest-path = "litellm-rust/crates/python-bridge/Cargo.toml"
-module-name = "litellm.rust_bridge._native"
-python-source = "."
-bindings = "pyo3"
-include = ["litellm/proxy/_experimental/out/**"]
-exclude = [
-    "litellm/proxy/enterprise",
-    "litellm/proxy/enterprise/**",
-    "**/__pycache__",
-    "**/__pycache__/**",
-    "**/.pytest_cache",
-    "**/.pytest_cache/**",
-    "**/.ruff_cache",
-    "**/.ruff_cache/**",
-]
+[tool.setuptools]
+packages = ["litellm"]
 
 [tool.uv]
 constraint-dependencies = [
@@ -271,11 +257,11 @@ required-version = ">=0.10.9"
 exclude-newer = "3 days"
 
 [tool.uv.sources]
-litellm-proxy-extras = { workspace = true }
-litellm-enterprise = { workspace = true }
+
+
 
 [tool.uv.workspace]
-members = ["enterprise", "litellm-proxy-extras"]
+
 
 [tool.isort]
 profile = "black"
