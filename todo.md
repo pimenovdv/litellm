@@ -8,7 +8,7 @@
 
 ## 2. Очистка репозитория от мусора
 - [ ] Удалить все неиспользуемые интеграции из `Backend/litellm/integrations/` (Langfuse, Datadog, Sentry, Slack и др.).
-- [ ] Удалить поддержку всех сторонних LLM-провайдеров из `Backend/litellm/llms/`, оставив исключительно `openai`.
+- [x] Удалить поддержку всех сторонних LLM-провайдеров из `Backend/litellm/llms/`, оставив исключительно `openai`.
 - [ ] Вырезать лишний функционал из ядра системы (RAG, Guardrails, сторонние менеджеры секретов, телеметрию).
 - [ ] Очистить корневую директорию от неактуальных артефактов (например, `.circleci`, `.devcontainer`, `.semgrep`, `litellm-proxy-extras`, `packaging` и др.).
 - [ ] Очистить списки зависимостей (`pyproject.toml`, `requirements.txt`, `uv.lock`, `package.json` во фронтенде) от неиспользуемых библиотек.

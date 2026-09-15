@@ -67,28 +67,6 @@ class BaseRerankConfig(ABC):
         """
         return api_base or ""
 
-    @abstractmethod
-    def get_supported_cohere_rerank_params(self, model: str) -> list:
-        pass
-
-    @abstractmethod
-    def map_cohere_rerank_params(
-        self,
-        non_default_params: dict,
-        model: str,
-        drop_params: bool,
-        query: str,
-        documents: List[Union[str, Dict[str, Any]]],
-        custom_llm_provider: str | None = None,
-        top_n: int | None = None,
-        rank_fields: List[str] | None = None,
-        return_documents: bool | None = True,
-        max_chunks_per_doc: int | None = None,
-        max_tokens_per_doc: int | None = None,
-        instruction: str | None = None,
-    ) -> Dict:
-        pass
-
     def get_error_class(
         self, error_message: str, status_code: int, headers: Union[dict, httpx.Headers]
     ) -> BaseLLMException:
