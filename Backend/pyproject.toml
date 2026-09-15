@@ -271,11 +271,10 @@ required-version = ">=0.10.9"
 exclude-newer = "3 days"
 
 [tool.uv.sources]
-litellm-proxy-extras = { workspace = true }
-litellm-enterprise = { workspace = true }
+
+
 
 [tool.uv.workspace]
-members = ["enterprise", "litellm-proxy-extras"]
 
 [tool.isort]
 profile = "black"
