@@ -7,7 +7,16 @@ import pytest
 from litellm.types.utils import LlmProviders
 from litellm.utils import ProviderConfigManager
 
+try:
+    from litellm.llms.litellm_proxy.responses.transformation import (
+        LiteLLMProxyResponsesAPIConfig,
+    )
+    HAS_LITELLM_PROXY = True
+except ImportError:
+    HAS_LITELLM_PROXY = False
 
+
+@pytest.mark.skipif(not HAS_LITELLM_PROXY, reason="litellm_proxy not available")
 def test_litellm_proxy_responses_api_config():
     """Test that litellm_proxy provider returns correct Responses API config"""
     from litellm.llms.litellm_proxy.responses.transformation import (
@@ -28,6 +37,7 @@ def test_litellm_proxy_responses_api_config():
     ), "custom_llm_provider should be LITELLM_PROXY"
 
 
+@pytest.mark.skipif(not HAS_LITELLM_PROXY, reason="litellm_proxy not available")
 def test_litellm_proxy_responses_api_config_get_complete_url():
     """Test that get_complete_url works correctly"""
     import os
@@ -59,6 +69,7 @@ def test_litellm_proxy_responses_api_config_get_complete_url():
         config.get_complete_url(api_base=None, litellm_params={})
 
 
+@pytest.mark.skipif(not HAS_LITELLM_PROXY, reason="litellm_proxy not available")
 def test_litellm_proxy_responses_api_config_inherits_from_openai():
     """Test that LiteLLMProxyResponsesAPIConfig extends OpenAI config properly"""
     from litellm.llms.litellm_proxy.responses.transformation import (

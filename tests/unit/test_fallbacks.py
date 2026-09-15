@@ -14,8 +14,29 @@ async def generate_key(
     models: list,
     calling_key="sk-1234",
 ):
-    # MOCK NETWORK CALL FOR OFFLINE TESTING
-    return {"key": "sk-mocked-key"}
+    url = "http://0.0.0.0:4000/key/generate"
+    headers = {
+        "Authorization": f"Bearer {calling_key}",
+        "Content-Type": "application/json",
+    }
+    data = {
+        "models": models,
+    }
+
+    print(f"data: {data}")
+
+    async with session.post(url, headers=headers, json=data) as response:
+        status = response.status
+        response_text = await response.text()
+
+        print(f"Response {i} (Status code: {status}):")
+        print(response_text)
+        print()
+
+        if status != 200:
+            raise Exception(f"Request {i} did not return a 200 status code: {status}")
+
+        return await response.json()
 
 
 async def chat_completion(
