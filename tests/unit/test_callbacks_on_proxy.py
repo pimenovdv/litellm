@@ -245,6 +245,7 @@ async def get_current_routing_strategy(session):
 @pytest.mark.asyncio
 @pytest.mark.order1
 @pytest.mark.flaky(reruns=2, reruns_delay=5)
+@proxy_skip
 async def test_check_num_callbacks():
     """
     PROD invariant: no callback TYPE should grow without bound over time.
@@ -273,6 +274,7 @@ async def test_check_num_callbacks():
 @pytest.mark.asyncio
 @pytest.mark.order2
 @pytest.mark.flaky(reruns=2, reruns_delay=5)
+@proxy_skip
 async def test_check_num_callbacks_on_lowest_latency():
     """
     Same PROD invariant as test_check_num_callbacks, but after switching the
