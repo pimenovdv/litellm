@@ -34,9 +34,13 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES
 from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.realtime_streaming import RealTimeStreaming
 from litellm.litellm_core_utils.url_utils import encode_url_path_segment
-from litellm.llms.base_llm.anthropic_messages.transformation import (
-    BaseAnthropicMessagesConfig,
-)
+try:
+    from litellm.llms.anthropic.chat.transformation import (
+        AnthropicConfig as BaseAnthropicMessagesConfig,
+    )
+except ImportError:
+    BaseAnthropicMessagesConfig = None
+
 from litellm.llms.base_llm.audio_transcription.transformation import (
     BaseAudioTranscriptionConfig,
 )
@@ -53,9 +57,10 @@ from litellm.llms.base_llm.files.transformation import (
     BaseFilesConfig,
     BaseFileUploadStream,
 )
-from litellm.llms.base_llm.google_genai.transformation import (
-    BaseGoogleGenAIGenerateContentConfig,
-)
+try:
+    from litellm.llms.base_llm.google_genai.transformation import BaseGoogleGenAIGenerateContentConfig
+except ImportError:
+    BaseGoogleGenAIGenerateContentConfig = None
 from litellm.llms.base_llm.image_edit.transformation import BaseImageEditConfig
 from litellm.llms.base_llm.image_generation.transformation import (
     BaseImageGenerationConfig,
@@ -163,7 +168,8 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-            AnthropicMessagesStreamingResponse,
+    from litellm.llms.anthropic.chat.transformation import (
+        AnthropicMessagesStreamingResponse,
     )
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
@@ -2157,7 +2163,8 @@ class BaseLLMHTTPHandler:
 
         initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
         if stream:
-                            AnthropicMessagesStreamingResponse,
+            from litellm.llms.anthropic.chat.transformation import (
+                AnthropicMessagesStreamingResponse,
                 anthropic_messages_stream_hidden_params,
             )
 
@@ -2180,7 +2187,8 @@ class BaseLLMHTTPHandler:
                     hidden_params=stream_hidden_params,
                 )
 
-                            AgenticAnthropicStreamingIterator,
+            from litellm.llms.anthropic.chat.transformation import (
+                AgenticAnthropicStreamingIterator,
             )
 
             initial_response = AgenticAnthropicStreamingIterator(
@@ -2307,9 +2315,9 @@ class BaseLLMHTTPHandler:
     def _rust_anthropic_messages_fake_stream(
         rust_response: AnthropicMessagesResponse,
     ) -> "AnthropicMessagesStreamingResponse":
-                    FakeAnthropicMessagesStreamIterator,
-        )
-                    AnthropicMessagesStreamHiddenParams,
+        from litellm.llms.anthropic.chat.transformation import (
+            FakeAnthropicMessagesStreamIterator,
+            AnthropicMessagesStreamHiddenParams,
             AnthropicMessagesStreamingResponse,
         )
 
@@ -5349,7 +5357,8 @@ class BaseLLMHTTPHandler:
             from typing import cast
 
             from litellm._logging import verbose_logger
-                            FakeAnthropicMessagesStreamIterator,
+            from litellm.llms.anthropic.chat.transformation import (
+                FakeAnthropicMessagesStreamIterator,
             )
             from litellm.types.llms.anthropic_messages.anthropic_response import (
                 AnthropicMessagesResponse,

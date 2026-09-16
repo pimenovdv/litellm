@@ -115,15 +115,23 @@ from litellm.llms.base_llm import BaseConfig, BaseImageGenerationConfig
 from litellm.llms.base_llm.base_model_iterator import (
     convert_model_response_to_streaming,
 )
-from litellm.llms.bedrock.common_utils import BedrockModelInfo
-from litellm.llms.cohere.common_utils import CohereModelInfo
+try:
+    from litellm.llms.bedrock.common_utils import BedrockModelInfo
+except ImportError:
+    BedrockModelInfo = None
+
+try:
+    from litellm.llms.cohere.common_utils import CohereModelInfo
+except ImportError:
+    CohereModelInfo = None
+
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
-from litellm.llms.openai_like.json_loader import JSONProviderRegistry
-from litellm.llms.vertex_ai.common_utils import (
-    VertexAIModelRoute,
-    get_vertex_ai_model_route,
-)
+try:
+    from litellm.llms.openai_like.json_loader import JSONProviderRegistry
+except ImportError:
+    JSONProviderRegistry = None
+
 from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
 from litellm.types.completion import (
@@ -200,73 +208,248 @@ from .litellm_core_utils.prompt_templates.factory import (
     stringify_json_tool_call_content,
 )
 from .litellm_core_utils.streaming_chunk_builder_utils import ChunkProcessor
-from .llms.anthropic.chat import AnthropicChatCompletion
-from .llms.azure.audio_transcriptions import AzureAudioTranscription
-from .llms.azure.azure import AzureChatCompletion, _check_dynamic_azure_params
-from .llms.azure.chat.o_series_handler import AzureOpenAIO1ChatCompletion
-from .llms.azure.completion.handler import AzureTextCompletion
-from .llms.azure_ai.anthropic.handler import AzureAnthropicChatCompletion
-from .llms.azure_ai.embed import AzureAIEmbedding
-from .llms.bedrock.chat import BedrockConverseLLM, BedrockLLM
-from .llms.bedrock.embed.embedding import BedrockEmbedding
-from .llms.bedrock.image_edit.handler import BedrockImageEdit
-from .llms.bedrock.image_generation.image_handler import BedrockImageGeneration
-from .llms.bytez.chat.transformation import BytezChatConfig
-from .llms.clarifai.chat.transformation import ClarifaiConfig
-from .llms.codestral.completion.handler import CodestralTextCompletion
-from .llms.cohere.embed import handler as cohere_embed
-from .llms.custom_httpx.aiohttp_handler import BaseLLMAIOHTTPHandler
-from .llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
-from .llms.custom_llm import CustomLLM, custom_chat_llm_router
-from .llms.databricks.embed.handler import DatabricksEmbeddingHandler
-from .llms.deprecated_providers import aleph_alpha, palm
-from .llms.gdc.chat.transformation import GDCGeminiConfig
-from .llms.gemini.common_utils import get_api_key_from_env
-from .llms.groq.chat.handler import GroqChatCompletion
-from .llms.heroku.chat.transformation import HerokuChatConfig
-from .llms.huggingface.embedding.handler import HuggingFaceEmbedding
-from .llms.lemonade.chat.transformation import LemonadeChatConfig
-from .llms.nlp_cloud.chat.handler import completion as nlp_cloud_chat_completion
-from .llms.nvidia_riva.audio_transcription.handler import (
-    NvidiaRivaAudioTranscription,
-)
-from .llms.nvidia_riva.audio_transcription.transformation import (
-    NvidiaRivaAudioTranscriptionConfig,
-)
-from .llms.oci.chat.transformation import OCIChatConfig
-from .llms.ollama.completion import handler as ollama
-from .llms.oobabooga.chat import oobabooga
-from .llms.openai.completion.handler import OpenAITextCompletion
-from .llms.openai.image_variations.handler import OpenAIImageVariationsHandler
-from .llms.openai.openai import OpenAIChatCompletion
-from .llms.openai.transcriptions.handler import OpenAIAudioTranscription
-from .llms.openai_like.chat.handler import OpenAILikeChatHandler
-from .llms.openai_like.embedding.handler import OpenAILikeEmbeddingHandler
-from .llms.ovhcloud.chat.transformation import OVHCloudChatConfig
-from .llms.petals.completion import handler as petals_handler
-from .llms.predibase.chat.handler import PredibaseChatCompletion
-from .llms.replicate.chat.handler import completion as replicate_chat_completion
-from .llms.sagemaker.chat.handler import SagemakerChatHandler
-from .llms.sagemaker.completion.handler import SagemakerLLM
-from .llms.sap.chat.handler import GenAIHubOrchestration
-from .llms.vertex_ai import vertex_ai_non_gemini
-from .llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import VertexLLM
-from .llms.vertex_ai.gemini_embeddings.batch_embed_content_handler import (
-    GoogleBatchEmbeddings,
-)
-from .llms.vertex_ai.image_generation.image_generation_handler import (
-    VertexImageGeneration,
-)
-from .llms.vertex_ai.multimodal_embeddings.embedding_handler import (
-    VertexMultimodalEmbedding,
-)
-from .llms.vertex_ai.vertex_ai_partner_models.main import VertexAIPartnerModels
-from .llms.vertex_ai.vertex_embeddings.embedding_handler import VertexEmbedding
-from .llms.vertex_ai.vertex_gemma_models.main import VertexAIGemmaModels
-from .llms.vertex_ai.vertex_model_garden.main import VertexAIModelGardenModels
-from .llms.vllm.completion import handler as vllm_handler
-from .llms.watsonx.chat.handler import WatsonXChatHandler
-from .llms.watsonx.common_utils import IBMWatsonXMixin
+try:
+    from .llms.anthropic.chat import AnthropicChatCompletion
+except ImportError:
+    AnthropicChatCompletion = None
+try:
+    from .llms.azure.audio_transcriptions import AzureAudioTranscription
+except ImportError:
+    AzureAudioTranscription = None
+try:
+    from .llms.azure.azure import AzureChatCompletion, _check_dynamic_azure_params
+except ImportError:
+    AzureChatCompletion = None
+    _check_dynamic_azure_params = None
+try:
+    from .llms.azure.chat.o_series_handler import AzureOpenAIO1ChatCompletion
+except ImportError:
+    AzureOpenAIO1ChatCompletion = None
+try:
+    from .llms.azure.completion.handler import AzureTextCompletion
+except ImportError:
+    AzureTextCompletion = None
+try:
+    from .llms.azure_ai.anthropic.handler import AzureAnthropicChatCompletion
+except ImportError:
+    AzureAnthropicChatCompletion = None
+try:
+    from .llms.azure_ai.embed import AzureAIEmbedding
+except ImportError:
+    AzureAIEmbedding = None
+try:
+    from .llms.bedrock.chat import BedrockConverseLLM, BedrockLLM
+except ImportError:
+    BedrockConverseLLM = None
+    BedrockLLM = None
+try:
+    from .llms.bedrock.embed.embedding import BedrockEmbedding
+except ImportError:
+    BedrockEmbedding = None
+try:
+    from .llms.bedrock.image_edit.handler import BedrockImageEdit
+except ImportError:
+    BedrockImageEdit = None
+try:
+    from .llms.bedrock.image_generation.image_handler import BedrockImageGeneration
+except ImportError:
+    BedrockImageGeneration = None
+try:
+    from .llms.bytez.chat.transformation import BytezChatConfig
+except ImportError:
+    BytezChatConfig = None
+try:
+    from .llms.clarifai.chat.transformation import ClarifaiConfig
+except ImportError:
+    ClarifaiConfig = None
+try:
+    from .llms.codestral.completion.handler import CodestralTextCompletion
+except ImportError:
+    CodestralTextCompletion = None
+try:
+    from .llms.cohere.embed import handler as cohere_embed
+except ImportError:
+    cohere_embed = None
+try:
+    from .llms.custom_httpx.aiohttp_handler import BaseLLMAIOHTTPHandler
+except ImportError:
+    BaseLLMAIOHTTPHandler = None
+try:
+    from .llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
+except ImportError:
+    BaseLLMHTTPHandler = None
+try:
+    from .llms.custom_llm import CustomLLM, custom_chat_llm_router
+except ImportError:
+    CustomLLM = None
+    custom_chat_llm_router = None
+try:
+    from .llms.databricks.embed.handler import DatabricksEmbeddingHandler
+except ImportError:
+    DatabricksEmbeddingHandler = None
+try:
+    from .llms.deprecated_providers import aleph_alpha, palm
+except ImportError:
+    aleph_alpha = None
+    palm = None
+try:
+    from .llms.gdc.chat.transformation import GDCGeminiConfig
+except ImportError:
+    GDCGeminiConfig = None
+try:
+    from .llms.gemini.common_utils import get_api_key_from_env
+except ImportError:
+    get_api_key_from_env = None
+try:
+    from .llms.groq.chat.handler import GroqChatCompletion
+except ImportError:
+    GroqChatCompletion = None
+try:
+    from .llms.heroku.chat.transformation import HerokuChatConfig
+except ImportError:
+    HerokuChatConfig = None
+try:
+    from .llms.huggingface.embedding.handler import HuggingFaceEmbedding
+except ImportError:
+    HuggingFaceEmbedding = None
+try:
+    from .llms.lemonade.chat.transformation import LemonadeChatConfig
+except ImportError:
+    LemonadeChatConfig = None
+try:
+    from .llms.nlp_cloud.chat.handler import completion as nlp_cloud_chat_completion
+except ImportError:
+    nlp_cloud_chat_completion = None
+try:
+    from .llms.nvidia_riva.audio_transcription.handler import (
+        NvidiaRivaAudioTranscription,
+    )
+except ImportError:
+    NvidiaRivaAudioTranscription = None
+try:
+    from .llms.nvidia_riva.audio_transcription.transformation import (
+        NvidiaRivaAudioTranscriptionConfig,
+    )
+except ImportError:
+    NvidiaRivaAudioTranscriptionConfig = None
+try:
+    from .llms.oci.chat.transformation import OCIChatConfig
+except ImportError:
+    OCIChatConfig = None
+try:
+    from .llms.ollama.completion import handler as ollama
+except ImportError:
+    ollama = None
+try:
+    from .llms.oobabooga.chat import oobabooga
+except ImportError:
+    oobabooga = None
+try:
+    from .llms.openai.completion.handler import OpenAITextCompletion
+except ImportError:
+    OpenAITextCompletion = None
+try:
+    from .llms.openai.image_variations.handler import OpenAIImageVariationsHandler
+except ImportError:
+    OpenAIImageVariationsHandler = None
+try:
+    from .llms.openai.openai import OpenAIChatCompletion
+except ImportError:
+    OpenAIChatCompletion = None
+try:
+    from .llms.openai.transcriptions.handler import OpenAIAudioTranscription
+except ImportError:
+    OpenAIAudioTranscription = None
+try:
+    from .llms.openai_like.chat.handler import OpenAILikeChatHandler
+except ImportError:
+    OpenAILikeChatHandler = None
+try:
+    from .llms.openai_like.embedding.handler import OpenAILikeEmbeddingHandler
+except ImportError:
+    OpenAILikeEmbeddingHandler = None
+try:
+    from .llms.ovhcloud.chat.transformation import OVHCloudChatConfig
+except ImportError:
+    OVHCloudChatConfig = None
+try:
+    from .llms.petals.completion import handler as petals_handler
+except ImportError:
+    petals_handler = None
+try:
+    from .llms.predibase.chat.handler import PredibaseChatCompletion
+except ImportError:
+    PredibaseChatCompletion = None
+try:
+    from .llms.replicate.chat.handler import completion as replicate_chat_completion
+except ImportError:
+    replicate_chat_completion = None
+try:
+    from .llms.sagemaker.chat.handler import SagemakerChatHandler
+except ImportError:
+    SagemakerChatHandler = None
+try:
+    from .llms.sagemaker.completion.handler import SagemakerLLM
+except ImportError:
+    SagemakerLLM = None
+try:
+    from .llms.sap.chat.handler import GenAIHubOrchestration
+except ImportError:
+    GenAIHubOrchestration = None
+try:
+    from .llms.vertex_ai import vertex_ai_non_gemini
+except ImportError:
+    vertex_ai_non_gemini = None
+try:
+    from .llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import VertexLLM
+except ImportError:
+    VertexLLM = None
+try:
+    from .llms.vertex_ai.gemini_embeddings.batch_embed_content_handler import (
+        GoogleBatchEmbeddings,
+    )
+except ImportError:
+    GoogleBatchEmbeddings = None
+try:
+    from .llms.vertex_ai.image_generation.image_generation_handler import (
+        VertexImageGeneration,
+    )
+except ImportError:
+    VertexImageGeneration = None
+try:
+    from .llms.vertex_ai.multimodal_embeddings.embedding_handler import (
+        VertexMultimodalEmbedding,
+    )
+except ImportError:
+    VertexMultimodalEmbedding = None
+try:
+    from .llms.vertex_ai.vertex_ai_partner_models.main import VertexAIPartnerModels
+except ImportError:
+    VertexAIPartnerModels = None
+try:
+    from .llms.vertex_ai.vertex_embeddings.embedding_handler import VertexEmbedding
+except ImportError:
+    VertexEmbedding = None
+try:
+    from .llms.vertex_ai.vertex_gemma_models.main import VertexAIGemmaModels
+except ImportError:
+    VertexAIGemmaModels = None
+try:
+    from .llms.vertex_ai.vertex_model_garden.main import VertexAIModelGardenModels
+except ImportError:
+    VertexAIModelGardenModels = None
+try:
+    from .llms.vllm.completion import handler as vllm_handler
+except ImportError:
+    vllm_handler = None
+try:
+    from .llms.watsonx.chat.handler import WatsonXChatHandler
+except ImportError:
+    WatsonXChatHandler = None
+try:
+    from .llms.watsonx.common_utils import IBMWatsonXMixin
+except ImportError:
+    IBMWatsonXMixin = None
 from .types.llms.anthropic import AnthropicThinkingParam
 from .types.llms.openai import (
     ChatCompletionAssistantMessage,
@@ -291,51 +474,51 @@ from .types.utils import (
 )
 
 ####### ENVIRONMENT VARIABLES ###################
-openai_chat_completions = OpenAIChatCompletion()
-openai_text_completions = OpenAITextCompletion()
-openai_audio_transcriptions = OpenAIAudioTranscription()
-nvidia_riva_audio_transcriptions = NvidiaRivaAudioTranscription()
-openai_image_variations = OpenAIImageVariationsHandler()
-groq_chat_completions = GroqChatCompletion()
-sap_gen_ai_hub_chat_completions = GenAIHubOrchestration()
-sap_gen_ai_hub_emb = GenAIHubOrchestration()
-azure_ai_embedding = AzureAIEmbedding()
-anthropic_chat_completions = AnthropicChatCompletion()
-azure_anthropic_chat_completions = AzureAnthropicChatCompletion()
-azure_chat_completions = AzureChatCompletion()
-azure_o1_chat_completions = AzureOpenAIO1ChatCompletion()
-azure_text_completions = AzureTextCompletion()
-azure_audio_transcriptions = AzureAudioTranscription()
-huggingface_embed = HuggingFaceEmbedding()
-predibase_chat_completions = PredibaseChatCompletion()
-codestral_text_completions = CodestralTextCompletion()
-bedrock_converse_chat_completion = BedrockConverseLLM()
-bedrock_embedding = BedrockEmbedding()
-bedrock_image_generation = BedrockImageGeneration()
-bedrock_image_edit = BedrockImageEdit()
-vertex_chat_completion = VertexLLM()
-vertex_embedding = VertexEmbedding()
-vertex_multimodal_embedding = VertexMultimodalEmbedding()
-vertex_image_generation = VertexImageGeneration()
-google_batch_embeddings = GoogleBatchEmbeddings()
-vertex_partner_models_chat_completion = VertexAIPartnerModels()
-vertex_gemma_chat_completion = VertexAIGemmaModels()
-vertex_model_garden_chat_completion = VertexAIModelGardenModels()
-gdc_transformation = GDCGeminiConfig()
+openai_chat_completions = OpenAIChatCompletion() if OpenAIChatCompletion else None if OpenAIChatCompletion else None if OpenAIChatCompletion else None if OpenAIChatCompletion else None if OpenAIChatCompletion else None if OpenAIChatCompletion else None if OpenAIChatCompletion else None if OpenAIChatCompletion else None if OpenAIChatCompletion else None
+openai_text_completions = OpenAITextCompletion() if OpenAITextCompletion else None if OpenAITextCompletion else None if OpenAITextCompletion else None if OpenAITextCompletion else None if OpenAITextCompletion else None if OpenAITextCompletion else None if OpenAITextCompletion else None if OpenAITextCompletion else None if OpenAITextCompletion else None
+openai_audio_transcriptions = OpenAIAudioTranscription() if OpenAIAudioTranscription else None if OpenAIAudioTranscription else None if OpenAIAudioTranscription else None if OpenAIAudioTranscription else None if OpenAIAudioTranscription else None if OpenAIAudioTranscription else None if OpenAIAudioTranscription else None if OpenAIAudioTranscription else None if OpenAIAudioTranscription else None
+nvidia_riva_audio_transcriptions = NvidiaRivaAudioTranscription() if NvidiaRivaAudioTranscription else None if NvidiaRivaAudioTranscription else None if NvidiaRivaAudioTranscription else None if NvidiaRivaAudioTranscription else None if NvidiaRivaAudioTranscription else None if NvidiaRivaAudioTranscription else None if NvidiaRivaAudioTranscription else None if NvidiaRivaAudioTranscription else None if NvidiaRivaAudioTranscription else None
+openai_image_variations = OpenAIImageVariationsHandler() if OpenAIImageVariationsHandler else None if OpenAIImageVariationsHandler else None if OpenAIImageVariationsHandler else None if OpenAIImageVariationsHandler else None if OpenAIImageVariationsHandler else None if OpenAIImageVariationsHandler else None if OpenAIImageVariationsHandler else None if OpenAIImageVariationsHandler else None if OpenAIImageVariationsHandler else None
+groq_chat_completions = GroqChatCompletion() if GroqChatCompletion else None if GroqChatCompletion else None if GroqChatCompletion else None if GroqChatCompletion else None if GroqChatCompletion else None if GroqChatCompletion else None if GroqChatCompletion else None if GroqChatCompletion else None if GroqChatCompletion else None
+sap_gen_ai_hub_chat_completions = GenAIHubOrchestration() if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None
+sap_gen_ai_hub_emb = GenAIHubOrchestration() if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None if GenAIHubOrchestration else None
+azure_ai_embedding = AzureAIEmbedding() if AzureAIEmbedding else None if AzureAIEmbedding else None if AzureAIEmbedding else None if AzureAIEmbedding else None if AzureAIEmbedding else None if AzureAIEmbedding else None if AzureAIEmbedding else None if AzureAIEmbedding else None if AzureAIEmbedding else None
+anthropic_chat_completions = AnthropicChatCompletion() if AnthropicChatCompletion else None if AnthropicChatCompletion else None if AnthropicChatCompletion else None if AnthropicChatCompletion else None if AnthropicChatCompletion else None if AnthropicChatCompletion else None if AnthropicChatCompletion else None if AnthropicChatCompletion else None
+azure_anthropic_chat_completions = AzureAnthropicChatCompletion() if AzureAnthropicChatCompletion else None if AzureAnthropicChatCompletion else None if AzureAnthropicChatCompletion else None if AzureAnthropicChatCompletion else None if AzureAnthropicChatCompletion else None if AzureAnthropicChatCompletion else None if AzureAnthropicChatCompletion else None if AzureAnthropicChatCompletion else None
+azure_chat_completions = AzureChatCompletion() if AzureChatCompletion else None if AzureChatCompletion else None if AzureChatCompletion else None if AzureChatCompletion else None if AzureChatCompletion else None if AzureChatCompletion else None if AzureChatCompletion else None if AzureChatCompletion else None
+azure_o1_chat_completions = AzureOpenAIO1ChatCompletion() if AzureOpenAIO1ChatCompletion else None if AzureOpenAIO1ChatCompletion else None if AzureOpenAIO1ChatCompletion else None if AzureOpenAIO1ChatCompletion else None if AzureOpenAIO1ChatCompletion else None if AzureOpenAIO1ChatCompletion else None if AzureOpenAIO1ChatCompletion else None if AzureOpenAIO1ChatCompletion else None
+azure_text_completions = AzureTextCompletion() if AzureTextCompletion else None if AzureTextCompletion else None if AzureTextCompletion else None if AzureTextCompletion else None if AzureTextCompletion else None if AzureTextCompletion else None if AzureTextCompletion else None if AzureTextCompletion else None
+azure_audio_transcriptions = AzureAudioTranscription() if AzureAudioTranscription else None if AzureAudioTranscription else None if AzureAudioTranscription else None if AzureAudioTranscription else None if AzureAudioTranscription else None if AzureAudioTranscription else None if AzureAudioTranscription else None if AzureAudioTranscription else None
+huggingface_embed = HuggingFaceEmbedding() if HuggingFaceEmbedding else None if HuggingFaceEmbedding else None if HuggingFaceEmbedding else None if HuggingFaceEmbedding else None if HuggingFaceEmbedding else None if HuggingFaceEmbedding else None if HuggingFaceEmbedding else None
+predibase_chat_completions = PredibaseChatCompletion() if PredibaseChatCompletion else None if PredibaseChatCompletion else None if PredibaseChatCompletion else None if PredibaseChatCompletion else None if PredibaseChatCompletion else None if PredibaseChatCompletion else None if PredibaseChatCompletion else None if PredibaseChatCompletion else None
+codestral_text_completions = CodestralTextCompletion() if CodestralTextCompletion else None if CodestralTextCompletion else None if CodestralTextCompletion else None if CodestralTextCompletion else None if CodestralTextCompletion else None if CodestralTextCompletion else None
+bedrock_converse_chat_completion = BedrockConverseLLM() if BedrockConverseLLM else None if BedrockConverseLLM else None if BedrockConverseLLM else None if BedrockConverseLLM else None if BedrockConverseLLM else None
+bedrock_embedding = BedrockEmbedding() if BedrockEmbedding else None if BedrockEmbedding else None if BedrockEmbedding else None if BedrockEmbedding else None if BedrockEmbedding else None
+bedrock_image_generation = BedrockImageGeneration() if BedrockImageGeneration else None if BedrockImageGeneration else None if BedrockImageGeneration else None if BedrockImageGeneration else None if BedrockImageGeneration else None if BedrockImageGeneration else None if BedrockImageGeneration else None if BedrockImageGeneration else None
+bedrock_image_edit = BedrockImageEdit() if BedrockImageEdit else None if BedrockImageEdit else None if BedrockImageEdit else None if BedrockImageEdit else None if BedrockImageEdit else None if BedrockImageEdit else None if BedrockImageEdit else None if BedrockImageEdit else None
+vertex_chat_completion = VertexLLM() if VertexLLM else None if VertexLLM else None if VertexLLM else None if VertexLLM else None
+vertex_embedding = VertexEmbedding() if VertexEmbedding else None if VertexEmbedding else None if VertexEmbedding else None
+vertex_multimodal_embedding = VertexMultimodalEmbedding() if VertexMultimodalEmbedding else None if VertexMultimodalEmbedding else None
+vertex_image_generation = VertexImageGeneration() if VertexImageGeneration else None if VertexImageGeneration else None
+google_batch_embeddings = GoogleBatchEmbeddings() if GoogleBatchEmbeddings else None if GoogleBatchEmbeddings else None if GoogleBatchEmbeddings else None if GoogleBatchEmbeddings else None if GoogleBatchEmbeddings else None if GoogleBatchEmbeddings else None if GoogleBatchEmbeddings else None if GoogleBatchEmbeddings else None
+vertex_partner_models_chat_completion = VertexAIPartnerModels() if VertexAIPartnerModels else None
+vertex_gemma_chat_completion = VertexAIGemmaModels() if VertexAIGemmaModels else None
+vertex_model_garden_chat_completion = VertexAIModelGardenModels() if VertexAIModelGardenModels else None
+gdc_transformation = GDCGeminiConfig() if GDCGeminiConfig else None
 # vertex_text_to_speech is now replaced by VertexAITextToSpeechConfig
-sagemaker_llm = SagemakerLLM()
-watsonx_chat_completion = WatsonXChatHandler()
-openai_like_embedding = OpenAILikeEmbeddingHandler()
-openai_like_chat_completion = OpenAILikeChatHandler()
-databricks_embedding = DatabricksEmbeddingHandler()
-base_llm_http_handler = BaseLLMHTTPHandler()
-base_llm_aiohttp_handler = BaseLLMAIOHTTPHandler()
-sagemaker_chat_completion = SagemakerChatHandler()
-bytez_transformation = BytezChatConfig()
-heroku_transformation = HerokuChatConfig()
-oci_transformation = OCIChatConfig()
-ovhcloud_transformation = OVHCloudChatConfig()
-lemonade_transformation = LemonadeChatConfig()
+sagemaker_llm = SagemakerLLM() if SagemakerLLM else None
+watsonx_chat_completion = WatsonXChatHandler() if WatsonXChatHandler else None if WatsonXChatHandler else None if WatsonXChatHandler else None if WatsonXChatHandler else None if WatsonXChatHandler else None if WatsonXChatHandler else None if WatsonXChatHandler else None if WatsonXChatHandler else None
+openai_like_embedding = OpenAILikeEmbeddingHandler() if OpenAILikeEmbeddingHandler else None if OpenAILikeEmbeddingHandler else None if OpenAILikeEmbeddingHandler else None if OpenAILikeEmbeddingHandler else None if OpenAILikeEmbeddingHandler else None if OpenAILikeEmbeddingHandler else None if OpenAILikeEmbeddingHandler else None
+openai_like_chat_completion = OpenAILikeChatHandler() if OpenAILikeChatHandler else None
+databricks_embedding = DatabricksEmbeddingHandler() if DatabricksEmbeddingHandler else None if DatabricksEmbeddingHandler else None if DatabricksEmbeddingHandler else None if DatabricksEmbeddingHandler else None if DatabricksEmbeddingHandler else None if DatabricksEmbeddingHandler else None if DatabricksEmbeddingHandler else None
+base_llm_http_handler = BaseLLMHTTPHandler() if BaseLLMHTTPHandler else None if BaseLLMHTTPHandler else None if BaseLLMHTTPHandler else None if BaseLLMHTTPHandler else None if BaseLLMHTTPHandler else None
+base_llm_aiohttp_handler = BaseLLMAIOHTTPHandler() if BaseLLMAIOHTTPHandler else None
+sagemaker_chat_completion = SagemakerChatHandler() if SagemakerChatHandler else None
+bytez_transformation = BytezChatConfig() if BytezChatConfig else None
+heroku_transformation = HerokuChatConfig() if HerokuChatConfig else None
+oci_transformation = OCIChatConfig() if OCIChatConfig else None
+ovhcloud_transformation = OVHCloudChatConfig() if OVHCloudChatConfig else None
+lemonade_transformation = LemonadeChatConfig() if LemonadeChatConfig else None
 
 MOCK_RESPONSE_TYPE = Union[str, Exception, dict, ModelResponse, ModelResponseStream]
 ####### COMPLETION ENDPOINTS ################
