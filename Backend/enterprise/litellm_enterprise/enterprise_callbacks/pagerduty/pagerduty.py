@@ -17,7 +17,6 @@ from typing import List, Optional, Union
 
 from litellm._logging import verbose_logger
 from litellm.caching import DualCache
-from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.llms.custom_httpx.http_handler import (
     AsyncHTTPHandler,
     get_async_httpx_client,
@@ -42,7 +41,7 @@ PAGERDUTY_DEFAULT_HANGING_THRESHOLD_SECONDS = 60
 PAGERDUTY_DEFAULT_HANGING_THRESHOLD_WINDOW_SECONDS = 600
 
 
-class PagerDutyAlerting(SlackAlerting):
+class PagerDutyAlerting:
     """
     Tracks failed requests and hanging requests separately.
     If threshold is crossed for either type, triggers a PagerDuty alert.
@@ -51,7 +50,6 @@ class PagerDutyAlerting(SlackAlerting):
     def __init__(
         self, alerting_args: Optional[Union[AlertingConfig, dict]] = None, **kwargs
     ):
-        super().__init__()
         _api_key = os.getenv("PAGERDUTY_API_KEY")
         if not _api_key:
             raise ValueError("PAGERDUTY_API_KEY is not set")
@@ -234,6 +232,14 @@ class PagerDutyAlerting(SlackAlerting):
             threshold=threshold,
             alert_prefix="High Number of Hanging LLM Requests",
         )
+
+    async def _request_is_completed(self, request_data: Optional[dict]) -> bool:
+        """
+        Check if the request is already completed.
+        """
+        if request_data is None:
+            return False
+        return request_data.get("completed", False)
 
     # ------------------ HELPERS ------------------ #
 

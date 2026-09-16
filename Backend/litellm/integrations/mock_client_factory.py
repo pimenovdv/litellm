@@ -20,8 +20,8 @@ from litellm._logging import verbose_logger
 class MockClientConfig:
     """Configuration for creating a mock client."""
 
-    name: str  # e.g., "GCS", "LANGFUSE", "LANGSMITH", "DATADOG"
-    env_var: str  # e.g., "GCS_MOCK", "LANGFUSE_MOCK"
+    name: str  # e.g., "GCS", "LANGSMITH"
+    env_var: str  # e.g., "GCS_MOCK"
     default_latency_ms: int = 100  # Default mock latency in milliseconds
     default_status_code: int = 200  # Default HTTP status code
     default_json_data: Optional[Dict] = None  # Default JSON response data
