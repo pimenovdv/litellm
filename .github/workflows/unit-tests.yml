@@ -1,0 +1,26 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system fastapi openai pyyaml tiktoken pydantic aiohttp httpx pytest pytest-asyncio pytest-cov pytest-mock respx mock fastuuid jinja2 tokenizers
+      - name: Run unit tests
+        env:
+          PYTHONPATH: Backend:./
+        run: |
+          pytest -m unit tests/unit/
