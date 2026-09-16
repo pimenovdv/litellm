@@ -1,5 +1,5 @@
-# Текущие задачи (Удаление поддержки сторонних LLM-провайдеров)
-- [x] Вырезать все импорты и ссылки, связанные с `anthropic_messages` / `Anthropic` из `Backend/litellm/router.py` и `Backend/litellm/llms/__init__.py`.
-- [x] Удалить папку `Backend/litellm/llms/base_llm/google_genai` и связанные с ней импорты/логику из `router.py`.
-- [x] Удалить папку `Backend/litellm/llms/base_llm/anthropic_messages` и связанные с ней импорты.
-- [ ] Очистить другие LLM-провайдеры (Cohere, Vertex, и т.д.) из `Backend/litellm/llms/base_llm/` и `router.py`.
+# Текущие задачи (Удаление неиспользуемых интеграций)
+- [ ] Найти и удалить модули `langfuse` и `datadog` из `Backend/litellm/integrations/`.
+- [ ] Удалить поддержку `sentry` и `slack` из системы логирования/интеграций.
+- [ ] Очистить ссылки на удаленные модули в `utils.py` и `_lazy_imports_registry.py`.
+- [ ] Удалить оставшиеся неиспользуемые скрипты интеграций (lunary, helicone, athina, prometheus, openmeter, supabase и др.) из `Backend/litellm/integrations/`.

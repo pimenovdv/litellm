@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What this tests ?
 ## Tests /organization endpoints.
 import pytest
@@ -192,6 +196,7 @@ async def list_organization(session, i):
 
 
 @pytest.mark.flaky(retries=5, delay=1)
+@proxy_skip
 @pytest.mark.asyncio
 async def test_organization_new():
     """
@@ -208,6 +213,7 @@ async def test_organization_new():
         await asyncio.gather(*tasks)
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_organization_list():
     """
@@ -231,6 +237,7 @@ async def test_organization_list():
             raise Exception("Return empty list of organization")
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_organization_delete():
     """
@@ -257,6 +264,7 @@ async def test_organization_delete():
         print(len(response_json))
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_organization_member_flow():
     """

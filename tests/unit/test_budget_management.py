@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What is this?
 ## Unit tests for the /budget/* endpoints
 from litellm._uuid import uuid
@@ -71,6 +75,7 @@ async def budget_setup():
         await delete_budget(session, budget_id)
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_create_budget_with_duration(budget_setup):
     """

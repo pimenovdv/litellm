@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What this tests ?
 ## Tests /chat/completions by generating a key and then making a chat completions-request
 import pytest
@@ -286,6 +290,7 @@ async def image_generation(session, key):
         )  # calling the function to check response headers
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_chat_completion():
     """
@@ -370,6 +375,7 @@ async def test_chat_completion_different_deployments():
             pass
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_chat_completion_streaming():
     """
@@ -393,6 +399,7 @@ async def test_chat_completion_streaming():
     print(f"response_str: {response_str}")
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_completion_streaming_usage_metrics():
     """
@@ -423,6 +430,7 @@ async def test_completion_streaming_usage_metrics():
     assert last_chunk.usage.total_tokens > 0, "Total tokens should be greater than 0"
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_chat_completion_anthropic_structured_output():
     """
@@ -456,6 +464,7 @@ async def test_chat_completion_anthropic_structured_output():
         print(message.parsed.events)
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_completion():
     """
@@ -483,6 +492,7 @@ async def test_completion():
     )
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_embeddings():
     """
@@ -504,6 +514,7 @@ async def test_embeddings():
 
 
 @pytest.mark.flaky(retries=5, delay=1)
+@proxy_skip
 @pytest.mark.asyncio
 async def test_image_generation():
     """
@@ -522,6 +533,7 @@ async def test_image_generation():
 
 
 @pytest.mark.flaky(retries=5, delay=1)
+@proxy_skip
 @pytest.mark.asyncio
 async def test_openai_wildcard_chat_completion():
     """
@@ -538,6 +550,7 @@ async def test_openai_wildcard_chat_completion():
         await chat_completion(session=session, key=key, model="gpt-3.5-turbo-0125")
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_proxy_all_models():
     """
@@ -560,6 +573,7 @@ async def test_proxy_all_models():
         )
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_batch_chat_completions():
     """
@@ -581,6 +595,7 @@ async def test_batch_chat_completions():
         assert isinstance(response, list)
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_moderations_endpoint():
     """

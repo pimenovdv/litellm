@@ -34,9 +34,6 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES
 from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.realtime_streaming import RealTimeStreaming
 from litellm.litellm_core_utils.url_utils import encode_url_path_segment
-from litellm.llms.base_llm.anthropic_messages.transformation import (
-    BaseAnthropicMessagesConfig,
-)
 from litellm.llms.base_llm.audio_transcription.transformation import (
     BaseAudioTranscriptionConfig,
 )
@@ -52,9 +49,6 @@ from litellm.llms.base_llm.evals.transformation import BaseEvalsAPIConfig
 from litellm.llms.base_llm.files.transformation import (
     BaseFilesConfig,
     BaseFileUploadStream,
-)
-from litellm.llms.base_llm.google_genai.transformation import (
-    BaseGoogleGenAIGenerateContentConfig,
 )
 from litellm.llms.base_llm.image_edit.transformation import BaseImageEditConfig
 from litellm.llms.base_llm.image_generation.transformation import (
@@ -157,14 +151,12 @@ def _rust_responses_websocket_enabled(
     return custom_llm_provider == "openai" and litellm_params.get("rust") is True
 
 
-from .http_handler import get_shared_realtime_ssl_context
+from litellm.llms.custom_httpx.http_handler import get_shared_realtime_ssl_context
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-            AnthropicMessagesStreamingResponse,
-    )
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
         CancelEvalResponse,
@@ -1887,7 +1879,7 @@ class BaseLLMHTTPHandler:
         request_body: dict,
         stream: bool,
         logging_obj: LiteLLMLoggingObj,
-        provider_config: BaseAnthropicMessagesConfig,
+        provider_config: "BaseAnthropicMessagesConfig",
         litellm_params: GenericLiteLLMParams,
         api_key: Optional[str],
         model: str,
@@ -1969,7 +1961,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseAnthropicMessagesConfig",
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -2157,9 +2149,6 @@ class BaseLLMHTTPHandler:
 
         initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
         if stream:
-                            AnthropicMessagesStreamingResponse,
-                anthropic_messages_stream_hidden_params,
-            )
 
             completion_stream = anthropic_messages_provider_config.get_async_streaming_response_iterator(
                 model=model,
@@ -2180,8 +2169,6 @@ class BaseLLMHTTPHandler:
                     hidden_params=stream_hidden_params,
                 )
 
-                            AgenticAnthropicStreamingIterator,
-            )
 
             initial_response = AgenticAnthropicStreamingIterator(
                 completion_stream=completion_stream,
@@ -2223,7 +2210,7 @@ class BaseLLMHTTPHandler:
         initial_response: AnthropicMessagesResponse,
         model: str,
         messages: list[dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseAnthropicMessagesConfig",
         anthropic_messages_optional_request_params: dict,
         logging_obj: LiteLLMLoggingObj,
         custom_llm_provider: str,
@@ -2307,11 +2294,6 @@ class BaseLLMHTTPHandler:
     def _rust_anthropic_messages_fake_stream(
         rust_response: AnthropicMessagesResponse,
     ) -> "AnthropicMessagesStreamingResponse":
-                    FakeAnthropicMessagesStreamIterator,
-        )
-                    AnthropicMessagesStreamHiddenParams,
-            AnthropicMessagesStreamingResponse,
-        )
 
         completion_stream = cast(AsyncIterator[bytes], FakeAnthropicMessagesStreamIterator(response=rust_response))
         hidden_params = AnthropicMessagesStreamHiddenParams(additional_headers={"x-litellm-rust": "true"})
@@ -2324,7 +2306,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseAnthropicMessagesConfig",
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         _is_async: bool,
@@ -5349,8 +5331,6 @@ class BaseLLMHTTPHandler:
             from typing import cast
 
             from litellm._logging import verbose_logger
-                            FakeAnthropicMessagesStreamIterator,
-            )
             from litellm.types.llms.anthropic_messages.anthropic_response import (
                 AnthropicMessagesResponse,
             )
@@ -5698,8 +5678,8 @@ class BaseLLMHTTPHandler:
             BaseImageGenerationConfig,
             BaseVectorStoreConfig,
             BaseVectorStoreFilesConfig,
-            BaseGoogleGenAIGenerateContentConfig,
-            BaseAnthropicMessagesConfig,
+            "BaseGoogleGenAIGenerateContentConfig",
+            "BaseAnthropicMessagesConfig",
             BaseBatchesConfig,
             BaseOCRConfig,
             BaseVideoConfig,
@@ -11063,7 +11043,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         contents: Any,
-        generate_content_provider_config: BaseGoogleGenAIGenerateContentConfig,
+        generate_content_provider_config: "BaseGoogleGenAIGenerateContentConfig",
         generate_content_config_dict: Dict,
         tools: Any,
         custom_llm_provider: str,
@@ -11195,7 +11175,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         contents: Any,
-        generate_content_provider_config: BaseGoogleGenAIGenerateContentConfig,
+        generate_content_provider_config: "BaseGoogleGenAIGenerateContentConfig",
         generate_content_config_dict: Dict,
         tools: Any,
         custom_llm_provider: str,

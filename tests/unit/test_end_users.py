@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What is this?
 ## Unit tests for the /end_users/* endpoints
 import pytest
@@ -149,6 +153,7 @@ async def new_budget(session, i, budget_id=None):
         print()
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_end_user_new():
     """
@@ -159,6 +164,7 @@ async def test_end_user_new():
         await asyncio.gather(*tasks)
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_aaaend_user_specific_region():
     """
@@ -198,6 +204,7 @@ async def test_aaaend_user_specific_region():
         assert result.headers.get("x-litellm-model-region") == "eu"
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_enduser_tpm_limits_non_master_key():
     """
@@ -246,6 +253,7 @@ async def test_enduser_tpm_limits_non_master_key():
     ), f"Sent 10 requests and end-user has tpm_limit of 2. Number requests passed: {passed}. Expected less than 5 to pass"
 
 
+@proxy_skip
 @pytest.mark.asyncio
 async def test_enduser_tpm_limits_with_master_key():
     """

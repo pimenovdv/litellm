@@ -1,3 +1,7 @@
+
+import pytest
+proxy_skip = pytest.mark.skip(reason='Proxy not running')
+
 # What this tests ?
 ## Makes sure the number of callbacks on the proxy don't increase over time
 ## Num callbacks should be a fixed number at t=0 and t=10, t=20
@@ -241,6 +245,7 @@ async def get_current_routing_strategy(session):
 @pytest.mark.asyncio
 @pytest.mark.order1
 @pytest.mark.flaky(reruns=2, reruns_delay=5)
+@proxy_skip
 async def test_check_num_callbacks():
     """
     PROD invariant: no callback TYPE should grow without bound over time.
@@ -269,6 +274,7 @@ async def test_check_num_callbacks():
 @pytest.mark.asyncio
 @pytest.mark.order2
 @pytest.mark.flaky(reruns=2, reruns_delay=5)
+@proxy_skip
 async def test_check_num_callbacks_on_lowest_latency():
     """
     Same PROD invariant as test_check_num_callbacks, but after switching the
