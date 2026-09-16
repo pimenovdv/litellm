@@ -40,7 +40,6 @@ from typing import (
     overload,
     Type,
 )
-from litellm.types.integrations.datadog import DatadogInitParams
 from litellm.types.integrations.newrelic import NewRelicInitParams
 from litellm._logging import (
     set_verbose,
