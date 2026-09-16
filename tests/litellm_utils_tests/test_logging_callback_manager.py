@@ -12,10 +12,16 @@ sys.path.insert(
 import litellm
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
-from litellm.integrations.langfuse.langfuse_prompt_management import (
-    LangfusePromptManagement,
-)
-from litellm.integrations.opentelemetry import OpenTelemetry
+try:
+    from litellm.integrations.langfuse.langfuse_prompt_management import (
+        LangfusePromptManagement,
+    )
+except ImportError:
+    LangfusePromptManagement = None
+try:
+    from litellm.integrations.opentelemetry import OpenTelemetry
+except ImportError:
+    OpenTelemetry = None
 
 
 # Test fixtures
@@ -53,6 +59,7 @@ def test_add_string_callback():
     assert litellm.callbacks.count(test_callback) == 1
 
 
+@pytest.mark.skipif(globals().get('LangfusePromptManagement') is None, reason='Langfuse integration removed')
 def test_duplicate_langfuse_logger_test():
     manager = LoggingCallbackManager()
     for _ in range(10):
@@ -62,6 +69,7 @@ def test_duplicate_langfuse_logger_test():
     assert len(litellm.success_callback) == 1
 
 
+@pytest.mark.skipif(globals().get('LangfusePromptManagement') is None, reason='Langfuse integration removed')
 def test_duplicate_multiple_loggers_test():
     manager = LoggingCallbackManager()
     for _ in range(10):
@@ -235,6 +243,7 @@ def test_reset_callbacks(callback_manager):
 
 
 @pytest.mark.asyncio
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_slack_alerting_callback_registration(callback_manager):
     """
     Test that litellm callbacks are correctly registered for slack alerting

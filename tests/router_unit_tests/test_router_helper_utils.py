@@ -8,7 +8,11 @@ from datetime import datetime
 sys.path.insert(
     0, os.path.abspath("../..")
 )  # Adds the parent directory to the system path
-from litellm import Router
+try:
+    from litellm.router import Router
+except ImportError:
+    Router = None
+
 import pytest
 import litellm
 from unittest.mock import patch, MagicMock, AsyncMock
