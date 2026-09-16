@@ -11501,26 +11501,8 @@ class Router:
             return allowed_fails_policy.BadRequestErrorAllowedFails
 
     def _initialize_alerting(self):
-        from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
-
-        if self.alerting_config is None:
-            return
-
-        router_alerting_config: AlertingConfig = self.alerting_config
-
-        _slack_alerting_logger = SlackAlerting(
-            alerting_threshold=router_alerting_config.alerting_threshold,
-            alerting=["slack"],
-            default_webhook_url=router_alerting_config.webhook_url,
-        )
-
-        self.slack_alerting_logger = _slack_alerting_logger
-
-        litellm.logging_callback_manager.add_litellm_callback(_slack_alerting_logger)  # type: ignore
-        litellm.logging_callback_manager.add_litellm_success_callback(
-            _slack_alerting_logger.response_taking_too_long_callback
-        )
-        verbose_router_logger.info("\033[94m\nInitialized Alerting for litellm.Router\033[0m\n")
+        # Alerting functionality removed.
+        pass
 
     def set_custom_routing_strategy(self, CustomRoutingStrategy: CustomRoutingStrategyBase):
         """

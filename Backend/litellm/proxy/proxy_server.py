@@ -244,7 +244,6 @@ from litellm.constants import (
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
     _get_parent_otel_span_from_kwargs,
     get_litellm_metadata_from_kwargs,
@@ -563,7 +562,6 @@ from litellm.secret_managers.main import (
     normalize_nonempty_secret_str,
     str_to_bool,
 )
-from litellm.types.integrations.slack_alerting import SlackAlertingArgs
 from litellm.types.llms.anthropic import (
     AnthropicMessagesRequest,
     AnthropicResponse,
@@ -13280,47 +13278,8 @@ async def alerting_settings(
         "max_outage_alert_list_size": {"type": "Integer"},
     }
 
-    _slack_alerting: SlackAlerting = proxy_logging_obj.slack_alerting_instance
-    _slack_alerting_args_dict = _slack_alerting.alerting_args.model_dump()
-
-    return_val = []
-
-    is_slack_enabled = False
-
-    if general_settings.get("alerting") and isinstance(general_settings["alerting"], list):
-        if "slack" in general_settings["alerting"]:
-            is_slack_enabled = True
-
-    _response_obj = ConfigList(
-        field_name="slack_alerting",
-        field_type=allowed_args["slack_alerting"]["type"],
-        field_description="Enable slack alerting for monitoring proxy in production: llm outages, budgets, spend tracking failures.",
-        field_value=is_slack_enabled,
-        stored_in_db=True if alerting_values is not None else False,
-        field_default_value=None,
-        premium_field=False,
-    )
-    return_val.append(_response_obj)
-
-    for field_name, field_info in SlackAlertingArgs.model_fields.items():
-        if field_name in allowed_args:
-            _stored_in_db: Optional[bool] = None
-            if field_name in alerting_args_dict:
-                _stored_in_db = True
-            else:
-                _stored_in_db = False
-
-            _response_obj = ConfigList(
-                field_name=field_name,
-                field_type=allowed_args[field_name]["type"],
-                field_description=field_info.description or "",
-                field_value=_slack_alerting_args_dict.get(field_name, None),
-                stored_in_db=_stored_in_db,
-                field_default_value=field_info.default,
-                premium_field=(True if field_name == "region_outage_alert_ttl" else False),
-            )
-            return_val.append(_response_obj)
-    return return_val
+    # Slack alerting removed
+    return []
 
 
 #### EXPERIMENTAL QUEUING ####
