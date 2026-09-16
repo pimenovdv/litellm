@@ -887,7 +887,7 @@ class CustomGuardrail(CustomLogger):
         tracing_detail: Optional[GuardrailTracingDetail] = None,
     ) -> None:
         """
-        Builds `StandardLoggingGuardrailInformation` and adds it to the request metadata so it can be used for logging to DataDog, Langfuse, etc.
+        Builds `StandardLoggingGuardrailInformation` and adds it to the request metadata so it can be used for downstream loggers.
 
         Args:
             tracing_detail: Optional typed dict with provider-specific tracing fields
@@ -912,12 +912,12 @@ class CustomGuardrail(CustomLogger):
         )
 
         # Sanitize the response to ensure it's JSON serializable and free of circular refs
-        # This prevents RecursionErrors in downstream loggers (Langfuse, Datadog, etc.)
+        # This prevents RecursionErrors in downstream loggers.
         clean_guardrail_response = filter_exceptions_from_params(guardrail_json_response)
 
         # Strip secret_fields to prevent plaintext Authorization headers from
         # being persisted to spend logs, OTEL traces, or other logging backends.
-        # This matches the pattern used by Langfuse and Arize integrations.
+        # This matches the pattern used by other integrations.
         if isinstance(clean_guardrail_response, dict):
             clean_guardrail_response.pop("secret_fields", None)
         elif isinstance(clean_guardrail_response, list):
@@ -1018,7 +1018,7 @@ class CustomGuardrail(CustomLogger):
         """
         Add StandardLoggingGuardrailInformation to the request data
 
-        This gets logged on downsteam Langfuse, DataDog, etc.
+        This gets logged on downstream loggers.
         """
         # Convert None to empty dict to satisfy type requirements
         guardrail_response: Union[Dict[str, Any], str] = {} if response is None else response
@@ -1085,7 +1085,7 @@ class CustomGuardrail(CustomLogger):
         """
         Add StandardLoggingGuardrailInformation to the request data
 
-        This gets logged on downsteam Langfuse, DataDog, etc.
+        This gets logged on downstream loggers.
         """
         guardrail_status: GuardrailStatus = (
             "guardrail_intervened" if self._is_guardrail_intervention(e) else "guardrail_failed_to_respond"
@@ -1234,7 +1234,7 @@ def log_guardrail_information(func):
     """
     Decorator to add standard logging guardrail information to any function
 
-    Add this decorator to ensure your guardrail response is logged to DataDog, OTEL, s3, GCS etc.
+    Add this decorator to ensure your guardrail response is logged to OTEL, s3, GCS etc.
 
     Logs for:
         - pre_call
@@ -1246,7 +1246,7 @@ def log_guardrail_information(func):
     from inside the wrapped function so they can record a richer payload
     (structured detections, tracing detail) than this decorator's
     "allow"/"mask"/raw-response default. To avoid double-recording in that
-    case (which would emit two spans, two Datadog records, two spend-log
+    case (which would emit two spans, two spend-log
     entries, etc.), a context-local flag records whether the wrapped function
     appended its own entry; if so, the auto-record is skipped. The flag is a
     ``ContextVar`` rather than a count of entries in the shared ``request_data``

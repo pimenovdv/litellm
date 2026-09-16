@@ -244,7 +244,6 @@ from litellm.constants import (
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
     _get_parent_otel_span_from_kwargs,
     get_litellm_metadata_from_kwargs,
@@ -563,7 +562,6 @@ from litellm.secret_managers.main import (
     normalize_nonempty_secret_str,
     str_to_bool,
 )
-from litellm.types.integrations.slack_alerting import SlackAlertingArgs
 from litellm.types.llms.anthropic import (
     AnthropicMessagesRequest,
     AnthropicResponse,
@@ -800,18 +798,6 @@ async def proxy_shutdown_event():
     if shutdown_billing_metrics_recorder is not None:
         shutdown_billing_metrics_recorder()
 
-    # flush remaining langfuse logs
-    if "langfuse" in litellm.success_callback:
-        try:
-            # flush langfuse logs on shutdow
-            from litellm.utils import langFuseLogger
-
-            if langFuseLogger is not None:
-                langFuseLogger.Langfuse.flush()
-        except Exception:
-            # [DO NOT BLOCK shutdown events for this]
-            pass
-
     ## RESET CUSTOM VARIABLES ##
     cleanup_router_config_variables()
 
@@ -989,7 +975,7 @@ async def proxy_startup_event(app: FastAPI):
     )
 
     ## V2 OTEL: publish the chosen V2 logger's TracerProvider as the OTel global.
-    ## This MUST run after callback initialization above: a preset (arize, langfuse,
+    ## This MUST run after callback initialization above: a preset (arize,
     ## …) builds its logger there, folding the OTEL_* base exporter and its own
     ## exporter into one logger. The FastAPI instrumentation mounted at app-creation
     ## binds to the global provider, so reusing that one logger is what makes the
@@ -4554,7 +4540,7 @@ class ProxyConfig:
                                     config_file_path=config_file_path,
                                 )
                             )
-                        # these are litellm callbacks - "langfuse", "sentry", "wandb"
+                        # these are litellm callbacks
                         else:
                             litellm.logging_callback_manager.add_litellm_success_callback(callback)
                             if "prometheus" in callback:
@@ -4581,7 +4567,7 @@ class ProxyConfig:
                                     config_file_path=config_file_path,
                                 )
                             )
-                        # these are litellm callbacks - "langfuse", "sentry", "wandb"
+                        # these are litellm callbacks
                         else:
                             litellm.logging_callback_manager.add_litellm_failure_callback(callback)
                     print(  # noqa: T201
@@ -4689,7 +4675,7 @@ class ProxyConfig:
                         reset_audit_log_callback_cache()
                         _in_memory_loggers[:] = [cb for cb in _in_memory_loggers if not isinstance(cb, S3V2Logger)]
 
-        ## GENERAL SERVER SETTINGS (e.g. master key,..) # do this after initializing litellm, to ensure sentry logging works for proxylogging
+        ## GENERAL SERVER SETTINGS (e.g. master key,..) # do this after initializing litellm
         general_settings = config.get("general_settings", {})
         if general_settings is None:
             general_settings = {}
@@ -5782,16 +5768,9 @@ class ProxyConfig:
         if _general_settings is not None and "alert_types" in _general_settings:
             general_settings["alert_types"] = _general_settings["alert_types"]
             proxy_logging_obj.alert_types = general_settings["alert_types"]
-            proxy_logging_obj.slack_alerting_instance.update_values(
-                alert_types=general_settings["alert_types"], llm_router=llm_router
-            )
 
         if _general_settings is not None and "alert_to_webhook_url" in _general_settings:
             general_settings["alert_to_webhook_url"] = _general_settings["alert_to_webhook_url"]
-            proxy_logging_obj.slack_alerting_instance.update_values(
-                alert_to_webhook_url=general_settings["alert_to_webhook_url"],
-                llm_router=llm_router,
-            )
 
         if _general_settings is not None and "plugins" in _general_settings:
             general_settings["plugins"] = _general_settings["plugins"]
@@ -5880,9 +5859,6 @@ class ProxyConfig:
         ## ALERTING ARGS ##
         if "alerting_args" in _general_settings:
             general_settings["alerting_args"] = _general_settings["alerting_args"]
-            proxy_logging_obj.slack_alerting_instance.update_values(
-                alerting_args=general_settings["alerting_args"],
-            )
 
         ## PASS-THROUGH ENDPOINTS ##
         if "pass_through_endpoints" in _general_settings:
@@ -8067,13 +8043,6 @@ class ProxyStartupEvent:
         if store_model_in_db is not True:
             await proxy_config.init_mcp_servers_from_db()
 
-        await cls._initialize_slack_alerting_jobs(
-            scheduler=scheduler,
-            general_settings=general_settings,
-            proxy_logging_obj=proxy_logging_obj,
-            prisma_client=prisma_client,
-        )
-
         await cls._initialize_spend_tracking_background_jobs(scheduler=scheduler)
 
         ### SPEND LOG CLEANUP ###
@@ -8363,60 +8332,6 @@ class ProxyStartupEvent:
                 "Expired UI session key cleanup disabled (set "
                 "LITELLM_EXPIRED_UI_SESSION_KEY_CLEANUP_ENABLED=true to enable)"
             )
-
-    @classmethod
-    async def _initialize_slack_alerting_jobs(
-        cls,
-        scheduler: AsyncIOScheduler,
-        general_settings: dict,
-        proxy_logging_obj: ProxyLogging,
-        prisma_client: PrismaClient,
-    ):
-        """Initialize Slack alerting background jobs for spend reports."""
-        if (
-            proxy_logging_obj is not None
-            and proxy_logging_obj.slack_alerting_instance.alerting is not None
-            and prisma_client is not None
-        ):
-            print("Alerting: Initializing Weekly/Monthly Spend Reports")  # noqa: T201
-            spend_report_frequency: str = general_settings.get("spend_report_frequency", "7d") or "7d"
-
-            days = int(spend_report_frequency[:-1])
-            if spend_report_frequency[-1].lower() != "d":
-                raise ValueError("spend_report_frequency must be specified in days, e.g., '1d', '7d'")
-
-            scheduler.add_job(
-                proxy_logging_obj.slack_alerting_instance.send_weekly_spend_report,
-                "interval",
-                days=days,
-                next_run_time=datetime.now() + timedelta(seconds=10 + random.randint(0, 300)),
-                args=[spend_report_frequency],
-                id="weekly_spend_report_job",
-                replace_existing=True,
-                misfire_grace_time=APSCHEDULER_MISFIRE_GRACE_TIME,
-            )
-
-            scheduler.add_job(
-                proxy_logging_obj.slack_alerting_instance.send_monthly_spend_report,
-                "cron",
-                day=1,
-                id="monthly_spend_report_job",
-                replace_existing=True,
-            )
-
-            if os.getenv("PROMETHEUS_URL"):
-                from zoneinfo import ZoneInfo
-
-                scheduler.add_job(
-                    proxy_logging_obj.slack_alerting_instance.send_fallback_stats_from_prometheus,
-                    "cron",
-                    hour=PROMETHEUS_FALLBACK_STATS_SEND_TIME_HOURS,
-                    minute=0,
-                    timezone=ZoneInfo("America/Los_Angeles"),
-                    id="prometheus_fallback_stats_job",
-                    replace_existing=True,
-                )
-                await proxy_logging_obj.slack_alerting_instance.send_fallback_stats_from_prometheus()
 
     @classmethod
     async def _setup_prisma_client(
@@ -12487,10 +12402,7 @@ async def model_metrics_slow_responses(
     startTime = startTime or datetime.now() - timedelta(days=DAYS_IN_A_MONTH)
     endTime = endTime or datetime.now()
 
-    alerting_threshold = (
-        proxy_logging_obj.slack_alerting_instance.alerting_threshold or DEFAULT_SLACK_ALERTING_THRESHOLD
-    )
-    alerting_threshold = int(alerting_threshold)
+    alerting_threshold = int(DEFAULT_SLACK_ALERTING_THRESHOLD)
 
     sql_query = """
 SELECT
@@ -13268,58 +13180,7 @@ async def alerting_settings(
         alerting_args_dict = {}
         alerting_values = None
 
-    allowed_args = {
-        "slack_alerting": {"type": "Boolean"},
-        "daily_report_frequency": {"type": "Integer"},
-        "report_check_interval": {"type": "Integer"},
-        "budget_alert_ttl": {"type": "Integer"},
-        "outage_alert_ttl": {"type": "Integer"},
-        "region_outage_alert_ttl": {"type": "Integer"},
-        "minor_outage_alert_threshold": {"type": "Integer"},
-        "major_outage_alert_threshold": {"type": "Integer"},
-        "max_outage_alert_list_size": {"type": "Integer"},
-    }
-
-    _slack_alerting: SlackAlerting = proxy_logging_obj.slack_alerting_instance
-    _slack_alerting_args_dict = _slack_alerting.alerting_args.model_dump()
-
     return_val = []
-
-    is_slack_enabled = False
-
-    if general_settings.get("alerting") and isinstance(general_settings["alerting"], list):
-        if "slack" in general_settings["alerting"]:
-            is_slack_enabled = True
-
-    _response_obj = ConfigList(
-        field_name="slack_alerting",
-        field_type=allowed_args["slack_alerting"]["type"],
-        field_description="Enable slack alerting for monitoring proxy in production: llm outages, budgets, spend tracking failures.",
-        field_value=is_slack_enabled,
-        stored_in_db=True if alerting_values is not None else False,
-        field_default_value=None,
-        premium_field=False,
-    )
-    return_val.append(_response_obj)
-
-    for field_name, field_info in SlackAlertingArgs.model_fields.items():
-        if field_name in allowed_args:
-            _stored_in_db: Optional[bool] = None
-            if field_name in alerting_args_dict:
-                _stored_in_db = True
-            else:
-                _stored_in_db = False
-
-            _response_obj = ConfigList(
-                field_name=field_name,
-                field_type=allowed_args[field_name]["type"],
-                field_description=field_info.description or "",
-                field_value=_slack_alerting_args_dict.get(field_name, None),
-                stored_in_db=_stored_in_db,
-                field_default_value=field_info.default,
-                premium_field=(True if field_name == "region_outage_alert_ttl" else False),
-            )
-            return_val.append(_response_obj)
     return return_val
 
 
@@ -14489,18 +14350,12 @@ async def update_config(
             # or any other proxy in the cluster) goes to DB.
             await invalidate_config_param(param_name)
 
-        # general_settings: merge per-key, with the alert_to_webhook_url side
-        # effect of auto-enabling slack alerting.
+        # general_settings: merge per-key
         if config_info.general_settings is not None:
             existing = await _read_section("general_settings")
             before_general_settings = copy.deepcopy(existing)
             updates = config_info.general_settings.dict(exclude_none=True)
             for k, v in updates.items():
-                if k == "alert_to_webhook_url":
-                    if "alerting" not in existing:
-                        existing["alerting"] = ["slack"]
-                    elif isinstance(existing["alerting"], list) and "slack" not in existing["alerting"]:
-                        existing["alerting"].append("slack")
                 existing[k] = v
             await _upsert_section("general_settings", existing)
             asyncio.create_task(
@@ -15485,11 +15340,10 @@ async def get_config(
         """
         [
             {
-                "name": "langfuse",
+                "name": "gcs_bucket",
                 "variables": {
-                    "LANGFUSE_PUB_KEY": "value",
-                    "LANGFUSE_SECRET_KEY": "value",
-                    "LANGFUSE_HOST": "value"
+                    "GCS_BUCKET_NAME": "value",
+                    "GCS_PATH_CREDENTIALS": "value"
                 },
                 "type": "success"
             }
@@ -15508,28 +15362,8 @@ async def get_config(
 
         _data_to_return = _apply_callback_role_gate(_data_to_return, is_full_admin)
 
-        # Check if slack alerting is on
         _alerting = _general_settings.get("alerting", [])
         alerting_data = []
-        if "slack" in _alerting:
-            _slack_values, _ = resolve_fields(
-                SLACK_DESCRIPTORS, environment_variables, os.environ, empty_db_is_set=True
-            )
-            _slack_env_vars = _apply_alerting_env_role_gate(_slack_values, is_full_admin)
-
-            _alerting_types = proxy_logging_obj.slack_alerting_instance.alert_types
-            _all_alert_types = proxy_logging_obj.slack_alerting_instance._all_possible_alert_types()
-            _alerts_to_webhook = _apply_webhook_role_gate(
-                proxy_logging_obj.slack_alerting_instance.alert_to_webhook_url, is_full_admin
-            )
-            alerting_data.append(
-                {
-                    "name": "slack",
-                    "variables": _slack_env_vars,
-                    "active_alerts": _alerting_types,
-                    "alerts_to_webhook": _alerts_to_webhook,
-                }
-            )
         # pass email alerting vars
         _email_values, _ = resolve_fields(EMAIL_DESCRIPTORS, environment_variables, os.environ, empty_db_is_set=True)
         _email_env_vars = _apply_alerting_env_role_gate(_email_values, is_full_admin)
