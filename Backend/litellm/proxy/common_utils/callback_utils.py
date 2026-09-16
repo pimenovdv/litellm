@@ -90,8 +90,7 @@ def initialize_callbacks_on_proxy(
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 imported_list.append(callback)
             elif isinstance(callback, str) and callback == "presidio":
-                                    _OPTIONAL_PresidioPIIMasking,
-                )
+                from litellm.proxy.guardrails.guardrail_hooks.presidio import _OPTIONAL_PresidioPIIMasking
 
                 presidio_logging_only: Optional[bool] = litellm_settings.get("presidio_logging_only", None)
                 if presidio_logging_only is not None:
@@ -154,8 +153,7 @@ def initialize_callbacks_on_proxy(
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
             elif isinstance(callback, str) and callback == "lakera_prompt_injection":
-                                    lakeraAI_Moderation,
-                )
+                from litellm.proxy.guardrails.guardrail_hooks.lakera_ai_v2 import lakeraAI_Moderation
 
                 init_params = {}
                 if "lakera_prompt_injection" in callback_specific_params and isinstance(
@@ -165,8 +163,7 @@ def initialize_callbacks_on_proxy(
                 lakera_moderations_object = lakeraAI_Moderation(**init_params)
                 imported_list.append(lakera_moderations_object)
             elif isinstance(callback, str) and callback == "aporia_prompt_injection":
-                                    AporiaGuardrail,
-                )
+                from litellm.proxy.guardrails.guardrail_hooks.aporia_ai import AporiaGuardrail
 
                 aporia_guardrail_object = AporiaGuardrail()
                 imported_list.append(aporia_guardrail_object)
@@ -274,18 +271,6 @@ def initialize_callbacks_on_proxy(
                     callback_specific_params=callback_specific_params,
                 )
                 imported_list.append(websearch_interception_obj)
-            elif isinstance(callback, str) and callback == "datadog_cost_management":
-                from litellm.integrations.datadog.datadog_cost_management import (
-                    DatadogCostManagementLogger,
-                )
-
-                init_params = {}
-                if "datadog_cost_management" in callback_specific_params and isinstance(
-                    callback_specific_params["datadog_cost_management"], dict
-                ):
-                    init_params = callback_specific_params["datadog_cost_management"]
-                datadog_cost_management_obj = DatadogCostManagementLogger(**init_params)
-                imported_list.append(datadog_cost_management_obj)
             elif isinstance(callback, CustomLogger):
                 imported_list.append(callback)
             else:
