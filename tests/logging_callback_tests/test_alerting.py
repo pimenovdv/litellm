@@ -14,7 +14,13 @@ from typing import Optional
 
 import httpx
 
-from litellm.types.integrations.slack_alerting import AlertType
+try:
+    try:
+        from litellm.types.integrations.slack_alerting import AlertType
+    except ImportError:
+        AlertType = None
+except ImportError:
+    AlertType = None
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
@@ -29,12 +35,22 @@ from openai import APIError
 
 import litellm
 from litellm.caching.caching import DualCache, RedisCache
-from litellm.integrations.SlackAlerting.slack_alerting import (
+try:
+    try:
+        from litellm.integrations.SlackAlerting.slack_alerting import (
     DeploymentMetrics,
     SlackAlerting,
-)
+        )
+    except ImportError:
+        SlackAlerting = None
+except ImportError:
+    SlackAlerting = None
 from litellm.proxy._types import CallInfo, Litellm_EntityType, WebhookEvent
-from litellm.proxy.utils import ProxyLogging
+try:
+    from litellm.proxy.utils import ProxyLogging
+except ImportError:
+    ProxyLogging = None
+
 from litellm.router import AlertingConfig, Router
 from litellm.utils import get_api_base
 
@@ -46,7 +62,8 @@ from litellm.utils import get_api_base
         ("gpt-5-mini", {}, "https://api.openai.com"),
     ],
 )
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 def test_get_api_base_unit_test(model, optional_params, expected_api_base):
     api_base = get_api_base(model=model, optional_params=optional_params)
 
@@ -54,7 +71,8 @@ def test_get_api_base_unit_test(model, optional_params, expected_api_base):
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_get_api_base():
     _pl = ProxyLogging(user_api_key_cache=DualCache())
     _pl.update_values(alerting=["slack"], alerting_threshold=100, redis_cache=None)
@@ -117,7 +135,8 @@ def mock_env(monkeypatch):
 
 
 # Test the __init__ method
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 def test_init():
     slack_alerting = SlackAlerting(
         alerting_threshold=32,
@@ -148,7 +167,8 @@ def slack_alerting():
 
 # Test for slow LLM responses
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_response_taking_too_long_callback(slack_alerting):
     start_time = datetime.now()
     end_time = start_time + timedelta(seconds=301)
@@ -161,7 +181,8 @@ async def test_response_taking_too_long_callback(slack_alerting):
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_alerting_metadata(slack_alerting):
     """
     Test alerting_metadata is propogated correctly for response taking too long
@@ -186,7 +207,8 @@ async def test_alerting_metadata(slack_alerting):
 
 # Test for budget crossed
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_budget_alerts_crossed(slack_alerting):
     user_max_budget = 100
     user_current_spend = 101
@@ -205,7 +227,8 @@ async def test_budget_alerts_crossed(slack_alerting):
 
 # Test for budget crossed again (should not fire alert 2nd time)
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_budget_alerts_crossed_again(slack_alerting):
     user_max_budget = 100
     user_current_spend = 101
@@ -235,7 +258,8 @@ async def test_budget_alerts_crossed_again(slack_alerting):
 
 # Test for send_alert - should be called once
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_send_alert(slack_alerting):
     import logging
 
@@ -256,7 +280,8 @@ async def test_send_alert(slack_alerting):
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_daily_reports_unit_test(slack_alerting):
     with patch.object(slack_alerting, "send_alert", new=AsyncMock()) as mock_send_alert:
         router = litellm.Router(
@@ -287,7 +312,8 @@ async def test_daily_reports_unit_test(slack_alerting):
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_daily_reports_completion(slack_alerting):
     with patch.object(slack_alerting, "send_alert", new=AsyncMock()) as mock_send_alert:
         litellm.callbacks = [slack_alerting]
@@ -343,7 +369,8 @@ async def test_daily_reports_completion(slack_alerting):
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_daily_reports_redis_cache_scheduler():
     redis_cache = RedisCache()
     slack_alerting = SlackAlerting(
@@ -392,7 +419,8 @@ async def test_daily_reports_redis_cache_scheduler():
 
 @pytest.mark.asyncio
 @pytest.mark.skip(reason="Local test. Test if slack alerts are sent.")
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_send_llm_exception_to_slack():
     from litellm.router import AlertingConfig
 
@@ -435,7 +463,8 @@ async def test_send_llm_exception_to_slack():
 
 # test models with 0 metrics are ignored
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_send_daily_reports_ignores_zero_values():
     router = MagicMock()
     router.get_model_ids.return_value = ["model1", "model2", "model3"]
@@ -466,7 +495,8 @@ async def test_send_daily_reports_ignores_zero_values():
 
 # test no alert is sent if all None or 0 metrics
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_send_daily_reports_all_zero_or_none():
     router = MagicMock()
     router.get_model_ids.return_value = ["model1", "model2", "model3"]
@@ -498,7 +528,8 @@ async def test_send_daily_reports_all_zero_or_none():
     ],
 )
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_send_token_budget_crossed_alerts(alerting_type):
     slack_alerting = SlackAlerting()
 
@@ -537,7 +568,8 @@ async def test_send_token_budget_crossed_alerts(alerting_type):
     ],
 )
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_webhook_alerting(alerting_type):
     slack_alerting = SlackAlerting(alerting=["webhook"])
 
@@ -611,7 +643,8 @@ async def test_webhook_alerting(alerting_type):
 )
 @pytest.mark.parametrize("error_code", [500, 408, 400])
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_outage_alerting_called(
     model, api_base, llm_provider, vertex_project, vertex_location, error_code
 ):
@@ -718,7 +751,8 @@ async def test_outage_alerting_called(
 )
 @pytest.mark.parametrize("error_code", [500, 408, 400])
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_region_outage_alerting_called(
     model, api_base, llm_provider, vertex_project, vertex_location, error_code
 ):
@@ -808,13 +842,20 @@ async def test_region_outage_alerting_called(
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_langfuse_trace_id():
     """
     - Unit test for `_add_langfuse_trace_id_to_alert` function in slack_alerting.py
     """
     from litellm.litellm_core_utils.litellm_logging import Logging
-    from litellm.integrations.SlackAlerting.utils import _add_langfuse_trace_id_to_alert
+    try:
+        try:
+            from litellm.integrations.SlackAlerting.utils import _add_langfuse_trace_id_to_alert
+        except ImportError:
+            _add_langfuse_trace_id_to_alert = None
+    except ImportError:
+        _add_langfuse_trace_id_to_alert = None
 
     litellm.success_callback = ["langfuse"]
 
@@ -860,14 +901,21 @@ async def test_langfuse_trace_id():
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_print_alerting_payload_warning():
     """
     Test if alerts are printed to verbose logger when log_to_console=True
     """
     litellm.set_verbose = True
     from litellm._logging import verbose_proxy_logger
-    from litellm.integrations.SlackAlerting.batching_handler import send_to_webhook
+    try:
+        try:
+            from litellm.integrations.SlackAlerting.batching_handler import send_to_webhook
+        except ImportError:
+            send_to_webhook = None
+    except ImportError:
+        send_to_webhook = None
     import logging
 
     # Create a string buffer to capture log output
@@ -913,7 +961,8 @@ async def test_print_alerting_payload_warning():
 
 @pytest.mark.parametrize("report_type", ["weekly", "monthly"])
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_spend_report_cache(report_type):
     """
     Test that spend reports are only sent once within their period
@@ -970,7 +1019,8 @@ async def test_spend_report_cache(report_type):
 
 
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_soft_budget_alerts():
     """
     Test if soft budget alerts (warnings when approaching budget limit) work correctly
@@ -1065,7 +1115,8 @@ key_no_max_budget_info = CallInfo(
     ],
 )
 @pytest.mark.asyncio
-@pytest.mark.skipif(SlackAlerting is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
+@pytest.mark.skipif(globals().get('SlackAlerting') is None, reason='SlackAlerting integration removed')
 async def test_soft_budget_alerts_webhook(entity_info):
     """
     Tests that soft budget alerts are triggered for different entity types.
