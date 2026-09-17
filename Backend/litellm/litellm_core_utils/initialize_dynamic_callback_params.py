@@ -46,11 +46,6 @@ def validate_no_callback_env_reference(param: str, value: object, *, source: str
 
 # Hardcoded list of supported callback params to avoid runtime inspection issues with TypedDict
 _supported_callback_params = [
-    "langfuse_public_key",
-    "langfuse_secret",
-    "langfuse_secret_key",
-    "langfuse_host",
-    "langfuse_prompt_version",
     "langsmith_api_key",
     "langsmith_project",
     "langsmith_base_url",
@@ -65,22 +60,13 @@ _supported_callback_params = [
     "braintrust_api_key",
     "braintrust_project",
     "braintrust_host",
-    "slack_webhook_url",
     "lunary_public_key",
-    "dd_api_key",
-    "dd_site",
-    "dd_agent_host",
-    "dd_agent_port",
     "turn_off_message_logging",
 ]
 
 _request_blocked_callback_params = {
     "gcs_bucket_name",
     "gcs_path_service_account",
-    "dd_api_key",
-    "dd_site",
-    "dd_agent_host",
-    "dd_agent_port",
 }
 
 
