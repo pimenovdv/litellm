@@ -6,7 +6,6 @@ import litellm
 from litellm._logging import verbose_logger
 
 from .integrations.custom_logger import CustomLogger
-from .integrations.datadog.datadog import DataDogLogger
 from .integrations.opentelemetry import OpenTelemetry
 from .integrations.prometheus_services import PrometheusServicesLogger
 from .types.services import ServiceLoggerPayload, ServiceTypes
@@ -183,15 +182,6 @@ class ServiceLogging(CustomLogger):
             if callback == "prometheus_system":
                 await self.init_prometheus_services_logger_if_none()
                 await self.prometheusServicesLogger.async_service_success_hook(payload=payload)
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
-                await self.init_datadog_logger_if_none()
-                await self.dd_logger.async_service_success_hook(
-                    payload=payload,
-                    parent_otel_span=parent_otel_span,
-                    start_time=start_time,
-                    end_time=end_time,
-                    event_metadata=event_metadata,
-                )
             else:
                 _otel_logger_to_use = self._resolve_otel_service_logger(callback)
                 # No ``parent_otel_span is not None`` gate: a background service
@@ -218,18 +208,6 @@ class ServiceLogging(CustomLogger):
             self.prometheusServicesLogger = PrometheusServicesLogger()
         elif self.prometheusServicesLogger is None:
             self.prometheusServicesLogger = self.prometheusServicesLogger()
-        return
-
-    async def init_datadog_logger_if_none(self):
-        """
-        initializes dd_logger if it is None or no attribute exists on ServiceLogging Object
-
-        """
-        from litellm.integrations.datadog.datadog import DataDogLogger
-
-        if not hasattr(self, "dd_logger"):
-            self.dd_logger: DataDogLogger = DataDogLogger()
-
         return
 
     async def init_otel_logger_if_none(self):
@@ -289,16 +267,6 @@ class ServiceLogging(CustomLogger):
                 await self.prometheusServicesLogger.async_service_failure_hook(
                     payload=payload,
                     error=error,
-                )
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
-                await self.init_datadog_logger_if_none()
-                await self.dd_logger.async_service_failure_hook(
-                    payload=payload,
-                    error=error_message,
-                    parent_otel_span=parent_otel_span,
-                    start_time=start_time,
-                    end_time=end_time,
-                    event_metadata=event_metadata,
                 )
             else:
                 _otel_logger_to_use = self._resolve_otel_service_logger(callback)
