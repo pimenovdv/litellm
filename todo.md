@@ -7,7 +7,7 @@
 - [x] Настроить и обновить `Dockerfile` для `Backend` и `frontend`, а также общий `docker-compose.yml` с учетом новой структуры папок.
 
 ## 2. Очистка репозитория от мусора
-- [ ] Удалить все неиспользуемые интеграции из `Backend/litellm/integrations/` (Langfuse, Datadog, Sentry, Slack и др.).
+- [x] Удалить все неиспользуемые интеграции из `Backend/litellm/integrations/` (Langfuse, Datadog, Sentry, Slack и др.).
 - [x] Удалить поддержку всех сторонних LLM-провайдеров из `Backend/litellm/llms/`, оставив исключительно `openai`.
 - [ ] Вырезать лишний функционал из ядра системы (RAG, Guardrails, сторонние менеджеры секретов, телеметрию).
 - [ ] Очистить корневую директорию от неактуальных артефактов (например, `.circleci`, `.devcontainer`, `.semgrep`, `litellm-proxy-extras`, `packaging` и др.).

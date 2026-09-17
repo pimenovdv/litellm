@@ -40,7 +40,6 @@ from typing import (
     overload,
     Type,
 )
-from litellm.types.integrations.datadog import DatadogInitParams
 from litellm.types.integrations.newrelic import NewRelicInitParams
 from litellm._logging import (
     set_verbose,
@@ -120,9 +119,6 @@ _custom_logger_compatible_callbacks_literal = Literal[
     "langsmith",
     "prometheus",
     "otel",
-    "datadog",
-    "datadog_metrics",
-    "datadog_llm_observability",
     "galileo",
     "braintrust",
     "arize",
@@ -133,8 +129,6 @@ _custom_logger_compatible_callbacks_literal = Literal[
     "opik",
     "argilla",
     "mlflow",
-    "langfuse",
-    "langfuse_otel",
     "weave_otel",
     "pagerduty",
     "humanloop",
@@ -169,14 +163,11 @@ callbacks: List[
     Union[Callable, _custom_logger_compatible_callbacks_literal, "CustomLogger"]  # CustomLogger is lazy-loaded
 ] = []
 callback_settings: Dict[str, Dict[str, Any]] = {}
-initialized_langfuse_clients: int = 0
-langfuse_default_tags: Optional[List[str]] = None
 langsmith_batch_size: Optional[int] = None
 prometheus_initialize_budget_metrics: Optional[bool] = False
 prometheus_latency_buckets: Optional[List[float]] = None
 require_auth_for_metrics_endpoint: Optional[bool] = True
 argilla_batch_size: Optional[int] = None
-datadog_use_v1: Optional[bool] = False  # if you want to use v1 datadog logged payload.
 gcs_pub_sub_use_v1: Optional[bool] = False  # if you want to use v1 gcs pubsub logged payload
 generic_api_use_v1: Optional[bool] = False  # if you want to use v1 generic api logged payload
 argilla_transformation_object: Optional[Dict[str, Any]] = None
@@ -415,8 +406,6 @@ suppress_debug_info: bool = False
 dynamodb_table_name: Optional[str] = None
 s3_callback_params: Optional[Dict] = None
 s3_audit_callback_params: Optional[Dict] = None
-datadog_llm_observability_params: Optional[Union[DatadogLLMObsInitParams, Dict]] = None
-datadog_params: Optional[Union[DatadogInitParams, Dict]] = None
 newrelic_params: Optional[Union[NewRelicInitParams, Dict]] = None
 aws_sqs_callback_params: Optional[Dict] = None
 generic_logger_headers: Optional[Dict] = None

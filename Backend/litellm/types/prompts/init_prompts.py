@@ -7,7 +7,6 @@ from pydantic import BaseModel, ConfigDict
 
 class SupportedPromptIntegrations(str, Enum):
     DOT_PROMPT = "dotprompt"
-    LANGFUSE = "langfuse"
     CUSTOM = "custom"
     BITBUCKET = "bitbucket"
     GITLAB = "gitlab"

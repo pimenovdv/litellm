@@ -3025,15 +3025,6 @@ OPENAI_RESPONSE_HEADERS = [
 
 
 class StandardCallbackDynamicParams(TypedDict, total=False):
-    # Langfuse dynamic params
-    langfuse_public_key: Optional[str]
-    langfuse_secret: Optional[str]
-    langfuse_secret_key: Optional[str]
-    langfuse_host: Optional[str]
-
-    # Langfuse prompt version
-    langfuse_prompt_version: Optional[int]
-
     # GCS dynamic params
     gcs_bucket_name: Optional[str]
     gcs_path_service_account: Optional[str]
@@ -3060,12 +3051,6 @@ class StandardCallbackDynamicParams(TypedDict, total=False):
     # Weave (W&B) dynamic params
     wandb_api_key: Optional[str]
     weave_project_id: Optional[str]
-
-    # Datadog dynamic params
-    dd_api_key: Optional[str]
-    dd_site: Optional[str]
-    dd_agent_host: Optional[str]
-    dd_agent_port: Optional[str]
 
     # Logging settings
     turn_off_message_logging: Optional[bool]  # when true will not log messages
@@ -3462,7 +3447,6 @@ class LlmProviders(str, Enum):
     ELEVENLABS = "elevenlabs"
     NOVITA = "novita"
     AIOHTTP_OPENAI = "aiohttp_openai"
-    LANGFUSE = "langfuse"
     HUMANLOOP = "humanloop"
     TOPAZ = "topaz"
     SAP_GENERATIVE_AI_HUB = "sap"
