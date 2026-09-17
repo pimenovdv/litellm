@@ -336,7 +336,6 @@ TYPES_NAMES = (
     "PriorityReservationSettings",
     "CustomLogger",
     "LoggingCallbackManager",
-    "DatadogLLMObsInitParams",
     # Note: LlmProviders is NOT lazy-loaded because it's imported during import time
     # in multiple places including openai.py (via main import)
     # Note: KeyManagementSettings is NOT lazy-loaded because _key_management_settings
@@ -562,10 +561,6 @@ _TYPES_IMPORT_MAP = {
     "LoggingCallbackManager": (
         "litellm.litellm_core_utils.logging_callback_manager",
         "LoggingCallbackManager",
-    ),
-    "DatadogLLMObsInitParams": (
-        "litellm.types.integrations.datadog_llm_obs",
-        "DatadogLLMObsInitParams",
     ),
 }
 

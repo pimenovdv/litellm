@@ -1,0 +1,32 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install dependencies
+      run: |
+        pip install uv
+        uv pip install --system -r Backend/requirements.txt
+        uv pip install --system pytest pytest-asyncio pytest-cov pytest-recording respx pytest-mock
+        # Install project itself so that tests can import the modules
+        uv pip install --system -e Backend/
+
+    - name: Run unit tests
+      run: |
+        PYTHONPATH=Backend:./ pytest -m unit tests/local_testing/test_router.py tests/local_testing/test_router_utils.py tests/test_litellm/test_router.py
