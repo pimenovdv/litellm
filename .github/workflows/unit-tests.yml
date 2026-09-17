@@ -1,0 +1,45 @@
+name: "Unified Unit Tests"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - litellm_internal_staging
+      - litellm_oss_staging
+      - "litellm_**"
+  push:
+    branches:
+      - main
+      - litellm_internal_staging
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install uv
+          # We run tests locally using pip install and PYTHONPATH to avoid workspace issues
+          uv pip install --system -r Backend/requirements.txt || true
+          uv pip install --system pytest pytest-asyncio pytest-cov pytest-mock aiohttp httpx pydantic openai pyyaml tiktoken python-dotenv fastapi fastapi-cli mock fastuuid respx websockets
+
+      - name: Run unit tests
+        env:
+          PYTHONPATH: Backend:./
+        run: |
+          pytest -m unit tests/unit/
