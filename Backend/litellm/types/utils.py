@@ -3462,7 +3462,6 @@ class LlmProviders(str, Enum):
     ELEVENLABS = "elevenlabs"
     NOVITA = "novita"
     AIOHTTP_OPENAI = "aiohttp_openai"
-    LANGFUSE = "langfuse"
     HUMANLOOP = "humanloop"
     TOPAZ = "topaz"
     SAP_GENERATIVE_AI_HUB = "sap"

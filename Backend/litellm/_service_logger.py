@@ -6,7 +6,6 @@ import litellm
 from litellm._logging import verbose_logger
 
 from .integrations.custom_logger import CustomLogger
-from .integrations.datadog.datadog import DataDogLogger
 from .integrations.opentelemetry import OpenTelemetry
 from .integrations.prometheus_services import PrometheusServicesLogger
 from .types.services import ServiceLoggerPayload, ServiceTypes
@@ -225,7 +224,6 @@ class ServiceLogging(CustomLogger):
         initializes dd_logger if it is None or no attribute exists on ServiceLogging Object
 
         """
-        from litellm.integrations.datadog.datadog import DataDogLogger
 
         if not hasattr(self, "dd_logger"):
             self.dd_logger: DataDogLogger = DataDogLogger()

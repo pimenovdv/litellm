@@ -40,7 +40,6 @@ from typing import (
     overload,
     Type,
 )
-from litellm.types.integrations.datadog import DatadogInitParams
 from litellm.types.integrations.newrelic import NewRelicInitParams
 from litellm._logging import (
     set_verbose,
@@ -120,9 +119,6 @@ _custom_logger_compatible_callbacks_literal = Literal[
     "langsmith",
     "prometheus",
     "otel",
-    "datadog",
-    "datadog_metrics",
-    "datadog_llm_observability",
     "galileo",
     "braintrust",
     "arize",
