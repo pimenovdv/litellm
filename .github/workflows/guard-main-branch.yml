@@ -3,7 +3,7 @@ name: Guard main branch
 on:
   pull_request:
     branches:
-      - main
+      - litellm_internal_staging
   merge_group:
 
 permissions: {}

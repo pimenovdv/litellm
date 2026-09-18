@@ -3,7 +3,7 @@ name: LiteLLM Linting
 on:
   pull_request:
     branches:
-      - main
+      - litellm_internal_staging
       - litellm_internal_staging
       - litellm_oss_staging
       - "litellm_**"
@@ -50,14 +50,14 @@ jobs:
         run: |
           uv sync --frozen --group proxy-dev --group e2e-dev
 
-      # basedpyright resolves Prisma's generated client (litellm/proxy/schema.prisma)
+      # basedpyright resolves Prisma's generated client (Backend/litellm/proxy/schema.prisma)
       # only after `prisma generate` writes prisma/client.py et al. Without this the
       # DB wrappers typed against the generated client would degrade to Unknown.
       - name: Generate Prisma client
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          uv run --no-sync --extra proxy --extra proxy-dev prisma generate --schema Backend/litellm/proxy/schema.prisma
 
       - name: Check ruff format
         env:
@@ -178,7 +178,7 @@ jobs:
 
       - name: Run secret scan test
         run: |
-          uv run --frozen --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
+          uv run --frozen --extra proxy --extra proxy-dev --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
 
       - name: Run ggshield secret scan
         env:

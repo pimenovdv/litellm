@@ -128,7 +128,7 @@ keywords:
     severity: "high"
   - keyword: "suicide methods"
     severity: "high"
-  
+
   # Medium severity - may have legitimate context (news, education, prevention)
   - keyword: "suicide"
     severity: "medium"

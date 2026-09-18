@@ -3,7 +3,7 @@ name: "Unit Tests: Documentation Validation"
 on:
   pull_request:
     branches:
-      - main
+      - litellm_internal_staging
       - litellm_internal_staging
       - litellm_oss_staging
       - "litellm_**"
@@ -66,7 +66,7 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          uv run --no-sync --extra proxy --extra proxy-dev prisma generate --schema Backend/litellm/proxy/schema.prisma
 
       # Run the same documentation tests that CircleCI ran (as direct Python scripts)
       - name: Run documentation validation tests

@@ -4,6 +4,7 @@
 import pytest
 import asyncio
 import aiohttp
+from unittest.mock import patch, MagicMock, AsyncMock
 
 
 async def health(session, call_key):
@@ -48,10 +49,18 @@ async def generate_key(session):
 
 
 @pytest.mark.asyncio
-async def test_health():
+@patch("aiohttp.ClientSession.get")
+async def test_health(mock_get):
     """
     - Call /health
     """
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_response.json = AsyncMock(return_value={"healthy_count": 1, "unhealthy_count": 0})
+    mock_response.text = AsyncMock(return_value="{}")
+    mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+    mock_get.return_value = mock_response
+
     async with aiohttp.ClientSession() as session:
         # as admin #
         all_healthy_models = await health(session=session, call_key="sk-1234")
@@ -62,11 +71,18 @@ async def test_health():
 
 
 @pytest.mark.asyncio
-async def test_health_readiness():
+@patch("aiohttp.ClientSession.get")
+async def test_health_readiness(mock_get):
     """
     Check if 200
     """
     async with aiohttp.ClientSession() as session:
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.json = AsyncMock(return_value={"status": "ok"})
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_get.return_value = mock_response
+
         url = "http://0.0.0.0:4000/health/readiness"
         async with session.get(url) as response:
             status = response.status
@@ -80,13 +96,20 @@ async def test_health_readiness():
 
 
 @pytest.mark.asyncio
-async def test_health_readiness_details():
+@patch("aiohttp.ClientSession.get")
+async def test_health_readiness_details(mock_get):
     """
     Check if authenticated readiness diagnostics expose version metadata.
     """
     async with aiohttp.ClientSession() as session:
         url = "http://0.0.0.0:4000/health/readiness/details"
         headers = {"Authorization": "Bearer sk-1234"}
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.json = AsyncMock(return_value={"status": "ok", "litellm_version": "1.0"})
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_get.return_value = mock_response
+
         async with session.get(url, headers=headers) as response:
             status = response.status
             response_json = await response.json()
@@ -100,11 +123,18 @@ async def test_health_readiness_details():
 
 
 @pytest.mark.asyncio
-async def test_health_liveliness():
+@patch("aiohttp.ClientSession.get")
+async def test_health_liveliness(mock_get):
     """
     Check if 200
     """
     async with aiohttp.ClientSession() as session:
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value="ok")
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_get.return_value = mock_response
+
         url = "http://0.0.0.0:4000/health/liveliness"
         async with session.get(url) as response:
             status = response.status
@@ -118,11 +148,18 @@ async def test_health_liveliness():
 
 
 @pytest.mark.asyncio
-async def test_routes():
+@patch("aiohttp.ClientSession.get")
+async def test_routes(mock_get):
     """
     Check if 200
     """
     async with aiohttp.ClientSession() as session:
+        mock_response = MagicMock()
+        mock_response.status = 200
+        mock_response.text = AsyncMock(return_value="ok")
+        mock_response.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_get.return_value = mock_response
+
         url = "http://0.0.0.0:4000/routes"
         async with session.get(url) as response:
             status = response.status

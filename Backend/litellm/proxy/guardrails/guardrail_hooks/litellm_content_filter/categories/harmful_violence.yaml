@@ -222,7 +222,7 @@ keywords:
     severity: "high"
   - keyword: "execution style"
     severity: "high"
-  
+
   # Medium severity - context-dependent
   - keyword: "murder"
     severity: "medium"

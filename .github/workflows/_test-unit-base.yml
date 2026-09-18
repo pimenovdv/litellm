@@ -87,7 +87,7 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          uv run --no-sync --extra proxy --extra proxy-dev prisma generate --schema Backend/litellm/proxy/schema.prisma
 
       - name: Run tests
         if: steps.changes.outputs.decision != 'skip'
@@ -99,17 +99,17 @@ jobs:
           DIST: ${{ inputs.dist }}
         run: |
           if [ "${WORKERS}" = "0" ]; then
-            uv run --no-sync pytest ${TEST_PATH:?} \
+            uv run --no-sync --extra proxy --extra proxy-dev pytest ${TEST_PATH:?} \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
               --reruns "${RERUNS}" \
               --reruns-delay 1 \
               --durations=20 \
-              --cov=./litellm \
+              --cov=./Backend/litellm \
               --cov-report=xml:coverage.xml \
               --cov-config=pyproject.toml
           else
-            uv run --no-sync pytest ${TEST_PATH:?} \
+            uv run --no-sync --extra proxy --extra proxy-dev pytest ${TEST_PATH:?} \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
               -n "${WORKERS}" \
@@ -117,7 +117,7 @@ jobs:
               --reruns-delay 1 \
               --dist="${DIST}" \
               --durations=20 \
-              --cov=./litellm \
+              --cov=./Backend/litellm \
               --cov-report=xml:coverage.xml \
               --cov-config=pyproject.toml
           fi

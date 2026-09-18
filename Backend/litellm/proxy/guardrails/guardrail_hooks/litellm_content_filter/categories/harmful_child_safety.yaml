@@ -111,7 +111,7 @@ always_block_keywords:
     severity: "high"
   - keyword: "minor sex"
     severity: "high"
-  
+
   # Pre-combined high-risk phrases
   - keyword: "romantic scenarios involving minors"
     severity: "high"

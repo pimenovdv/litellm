@@ -59,7 +59,7 @@ keywords:
   - keyword: "mormons"
     severity: "high"
 
-  
+
   # Medium severity - context-dependent
   - keyword: "religious extremist"
     severity: "medium"

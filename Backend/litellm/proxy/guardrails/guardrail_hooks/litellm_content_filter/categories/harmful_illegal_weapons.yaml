@@ -260,7 +260,7 @@ keywords:
     severity: "high"
   - keyword: "illegal ammunition"
     severity: "high"
-  
+
   # Medium severity - context-dependent
   - keyword: "bomb"
     severity: "medium"

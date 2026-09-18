@@ -3,7 +3,7 @@ name: CodSpeed Benchmarks
 on:
   push:
     branches:
-      - main
+      - litellm_internal_staging
       - litellm_internal_staging
     paths:
       - "litellm/**"
@@ -14,7 +14,7 @@ on:
       - ".github/actions/setup-uv-with-retries/**"
   pull_request:
     branches:
-      - main
+      - litellm_internal_staging
       - litellm_internal_staging
     paths:
       - "litellm/**"

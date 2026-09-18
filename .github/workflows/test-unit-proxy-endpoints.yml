@@ -3,7 +3,7 @@ name: "Unit Tests: Proxy API Endpoints"
 on:
   pull_request:
     branches:
-      - main
+      - litellm_internal_staging
       - litellm_internal_staging
       - litellm_oss_staging
       - "litellm_**"
@@ -25,29 +25,29 @@ jobs:
     uses: ./.github/workflows/_test-unit-base.yml
     with:
       test-path: >-
-        tests/test_litellm/proxy/management_endpoints
-        tests/test_litellm/proxy/guardrails
-        tests/test_litellm/proxy/management_helpers
-        tests/test_litellm/proxy/anthropic_endpoints
-        tests/test_litellm/proxy/google_endpoints
-        tests/test_litellm/proxy/openai_files_endpoint
-        tests/test_litellm/proxy/batches_endpoints
-        tests/test_litellm/proxy/video_endpoints
-        tests/test_litellm/proxy/response_api_endpoints
-        tests/test_litellm/proxy/image_endpoints
-        tests/test_litellm/proxy/vector_store_endpoints
-        tests/test_litellm/proxy/agent_endpoints
-        tests/test_litellm/proxy/a2a
-        tests/test_litellm/proxy/discovery_endpoints
-        tests/test_litellm/proxy/health_endpoints
-        tests/test_litellm/proxy/shutdown
-        tests/test_litellm/proxy/public_endpoints
-        tests/test_litellm/proxy/prompts
-        tests/test_litellm/proxy/rag_endpoints
-        tests/test_litellm/proxy/realtime_endpoints
-        tests/test_litellm/proxy/ui_crud_endpoints
-        tests/test_litellm/proxy/config_resolvers
-        tests/test_litellm/proxy/utils
+        tests/unit/proxy/management_endpoints
+        tests/unit/proxy/guardrails
+        tests/unit/proxy/management_helpers
+        tests/unit/proxy/anthropic_endpoints
+        tests/unit/proxy/google_endpoints
+        tests/unit/proxy/openai_files_endpoint
+        tests/unit/proxy/batches_endpoints
+        tests/unit/proxy/video_endpoints
+        tests/unit/proxy/response_api_endpoints
+        tests/unit/proxy/image_endpoints
+        tests/unit/proxy/vector_store_endpoints
+        tests/unit/proxy/agent_endpoints
+        tests/unit/proxy/a2a
+        tests/unit/proxy/discovery_endpoints
+        tests/unit/proxy/health_endpoints
+        tests/unit/proxy/shutdown
+        tests/unit/proxy/public_endpoints
+        tests/unit/proxy/prompts
+        tests/unit/proxy/rag_endpoints
+        tests/unit/proxy/realtime_endpoints
+        tests/unit/proxy/ui_crud_endpoints
+        tests/unit/proxy/config_resolvers
+        tests/unit/proxy/utils
       workers: 2
       reruns: 2
       artifact-name: proxy-endpoints
@@ -63,7 +63,7 @@ jobs:
       pull-requests: write
     uses: ./.github/workflows/_test-unit-base.yml
     with:
-      test-path: tests/test_litellm/proxy/proxy_server
+      test-path: tests/unit/proxy/proxy_server
       workers: 4
       reruns: 2
       timeout-minutes: 60

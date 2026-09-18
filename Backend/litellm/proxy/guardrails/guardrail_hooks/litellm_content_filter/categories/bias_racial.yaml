@@ -26,7 +26,7 @@ additional_block_words:
   - "savages"
   - "barbaric"
   - "barbarian"
-  
+
   # Elimination/violence language
   - "eliminate"
   - "eliminated"
@@ -52,7 +52,7 @@ additional_block_words:
   - "deserve to die"
   - "need to die"
   - "must die"
-  
+
   # Threat/danger framing
   - "dangerous"
   - "threat"
@@ -74,7 +74,7 @@ additional_block_words:
   - "replacement"
   - "infiltrating"
   - "infiltration"
-  
+
   # Negative stereotypes
   - "lazy"
   - "criminals"
@@ -92,7 +92,7 @@ additional_block_words:
   - "ignorant"
   - "uneducated"
   - "uncivilized"
-  
+
   # Exclusion/deportation
   - "go back"
   - "send back"
@@ -103,7 +103,7 @@ additional_block_words:
   - "get out"
   - "leave"
   - "kick out"
-  
+
   # Supremacy concepts
   - "pure"
   - "purity"
@@ -112,7 +112,7 @@ additional_block_words:
   - "supremacist"
   - "nationalist"
   - "nationalism"
-  
+
   # Economic/social stereotypes
   - "stealing jobs"
   - "taking jobs"
@@ -120,7 +120,7 @@ additional_block_words:
   - "benefits"
   - "leeches"
   - "moochers"
-  
+
   # Animalistic/dehumanizing
   - "animals"
   - "animal"
@@ -165,7 +165,7 @@ identifier_words:
   - "aboriginal"
   - "aboriginals"
   - "indigenous people"
-  
+
   # Specific ethnic/national groups - Americas
   - "mexican"
   - "mexicans"
@@ -193,7 +193,7 @@ identifier_words:
   - "nicaraguans"
   - "honduran"
   - "hondurans"
-  
+
   # Specific ethnic/national groups - Asia
   - "chinese"
   - "japanese"
@@ -224,7 +224,7 @@ identifier_words:
   - "nepalese"
   - "afghan"
   - "afghans"
-  
+
   # Specific ethnic/national groups - Middle East/North Africa
   - "arab"
   - "arabs"
@@ -257,7 +257,7 @@ identifier_words:
   - "muslim"
   - "muslims"
   - "islamic"
-  
+
   # Specific ethnic/national groups - Africa
   - "african"
   - "africans"
@@ -279,7 +279,7 @@ identifier_words:
   - "tanzanians"
   - "sudanese"
   - "congolese"
-  
+
   # Specific ethnic/national groups - Europe
   - "eastern european"
   - "eastern europeans"
@@ -303,7 +303,7 @@ identifier_words:
   - "romani"
   - "gypsy"
   - "gypsies"
-  
+
   # Immigration status
   - "immigrant"
   - "immigrants"
@@ -320,7 +320,7 @@ identifier_words:
   - "foreigners"
   - "expat"
   - "expats"
-  
+
   # Group descriptors
   - "minority"
   - "minorities"
@@ -362,7 +362,7 @@ always_block_keywords:
     severity: "high"
   - keyword: "blood and soil"
     severity: "high"
-  
+
   # Genocide/replacement theories
   - keyword: "white genocide"
     severity: "high"
@@ -376,7 +376,7 @@ always_block_keywords:
     severity: "high"
   - keyword: "final solution"
     severity: "high"
-  
+
   # Explicit combinations
   - keyword: "subhuman race"
     severity: "high"
@@ -432,7 +432,7 @@ exceptions:
   - "against racism"
   - "oppose racism"
   - "condemn racism"
-  
+
   # Cultural and historical
   - "study shows"
   - "research indicates"
@@ -454,7 +454,7 @@ exceptions:
   - "celebrating"
   - "heritage"
   - "traditions"
-  
+
   # Rights and support
   - "immigrant rights"
   - "immigrant support"
@@ -466,7 +466,7 @@ exceptions:
   - "human rights"
   - "equal rights"
   - "equal treatment"
-  
+
   # Education and awareness
   - "education about"
   - "learn about"
@@ -476,7 +476,7 @@ exceptions:
   - "cultural sensitivity"
   - "cultural competency"
   - "diversity training"
-  
+
   # Positive representation
   - "representation matters"
   - "diverse perspectives"

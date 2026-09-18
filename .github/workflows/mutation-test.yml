@@ -61,7 +61,7 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          uv run --no-sync --extra proxy --extra proxy-dev prisma generate --schema Backend/litellm/proxy/schema.prisma
 
       # mutmut 3.x runs tests inside a `mutants/` sandbox where it injects
       # mutation trampolines. uv installs the project as editable by default,

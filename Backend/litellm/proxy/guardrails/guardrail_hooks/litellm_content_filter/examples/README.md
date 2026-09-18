@@ -9,20 +9,20 @@ Use **competitor_intent_type: airline** for simplified config; competitors are a
 
 To make it effective for a specific industry (e.g. airlines), add an **industry layer** on top:
 
-1. **domain_words** – Terms that signal “this is about our vertical.”  
-   For airline: `airline`, `carrier`, `flight`, `business class`, `lounge`, etc.  
+1. **domain_words** – Terms that signal “this is about our vertical.”
+   For airline: `airline`, `carrier`, `flight`, `business class`, `lounge`, etc.
    This enables the **category_ranking** path (e.g. “Which Gulf airline is the best?”) and the scoring **gate** (so “best” alone doesn’t trigger without domain/geo).
 
-2. **route_geo_cues** – Optional geography/hub terms.  
+2. **route_geo_cues** – Optional geography/hub terms.
    For airline: `country`, `hub-city`, `airport-code`, `region`.
 
-3. **descriptor_lexicon** – Phrases that count as indirect competitor reference.  
+3. **descriptor_lexicon** – Phrases that count as indirect competitor reference.
    For aviation: `gulf carrier`, `five star airline`, etc.
 
-4. **competitor_aliases** – Per-competitor aliases (IATA codes, nicknames).  
+4. **competitor_aliases** – Per-competitor aliases (IATA codes, nicknames).
    Example: `competitor-name` → `["iata-code", "nickname"]`.
 
-5. **policy** – What to do per intent band: `refuse`, `reframe`, `log_only`, or `allow`.  
+5. **policy** – What to do per intent band: `refuse`, `reframe`, `log_only`, or `allow`.
    Example: `competitor_comparison: refuse`, `category_ranking: reframe`.
 
 See the config examples below for how to add this to your proxy `guardrails` config.
