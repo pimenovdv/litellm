@@ -25,7 +25,6 @@ from litellm.constants import (
     DEFAULT_COMPETITOR_DISCOVERY_MODEL,
     MAX_COMPETITOR_NAMES,
 )
-from litellm.integrations.custom_guardrail import CustomGuardrail
 from litellm.llms.openai.chat.guardrail_translation.handler import (
     OpenAIChatCompletionsHandler,
 )

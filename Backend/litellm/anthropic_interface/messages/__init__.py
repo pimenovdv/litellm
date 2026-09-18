@@ -11,8 +11,7 @@ This is an __init__.py file to allow the following interface
 """
 
 from typing import Any, AsyncIterator, Coroutine, Dict, Iterator, List, Optional, Union
-    AnthropicMessagesResponse,
-)
+from litellm.types.llms.anthropic_messages.anthropic_response import AnthropicMessagesResponse
 
 
 async def acreate(

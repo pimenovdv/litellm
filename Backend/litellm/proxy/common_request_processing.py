@@ -36,7 +36,6 @@ from litellm.constants import (
     RETURN_RAW_MODEL_NAME_METADATA_KEY,
     STREAM_SSE_DATA_PREFIX,
 )
-from litellm.integrations.custom_guardrail import CustomGuardrail
 from litellm.litellm_core_utils.dd_tracing import NullTracer, tracer
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
 from litellm.litellm_core_utils.llm_response_utils.get_headers import (
@@ -2211,7 +2210,7 @@ class ProxyBaseLLMRequestProcessing:
         on non-streaming /chat/completions (no post_call_success_hook flush path).
         """
         for cb in litellm.callbacks:
-            if not isinstance(cb, CustomGuardrail):
+            if not hasattr(cb, "guardrail_name"):
                 continue
             if cb.event_hook is None:
                 continue
@@ -2235,7 +2234,7 @@ class ProxyBaseLLMRequestProcessing:
 
         guardrail_data = _check_and_merge_model_level_guardrails(data=self.data, llm_router=llm_router)
         for cb in litellm.callbacks:
-            if not isinstance(cb, CustomGuardrail):
+            if not hasattr(cb, "guardrail_name"):
                 continue
             if cb.should_run_guardrail(
                 data=guardrail_data,
@@ -2456,7 +2455,7 @@ class ProxyBaseLLMRequestProcessing:
 
             guardrail_data = _check_and_merge_model_level_guardrails(data=captured_data, llm_router=_global_llm_router)
             for cb in litellm.callbacks:
-                if not isinstance(cb, CustomGuardrail):
+                if not hasattr(cb, "guardrail_name"):
                     continue
                 if not cb.should_run_guardrail(
                     data=guardrail_data,

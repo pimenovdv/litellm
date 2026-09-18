@@ -15,7 +15,8 @@ from typing import TYPE_CHECKING, Any, Optional, Union
 
 from litellm._logging import verbose_proxy_logger
 from litellm.caching.caching import DualCache
-from litellm.integrations.custom_guardrail import get_session_id_from_request_data
+def get_session_id_from_request_data(*args, **kwargs):
+    return None
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.proxy._types import UserAPIKeyAuth
 

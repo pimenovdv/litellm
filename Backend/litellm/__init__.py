@@ -1228,3 +1228,9 @@ _key_management_settings: KeyManagementSettings = KeyManagementSettings()
 # client must be imported immediately as it's used as a decorator at function definition time
 from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
+
+from litellm.router import Router
+from litellm.types.utils import ModelResponse, EmbeddingResponse, ImageResponse, Usage, ModelResponseStream, TextCompletionResponse
+from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler
+from litellm.caching.caching import DualCache
+from litellm.utils import get_model_info
