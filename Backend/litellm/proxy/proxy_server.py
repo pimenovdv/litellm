@@ -347,10 +347,7 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
-from litellm.proxy.guardrails.init_guardrails import (
-    init_guardrails_v2,
-    initialize_guardrails,
-)
+
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
@@ -3489,25 +3486,6 @@ def _is_remote_module_url(value: Any) -> bool:
     return isinstance(value, str) and (value.startswith("s3://") or value.startswith("gcs://"))
 
 
-def _scrub_guardrail_inner(inner: Dict[str, Any]) -> None:
-    """Strip remote-URL entries from a guardrail's ``callbacks`` list
-    and ``guardrail`` (v2 module-path) field. Mutates in place."""
-    cbs = inner.get("callbacks")
-    if isinstance(cbs, list):
-        cleaned = [c for c in cbs if not _is_remote_module_url(c)]
-        if len(cleaned) != len(cbs):
-            verbose_proxy_logger.warning(
-                "Refused %d remote-URL entries from DB-overlay litellm_settings.guardrails[...].callbacks",
-                len(cbs) - len(cleaned),
-            )
-            inner["callbacks"] = cleaned
-    if _is_remote_module_url(inner.get("guardrail")):
-        verbose_proxy_logger.warning(
-            "Refused remote-URL guardrail module from DB-overlay litellm_settings.guardrails[...].guardrail: %r",
-            inner.get("guardrail"),
-        )
-        inner["guardrail"] = None
-
 
 def _scrub_db_overlay_remote_module_loads(section: str, db_value: Any) -> Any:
     """Strip ``s3://`` / ``gcs://`` entries from the DB-overlay value for
@@ -4453,15 +4431,6 @@ class ProxyConfig:
                         verbose_proxy_logger.debug(f"{blue_color_code}Set Cache on LiteLLM Proxy{reset_color_code}")
                 elif key == "cache" and value is False:
                     pass
-                elif key == "guardrails":
-                    guardrail_name_config_map = initialize_guardrails(
-                        guardrails_config=value,
-                        premium_user=premium_user,
-                        config_file_path=config_file_path,
-                        litellm_settings=litellm_settings,
-                    )
-
-                    litellm.guardrail_name_config_map = guardrail_name_config_map
 
                 elif key == "global_prompt_directory":
                     from litellm.integrations.dotprompt import (
@@ -5008,17 +4977,7 @@ class ProxyConfig:
         if redis_usage_cache is not None and router.cache.redis_cache is None:
             router._update_redis_cache(cache=redis_usage_cache)
 
-        # Guardrail settings
-        guardrails_v2: Optional[List[Dict]] = None
 
-        if config is not None:
-            guardrails_v2 = config.get("guardrails", None)
-        if guardrails_v2:
-            init_guardrails_v2(
-                all_guardrails=guardrails_v2,
-                config_file_path=config_file_path,
-                llm_router=router,
-            )
 
         # Policy Engine settings
         await self._init_policy_engine(
@@ -6177,7 +6136,7 @@ class ProxyConfig:
         ex. Vector Stores, Guardrails, MCP tools, etc.
         """
         if self._should_load_db_object(object_type="guardrails"):
-            await self._init_guardrails_in_db(prisma_client=prisma_client)
+            pass
 
         if self._should_load_db_object(object_type="policies"):
             await self._init_policies_in_db(prisma_client=prisma_client)
@@ -6596,35 +6555,6 @@ class ProxyConfig:
         except Exception as e:
             verbose_proxy_logger.debug(
                 "litellm.proxy.proxy_server.py::ProxyConfig:_init_prompts_in_db - {}".format(str(e))
-            )
-
-    async def _init_guardrails_in_db(self, prisma_client: PrismaClient):
-        from litellm.proxy.guardrails.guardrail_registry import (
-            IN_MEMORY_GUARDRAIL_HANDLER,
-            Guardrail,
-            GuardrailRegistry,
-        )
-
-        try:
-            guardrails_in_db: List[Guardrail] = await GuardrailRegistry.get_all_guardrails_from_db(
-                prisma_client=prisma_client
-            )
-            verbose_proxy_logger.debug("guardrails from the DB %s", str(guardrails_in_db))
-            db_guardrail_ids: set = set()
-            for guardrail in guardrails_in_db:
-                guardrail_id = guardrail.get("guardrail_id")
-                if guardrail_id:
-                    db_guardrail_ids.add(guardrail_id)
-                IN_MEMORY_GUARDRAIL_HANDLER.sync_guardrail_from_db(
-                    guardrail=cast(Guardrail, guardrail),
-                )
-
-            # Drop in-memory DB-backed entries whose row was deleted on another
-            # pod. Config-loaded entries are never touched.
-            IN_MEMORY_GUARDRAIL_HANDLER.reconcile_db_guardrails(db_guardrail_ids=db_guardrail_ids)
-        except Exception as e:
-            verbose_proxy_logger.exception(
-                "litellm.proxy.proxy_server.py::ProxyConfig:_init_guardrails_in_db - {}".format(str(e))
             )
 
     async def _init_policies_in_db(self, prisma_client: PrismaClient):
@@ -9820,10 +9750,7 @@ async def realtime_websocket_endpoint(
     websocket: WebSocket,
     model: Optional[str] = fastapi.Query(None, description="The model to use for the websocket connection."),
     intent: Optional[str] = fastapi.Query(None, description="The intent of the websocket connection."),
-    guardrails: Optional[str] = fastapi.Query(
-        None,
-        description="Comma-separated list of guardrail names to apply to this request.",
-    ),
+
     user_api_key_dict=Depends(user_api_key_auth_websocket),
 ):
     requested_protocols = [
@@ -9862,9 +9789,7 @@ async def realtime_websocket_endpoint(
         "query_params": query_params,  # Only explicit params
     }
 
-    # Pass guardrails into data so pre-call guardrail processing picks them up
-    if guardrails:
-        data["guardrails"] = [g.strip() for g in guardrails.split(",") if g.strip()]
+
 
     # Use raw ASGI headers (already lowercase bytes) to avoid extra work
     headers_list = list(websocket.scope.get("headers") or [])
