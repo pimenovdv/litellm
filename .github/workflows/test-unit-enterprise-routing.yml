@@ -3,7 +3,7 @@ name: "Unit Tests: Enterprise, Google GenAI & Routing"
 on:
   pull_request:
     branches:
-      - main
+      - litellm_internal_staging
       - litellm_internal_staging
       - litellm_oss_staging
       - "litellm_**"
@@ -22,10 +22,10 @@ jobs:
     uses: ./.github/workflows/_test-unit-base.yml
     with:
       test-path: >-
-        tests/test_litellm/enterprise
-        tests/test_litellm/google_genai
-        tests/test_litellm/router_utils
-        tests/test_litellm/router_strategy
+        tests/unit/enterprise
+        tests/unit/google_genai
+        tests/unit/router_utils
+        tests/unit/router_strategy
       workers: 2
       reruns: 2
       artifact-name: enterprise-routing

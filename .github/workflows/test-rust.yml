@@ -7,7 +7,7 @@ on:
       - ".github/workflows/test-rust.yml"
   pull_request:
     branches:
-      - main
+      - litellm_internal_staging
       - litellm_internal_staging
       - litellm_oss_staging
       - "litellm_**"

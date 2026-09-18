@@ -3,7 +3,7 @@ name: "Unit Tests: Integrations (Callbacks & Logging)"
 on:
   pull_request:
     branches:
-      - main
+      - litellm_internal_staging
       - litellm_internal_staging
       - litellm_oss_staging
       - "litellm_**"
@@ -21,7 +21,7 @@ jobs:
   integrations:
     uses: ./.github/workflows/_test-unit-base.yml
     with:
-      test-path: "tests/test_litellm/integrations"
+      test-path: "tests/unit/integrations"
       workers: 2
       reruns: 3
       artifact-name: integrations
