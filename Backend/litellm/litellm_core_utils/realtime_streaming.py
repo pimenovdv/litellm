@@ -672,16 +672,7 @@ class RealTimeStreaming:
         )
 
     def _has_realtime_guardrails(self) -> bool:
-        """Return True if any callback is registered for realtime guardrail event types."""
-        from litellm.types.guardrails import GuardrailEventHooks
-
-        return self._has_realtime_guardrails_for_event_hooks(
-            [
-                GuardrailEventHooks.realtime_input_transcription,
-                GuardrailEventHooks.pre_call,
-                GuardrailEventHooks.post_call,
-            ]
-        )
+        return False
 
     def _has_audio_transcription_guardrails(self) -> bool:
         """Return True when a guardrail is configured for the audio/VAD transcript path.
@@ -694,136 +685,7 @@ class RealTimeStreaming:
 
         return self._has_realtime_guardrails_for_event_hooks([GuardrailEventHooks.realtime_input_transcription])
 
-    async def run_realtime_guardrails(
-        self,
-        transcript: str,
-        item_id: Optional[str] = None,
-        pre_block_backend_message: Optional[str] = None,
-        event_hooks: Optional[List[Any]] = None,
-    ) -> bool:
-        """
-        Run registered guardrails on realtime text (transcript, user message, tool output).
-
-        Returns True if blocked (synthetic warning already sent to client).
-        Returns False if clean (caller should send response.create to the backend).
-
-        ``pre_block_backend_message`` (if provided) is sent to the backend
-        BEFORE any of the guardrail's own backend messages when a block is
-        triggered. This is needed for protocol contracts that require a
-        specific message to be sent first — e.g. Gemini Live requires a
-        matching ``toolResponse`` immediately after a ``toolCall`` before any
-        other client messages can be accepted.
-
-        ``event_hooks`` selects which guardrail modes to evaluate. Audio/VAD
-        transcript completion uses ``realtime_input_transcription`` only;
-        typed user messages and tool outputs use ``pre_call``.
-        """
-        from litellm.integrations.custom_guardrail import CustomGuardrail
-        from litellm.types.guardrails import GuardrailEventHooks
-
-        if event_hooks is None:
-            event_hooks = [GuardrailEventHooks.realtime_input_transcription]
-        _realtime_event_types = event_hooks
-        _check_data = {**self.request_data, "transcript": transcript}
-        _already_run: set = set()
-
-        for callback in litellm.callbacks:
-            if not isinstance(callback, CustomGuardrail):
-                continue
-            if id(callback) in _already_run:
-                continue
-            if not any(callback.should_run_guardrail(data=_check_data, event_type=et) for et in _realtime_event_types):
-                continue
-            _already_run.add(id(callback))
-            try:
-                await callback.apply_guardrail(
-                    inputs={"texts": [transcript], "images": []},
-                    request_data={"user_api_key_dict": self.user_api_key_dict},
-                    input_type="request",
-                )
-            except Exception as e:
-                # Re-raise unexpected errors (no status_code/detail = programming bug, not a block).
-                # HTTPException and guardrail-raised exceptions have a status_code or detail attr.
-                is_guardrail_block = hasattr(e, "status_code") or isinstance(e, ValueError)
-                if not is_guardrail_block:
-                    verbose_logger.exception(
-                        "[realtime guardrail] unexpected error in apply_guardrail: %s",
-                        e,
-                    )
-                    raise
-                # Extract the human-readable error from the detail dict (HTTPException)
-                # or fall back to str(e) for plain ValueError.
-                detail = getattr(e, "detail", None)
-                if isinstance(detail, dict):
-                    safe_msg = detail.get("error") or str(e)
-                elif detail is not None:
-                    safe_msg = str(detail)
-                else:
-                    safe_msg = str(e) or "I'm sorry, that request was blocked by the content filter."
-
-                # Use realtime_violation_message if configured; fall back to guardrail error text.
-                error_msg = getattr(callback, "realtime_violation_message", None) or safe_msg
-
-                # Deliver any caller-supplied backend message FIRST so that
-                # protocol contracts requiring a specific ordering (e.g.
-                # Gemini Live's mandatory ``toolResponse`` after a
-                # ``toolCall``) are honored before the guardrail's own
-                # clientContent / cancel messages are sent.
-                if pre_block_backend_message is not None:
-                    await self._send_to_backend(pre_block_backend_message)
-                # Cancel any in-progress LLM response (e.g. VAD auto-response).
-                await self._send_to_backend(json.dumps({"type": "response.cancel"}))
-                # Send the policy violation hint (shows as small gray status text in UI).
-                await self.websocket.send_text(
-                    json.dumps(
-                        {
-                            "type": "error",
-                            "error": {
-                                "type": "guardrail_violation",
-                                "message": error_msg,
-                                "code": "content_policy_violation",
-                            },
-                        }
-                    )
-                )
-                # Ask the LLM to voice the exact guardrail message so the
-                # user hears it as audio in voice sessions (not just text).
-                guardrail_prompt = (
-                    f"Say exactly the following message to the user, word for word, "
-                    f"do not add anything else: {error_msg}"
-                )
-                await self._send_to_backend(
-                    json.dumps(
-                        {
-                            "type": "conversation.item.create",
-                            "item": {
-                                "type": "message",
-                                "role": "user",
-                                "content": [{"type": "input_text", "text": guardrail_prompt}],
-                            },
-                        }
-                    )
-                )
-                await self._send_to_backend(json.dumps({"type": "response.create"}))
-
-                self._violation_count += 1
-                end_session_after: Optional[int] = getattr(callback, "end_session_after_n_fails", None)
-                should_end = getattr(callback, "on_violation", None) == "end_session" or (
-                    end_session_after is not None and self._violation_count >= end_session_after
-                )
-                if should_end:
-                    verbose_logger.warning(
-                        "[realtime guardrail] ending session after violation %d",
-                        self._violation_count,
-                    )
-                    await self.backend_ws.close()  # type: ignore[union-attr, attr-defined]
-
-                verbose_logger.warning(
-                    "[realtime guardrail] BLOCKED transcript (violation %d): %r",
-                    self._violation_count,
-                    transcript[:80],
-                )
-                return True
+    async def run_realtime_guardrails(self, *args, **kwargs) -> bool:
         return False
 
     async def _handle_provider_config_message(self, raw_response) -> None:

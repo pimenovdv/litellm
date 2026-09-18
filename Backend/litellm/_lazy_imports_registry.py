@@ -541,7 +541,6 @@ _DOTPROMPT_IMPORT_MAP = {
 }
 
 _TYPES_IMPORT_MAP = {
-    "GuardrailItem": ("litellm.types.guardrails", "GuardrailItem"),
     "DefaultTeamSSOParams": (
         "litellm.types.proxy.management_endpoints.ui_sso",
         "DefaultTeamSSOParams",

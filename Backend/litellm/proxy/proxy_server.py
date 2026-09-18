@@ -242,7 +242,6 @@ from litellm.constants import (
     PROXY_CONFIG_RELOAD_INTERVAL_SECONDS,
 )
 from litellm.exceptions import RejectedRequestError
-from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
@@ -347,10 +346,6 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
-from litellm.proxy.guardrails.init_guardrails import (
-    init_guardrails_v2,
-    initialize_guardrails,
-)
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
