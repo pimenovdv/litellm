@@ -36,6 +36,7 @@ from litellm.constants import (
     RETURN_RAW_MODEL_NAME_METADATA_KEY,
     STREAM_SSE_DATA_PREFIX,
 )
+from litellm.integrations.custom_guardrail import CustomGuardrail
 from litellm.litellm_core_utils.dd_tracing import NullTracer, tracer
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
 from litellm.litellm_core_utils.llm_response_utils.get_headers import (
@@ -53,6 +54,7 @@ from litellm.proxy.route_llm_request import route_request
 from litellm.proxy.utils import ProxyLogging, _check_and_merge_model_level_guardrails
 from litellm.router import Router
 from litellm.router_utils.add_retry_fallback_headers import get_hidden_params_dict
+from litellm.types.guardrails import GuardrailEventHooks
 from litellm.types.router import RouterRateLimitError
 from litellm.types.utils import ServerToolUse
 
@@ -2218,6 +2220,28 @@ class ProxyBaseLLMRequestProcessing:
         return False
 
     def _has_post_call_guardrails_for_passthrough(self) -> bool:
+        """
+        True when a post_call guardrail will actually run for THIS request.
+
+        Mirrors the gate in ProxyLogging.post_call_success_hook
+        (should_run_guardrail against the request's merged guardrails) so that a
+        guardrail registered globally but not configured for this key/team does
+        not force the passthrough stream to be buffered into a single
+        non-streaming response. An event_hook=None guardrail still counts here
+        because should_run_guardrail treats it as matching every hook.
+        """
+        from litellm.proxy.proxy_server import llm_router
+        from litellm.proxy.utils import _check_and_merge_model_level_guardrails
+
+        guardrail_data = _check_and_merge_model_level_guardrails(data=self.data, llm_router=llm_router)
+        for cb in litellm.callbacks:
+            if not isinstance(cb, CustomGuardrail):
+                continue
+            if cb.should_run_guardrail(
+                data=guardrail_data,
+                event_type=GuardrailEventHooks.post_call,
+            ):
+                return True
         return False
 
     def _passthrough_endpoint_has_stream_guardrail_handler(self) -> bool:
