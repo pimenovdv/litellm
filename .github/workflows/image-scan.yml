@@ -67,7 +67,7 @@ jobs:
           LITELLM_IMAGE: litellm-image-scan:${{ github.sha }}
         run: |
           python -m pip install "pytest==9.0.3"
-          python -m pytest tests/proxy_migration_tests/test_offline_image_migration.py -v
+          PYTHONPATH=Backend:./ python -m pytest tests/proxy_migration_tests/test_offline_image_migration.py -v
 
       # Scans the whole shipped artifact: OS/apk plus every language package
       # baked into the image, including ones no lockfile declares (e.g. prisma's
