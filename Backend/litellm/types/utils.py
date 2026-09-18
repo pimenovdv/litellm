@@ -53,7 +53,6 @@ from litellm.types.mcp import MCPServerCostInfo
 
 from ..litellm_core_utils.core_helpers import map_finish_reason
 from .agents import LiteLLMSendMessageResponse
-from .guardrails import GuardrailEventHooks
 from .llms.anthropic_messages.anthropic_response import AnthropicMessagesResponse
 from .llms.base import HiddenParams
 from .llms.openai import (
@@ -2768,9 +2767,6 @@ class StandardLoggingPayloadErrorInformation(TypedDict, total=False):
     error_budget_spend: Optional[float]
 
 
-class GuardrailMode(TypedDict, total=False):
-    tags: Optional[Dict[str, Union[str, List[str]]]]
-    default: Optional[Union[str, List[str]]]
 
 
 GuardrailStatus = Literal["success", "guardrail_intervened", "guardrail_failed_to_respond", "not_run"]
@@ -2779,7 +2775,7 @@ GuardrailStatus = Literal["success", "guardrail_intervened", "guardrail_failed_t
 class StandardLoggingGuardrailInformation(TypedDict, total=False):
     guardrail_name: Optional[str]
     guardrail_provider: Optional[str]
-    guardrail_mode: Optional[Union[GuardrailEventHooks, List[GuardrailEventHooks], GuardrailMode]]
+    guardrail_mode: Optional[Union[str, List[str], dict]]
     guardrail_request: Optional[Union[str, dict]]
     guardrail_response: Optional[Union[dict, str, List[dict]]]
     guardrail_status: GuardrailStatus
