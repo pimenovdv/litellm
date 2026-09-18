@@ -17,7 +17,6 @@ from litellm.types.proxy.guardrails.guardrail_hooks.enkryptai import (
 from litellm.types.proxy.guardrails.guardrail_hooks.grayswan import (
     GraySwanGuardrailConfigModel,
 )
-from litellm.types.proxy.guardrails.guardrail_hooks.ibm import (
     IBMGuardrailsBaseConfigModel,
 )
 from litellm.types.proxy.guardrails.guardrail_hooks.litellm_content_filter import (
