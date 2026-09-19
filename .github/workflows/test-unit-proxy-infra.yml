@@ -22,15 +22,15 @@ jobs:
     uses: ./.github/workflows/_test-unit-base.yml
     with:
       test-path: >-
-        tests/test_litellm/proxy/db
-        tests/test_litellm/proxy/middleware
-        tests/test_litellm/proxy/spend_tracking
-        tests/test_litellm/proxy/pass_through_endpoints
-        tests/test_litellm/proxy/_experimental
-        tests/test_litellm/proxy/experimental
-        tests/test_litellm/proxy/common_utils
-        tests/test_litellm/proxy/logging_endpoints
-        tests/test_litellm/proxy/test_*.py
+        tests/unit/proxy/db
+        tests/unit/proxy/middleware
+        tests/unit/proxy/spend_tracking
+        tests/unit/proxy/pass_through_endpoints
+        tests/unit/proxy/_experimental
+        tests/unit/proxy/experimental
+        tests/unit/proxy/common_utils
+        tests/unit/proxy/logging_endpoints
+        tests/unit/proxy/test_*.py
       workers: 2
       reruns: 2
       artifact-name: proxy-infra
