@@ -142,7 +142,7 @@ jobs:
           #
           # Use the positive `= "true"` gate (not `!= "true" -> exit`) so
           # the workflow guardrails in
-          # tests/unit/test_github_triage_workflows.py see the
+          # tests/test_litellm/test_github_triage_workflows.py see the
           # canonical fail-safe enable pattern. Unknown values like
           # "True", "yes", "1", or typos fall through to the dry-run
           # branch, which is the safe default.
