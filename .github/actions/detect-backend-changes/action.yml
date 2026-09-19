@@ -1,7 +1,7 @@
 name: "Detect backend-relevant changes"
 description: >-
-  Classify the pull request's changed files with .circleci/scripts/classify_changes.sh
-  and expose decision=run|skip. decision=skip means only ui/**, **.md or **.mdx files
+  Classify the pull request's changed files and expose decision=run|skip.
+  decision=skip means only frontend/**, **.md or **.mdx files
   changed, so callers can short-circuit expensive steps while the job still completes
   successfully and satisfies its required status check. The decision defaults to run for
   any non pull_request event or whenever the changed set cannot be resolved, so tests are
@@ -43,6 +43,15 @@ runs:
         fi
         echo "detect-backend-changes: changed files vs ${BASE_SHA}:"
         printf '%s\n' "${changed}" | sed 's/^/  /'
-        decision="$(printf '%s\n' "${changed}" | bash .circleci/scripts/classify_changes.sh backend)" || decision="run"
+
+        # Check if there are changes outside of frontend/ and *.md/*.mdx
+        backend_changed=$(printf '%s\n' "${changed}" | grep -vE "^frontend/|.*\.md$|.*\.mdx$" || true)
+
+        if [ -n "$backend_changed" ]; then
+          decision="run"
+        else
+          decision="skip"
+        fi
+
         echo "detect-backend-changes: decision=${decision}"
         echo "decision=${decision}" >> "${GITHUB_OUTPUT}"
