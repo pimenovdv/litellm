@@ -60,7 +60,8 @@ jobs:
         with:
           mode: simulation
           run: >
-            env PYTEST_DISABLE_PLUGIN_AUTOLOAD=1
+            cd Backend; \
+            env PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
             uv run --frozen --no-default-groups
             --with pytest==8.3.5
             --with pytest-codspeed==4.3.0

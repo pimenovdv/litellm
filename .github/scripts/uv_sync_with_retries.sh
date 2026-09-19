@@ -15,7 +15,7 @@ fi
 for attempt in $(seq 1 "${max_attempts}"); do
   echo "uv sync attempt ${attempt}/${max_attempts}"
   status=0
-  if uv sync "$@"; then
+  if (cd Backend && uv sync "$@"); then
     exit 0
   else
     status=$?

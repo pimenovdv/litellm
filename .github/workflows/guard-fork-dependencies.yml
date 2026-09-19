@@ -37,7 +37,7 @@ jobs:
 
       - name: Reject uv.lock changes
         run: |
-          if ! diff -q base/uv.lock pr/uv.lock >/dev/null 2>&1; then
+          if ! diff -q base/Backend/uv.lock pr/Backend/uv.lock >/dev/null 2>&1; then
             echo "::error::Fork PRs must not modify uv.lock. Dependency lockfile changes must come from a branch in the canonical repository."
             exit 1
           fi
@@ -127,9 +127,9 @@ jobs:
             return 0
           }
 
-          check_deps base/pyproject.toml pr/pyproject.toml "pyproject.toml" || had_error=1
-          check_deps base/litellm-proxy-extras/pyproject.toml pr/litellm-proxy-extras/pyproject.toml "litellm-proxy-extras/pyproject.toml" || had_error=1
-          check_deps base/enterprise/pyproject.toml pr/enterprise/pyproject.toml "enterprise/pyproject.toml" || had_error=1
+          check_deps base/Backend/pyproject.toml pr/Backend/pyproject.toml "pyproject.toml" || had_error=1
+          check_deps base/Backend/litellm-proxy-extras/pyproject.toml pr/Backend/litellm-proxy-extras/pyproject.toml "litellm-proxy-extras/pyproject.toml" || had_error=1
+          check_deps base/Backend/enterprise/pyproject.toml pr/Backend/enterprise/pyproject.toml "enterprise/pyproject.toml" || had_error=1
 
           if [ "$had_error" -ne 0 ]; then
             echo ""
