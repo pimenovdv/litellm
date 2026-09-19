@@ -1,7 +1,7 @@
-"""Regression tests for CircleCI change-based job gating.
+"""Regression tests for GitHub Actions change-based job gating.
 
-`.circleci/scripts/classify_changes.sh` is the pure decision function behind
-`path_filter.sh`: given the list of files a PR changed (on stdin) and a job
+`.github/scripts/classify_changes.sh` is the pure decision function behind
+the `detect-backend-changes` action: given the list of files a PR changed (on stdin) and a job
 category, it prints `run` or `skip`. The gating contract we lock in here:
 
   * docs-only changes (``*.md``, ``*.mdx``, ``docs/``) run nothing
