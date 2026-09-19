@@ -8,7 +8,7 @@ import { ADMIN_STORAGE_PATH } from "../../constants";
  * `premium_user` claim is the same value the dashboard reads to enable
  * premium-gated UI surfaces (Team-BYOK switch, etc.), so asserting it here
  * catches any future regression where the env var stops being plumbed
- * through `run_e2e.sh`.
+ * through `run_e2e.sh` / `.circleci/config.yml`.
  *
  * Skips locally when no license is configured.
  */
