@@ -57,7 +57,7 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          cd Backend && uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Check ruff format
         env:
@@ -68,7 +68,7 @@ jobs:
             echo "No changed litellm Python files to check with ruff format."
             exit 0
           fi
-          xargs uv run --no-sync ruff format --check --exclude '/enterprise/' < "$RUNNER_TEMP/ruff_format_files.txt"
+          xargs sh -c 'cd Backend && uv run --no-sync ruff format --check --exclude "/enterprise/" "$@"' _ < "$RUNNER_TEMP/ruff_format_files.txt"
 
       - name: Debug - Check file state
         run: |
@@ -81,51 +81,49 @@ jobs:
 
       - name: Run Ruff linting
         run: |
-          cd litellm
-          uv run --no-sync ruff check .
+          cd Backend/litellm && uv run --no-sync ruff check .
           cd ..
 
       - name: Check strict-rule budget (delta vs base)
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          uv run --no-sync python scripts/ruff_strict_gate.py --base "$BASE_SHA"
+          cd Backend && uv run --no-sync python scripts/ruff_strict_gate.py --base "$BASE_SHA"
 
       - name: Check type-discipline budget (mutable collections / casts / type guards / kwargs / unexplained suppressions, delta vs base)
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          uv run --no-sync python scripts/type_discipline_gate.py --base "$BASE_SHA"
+          cd Backend && uv run --no-sync python scripts/type_discipline_gate.py --base "$BASE_SHA"
 
       - name: Print OpenAI version
         run: |
-          uv run --no-sync python -c "import openai; print(f'OpenAI version: {openai.__version__}')"
+          cd Backend && uv run --no-sync python -c "import openai; print(f'OpenAI version: {openai.__version__}')"
 
       - name: Check basedpyright budget (delta vs base)
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          (uv run --no-sync basedpyright --outputjson || true) | uv run --no-sync python scripts/type_check_gate.py --base "$BASE_SHA"
+          (cd Backend && uv run --no-sync basedpyright --outputjson || true) | cd Backend && uv run --no-sync python scripts/type_check_gate.py --base "$BASE_SHA"
 
       - name: Check tests/e2e basedpyright (zero errors)
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           if git diff --name-only --diff-filter=ACMRD "$BASE_SHA"...HEAD -- 'tests/e2e/**/*.py' | grep -q .; then
-            uv run --no-sync basedpyright tests/e2e
+            cd Backend && uv run --no-sync basedpyright tests/e2e
           else
             echo "No changed tests/e2e Python files; skipping."
           fi
 
       - name: Check for circular imports
         run: |
-          cd litellm
-          uv run --no-sync python ../tests/documentation_tests/test_circular_imports.py
+          cd Backend/litellm && uv run --no-sync python ../tests/documentation_tests/test_circular_imports.py
           cd ..
 
       - name: Check import safety
         run: |
-          uv run --no-sync python -c "from litellm import *" || (echo '🚨 import failed, this means you introduced unprotected imports! 🚨'; exit 1)
+          cd Backend && uv run --no-sync python -c "from litellm import *" || (echo '🚨 import failed, this means you introduced unprotected imports! 🚨'; exit 1)
 
   # Intentionally NON-GATING. This job turns red when a *-budget.json ceiling is
   # raised (or a rule/budget is dropped) so a loosening is obvious in review, but it
@@ -178,7 +176,7 @@ jobs:
 
       - name: Run secret scan test
         run: |
-          uv run --frozen --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
+          cd Backend && uv run --frozen --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
 
       - name: Run ggshield secret scan
         env:
