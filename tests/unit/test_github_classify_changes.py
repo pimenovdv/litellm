@@ -1,4 +1,4 @@
-"""Regression tests for CircleCI change-based job gating.
+"""Regression tests for GitHub Actions change-based job gating.
 
 `.github/scripts/classify_changes.sh` is the pure decision function behind
 `path_filter.sh`: given the list of files a PR changed (on stdin) and a job
