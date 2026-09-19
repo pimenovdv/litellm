@@ -76,33 +76,3 @@ def test_non_docs_directory_with_docs_in_name_is_backend() -> None:
 
 def test_unknown_category_fails_open_to_run() -> None:
     assert classify("mystery", DOCS) == "run"
-
-
-def _git(cwd: Path, *args: str) -> None:
-    subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True, text=True)
-
-
-def _pr_repo(tmp_path: Path, feature_files: dict[str, str]) -> Path:
-    """A repo whose HEAD is a feature branch off `main` with `feature_files` changed."""
-    remote = tmp_path / "remote.git"
-    subprocess.run(["git", "init", "-q", "--bare", str(remote)], check=True)
-    work = tmp_path / "work"
-    work.mkdir()
-    _git(work, "init", "-q", "-b", "main")
-    _git(work, "config", "user.email", "t@t")
-    _git(work, "config", "user.name", "t")
-    _git(work, "remote", "add", "origin", str(remote))
-    (work / "litellm_core.py").write_text("x\n")
-    _git(work, "add", ".")
-    _git(work, "commit", "-qm", "base")
-    _git(work, "push", "-q", "origin", "main")
-    _git(work, "checkout", "-q", "-b", "litellm_feature")
-    for rel, content in feature_files.items():
-        target = work / rel
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content)
-    _git(work, "add", "-A")
-    _git(work, "commit", "-qm", "feature")
-    return work
-
-
