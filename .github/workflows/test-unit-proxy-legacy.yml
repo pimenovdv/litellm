@@ -24,23 +24,23 @@ jobs:
       matrix:
         test-group:
           - name: "auth-and-jwt"
-            path: "tests/proxy_unit_tests/test_[a-j]*.py"
+            path: "tests/test_litellm/proxy/test_[a-j]*.py"
           - name: "key-generation"
-            path: "tests/proxy_unit_tests/test_[k-o]*.py"
+            path: "tests/test_litellm/proxy/test_[k-o]*.py"
           - name: "proxy-config"
-            path: "tests/proxy_unit_tests/test_prisma*.py tests/proxy_unit_tests/test_prompt*.py tests/proxy_unit_tests/test_proxy_[c-r]*.py"
+            path: "tests/test_litellm/proxy/test_prisma*.py tests/test_litellm/proxy/test_prompt*.py tests/test_litellm/proxy/test_proxy_[c-r]*.py"
           - name: "proxy-server"
-            path: "tests/proxy_unit_tests/test_proxy_server.py"
+            path: "tests/test_litellm/proxy/test_proxy_server.py"
           - name: "proxy-server-extras"
-            path: "tests/proxy_unit_tests/test_proxy_server_*.py tests/proxy_unit_tests/test_proxy_setting_guardrails.py"
+            path: "tests/test_litellm/proxy/test_proxy_server_*.py tests/test_litellm/proxy/test_proxy_setting_guardrails.py"
           - name: "proxy-utils"
-            path: "tests/proxy_unit_tests/test_proxy_utils.py"
+            path: "tests/test_litellm/proxy/test_proxy_utils.py"
           - name: "proxy-token-counter"
-            path: "tests/proxy_unit_tests/test_proxy_token_counter.py"
+            path: "tests/test_litellm/proxy/test_proxy_token_counter.py"
           - name: "proxy-response-and-misc"
-            path: "tests/proxy_unit_tests/test_[r-t]*.py"
+            path: "tests/test_litellm/proxy/test_[r-t]*.py"
           - name: "proxy-user-auth-and-spend"
-            path: "tests/proxy_unit_tests/test_[u-z]*.py"
+            path: "tests/test_litellm/proxy/test_[u-z]*.py"
 
     name: ${{ matrix.test-group.name }}
 
@@ -83,7 +83,7 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema Backend/litellm/proxy/schema.prisma
 
       - name: Run tests - ${{ matrix.test-group.name }}
         if: steps.changes.outputs.decision != 'skip'
