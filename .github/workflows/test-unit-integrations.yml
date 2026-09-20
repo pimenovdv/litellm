@@ -21,7 +21,7 @@ jobs:
   integrations:
     uses: ./.github/workflows/_test-unit-base.yml
     with:
-      test-path: "tests/unit/integrations"
+      test-path: "tests/test_litellm/integrations"
       workers: 2
       reruns: 3
       artifact-name: integrations
