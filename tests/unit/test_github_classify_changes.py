@@ -117,9 +117,9 @@ def _run_path_filter(work: Path, tmp_path: Path, category: str, scripts_dir: Pat
     stub.chmod(0o755)
     env = dict(os.environ)
     env["PATH"] = f"{bin_dir}{os.pathsep}{env['PATH']}"
-    env.pop("CIRCLE_PULL_REQUEST", None)
+    env.pop("GITHUB_HEAD_REF", None)
     if is_pr:
-        env["CIRCLE_PULL_REQUEST"] = "https://github.com/x/y/pull/1"
+        env["GITHUB_HEAD_REF"] = "feature-branch"
     return subprocess.run(
         ["bash", str(scripts_dir / "path_filter.sh"), category],
         cwd=work,
