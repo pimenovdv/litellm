@@ -37,7 +37,6 @@ jobs:
 
       - name: Reject symlinked schema files
         run: |
-          for f in schema.prisma litellm/proxy/schema.prisma; do
             if [ -L "$f" ]; then
               echo "::error file=$f::$f is a symlink, which is not allowed"
               exit 1
@@ -51,7 +50,6 @@ jobs:
       - name: Check for changes
         id: diff
         run: |
-          if git diff --quiet -- litellm/proxy/schema.prisma; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "Schemas already in sync. Nothing to do."
           else
@@ -67,6 +65,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B "$GITHUB_HEAD_REF"
-          git add -- litellm/proxy/schema.prisma
           git commit -m "chore: sync schema.prisma copies from root"
           git push origin "HEAD:$GITHUB_HEAD_REF"

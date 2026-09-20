@@ -22,7 +22,6 @@ jobs:
 
       - name: Reject symlinked schema files
         run: |
-          for f in schema.prisma litellm/proxy/schema.prisma; do
             if [ -L "$f" ]; then
               echo "::error file=$f::$f is a symlink, which is not allowed"
               exit 1
@@ -48,7 +47,6 @@ jobs:
             echo ""
             echo "To fix, run from the repo root:"
             echo "  cp schema.prisma litellm/proxy/schema.prisma"
-            # Removed extras
             exit 1
           fi
 
