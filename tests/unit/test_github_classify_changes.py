@@ -1,6 +1,6 @@
 """Regression tests for CircleCI change-based job gating.
 
-`.circleci/scripts/classify_changes.sh` is the pure decision function behind
+`.github/scripts/classify_changes.sh` is the pure decision function behind
 `path_filter.sh`: given the list of files a PR changed (on stdin) and a job
 category, it prints `run` or `skip`. The gating contract we lock in here:
 
@@ -21,7 +21,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS_DIR = Path(__file__).resolve().parents[2] / ".circleci" / "scripts"
+SCRIPTS_DIR = Path(__file__).resolve().parents[2] / ".github" / "scripts"
 SCRIPT = SCRIPTS_DIR / "classify_changes.sh"
 PATH_FILTER = SCRIPTS_DIR / "path_filter.sh"
 
@@ -112,8 +112,8 @@ def _pr_repo(tmp_path: Path, feature_files: dict[str, str]) -> Path:
 def _run_path_filter(work: Path, tmp_path: Path, category: str, scripts_dir: Path, is_pr: bool = True):
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir(exist_ok=True)
-    stub = bin_dir / "circleci-agent"
-    stub.write_text("#!/usr/bin/env bash\necho \"[stub] circleci-agent $*\"\nexit 0\n")
+    stub = bin_dir / "exit"
+    stub.write_text("#!/usr/bin/env bash\necho \"[stub] exit $*\"\nexit 0\n")
     stub.chmod(0o755)
     env = dict(os.environ)
     env["PATH"] = f"{bin_dir}{os.pathsep}{env['PATH']}"
@@ -133,7 +133,7 @@ def test_path_filter_halts_docs_only_pr(tmp_path: Path) -> None:
     work = _pr_repo(tmp_path, {"README.md": "# docs\n"})
     result = _run_path_filter(work, tmp_path, "backend", SCRIPTS_DIR)
     assert result.returncode == 0
-    assert "circleci-agent step halt" in result.stdout
+    assert "halting job as successful" in result.stdout
 
 
 def test_path_filter_runs_backend_pr(tmp_path: Path) -> None:
