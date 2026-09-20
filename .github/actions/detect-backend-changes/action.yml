@@ -43,6 +43,6 @@ runs:
         fi
         echo "detect-backend-changes: changed files vs ${BASE_SHA}:"
         printf '%s\n' "${changed}" | sed 's/^/  /'
-        decision="$(printf '%s\n' "${changed}" | bash .circleci/scripts/classify_changes.sh backend)" || decision="run"
+        decision="$(printf '%s\n' "${changed}" | bash .github/scripts/classify_changes.sh backend)" || decision="run"
         echo "detect-backend-changes: decision=${decision}"
         echo "decision=${decision}" >> "${GITHUB_OUTPUT}"
