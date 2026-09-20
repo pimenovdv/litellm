@@ -5,7 +5,7 @@ import os
 def check_for_litellm_module_deletion(base_dir):
     """
     Checks for code patterns that delete litellm modules from sys.modules
-    in the test_litellm directory.
+    in the unit directory.
 
     Specifically looks for patterns like:
     for module in list(sys.modules.keys()):
@@ -13,7 +13,7 @@ def check_for_litellm_module_deletion(base_dir):
             del sys.modules[module]
     """
     problematic_files = []
-    test_dir = os.path.join(base_dir, "test_litellm")
+    test_dir = os.path.join(base_dir, "unit")
 
     if not os.path.exists(test_dir):
         print(f"Warning: Directory {test_dir} does not exist.")
@@ -173,7 +173,7 @@ def main():
             f"This can cause import issues and test failures. Files: {problematic_files}"
         )
     else:
-        print("✓ No litellm module deletion patterns found in test_litellm directory.")
+        print("✓ No litellm module deletion patterns found in unit directory.")
 
 
 if __name__ == "__main__":
