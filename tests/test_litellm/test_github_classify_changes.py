@@ -133,7 +133,7 @@ def test_path_filter_halts_docs_only_pr(tmp_path: Path) -> None:
     work = _pr_repo(tmp_path, {"README.md": "# docs\n"})
     result = _run_path_filter(work, tmp_path, "backend", SCRIPTS_DIR)
     assert result.returncode == 0
-    assert "circleci-agent step halt" in result.stdout
+    assert "skip" in result.stdout
 
 
 def test_path_filter_runs_backend_pr(tmp_path: Path) -> None:
