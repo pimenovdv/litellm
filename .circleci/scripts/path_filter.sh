@@ -37,4 +37,4 @@ if [ "$decision" = run ]; then
 fi
 
 echo "path-filter[$category]: only unrelated (docs/client) changes detected; halting job as successful"
-echo "Skipping step (was circleci-agent step halt)"
+circleci-agent step halt
