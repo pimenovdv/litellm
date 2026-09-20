@@ -59,7 +59,7 @@ jobs:
               for token in entry["test-path"].split():
                   if token.startswith("tests/test_litellm/proxy/"):
                       referenced.add(pathlib.PurePosixPath(token).name)
-          actual = {p.name for p in pathlib.Path("tests/proxy_unit_tests").iterdir()
+          actual = {p.name for p in pathlib.Path("tests/test_litellm/proxy").iterdir()
                     if p.name.startswith("test_") and (p.suffix == ".py" or p.is_dir())
                     and p.name != "test_configs"}
           orphans = sorted(actual - referenced)
