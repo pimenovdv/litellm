@@ -33,4 +33,3 @@ CREATE INDEX IF NOT EXISTS "LiteLLM_DailyTeamSpend_team_id_date_idx" ON "LiteLLM
 
 -- CreateIndex
 CREATE INDEX IF NOT EXISTS "LiteLLM_DailyUserSpend_user_id_date_idx" ON "LiteLLM_DailyUserSpend"("user_id", "date");
-

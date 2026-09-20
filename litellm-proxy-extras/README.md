@@ -7,7 +7,7 @@ To install, run:
 ```bash
 uv add litellm-proxy-extras
 ```
-OR 
+OR
 
 ```bash
 uv tool install 'litellm[proxy]' # installs litellm-proxy-extras and other proxy dependencies

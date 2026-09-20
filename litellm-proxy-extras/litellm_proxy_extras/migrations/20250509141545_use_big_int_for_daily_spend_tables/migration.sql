@@ -24,4 +24,3 @@ ALTER COLUMN "failed_requests" SET DATA TYPE BIGINT,
 ALTER COLUMN "successful_requests" SET DATA TYPE BIGINT,
 ALTER COLUMN "cache_creation_input_tokens" SET DATA TYPE BIGINT,
 ALTER COLUMN "cache_read_input_tokens" SET DATA TYPE BIGINT;
-

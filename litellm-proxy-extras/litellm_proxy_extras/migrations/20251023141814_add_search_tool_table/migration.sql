@@ -12,4 +12,3 @@ CREATE TABLE IF NOT EXISTS "LiteLLM_SearchToolsTable" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX IF NOT EXISTS "LiteLLM_SearchToolsTable_search_tool_name_key" ON "LiteLLM_SearchToolsTable"("search_tool_name");
-

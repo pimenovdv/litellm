@@ -15,4 +15,3 @@ CREATE UNIQUE INDEX IF NOT EXISTS "LiteLLM_ManagedFileTable_unified_file_id_key"
 
 -- CreateIndex
 CREATE INDEX IF NOT EXISTS "LiteLLM_ManagedFileTable_unified_file_id_idx" ON "LiteLLM_ManagedFileTable"("unified_file_id");
-

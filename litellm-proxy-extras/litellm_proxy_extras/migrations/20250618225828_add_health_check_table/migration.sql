@@ -25,4 +25,3 @@ CREATE INDEX IF NOT EXISTS "LiteLLM_HealthCheckTable_checked_at_idx" ON "LiteLLM
 
 -- CreateIndex
 CREATE INDEX IF NOT EXISTS "LiteLLM_HealthCheckTable_status_idx" ON "LiteLLM_HealthCheckTable"("status");
-

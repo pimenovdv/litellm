@@ -12,4 +12,3 @@ CREATE TABLE IF NOT EXISTS "LiteLLM_PromptTable" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX IF NOT EXISTS "LiteLLM_PromptTable_prompt_id_key" ON "LiteLLM_PromptTable"("prompt_id");
-
