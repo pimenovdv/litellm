@@ -24,7 +24,7 @@ jobs:
       pull-requests: write
     uses: ./.github/workflows/_test-unit-base.yml
     with:
-      test-path: "tests/unit/llms/vertex_ai"
+      test-path: "tests/test_litellm/llms/vertex_ai"
       workers: 1
       reruns: 2
       artifact-name: llm-vertex-ai
@@ -37,7 +37,7 @@ jobs:
       pull-requests: write
     uses: ./.github/workflows/_test-unit-base.yml
     with:
-      test-path: "tests/unit/llms --ignore=tests/unit/llms/vertex_ai"
+      test-path: "tests/test_litellm/llms --ignore=tests/test_litellm/llms/vertex_ai"
       workers: 2
       reruns: 2
       artifact-name: llm-other-providers
