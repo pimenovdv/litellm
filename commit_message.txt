@@ -1,0 +1,5 @@
+Refactor: Move frontend code and ensure complete Backend/frontend separation
+
+- Moved all UI code from `ui/` to `frontend/`.
+- Verified absence of shared Python imports in `frontend/`.
+- Documented next steps for Dockerfile and docker-compose adjustments in `current_todo.md`.
