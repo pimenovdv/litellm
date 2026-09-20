@@ -21,7 +21,7 @@ jobs:
   responses-caching-types:
     uses: ./.github/workflows/_test-unit-base.yml
     with:
-      test-path: "tests/test_litellm/responses tests/test_litellm/caching tests/test_litellm/types"
+      test-path: "tests/unit/responses tests/unit/caching tests/unit/types"
       workers: 2
       reruns: 2
       artifact-name: responses-caching-types
