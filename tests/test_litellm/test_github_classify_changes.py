@@ -1,6 +1,6 @@
 """Regression tests for CircleCI change-based job gating.
 
-`.circleci/scripts/classify_changes.sh` is the pure decision function behind
+`.github/scripts/path_filter.sh` is the pure decision function behind
 `path_filter.sh`: given the list of files a PR changed (on stdin) and a job
 category, it prints `run` or `skip`. The gating contract we lock in here:
 
@@ -21,7 +21,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS_DIR = Path(__file__).resolve().parents[2] / ".circleci" / "scripts"
+SCRIPTS_DIR = Path(__file__).resolve().parents[2] / ".github" / "scripts"
 SCRIPT = SCRIPTS_DIR / "classify_changes.sh"
 PATH_FILTER = SCRIPTS_DIR / "path_filter.sh"
 
