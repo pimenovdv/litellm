@@ -1,6 +1,5 @@
-# Текущие задачи (Очистка от RAG, Guardrails, Secret Managers, Telemetry)
-- [x] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`, `Backend/litellm/types/rag.py`, `Backend/litellm/types/integrations/rag`).
-- [ ] Удалить файлы Guardrails (директории `Backend/litellm/proxy/guardrails`, `Backend/litellm/types/proxy/guardrails`, `Backend/litellm/types/guardrails.py`, `Backend/litellm/proxy/pass_through_endpoints/passthrough_guardrails.py`).
-- [ ] Удалить менеджеры секретов (директория `Backend/litellm/secret_managers`, `Backend/litellm/types/secret_managers`, `Backend/litellm/integrations/custom_secret_manager.py`).
-- [ ] Вырезать функционал Telemetry / OpenTelemetry, если таковой еще остался.
-- [ ] Проверить и очистить `Backend/litellm/proxy/proxy_server.py` и `Backend/litellm/__init__.py` от импортов и инициализаций удаленных модулей (RAG, Guardrails, Secret Managers).
+- [x] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`, `Backend/litellm/types/rag.py`, `Backend/litellm/types/integrations/rag`) (макс 3-5 файлов).
+- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/proxy_server.py`.
+- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/middleware/billable_request_metrics_middleware.py` и `Backend/litellm/proxy/_types.py`.
+- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/public_endpoints/public_endpoints.py`, `Backend/litellm/proxy/route_llm_request.py`, `Backend/litellm/types/llms/custom_http.py` и `Backend/litellm/__init__.py`.
+- [ ] Очистить ссылки на RAG в `Backend/litellm/provider_endpoints_support_backup.json` и удалить оставшиеся тесты RAG.
