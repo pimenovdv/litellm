@@ -7,7 +7,7 @@ import pytest
 def _hermetic_server_root_path():
     """Isolate MCP discovery tests from a leaked ``SERVER_ROOT_PATH``.
 
-    ``tests/test_litellm/proxy/test_custom_proxy.py`` sets ``SERVER_ROOT_PATH`` at import time
+    ``tests/unit/proxy/test_custom_proxy.py`` sets ``SERVER_ROOT_PATH`` at import time
     (its app mounts under a custom path) and never restores it, so in a shared shard the value
     leaks into this process. The discovery routes and the 401 challenges read it, so a leaked
     value would silently rewrite every ``resource_metadata`` URL and make these tests depend on

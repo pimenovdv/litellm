@@ -95,7 +95,7 @@ jobs:
         run: uv run --no-sync python ./tests/code_coverage_tests/test_router_strategy_async.py
 
       - name: litellm_logging_code_coverage
-        run: uv run --no-sync python ./tests/code_coverage_tests/litellm_logging_code_coverage.py
+        run: uv run --no-sync python ./tests/code_coverage_tests/unit_logging_code_coverage.py
 
       - name: ensure_async_clients_test
         run: uv run --no-sync python ./tests/code_coverage_tests/ensure_async_clients_test.py
