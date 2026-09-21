@@ -90,8 +90,9 @@ def initialize_callbacks_on_proxy(
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 imported_list.append(callback)
             elif isinstance(callback, str) and callback == "presidio":
-                                    _OPTIONAL_PresidioPIIMasking,
-                )
+                                    from litellm.proxy.guardrails.guardrail_hooks.test_presidio import (
+#                                         _OPTIONAL_PresidioPIIMasking,
+                                    )
 
                 presidio_logging_only: Optional[bool] = litellm_settings.get("presidio_logging_only", None)
                 if presidio_logging_only is not None:

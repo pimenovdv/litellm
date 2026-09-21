@@ -9,6 +9,7 @@ import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.anthropic_interface.exceptions import AnthropicExceptionMapping
 from litellm.integrations.custom_guardrail import ModifyResponseException
+from litellm.types.llms.anthropic import (
     AnthropicContextManagementError,
 )
 from litellm.llms.base_llm.guardrail_translation.utils import (

@@ -1,0 +1,11 @@
+sed -i '166s/^/# /' Backend/litellm/llms/custom_httpx/llm_http_handler.py
+sed -i '167s/^/# /' Backend/litellm/llms/custom_httpx/llm_http_handler.py
+sed -i '2160s/^/# /' Backend/litellm/llms/custom_httpx/llm_http_handler.py
+sed -i '3553s/^/# /' Backend/litellm/main.py
+sed -i '94s/^/# /' Backend/litellm/proxy/common_utils/callback_utils.py
+sed -i '79s/^/# /' Backend/litellm/proxy/guardrails/guardrail_initializers.py
+sed -i '16s/^/# /' Backend/litellm/proxy/guardrails/guardrail_registry.py
+sed -i '18s/^/# /' Backend/litellm/proxy/guardrails/guardrail_registry.py
+sed -i '1653s/^/# /' Backend/litellm/proxy/pass_through_endpoints/llm_passthrough_endpoints.py
+sed -i '772s/^/# /' Backend/litellm/proxy/pass_through_endpoints/llm_provider_handlers/anthropic_passthrough_logging_handler.py
+sed -i '775s/^/# /' Backend/litellm/proxy/pass_through_endpoints/llm_provider_handlers/anthropic_passthrough_logging_handler.py
