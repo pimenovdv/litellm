@@ -1,7 +1,6 @@
-# Текущие задачи (Очистка от неактуальных артефактов)
-- [x] Удалить файлы из .circleci: `.circleci/scripts/classify_changes.sh`, `.circleci/scripts/path_filter.sh`, `.circleci/config.yml`.
-- [x] Удалить файлы из .devcontainer и packaging: `.devcontainer/post-create.sh`, `.devcontainer/devcontainer.json`, `packaging/homebrew/lite.rb`, `packaging/homebrew/README.md`.
-- [x] Удалить файлы из .semgrep: `.semgrep/rules/security/no-claude-directory.yml`, `.semgrep/rules/python/reliability/unbounded-memory.yml`, `.semgrep/rules/python/unbounded-memory.yml`, `.semgrep/rules/README.md`.
-- [x] Удалить директорию `litellm-proxy-extras` (часть 1, 5 файлов): `litellm-proxy-extras/README.md`, `litellm-proxy-extras/__init__.py`, `litellm-proxy-extras/main.py`, `litellm-proxy-extras/requirements.txt`, `litellm-proxy-extras/setup.py`. (Будет уточняться по мере выполнения)
-- [x] Проверить и удалить связанные файлы конфигурации (например, скрипты `QA` и `ruff/pyright` бюджеты, если они больше не нужны, но начать с четко указанных артефактов).
-- [x] Убедиться, что сборка Backend не требует `litellm-proxy-extras` в `pyproject.toml` (если оно там было).
+# Текущие задачи (Очистка от RAG, Guardrails, Secret Managers, Telemetry)
+- [ ] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`, `Backend/litellm/types/rag.py`, `Backend/litellm/types/integrations/rag`).
+- [ ] Удалить файлы Guardrails (директории `Backend/litellm/proxy/guardrails`, `Backend/litellm/types/proxy/guardrails`, `Backend/litellm/types/guardrails.py`, `Backend/litellm/proxy/pass_through_endpoints/passthrough_guardrails.py`).
+- [ ] Удалить менеджеры секретов (директория `Backend/litellm/secret_managers`, `Backend/litellm/types/secret_managers`, `Backend/litellm/integrations/custom_secret_manager.py`).
+- [ ] Вырезать функционал Telemetry / OpenTelemetry, если таковой еще остался.
+- [ ] Проверить и очистить `Backend/litellm/proxy/proxy_server.py` и `Backend/litellm/__init__.py` от импортов и инициализаций удаленных модулей (RAG, Guardrails, Secret Managers).
