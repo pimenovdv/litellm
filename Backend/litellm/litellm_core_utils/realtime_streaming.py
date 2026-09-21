@@ -673,7 +673,6 @@ class RealTimeStreaming:
 
     def _has_realtime_guardrails(self) -> bool:
         """Return True if any callback is registered for realtime guardrail event types."""
-        from litellm.types.guardrails import GuardrailEventHooks
 
         return self._has_realtime_guardrails_for_event_hooks(
             [
@@ -690,7 +689,6 @@ class RealTimeStreaming:
         ``pre_call`` / ``post_call`` guardrails (e.g. Model Armor on chat completions)
         must not override ``turn_detection.create_response`` on realtime sessions.
         """
-        from litellm.types.guardrails import GuardrailEventHooks
 
         return self._has_realtime_guardrails_for_event_hooks([GuardrailEventHooks.realtime_input_transcription])
 
@@ -719,7 +717,6 @@ class RealTimeStreaming:
         typed user messages and tool outputs use ``pre_call``.
         """
         from litellm.integrations.custom_guardrail import CustomGuardrail
-        from litellm.types.guardrails import GuardrailEventHooks
 
         if event_hooks is None:
             event_hooks = [GuardrailEventHooks.realtime_input_transcription]
@@ -1176,7 +1173,6 @@ class RealTimeStreaming:
                 guardrail_turn_detection_injected = False
                 msg_type: Optional[str] = None
                 try:
-                    from litellm.types.guardrails import GuardrailEventHooks
 
                     msg_obj = json.loads(message)
                     msg_type = msg_obj.get("type")
