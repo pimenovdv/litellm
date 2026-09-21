@@ -212,8 +212,17 @@ async def test_vector_store_file_create_denies_other_team_path_store():
     mock_base_process.assert_not_called()
 
 
-<<<<<<< HEAD
-=======
+
+
+
+
+
+
+
+
+
+
+@pytest.mark.asyncio
 async def test_responses_file_search_denies_other_team_vector_store():
     from litellm.proxy.common_request_processing import (
         _authorize_response_file_search_vector_stores,
