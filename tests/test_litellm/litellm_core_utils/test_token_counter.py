@@ -18,7 +18,7 @@ from litellm import create_pretrained_tokenizer, decode, encode, get_modified_ma
 from litellm import token_counter as token_counter_old
 from litellm.litellm_core_utils.token_counter import token_counter as token_counter_new
 from tests.large_text import text
-from tests.test_litellm.litellm_core_utils.messages_with_counts import (
+from tests.unit.litellm_core_utils.messages_with_counts import (
     MESSAGES_TEXT,
     MESSAGES_WITH_IMAGES,
     MESSAGES_WITH_TOOLS,

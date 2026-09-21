@@ -16,7 +16,7 @@ from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.rubrik import RubrikLogger
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler
 
-from tests.test_litellm.integrations.rubrik_test_helpers import (
+from tests.unit.integrations.rubrik_test_helpers import (
     make_inputs_with_tools,
     make_tool_call_dict,
 )
