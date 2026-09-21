@@ -25,7 +25,7 @@ def test_prompt_manager_initialization():
     # Test with the existing prompts directory
     prompt_dir = Path(
         __file__
-    ).parent  # Current directory when running from tests/test_litellm/prompts
+    ).parent  # Current directory when running from tests/unit/prompts
     manager = PromptManager(prompt_directory=str(prompt_dir))
 
     # Should have loaded at least the sample prompts
@@ -59,7 +59,7 @@ def test_render_simple_template():
     """Test rendering a simple template with variables."""
     prompt_dir = Path(
         __file__
-    ).parent  # Current directory when running from tests/test_litellm/prompts
+    ).parent  # Current directory when running from tests/unit/prompts
     manager = PromptManager(prompt_directory=str(prompt_dir))
 
     # Test sample_prompt rendering
@@ -75,7 +75,7 @@ def test_render_chat_prompt():
     """Test rendering the chat prompt with conditional content."""
     prompt_dir = Path(
         __file__
-    ).parent  # Current directory when running from tests/test_litellm/prompts
+    ).parent  # Current directory when running from tests/unit/prompts
     manager = PromptManager(prompt_directory=str(prompt_dir))
 
     # Test with system context
@@ -101,7 +101,7 @@ def test_render_coding_assistant():
     """Test rendering the coding assistant prompt with complex logic."""
     prompt_dir = Path(
         __file__
-    ).parent  # Current directory when running from tests/test_litellm/prompts
+    ).parent  # Current directory when running from tests/unit/prompts
     manager = PromptManager(prompt_directory=str(prompt_dir))
 
     rendered = manager.render(
@@ -162,7 +162,7 @@ def test_prompt_not_found():
     """Test error handling for non-existent prompts."""
     prompt_dir = Path(
         __file__
-    ).parent  # Current directory when running from tests/test_litellm/prompts
+    ).parent  # Current directory when running from tests/unit/prompts
     manager = PromptManager(prompt_directory=str(prompt_dir))
 
     with pytest.raises(KeyError, match="Prompt 'nonexistent' not found"):
@@ -173,7 +173,7 @@ def test_list_prompts():
     """Test listing available prompts."""
     prompt_dir = Path(
         __file__
-    ).parent  # Current directory when running from tests/test_litellm/prompts
+    ).parent  # Current directory when running from tests/unit/prompts
     manager = PromptManager(prompt_directory=str(prompt_dir))
 
     prompts = manager.list_prompts()
@@ -187,7 +187,7 @@ def test_get_prompt_metadata():
     """Test retrieving prompt metadata."""
     prompt_dir = Path(
         __file__
-    ).parent  # Current directory when running from tests/test_litellm/prompts
+    ).parent  # Current directory when running from tests/unit/prompts
     manager = PromptManager(prompt_directory=str(prompt_dir))
 
     metadata = manager.get_prompt_metadata("sample_prompt")
@@ -224,7 +224,7 @@ def test_add_prompt_programmatically():
     """Test adding prompts programmatically."""
     prompt_dir = Path(
         __file__
-    ).parent  # Current directory when running from tests/test_litellm/prompts
+    ).parent  # Current directory when running from tests/unit/prompts
     manager = PromptManager(prompt_directory=str(prompt_dir))
 
     initial_count = len(manager.prompts)

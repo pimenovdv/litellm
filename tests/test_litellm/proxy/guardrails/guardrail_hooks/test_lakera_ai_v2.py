@@ -1,7 +1,7 @@
 """
 Tests for Lakera AI v2 guardrail hook (post-call and shared behavior).
 
-PR checklist requires at least one test in tests/test_litellm/.
+PR checklist requires at least one test in tests/unit/.
 Additional tests live in tests/guardrails_tests/test_lakera_v2.py.
 """
 
