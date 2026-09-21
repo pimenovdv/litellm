@@ -120,7 +120,6 @@ from litellm.llms.cohere.common_utils import CohereModelInfo
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
 from litellm.llms.openai_like.json_loader import JSONProviderRegistry
-from litellm.llms.vertex_ai.vertex_llm_base import (
     VertexAIModelRoute,
     get_vertex_ai_model_route,
 )
@@ -3550,7 +3549,7 @@ def _complete_vertex_ai(ctx: _CompletionDispatchContext) -> _CompletionDispatchR
     elif model_route == VertexAIModelRoute.AGENT_ENGINE:
         # Vertex AI Agent Engine (Reasoning Engines)
                     VertexAgentEngineConfig,
-#         )
+        )
 
         vertex_agent_engine_config = VertexAgentEngineConfig()
 

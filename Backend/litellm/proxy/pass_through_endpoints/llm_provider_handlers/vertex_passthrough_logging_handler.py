@@ -452,10 +452,10 @@ class VertexPassthroughLoggingHandler:
             chunk_parsing_logic: Any = vertex_iterator._common_chunk_parsing_logic
             parsed_chunks = [chunk_parsing_logic(chunk) for chunk in all_chunks]
         elif "rawPredict" in url_route or "streamRawPredict" in url_route:
-            from litellm.llms.base_llm.base_model_iterator import (
+                        from litellm.llms.base_llm.base_model_iterator import (
                 BaseModelResponseIterator,
             )
-            from litellm.types.llms.vertex_ai import ModelResponseIterator
+
             vertex_iterator = ModelResponseIterator(
                 streaming_response=None,
                 sync_stream=False,

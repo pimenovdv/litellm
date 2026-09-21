@@ -12,7 +12,6 @@ from litellm.litellm_core_utils.litellm_logging import use_custom_pricing_for_mo
 from litellm.litellm_core_utils.prompt_templates.common_utils import (
     get_content_from_model_response,
 )
-from litellm.types.llms.anthropic import (
     ModelResponseIterator as AnthropicModelResponseIterator,
 )
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
@@ -769,10 +768,10 @@ class AnthropicPassthroughLoggingHandler:
         Handle Anthropic batch creation passthrough logging.
         Creates a managed object for cost tracking when batch job is successfully created.
         """
-#         import base64
+        import base64
 
         from litellm._uuid import uuid
-#                 from litellm.types.utils import Choices, SpecialEnums
+                from litellm.types.utils import Choices, SpecialEnums
 
         try:
             _json_response = httpx_response.json()

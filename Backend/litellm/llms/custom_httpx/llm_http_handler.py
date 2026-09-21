@@ -163,8 +163,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-#             from litellm.types.llms.anthropic import (
-#         AnthropicMessagesStreamingResponse,
+            AnthropicMessagesStreamingResponse,
     )
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
@@ -2157,7 +2156,7 @@ class BaseLLMHTTPHandler:
         logging_obj.model_call_details["httpx_response"] = response
 
         initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
-#         if stream:
+        if stream:
                             AnthropicMessagesStreamingResponse,
                 anthropic_messages_stream_hidden_params,
             )
