@@ -21,7 +21,7 @@ jobs:
   core-utils:
     uses: ./.github/workflows/_test-unit-base.yml
     with:
-      test-path: "tests/unit/litellm_core_utils"
+      test-path: "tests/test_litellm/litellm_core_utils"
       workers: 2
       reruns: 1
       artifact-name: core-utils
