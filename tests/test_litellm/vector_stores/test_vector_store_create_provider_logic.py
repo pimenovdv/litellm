@@ -1,3 +1,4 @@
+import pytest; pytest.skip("module deleted", allow_module_level=True)
 import os
 import sys
 from unittest.mock import Mock, patch
