@@ -1,3 +1,0 @@
-- [x] Fix test errors
-- [x] Create PR test workflow
-- [x] Verify CI workflow deletion and branch protection compatibility
