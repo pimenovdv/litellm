@@ -39,7 +39,6 @@ jobs:
         tests/test_litellm/vector_stores
         tests/test_litellm/videos
         tests/test_litellm/test_*.py
-        tests/unit/test_*.py
       workers: 2
       reruns: 2
       artifact-name: misc

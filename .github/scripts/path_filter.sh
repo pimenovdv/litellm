@@ -9,7 +9,7 @@ run_full() {
   exit 0
 }
 
-if [ "${GITHUB_EVENT_NAME:-}" != "pull_request" ] && [ -z "${GITHUB_HEAD_REF:-}" ]; then run_full "not a pull request"; fi
+[ -n "${CIRCLE_PULL_REQUEST:-}" ] || run_full "not a pull request"
 
 candidate_bases="main litellm_internal_staging litellm_oss_staging"
 merge_base=""
@@ -37,4 +37,4 @@ if [ "$decision" = run ]; then
 fi
 
 echo "path-filter[$category]: only unrelated (docs/client) changes detected; halting job as successful"
-exit 0
+circleci-agent step halt
