@@ -1,0 +1,3 @@
+- [ ] Удалить Guardrails (директория `Backend/litellm/proxy/guardrails`, ссылки в коде).
+- [ ] Удалить сторонние менеджеры секретов из `Backend/litellm/secret_managers/` кроме базовых (оставить local, os).
+- [ ] Удалить телеметрию (если осталась) в `Backend/litellm/`.
