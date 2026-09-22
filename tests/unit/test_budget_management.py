@@ -72,6 +72,7 @@ async def budget_setup():
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="requires proxy running on 4000")
 async def test_create_budget_with_duration(budget_setup):
     """
     Test creating a budget with a specified duration and verify that 'budget_reset_at'
