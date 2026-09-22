@@ -17,4 +17,4 @@ jobs:
         pip install fastapi starlette pytest-asyncio pydantic-settings pytest python-multipart python-dotenv pytest-cov pytest-mock respx vcrpy pytest-recording
     - name: Run proxy pre call tests
       run: |
-        PYTHONPATH=Backend:./ python -m pytest -m unit tests/test_litellm/proxy/test_litellm_pre_call_utils.py -v
+        PYTHONPATH=Backend:./ python -m pytest tests/test_litellm/proxy/test_litellm_pre_call_utils.py -v
