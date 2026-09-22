@@ -79,7 +79,7 @@ def run_lint_check(unique_names):
 
 
 def main():
-    # llms_dir = "./litellm/llms/"  # Update this path if needed
+    # llms_dir = "./Backend/litellm/llms/"  # Update this path if needed
     llms_dir = "litellm/litellm/llms"  # LOCAL TESTING
 
     unique_names = get_unique_names_from_llms_dir(llms_dir)
