@@ -7,10 +7,8 @@ import httpx
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.gemini.videos.transformation import GeminiVideoConfig
-from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
-    ModelResponseIterator as GeminiModelResponseIterator,
-)
+
+
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
 from litellm.types.utils import (
     ModelResponse,
@@ -43,13 +41,9 @@ class GeminiPassthroughLoggingHandler:
         if "predictLongRunning" in url_route:
             model = GeminiPassthroughLoggingHandler.extract_model_from_url(url_route)
 
-            gemini_video_config = GeminiVideoConfig()
-            litellm_video_response = gemini_video_config.transform_video_create_response(
-                model=model,
-                raw_response=httpx_response,
-                logging_obj=logging_obj,
-                custom_llm_provider="gemini",
-                request_data=request_body,
+            pass
+            litellm_video_response = litellm.VideoResponse(
+
             )
             logging_obj.model = model
             logging_obj.model_call_details["model"] = model
@@ -175,12 +169,7 @@ class GeminiPassthroughLoggingHandler:
     ) -> Optional[Union[ModelResponse, TextCompletionResponse]]:
         parsed_chunks = []
         if "generateContent" in url_route or "streamGenerateContent" in url_route:
-            gemini_iterator: Any = GeminiModelResponseIterator(
-                streaming_response=None,
-                sync_stream=False,
-                logging_obj=litellm_logging_obj,
-            )
-            chunk_parsing_logic: Any = gemini_iterator._common_chunk_parsing_logic
+            chunk_parsing_logic: Any = None
             parsed_chunks = [chunk_parsing_logic(chunk) for chunk in all_chunks]
         else:
             return None

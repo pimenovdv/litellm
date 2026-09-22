@@ -17,9 +17,6 @@ import litellm
 from litellm._logging import verbose_logger
 from litellm.constants import request_timeout
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.azure_ai.ocr.common_utils import (
-    is_azure_document_intelligence_model,
-)
 from litellm.llms.base_llm.ocr.transformation import BaseOCRConfig, OCRResponse
 from litellm.llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
 from litellm.rust_bridge import ocr as rust_ocr_bridge
@@ -103,7 +100,7 @@ def _prepare_ocr_request(
     suppress_dynamic_api_base = (
         not caller_supplied_api_base
         and custom_llm_provider == "azure_ai"
-        and is_azure_document_intelligence_model(model)
+
     )
     if dynamic_api_key:
         api_key = dynamic_api_key
@@ -201,8 +198,6 @@ def _rust_bridge_api_base(
     if prepared_request.api_base is not None:
         return prepared_request.api_base
     if prepared_request.custom_llm_provider == "azure_ai":
-        if is_azure_document_intelligence_model(prepared_request.model):
-            return resolve_secret("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT")
         return resolve_secret("AZURE_AI_API_BASE")
     return None
 

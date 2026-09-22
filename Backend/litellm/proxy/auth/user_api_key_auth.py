@@ -28,8 +28,6 @@ from litellm.constants import (
     LITELLM_PROXY_BUDGET_NAME,
     LITELLM_PROXY_MASTER_KEY_ALIAS,
 )
-from litellm.integrations.otel.model.config import is_otel_v2_enabled
-from litellm.integrations.otel.runtime import phase_span, seed_request_identity
 from litellm.litellm_core_utils.dd_tracing import tracer
 from litellm.litellm_core_utils.dot_notation_indexing import get_nested_value
 from litellm.proxy._types import *
@@ -1031,7 +1029,7 @@ def _ensure_parent_otel_span_on_request_state(request: Request) -> None:
     # Under V2 the FastAPI instrumentor stamps http.route / url.path on the server
     # span; only the legacy logger needs these set explicitly.
     set_route_attrs = getattr(open_telemetry_logger, "set_proxy_request_route_attributes", None)
-    if not is_otel_v2_enabled() and set_route_attrs is not None:
+    if not False and set_route_attrs is not None:
         set_route_attrs(
             parent_otel_span,
             url_path=get_request_route(request=request),
@@ -2604,11 +2602,6 @@ async def user_api_key_auth(
     # persists on the request task (detaching the span's context token inside the
     # ``with`` would unwind a Baggage attach made within it) and every post-auth
     # span — pre-call, LLM call, guardrail, spend write — inherits team/key/user.
-    seed_request_identity(
-        user_api_key_auth_obj,
-        model=request_data.get("model") if isinstance(request_data, dict) else None,
-    )
-    user_api_key_auth_obj.request_route = normalize_request_route(route)
 
     # Resolve caller identity once, here at the seam, into a single per-request
     # Principal projected off the key object the builder already fetched (no

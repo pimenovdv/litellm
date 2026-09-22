@@ -10,7 +10,7 @@ from pydantic import BaseModel
 import litellm
 from litellm._logging import verbose_logger
 from litellm._uuid import uuid
-from litellm.integrations.otel.model.config import is_otel_v2_enabled
+
 from litellm.proxy._types import (  # key request types; user request types; team request types; customer request types
     BudgetNewRequest,
     DeleteCustomerRequest,

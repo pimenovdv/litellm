@@ -34,9 +34,7 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES
 from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.realtime_streaming import RealTimeStreaming
 from litellm.litellm_core_utils.url_utils import encode_url_path_segment
-from litellm.llms.base_llm.anthropic_messages.transformation import (
-    BaseAnthropicMessagesConfig,
-)
+
 from litellm.llms.base_llm.audio_transcription.transformation import (
     BaseAudioTranscriptionConfig,
 )
@@ -53,9 +51,7 @@ from litellm.llms.base_llm.files.transformation import (
     BaseFilesConfig,
     BaseFileUploadStream,
 )
-from litellm.llms.base_llm.google_genai.transformation import (
-    BaseGoogleGenAIGenerateContentConfig,
-)
+
 from litellm.llms.base_llm.image_edit.transformation import BaseImageEditConfig
 from litellm.llms.base_llm.image_generation.transformation import (
     BaseImageGenerationConfig,
@@ -97,7 +93,7 @@ from litellm.types.integrations.custom_logger import (
     AgenticLoopRequestPatch,
 )
 from litellm.types.llms.anthropic_messages.anthropic_response import (
-    AnthropicMessagesResponse,
+    Any,
 )
 from litellm.types.llms.anthropic_skills import (
     DeleteSkillResponse,
@@ -163,8 +159,6 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-            AnthropicMessagesStreamingResponse,
-    )
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
         CancelEvalResponse,
@@ -1887,7 +1881,7 @@ class BaseLLMHTTPHandler:
         request_body: dict,
         stream: bool,
         logging_obj: LiteLLMLoggingObj,
-        provider_config: BaseAnthropicMessagesConfig,
+        provider_config: Any,
         litellm_params: GenericLiteLLMParams,
         api_key: Optional[str],
         model: str,
@@ -1969,7 +1963,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: Any,
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -1980,7 +1974,7 @@ class BaseLLMHTTPHandler:
         api_base: Optional[str] = None,
         stream: Optional[bool] = False,
         kwargs: Optional[Dict[str, Any]] = None,
-    ) -> Union[AnthropicMessagesResponse, AsyncIterator]:
+    ) -> Union[Any, AsyncIterator]:
         from litellm.litellm_core_utils.get_provider_specific_headers import (
             ProviderSpecificHeaderUtils,
         )
@@ -2155,11 +2149,8 @@ class BaseLLMHTTPHandler:
         # used for logging + cost tracking
         logging_obj.model_call_details["httpx_response"] = response
 
-        initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
+        initial_response: Union[AsyncIterator, Any]
         if stream:
-                            AnthropicMessagesStreamingResponse,
-                anthropic_messages_stream_hidden_params,
-            )
 
             completion_stream = anthropic_messages_provider_config.get_async_streaming_response_iterator(
                 model=model,
@@ -2179,9 +2170,6 @@ class BaseLLMHTTPHandler:
                     completion_stream=completion_stream,
                     hidden_params=stream_hidden_params,
                 )
-
-                            AgenticAnthropicStreamingIterator,
-            )
 
             initial_response = AgenticAnthropicStreamingIterator(
                 completion_stream=completion_stream,
@@ -2220,16 +2208,16 @@ class BaseLLMHTTPHandler:
     async def _finalize_anthropic_messages_response(
         self,
         *,
-        initial_response: AnthropicMessagesResponse,
+        initial_response: Any,
         model: str,
         messages: list[dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: Any,
         anthropic_messages_optional_request_params: dict,
         logging_obj: LiteLLMLoggingObj,
         custom_llm_provider: str,
         api_key: str | None,
         kwargs: dict,
-    ) -> AnthropicMessagesResponse | AsyncIterator:
+    ) -> Any | AsyncIterator:
         # Inject api_key into kwargs so follow-up calls in agentic hooks can
         # authenticate. api_key is a named param here (not in kwargs), so
         # _prepare_followup_kwargs would miss it otherwise.
@@ -2269,7 +2257,7 @@ class BaseLLMHTTPHandler:
         headers: dict,
         request_body: dict,
         timeout: float | httpx.Timeout | None,
-    ) -> AnthropicMessagesResponse | None:
+    ) -> Any | None:
         if custom_llm_provider not in ("azure_ai", "anthropic"):
             return None
         if litellm_params.get("rust") is not True and not BaseLLMHTTPHandler._rust_env_enabled():
@@ -2299,19 +2287,14 @@ class BaseLLMHTTPHandler:
         if rust_response is None:
             return None
 
-        response_obj = cast(AnthropicMessagesResponse, dict(rust_response))
+        response_obj = cast(Any, dict(rust_response))
         response_obj["_hidden_params"] = {"additional_headers": {"x-litellm-rust": "true"}}
         return response_obj
 
     @staticmethod
     def _rust_anthropic_messages_fake_stream(
-        rust_response: AnthropicMessagesResponse,
-    ) -> "AnthropicMessagesStreamingResponse":
-                    FakeAnthropicMessagesStreamIterator,
-        )
-                    AnthropicMessagesStreamHiddenParams,
-            AnthropicMessagesStreamingResponse,
-        )
+        rust_response: Any,
+    ):
 
         completion_stream = cast(AsyncIterator[bytes], FakeAnthropicMessagesStreamIterator(response=rust_response))
         hidden_params = AnthropicMessagesStreamHiddenParams(additional_headers={"x-litellm-rust": "true"})
@@ -2324,7 +2307,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: Any,
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         _is_async: bool,
@@ -2336,8 +2319,8 @@ class BaseLLMHTTPHandler:
         stream: Optional[bool] = False,
         kwargs: Optional[Dict[str, Any]] = None,
     ) -> Union[
-        AnthropicMessagesResponse,
-        Coroutine[Any, Any, Union[AnthropicMessagesResponse, AsyncIterator]],
+        Any,
+        Coroutine[Any, Any, Union[Any, AsyncIterator]],
     ]:
         """
         LLM HTTP Handler for Anthropic Messages
@@ -5345,20 +5328,6 @@ class BaseLLMHTTPHandler:
             if logging_obj is not None
             else False
         )
-        if websearch_converted_stream and isinstance(response, dict):
-            from typing import cast
-
-            from litellm._logging import verbose_logger
-                            FakeAnthropicMessagesStreamIterator,
-            )
-            from litellm.types.llms.anthropic_messages.anthropic_response import (
-                AnthropicMessagesResponse,
-            )
-
-            verbose_logger.debug(
-                "WebSearchInterception: Agentic loop completed, converting non-streaming response to fake stream"
-            )
-            return FakeAnthropicMessagesStreamIterator(response=cast(AnthropicMessagesResponse, response))
         return response
 
     async def _call_agentic_completion_hooks(
@@ -5366,7 +5335,7 @@ class BaseLLMHTTPHandler:
         response: Any,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: "BaseAnthropicMessagesConfig",
+        anthropic_messages_provider_config: "Any",
         anthropic_messages_optional_request_params: Dict,
         logging_obj: "LiteLLMLoggingObj",
         stream: bool,
@@ -5668,7 +5637,6 @@ class BaseLLMHTTPHandler:
             if logging_obj is not None
             else False
         )
-
         if websearch_converted_stream:
             from litellm._logging import verbose_logger
             from litellm.llms.base_llm.base_model_iterator import (
@@ -5698,8 +5666,8 @@ class BaseLLMHTTPHandler:
             BaseImageGenerationConfig,
             BaseVectorStoreConfig,
             BaseVectorStoreFilesConfig,
-            BaseGoogleGenAIGenerateContentConfig,
-            BaseAnthropicMessagesConfig,
+            Any,
+            Any,
             BaseBatchesConfig,
             BaseOCRConfig,
             BaseVideoConfig,
@@ -11063,7 +11031,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         contents: Any,
-        generate_content_provider_config: BaseGoogleGenAIGenerateContentConfig,
+        generate_content_provider_config: Any,
         generate_content_config_dict: Dict,
         tools: Any,
         custom_llm_provider: str,
@@ -11195,7 +11163,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         contents: Any,
-        generate_content_provider_config: BaseGoogleGenAIGenerateContentConfig,
+        generate_content_provider_config: Any,
         generate_content_config_dict: Dict,
         tools: Any,
         custom_llm_provider: str,

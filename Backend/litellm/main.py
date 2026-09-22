@@ -115,14 +115,9 @@ from litellm.llms.base_llm import BaseConfig, BaseImageGenerationConfig
 from litellm.llms.base_llm.base_model_iterator import (
     convert_model_response_to_streaming,
 )
-from litellm.llms.bedrock.common_utils import BedrockModelInfo
-from litellm.llms.cohere.common_utils import CohereModelInfo
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
-from litellm.llms.openai_like.json_loader import JSONProviderRegistry
-    VertexAIModelRoute,
-    get_vertex_ai_model_route,
-)
+
 from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
 from litellm.types.completion import (
@@ -199,73 +194,6 @@ from .litellm_core_utils.prompt_templates.factory import (
     stringify_json_tool_call_content,
 )
 from .litellm_core_utils.streaming_chunk_builder_utils import ChunkProcessor
-from .llms.anthropic.chat import AnthropicChatCompletion
-from .llms.azure.audio_transcriptions import AzureAudioTranscription
-from .llms.azure.azure import AzureChatCompletion, _check_dynamic_azure_params
-from .llms.azure.chat.o_series_handler import AzureOpenAIO1ChatCompletion
-from .llms.azure.completion.handler import AzureTextCompletion
-from .llms.azure_ai.anthropic.handler import AzureAnthropicChatCompletion
-from .llms.azure_ai.embed import AzureAIEmbedding
-from .llms.bedrock.chat import BedrockConverseLLM, BedrockLLM
-from .llms.bedrock.embed.embedding import BedrockEmbedding
-from .llms.bedrock.image_edit.handler import BedrockImageEdit
-from .llms.bedrock.image_generation.image_handler import BedrockImageGeneration
-from .llms.bytez.chat.transformation import BytezChatConfig
-from .llms.clarifai.chat.transformation import ClarifaiConfig
-from .llms.codestral.completion.handler import CodestralTextCompletion
-from .llms.cohere.embed import handler as cohere_embed
-from .llms.custom_httpx.aiohttp_handler import BaseLLMAIOHTTPHandler
-from .llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
-from .llms.custom_llm import CustomLLM, custom_chat_llm_router
-from .llms.databricks.embed.handler import DatabricksEmbeddingHandler
-from .llms.deprecated_providers import aleph_alpha, palm
-from .llms.gdc.chat.transformation import GDCGeminiConfig
-from .llms.gemini.common_utils import get_api_key_from_env
-from .llms.groq.chat.handler import GroqChatCompletion
-from .llms.heroku.chat.transformation import HerokuChatConfig
-from .llms.huggingface.embedding.handler import HuggingFaceEmbedding
-from .llms.lemonade.chat.transformation import LemonadeChatConfig
-from .llms.nlp_cloud.chat.handler import completion as nlp_cloud_chat_completion
-from .llms.nvidia_riva.audio_transcription.handler import (
-    NvidiaRivaAudioTranscription,
-)
-from .llms.nvidia_riva.audio_transcription.transformation import (
-    NvidiaRivaAudioTranscriptionConfig,
-)
-from .llms.oci.chat.transformation import OCIChatConfig
-from .llms.ollama.completion import handler as ollama
-from .llms.oobabooga.chat import oobabooga
-from .llms.openai.completion.handler import OpenAITextCompletion
-from .llms.openai.image_variations.handler import OpenAIImageVariationsHandler
-from .llms.openai.openai import OpenAIChatCompletion
-from .llms.openai.transcriptions.handler import OpenAIAudioTranscription
-from .llms.openai_like.chat.handler import OpenAILikeChatHandler
-from .llms.openai_like.embedding.handler import OpenAILikeEmbeddingHandler
-from .llms.ovhcloud.chat.transformation import OVHCloudChatConfig
-from .llms.petals.completion import handler as petals_handler
-from .llms.predibase.chat.handler import PredibaseChatCompletion
-from .llms.replicate.chat.handler import completion as replicate_chat_completion
-from .llms.sagemaker.chat.handler import SagemakerChatHandler
-from .llms.sagemaker.completion.handler import SagemakerLLM
-from .llms.sap.chat.handler import GenAIHubOrchestration
-from .llms.vertex_ai import vertex_ai_non_gemini
-from .llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import VertexLLM
-from .llms.vertex_ai.gemini_embeddings.batch_embed_content_handler import (
-    GoogleBatchEmbeddings,
-)
-from .llms.vertex_ai.image_generation.image_generation_handler import (
-    VertexImageGeneration,
-)
-from .llms.vertex_ai.multimodal_embeddings.embedding_handler import (
-    VertexMultimodalEmbedding,
-)
-from .llms.vertex_ai.vertex_ai_partner_models.main import VertexAIPartnerModels
-from .llms.vertex_ai.vertex_embeddings.embedding_handler import VertexEmbedding
-from .llms.vertex_ai.vertex_gemma_models.main import VertexAIGemmaModels
-from .llms.vertex_ai.vertex_model_garden.main import VertexAIModelGardenModels
-from .llms.vllm.completion import handler as vllm_handler
-from .llms.watsonx.chat.handler import WatsonXChatHandler
-from .llms.watsonx.common_utils import IBMWatsonXMixin
 from .types.llms.anthropic import AnthropicThinkingParam
 from .types.llms.openai import (
     ChatCompletionAssistantMessage,
@@ -290,51 +218,7 @@ from .types.utils import (
 )
 
 ####### ENVIRONMENT VARIABLES ###################
-openai_chat_completions = OpenAIChatCompletion()
-openai_text_completions = OpenAITextCompletion()
-openai_audio_transcriptions = OpenAIAudioTranscription()
-nvidia_riva_audio_transcriptions = NvidiaRivaAudioTranscription()
-openai_image_variations = OpenAIImageVariationsHandler()
-groq_chat_completions = GroqChatCompletion()
-sap_gen_ai_hub_chat_completions = GenAIHubOrchestration()
-sap_gen_ai_hub_emb = GenAIHubOrchestration()
-azure_ai_embedding = AzureAIEmbedding()
-anthropic_chat_completions = AnthropicChatCompletion()
-azure_anthropic_chat_completions = AzureAnthropicChatCompletion()
-azure_chat_completions = AzureChatCompletion()
-azure_o1_chat_completions = AzureOpenAIO1ChatCompletion()
-azure_text_completions = AzureTextCompletion()
-azure_audio_transcriptions = AzureAudioTranscription()
-huggingface_embed = HuggingFaceEmbedding()
-predibase_chat_completions = PredibaseChatCompletion()
-codestral_text_completions = CodestralTextCompletion()
-bedrock_converse_chat_completion = BedrockConverseLLM()
-bedrock_embedding = BedrockEmbedding()
-bedrock_image_generation = BedrockImageGeneration()
-bedrock_image_edit = BedrockImageEdit()
-vertex_chat_completion = VertexLLM()
-vertex_embedding = VertexEmbedding()
-vertex_multimodal_embedding = VertexMultimodalEmbedding()
-vertex_image_generation = VertexImageGeneration()
-google_batch_embeddings = GoogleBatchEmbeddings()
-vertex_partner_models_chat_completion = VertexAIPartnerModels()
-vertex_gemma_chat_completion = VertexAIGemmaModels()
-vertex_model_garden_chat_completion = VertexAIModelGardenModels()
-gdc_transformation = GDCGeminiConfig()
 # vertex_text_to_speech is now replaced by VertexAITextToSpeechConfig
-sagemaker_llm = SagemakerLLM()
-watsonx_chat_completion = WatsonXChatHandler()
-openai_like_embedding = OpenAILikeEmbeddingHandler()
-openai_like_chat_completion = OpenAILikeChatHandler()
-databricks_embedding = DatabricksEmbeddingHandler()
-base_llm_http_handler = BaseLLMHTTPHandler()
-base_llm_aiohttp_handler = BaseLLMAIOHTTPHandler()
-sagemaker_chat_completion = SagemakerChatHandler()
-bytez_transformation = BytezChatConfig()
-heroku_transformation = HerokuChatConfig()
-oci_transformation = OCIChatConfig()
-ovhcloud_transformation = OVHCloudChatConfig()
-lemonade_transformation = LemonadeChatConfig()
 
 MOCK_RESPONSE_TYPE = Union[str, Exception, dict, ModelResponse, ModelResponseStream]
 ####### COMPLETION ENDPOINTS ################
@@ -3547,9 +3431,6 @@ def _complete_vertex_ai(ctx: _CompletionDispatchContext) -> _CompletionDispatchR
             client=client,
         )
     elif model_route == VertexAIModelRoute.AGENT_ENGINE:
-        # Vertex AI Agent Engine (Reasoning Engines)
-                    VertexAgentEngineConfig,
-        )
 
         vertex_agent_engine_config = VertexAgentEngineConfig()
 
@@ -7696,9 +7577,6 @@ def transcription(
             ),
         )
     elif custom_llm_provider == "soniox":
-                    SonioxAudioTranscriptionHandler,
-        )
-
         response = SonioxAudioTranscriptionHandler().audio_transcriptions(
             model=model,
             audio_file=file,
@@ -8039,8 +7917,6 @@ def speech(
                 litellm_params=litellm_params_dict,
             )
     elif custom_llm_provider == "elevenlabs":
-                    ElevenLabsTextToSpeechConfig,
-        )
 
         if text_to_speech_provider_config is None:
             text_to_speech_provider_config = ElevenLabsTextToSpeechConfig()
@@ -8082,8 +7958,6 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "vertex_ai" or custom_llm_provider == "vertex_ai_beta":
-                    VertexAITextToSpeechConfig,
-        )
 
         generic_optional_params = GenericLiteLLMParams(**kwargs)
 
@@ -8182,8 +8056,6 @@ def speech(
             **kwargs,
         )
     elif custom_llm_provider == "minimax":
-                    MinimaxTextToSpeechConfig,
-        )
 
         # MiniMax Text-to-Speech
         if text_to_speech_provider_config is None:
@@ -8219,8 +8091,6 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "aws_polly":
-                    AWSPollyTextToSpeechConfig,
-        )
 
         # AWS Polly Text-to-Speech
         if text_to_speech_provider_config is None:
