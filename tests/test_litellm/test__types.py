@@ -1,4 +1,4 @@
-# tests/test_litellm/proxy/test__types.py
+# tests/unit/proxy/test__types.py
 
 from litellm.proxy._types import LiteLLM_TeamMembership
 

@@ -77,5 +77,5 @@ File delete asserts `object=="file"` and `deleted==True`.
 
 Driving a batch to `completed`, cost tracking on completion, and the DB write-back
 are not covered here; the 24h window makes them unfit for a synchronous gate. That
-logic belongs in a DI-stubbed proxy integration test under `tests/test_litellm/proxy/`
+logic belongs in a DI-stubbed proxy integration test under `tests/unit/proxy/`
 where the provider client is injected to return `completed` deterministically.

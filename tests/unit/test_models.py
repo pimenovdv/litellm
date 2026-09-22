@@ -269,7 +269,7 @@ async def delete_model(session, model_id="123", key="sk-1234"):
 
 
 @pytest.mark.skip(
-    reason="Requires live proxy + OPENAI_API_KEY. Deterministic mock version in tests/test_litellm/proxy/management_endpoints/test_model_management_endpoints.py::TestAddAndDeleteModelLifecycle"
+    reason="Requires live proxy + OPENAI_API_KEY. Deterministic mock version in tests/unit/proxy/management_endpoints/test_model_management_endpoints.py::TestAddAndDeleteModelLifecycle"
 )
 @pytest.mark.asyncio
 async def test_add_and_delete_models():
@@ -279,7 +279,7 @@ async def test_add_and_delete_models():
     - Delete model
     - Call model -> expect to fail
     """
-    from litellm._uuid import uuid
+    import uuid
 
     async with aiohttp.ClientSession() as session:
         key_gen = await generate_key(session=session)
@@ -401,7 +401,7 @@ async def test_add_model_run_health():
     Call /health
     -> Ensure the health check for the endpoint is working as expected
     """
-    from litellm._uuid import uuid
+    import uuid
 
     async with aiohttp.ClientSession() as session:
         key_gen = await generate_key(session=session)
@@ -468,7 +468,7 @@ async def test_get_personal_models_for_user():
     """
     Test /models endpoint with team
     """
-    from tests.test_users import new_user
+    from tests.unit.test_users import new_user
 
     async with aiohttp.ClientSession() as session:
         # Creat a user
@@ -520,9 +520,9 @@ async def test_team_model_e2e():
     - update model
     - delete model
     """
-    from tests.test_users import new_user
-    from tests.test_team import new_team
-    from litellm._uuid import uuid
+    from tests.unit.test_users import new_user
+    from tests.unit.test_team import new_team
+    import uuid
 
     async with aiohttp.ClientSession() as session:
         # Creat a user

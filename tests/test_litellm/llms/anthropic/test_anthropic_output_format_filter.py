@@ -2,7 +2,7 @@
 Coverage for filter_anthropic_output_schema's array/object constraint stripping.
 
 Mirrors tests/litellm/llms/anthropic/test_anthropic_schema_filter.py, but lives
-under tests/test_litellm/ so the coverage-uploading CI job exercises the stripped
+under tests/unit/ so the coverage-uploading CI job exercises the stripped
 keyword handling (uniqueItems / contains / minProperties / maxProperties plus
 multipleOf / patternProperties / propertyNames / dependentRequired /
 dependentSchemas / unevaluatedProperties / if / then / else / not / prefixItems),

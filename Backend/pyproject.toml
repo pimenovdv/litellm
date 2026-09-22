@@ -313,7 +313,7 @@ paths_to_mutate = [
     "litellm/proxy/management_endpoints/",
 ]
 tests_dir = [
-    "tests/test_litellm/proxy/management_endpoints/",
+    "tests/unit/proxy/management_endpoints/",
     "tests/proxy_behavior/management/",
 ]
 also_copy = [

@@ -11,7 +11,7 @@ parsed result is the LiteLLMBatch the transform produced.
 
 The sync ``retrieve_batch`` dispatch (``_is_async`` true -> coroutine, false ->
 asyncio.run) is exercised directly, mirroring the dispatch-contract discipline in
-tests/test_litellm/batches/test_main.py.
+tests/unit/batches/test_main.py.
 """
 
 import os

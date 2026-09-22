@@ -37,7 +37,7 @@ def _backup_path() -> str:
 
 
 def _main_path() -> str:
-    # This test lives at ``tests/test_litellm/``; the primary price map sits at
+    # This test lives at ``tests/unit/``; the primary price map sits at
     # the repo root, two directories up. Resolve it relative to this file so the
     # test works regardless of where ``litellm`` itself is installed (e.g. a pip
     # install into site-packages).

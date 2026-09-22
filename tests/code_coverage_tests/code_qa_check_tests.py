@@ -13,7 +13,7 @@ def check_for_litellm_module_deletion(base_dir):
             del sys.modules[module]
     """
     problematic_files = []
-    test_dir = os.path.join(base_dir, "test_litellm")
+    test_dir = os.path.join(base_dir, "unit")
 
     if not os.path.exists(test_dir):
         print(f"Warning: Directory {test_dir} does not exist.")

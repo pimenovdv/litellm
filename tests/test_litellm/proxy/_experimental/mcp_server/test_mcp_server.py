@@ -5831,7 +5831,7 @@ async def test_delegate_not_probed_when_named_only_via_server_id():
 @pytest.mark.asyncio
 async def test_delegate_preflight_with_unpatched_probe():
     """Integration across the preflight and the unpatched ``_probe_upstream_auth``,
-    mocked only at the httpx-client boundary (tests/test_litellm is mocked-only; the
+    mocked only at the httpx-client boundary (tests/unit is mocked-only; the
     real-network proof lives in the PR's live-proxy evidence). The mock honors the
     ``AsyncHTTPHandler.post`` contract by raising ``httpx.HTTPStatusError`` on the
     upstream 401, so the production ``except httpx.HTTPStatusError`` branch is the one
