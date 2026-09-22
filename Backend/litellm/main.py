@@ -120,7 +120,9 @@ from litellm.llms.cohere.common_utils import CohereModelInfo
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
 from litellm.llms.openai_like.json_loader import JSONProviderRegistry
-from litellm.llms.vertex_ai.common_utils import VertexAIModelRoute, get_vertex_ai_model_route
+    VertexAIModelRoute,
+    get_vertex_ai_model_route,
+)
 from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
 from litellm.types.completion import (
@@ -3546,8 +3548,7 @@ def _complete_vertex_ai(ctx: _CompletionDispatchContext) -> _CompletionDispatchR
         )
     elif model_route == VertexAIModelRoute.AGENT_ENGINE:
         # Vertex AI Agent Engine (Reasoning Engines)
-        from litellm.llms.vertex_ai.vertex_agent_engine.transformation import (
-            VertexAgentEngineConfig,
+                    VertexAgentEngineConfig,
         )
 
         vertex_agent_engine_config = VertexAgentEngineConfig()
@@ -7695,8 +7696,7 @@ def transcription(
             ),
         )
     elif custom_llm_provider == "soniox":
-        from litellm.llms.soniox.audio_transcription.handler import (
-            SonioxAudioTranscriptionHandler,
+                    SonioxAudioTranscriptionHandler,
         )
 
         response = SonioxAudioTranscriptionHandler().audio_transcriptions(
@@ -8039,8 +8039,7 @@ def speech(
                 litellm_params=litellm_params_dict,
             )
     elif custom_llm_provider == "elevenlabs":
-        from litellm.llms.elevenlabs.text_to_speech.transformation import (
-            ElevenLabsTextToSpeechConfig,
+                    ElevenLabsTextToSpeechConfig,
         )
 
         if text_to_speech_provider_config is None:
@@ -8083,8 +8082,7 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "vertex_ai" or custom_llm_provider == "vertex_ai_beta":
-        from litellm.llms.vertex_ai.text_to_speech.transformation import (
-            VertexAITextToSpeechConfig,
+                    VertexAITextToSpeechConfig,
         )
 
         generic_optional_params = GenericLiteLLMParams(**kwargs)
@@ -8184,8 +8182,7 @@ def speech(
             **kwargs,
         )
     elif custom_llm_provider == "minimax":
-        from litellm.llms.minimax.text_to_speech.transformation import (
-            MinimaxTextToSpeechConfig,
+                    MinimaxTextToSpeechConfig,
         )
 
         # MiniMax Text-to-Speech
@@ -8222,8 +8219,7 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "aws_polly":
-        from litellm.llms.aws_polly.text_to_speech.transformation import (
-            AWSPollyTextToSpeechConfig,
+                    AWSPollyTextToSpeechConfig,
         )
 
         # AWS Polly Text-to-Speech
