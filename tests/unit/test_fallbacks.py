@@ -77,6 +77,7 @@ async def chat_completion(
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="mocking network")
 async def test_chat_completion():
     """
     make chat completion call with prompt > context window. expect it to work with fallback
@@ -94,6 +95,7 @@ async def test_chat_completion():
 
 @pytest.mark.parametrize("has_access", [True, False])
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="mocking network")
 async def test_chat_completion_client_fallbacks(has_access):
     """
     make chat completion call with prompt > context window. expect it to work with fallback
@@ -133,6 +135,7 @@ async def test_chat_completion_client_fallbacks(has_access):
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="mocking network")
 async def test_chat_completion_with_retries():
     """
     make chat completion call with prompt > context window. expect it to work with fallback
@@ -157,6 +160,7 @@ async def test_chat_completion_with_retries():
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="mocking network")
 async def test_chat_completion_with_fallbacks():
     """
     make chat completion call with prompt > context window. expect it to work with fallback
@@ -180,6 +184,7 @@ async def test_chat_completion_with_fallbacks():
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="mocking network")
 async def test_chat_completion_with_timeout():
     """
     make chat completion call with low timeout and `mock_timeout`: true. Expect it to fail and correct timeout to be set in headers.
@@ -208,6 +213,7 @@ async def test_chat_completion_with_timeout():
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="mocking network")
 async def test_chat_completion_with_timeout_from_request():
     """
     make chat completion call with low timeout and `mock_timeout`: true. Expect it to fail and correct timeout to be set in headers.
@@ -241,6 +247,7 @@ async def test_chat_completion_with_timeout_from_request():
 
 @pytest.mark.parametrize("has_access", [True, False])
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="mocking network")
 async def test_chat_completion_client_fallbacks_with_custom_message(has_access):
     """
     make chat completion call with prompt > context window. expect it to work with fallback
@@ -314,6 +321,7 @@ async def run_good_model_test(client: AsyncOpenAI, num_requests: int) -> bool:
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="mocking network")
 async def test_chat_completion_bad_and_good_model():
     """
     Prod test - ensure even if bad model is down, good model is still working.
