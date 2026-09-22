@@ -25,7 +25,14 @@ from litellm.litellm_core_utils.core_helpers import (
 from litellm.caching import DualCache
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.secret_managers.main import str_to_bool
+from litellm.types.guardrails import (
+    DynamicGuardrailParams,
+    GuardrailEventHooks,
+    LitellmParams,
+    Mode,
+)
 from litellm.types.llms.openai import AllMessageValues
+from litellm.types.proxy.guardrails.guardrail_hooks.base import GuardrailConfigModel
 from litellm.types.utils import (
     CallTypes,
     GenericGuardrailAPIInputs,
@@ -109,8 +116,8 @@ class CustomGuardrail(CustomLogger):
     def __init__(
         self,
         guardrail_name: Optional[str] = None,
-        supported_event_hooks: Optional[List[Any]] = None,
-        event_hook: Optional[Union[Any, List[Any], Any]] = None,
+        supported_event_hooks: Optional[List[GuardrailEventHooks]] = None,
+        event_hook: Optional[Union[GuardrailEventHooks, List[GuardrailEventHooks], Mode]] = None,
         default_on: bool = False,
         mask_request_content: bool = False,
         mask_response_content: bool = False,
@@ -139,7 +146,7 @@ class CustomGuardrail(CustomLogger):
             on_violation: For /v1/realtime sessions, 'warn' or 'end_session'
             realtime_violation_message: Message the bot speaks aloud when a /v1/realtime guardrail fires
             on_sensitive_data: Action when sensitive data is detected. 'block' (default) or 'route'
-            sensitive_data_route_to_model: Anyl to route to when on_sensitive_data='route'
+            sensitive_data_route_to_model: Model to route to when on_sensitive_data='route'
             sticky_session_routing: When True, all subsequent requests in the session use the same model
             run_in_parallel: When True, this pre_call or post_call guardrail runs concurrently with
                 other opted-in guardrails of the same hook. Only safe for block-only guardrails that
@@ -147,7 +154,7 @@ class CustomGuardrail(CustomLogger):
         """
         self.guardrail_name = guardrail_name
         self.supported_event_hooks = supported_event_hooks
-        self.event_hook: Optional[Union[Any, List[Any], Any]] = event_hook
+        self.event_hook: Optional[Union[GuardrailEventHooks, List[GuardrailEventHooks], Mode]] = event_hook
         self.default_on: bool = default_on
         self.mask_request_content: bool = mask_request_content
         self.mask_response_content: bool = mask_response_content
@@ -430,7 +437,7 @@ class CustomGuardrail(CustomLogger):
             )
 
     @staticmethod
-    def get_config_model() -> Optional[Type["GuardrailConfigAnyl"]]:
+    def get_config_model() -> Optional[Type["GuardrailConfigModel"]]:
         """
         Returns the config model for the guardrail
 
@@ -439,7 +446,7 @@ class CustomGuardrail(CustomLogger):
         return None
 
     @classmethod
-    def get_supported_event_hooks(cls) -> Optional[List[Any]]:
+    def get_supported_event_hooks(cls) -> Optional[List[GuardrailEventHooks]]:
         """
         Returns the event hooks this guardrail supports, for the UI to render.
 
@@ -452,26 +459,26 @@ class CustomGuardrail(CustomLogger):
 
     def _validate_event_hook(
         self,
-        event_hook: Optional[Union[Any, List[Any], Any]],
-        supported_event_hooks: List[Any],
+        event_hook: Optional[Union[GuardrailEventHooks, List[GuardrailEventHooks], Mode]],
+        supported_event_hooks: List[GuardrailEventHooks],
     ) -> None:
         def _validate_event_hook_list_is_in_supported_event_hooks(
-            event_hook: Union[List[Any], List[str]],
-            supported_event_hooks: List[Any],
+            event_hook: Union[List[GuardrailEventHooks], List[str]],
+            supported_event_hooks: List[GuardrailEventHooks],
         ) -> None:
             for hook in event_hook:
                 if isinstance(hook, str):
-                    hook = Any(hook)
+                    hook = GuardrailEventHooks(hook)
                 if hook not in supported_event_hooks:
                     raise ValueError(f"Event hook {hook} is not in the supported event hooks {supported_event_hooks}")
 
         if event_hook is None:
             return
         if isinstance(event_hook, str):
-            event_hook = Any(event_hook)
+            event_hook = GuardrailEventHooks(event_hook)
         if isinstance(event_hook, list):
             _validate_event_hook_list_is_in_supported_event_hooks(event_hook, supported_event_hooks)
-        elif isinstance(event_hook, Any):
+        elif isinstance(event_hook, Mode):
             tag_values_flat: list = []
             for v in event_hook.tags.values():
                 if isinstance(v, list):
@@ -482,7 +489,7 @@ class CustomGuardrail(CustomLogger):
             if event_hook.default:
                 default_list = event_hook.default if isinstance(event_hook.default, list) else [event_hook.default]
                 _validate_event_hook_list_is_in_supported_event_hooks(default_list, supported_event_hooks)
-        elif isinstance(event_hook, Any):
+        elif isinstance(event_hook, GuardrailEventHooks):
             if event_hook not in supported_event_hooks:
                 raise ValueError(f"Event hook {event_hook} is not in the supported event hooks {supported_event_hooks}")
 
@@ -548,7 +555,7 @@ class CustomGuardrail(CustomLogger):
                 return True
             raise
 
-    def get_guardrail_from_metadata(self, data: dict) -> Union[List[str], List[Dict[str, Any]]]:
+    def get_guardrail_from_metadata(self, data: dict) -> Union[List[str], List[Dict[str, DynamicGuardrailParams]]]:
         """
         Returns the guardrail(s) to be run from the metadata or root
         """
@@ -569,7 +576,7 @@ class CustomGuardrail(CustomLogger):
 
     def _guardrail_is_in_requested_guardrails(
         self,
-        requested_guardrails: Union[List[str], List[Dict[str, Any]]],
+        requested_guardrails: Union[List[str], List[Dict[str, DynamicGuardrailParams]]],
     ) -> bool:
         for _guardrail in requested_guardrails:
             if isinstance(_guardrail, dict):
@@ -653,7 +660,7 @@ class CustomGuardrail(CustomLogger):
         if self._pre_call_hook_already_ran(kwargs):
             return kwargs
 
-        if self.should_run_guardrail(data=kwargs, event_type=Any.pre_call) is not True:
+        if self.should_run_guardrail(data=kwargs, event_type=GuardrailEventHooks.pre_call) is not True:
             return kwargs
 
         # CHECK IF GUARDRAIL REJECTS THE REQUEST
@@ -697,7 +704,7 @@ class CustomGuardrail(CustomLogger):
         if litellm_guardrails is None or not isinstance(litellm_guardrails, list):
             return response
 
-        if self.should_run_guardrail(data=request_data, event_type=Any.post_call) is not True:
+        if self.should_run_guardrail(data=request_data, event_type=GuardrailEventHooks.post_call) is not True:
             return response
 
         # CHECK IF GUARDRAIL REJECTS THE REQUEST
@@ -721,7 +728,7 @@ class CustomGuardrail(CustomLogger):
     def should_run_guardrail(
         self,
         data,
-        event_type: Any,
+        event_type: GuardrailEventHooks,
     ) -> bool:
         """
         Returns True if the guardrail should be run on the event_type
@@ -745,7 +752,7 @@ class CustomGuardrail(CustomLogger):
 
         if self.default_on is True and disable_global_guardrail is not True:
             if self._event_hook_is_event_type(event_type):
-                if isinstance(self.event_hook, Any):
+                if isinstance(self.event_hook, Mode):
                     try:
                         from litellm_enterprise.integrations.custom_guardrail import (
                             EnterpriseCustomGuardrailHelper,
@@ -772,7 +779,7 @@ class CustomGuardrail(CustomLogger):
         if not self._event_hook_is_event_type(event_type):
             return False
 
-        if isinstance(self.event_hook, Any):
+        if isinstance(self.event_hook, Mode):
             try:
                 from litellm_enterprise.integrations.custom_guardrail import (
                     EnterpriseCustomGuardrailHelper,
@@ -786,7 +793,7 @@ class CustomGuardrail(CustomLogger):
                 return result
         return True
 
-    def _event_hook_is_event_type(self, event_type: Any) -> bool:
+    def _event_hook_is_event_type(self, event_type: GuardrailEventHooks) -> bool:
         """
         Returns True if the event_hook is the same as the event_type
 
@@ -798,7 +805,7 @@ class CustomGuardrail(CustomLogger):
             return True
         if isinstance(self.event_hook, list):
             return event_type.value in self.event_hook
-        if isinstance(self.event_hook, Any):
+        if isinstance(self.event_hook, Mode):
             for tag_value in self.event_hook.tags.values():
                 if isinstance(tag_value, list):
                     if event_type.value in tag_value:
@@ -837,7 +844,7 @@ class CustomGuardrail(CustomLogger):
         for guardrail in requested_guardrails:
             if isinstance(guardrail, dict) and self.guardrail_name in guardrail:
                 # Get the configuration for this guardrail
-                guardrail_config: Any = Any(**guardrail[self.guardrail_name])
+                guardrail_config: DynamicGuardrailParams = DynamicGuardrailParams(**guardrail[self.guardrail_name])
                 extra_body = guardrail_config.get("extra_body", {})
                 if self._validate_premium_user() is not True:
                     if isinstance(extra_body, dict) and extra_body:
@@ -876,7 +883,7 @@ class CustomGuardrail(CustomLogger):
         duration: Optional[float] = None,
         masked_entity_count: Optional[Dict[str, int]] = None,
         guardrail_provider: Optional[str] = None,
-        event_type: Optional[Any] = None,
+        event_type: Optional[GuardrailEventHooks] = None,
         tracing_detail: Optional[GuardrailTracingDetail] = None,
     ) -> None:
         """
@@ -889,14 +896,14 @@ class CustomGuardrail(CustomLogger):
         """
         if isinstance(guardrail_json_response, Exception):
             guardrail_json_response = str(guardrail_json_response)
-        from litellm.types.utils import GuardrailAny
+        from litellm.types.utils import GuardrailMode
 
         # Use event_type if provided, otherwise fall back to self.event_hook
-        guardrail_mode: Union[Any, GuardrailAny, List[Any]]
+        guardrail_mode: Union[GuardrailEventHooks, GuardrailMode, List[GuardrailEventHooks]]
         if event_type is not None:
             guardrail_mode = event_type
-        elif isinstance(self.event_hook, Any):
-            guardrail_mode = GuardrailAny(**dict(self.event_hook.model_dump()))  # type: ignore[typeddict-item]
+        elif isinstance(self.event_hook, Mode):
+            guardrail_mode = GuardrailMode(**dict(self.event_hook.model_dump()))  # type: ignore[typeddict-item]
         else:
             guardrail_mode = self.event_hook  # type: ignore[assignment]
 
@@ -1005,7 +1012,7 @@ class CustomGuardrail(CustomLogger):
         start_time: Optional[float] = None,
         end_time: Optional[float] = None,
         duration: Optional[float] = None,
-        event_type: Optional[Any] = None,
+        event_type: Optional[GuardrailEventHooks] = None,
         original_inputs: Optional[Dict] = None,
     ):
         """
@@ -1073,7 +1080,7 @@ class CustomGuardrail(CustomLogger):
         start_time: Optional[float] = None,
         end_time: Optional[float] = None,
         duration: Optional[float] = None,
-        event_type: Optional[Any] = None,
+        event_type: Optional[GuardrailEventHooks] = None,
     ):
         """
         Add StandardLoggingGuardrailInformation to the request data
@@ -1137,7 +1144,7 @@ class CustomGuardrail(CustomLogger):
         # Mask the content
         return content_string[:start_index] + mask_string + content_string[end_index:]
 
-    def update_in_memory_litellm_params(self, litellm_params: Any) -> None:
+    def update_in_memory_litellm_params(self, litellm_params: LitellmParams) -> None:
         """
         Update the guardrails litellm params in memory
         """
@@ -1260,17 +1267,17 @@ def log_guardrail_information(func):
 
     def _infer_event_type_from_function_name(
         func_name: str,
-    ) -> Optional[Any]:
+    ) -> Optional[GuardrailEventHooks]:
         """Infer the actual event type from the function name"""
         if func_name == "async_pre_call_hook":
-            return Any.pre_call
+            return GuardrailEventHooks.pre_call
         elif func_name == "async_moderation_hook":
-            return Any.during_call
+            return GuardrailEventHooks.during_call
         elif func_name in (
             "async_post_call_success_hook",
             "async_post_call_streaming_hook",
         ):
-            return Any.post_call
+            return GuardrailEventHooks.post_call
         return None
 
     @functools.wraps(func)

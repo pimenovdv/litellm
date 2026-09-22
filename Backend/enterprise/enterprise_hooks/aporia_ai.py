@@ -31,6 +31,7 @@ from litellm.llms.custom_httpx.http_handler import (
 )
 from litellm.proxy._types import UserAPIKeyAuth
 from litellm.proxy.guardrails.guardrail_helpers import should_proceed_based_on_metadata
+from litellm.types.guardrails import GuardrailEventHooks
 
 GUARDRAIL_NAME = "aporia"
 

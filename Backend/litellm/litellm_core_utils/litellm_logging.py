@@ -2009,6 +2009,7 @@ class Logging(LiteLLMLoggingBaseClass):
             ## LOGGING HOOK ##
             for callback in callbacks:
                 if isinstance(callback, CustomGuardrail):
+                    from litellm.types.guardrails import GuardrailEventHooks
 
                     if (
                         callback.should_run_guardrail(
@@ -2503,6 +2504,7 @@ class Logging(LiteLLMLoggingBaseClass):
 
         for callback in callbacks:
             if isinstance(callback, CustomGuardrail):
+                from litellm.types.guardrails import GuardrailEventHooks
 
                 if (
                     callback.should_run_guardrail(

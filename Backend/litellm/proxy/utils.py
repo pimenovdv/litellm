@@ -48,6 +48,7 @@ from litellm.proxy._types import (
     SpendLogsPayload,
 )
 from litellm.proxy.spend_tracking.spend_log_error_logger import spend_log_error
+from litellm.types.guardrails import GuardrailEventHooks
 from litellm.types.proxy.model_listing import ModelInfoResponse
 from litellm.types.utils import CallTypes, CallTypesLiteral, ModelInfo
 
@@ -1041,6 +1042,7 @@ class ProxyLogging:
         Returns:
             Updated data dictionary if guardrail passes, None if guardrail should be skipped
         """
+        from litellm.types.guardrails import GuardrailEventHooks
 
         # Determine the event type based on call type
         if event_type is GuardrailEventHooks.pre_call and call_type == CallTypes.call_mcp_tool.value:
@@ -1800,6 +1802,7 @@ class ProxyLogging:
                         return
                 else:
                     # Main - V2 Guardrails implementation
+                    from litellm.types.guardrails import GuardrailEventHooks
 
                     event_type = GuardrailEventHooks.during_call
                     if call_type == CallTypes.call_mcp_tool.value:
@@ -2254,6 +2257,7 @@ class ProxyLogging:
         """
 
         from litellm.proxy.proxy_server import llm_router
+        from litellm.types.guardrails import GuardrailEventHooks
 
         guardrail_callbacks: List[CustomGuardrail] = []
         other_callbacks: List[CustomLogger] = []
@@ -2534,6 +2538,7 @@ class ProxyLogging:
                     _callback: Optional[CustomLogger] = None
                     if isinstance(callback, CustomGuardrail):
                         # Main - V2 Guardrails implementation
+                        from litellm.types.guardrails import GuardrailEventHooks
 
                         ## CHECK FOR MODEL-LEVEL GUARDRAILS (cached per-request)
                         if not _guardrail_data_computed:

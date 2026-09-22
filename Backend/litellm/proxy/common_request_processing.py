@@ -54,6 +54,7 @@ from litellm.proxy.route_llm_request import route_request
 from litellm.proxy.utils import ProxyLogging, _check_and_merge_model_level_guardrails
 from litellm.router import Router
 from litellm.router_utils.add_retry_fallback_headers import get_hidden_params_dict
+from litellm.types.guardrails import GuardrailEventHooks
 from litellm.types.router import RouterRateLimitError
 from litellm.types.utils import ServerToolUse
 
