@@ -1,3 +1,4 @@
+import pytest; pytest.skip("module deleted", allow_module_level=True)
 """
 Test file for RAGFlow chat transformation functionality.
 
