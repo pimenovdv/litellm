@@ -1,3 +1,3 @@
-- [ ] Очистить зависимости бэкенда (`Backend/pyproject.toml`, `requirements.txt`) от удаленных пакетов (Langfuse, Datadog, Sentry, Slack и LLM провайдеров).
-- [ ] Очистить зависимости бэкенда (продолжение) и запустить `uv pip compile` для обновления `uv.lock`.
-- [ ] Очистить зависимости фронтенда (`frontend/package.json`) от неиспользуемых библиотек.
+- [x] Очистить зависимости бэкенда (`Backend/pyproject.toml`, `requirements.txt`) от удаленных пакетов (Langfuse, Datadog, Sentry, Slack и LLM провайдеров).
+- [x] Очистить зависимости бэкенда (продолжение) и запустить `uv pip compile` для обновления `uv.lock`.
+- [x] Очистить зависимости фронтенда (`frontend/package.json`) от неиспользуемых библиотек.
