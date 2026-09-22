@@ -248,7 +248,7 @@
         "bedrock_invoke": true,
         "bedrock_converse": true,
         "vector_stores_search": true,
-        "count_tokens": true,
+        "count_tokens": true
       }
     },
     "s3_vectors": {

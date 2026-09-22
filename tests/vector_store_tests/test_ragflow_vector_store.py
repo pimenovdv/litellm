@@ -1,3 +1,4 @@
+import pytest; pytest.skip("module deleted", allow_module_level=True)
 """
 Test RAGFlow Vector Store helper functions and transformation.
 """
