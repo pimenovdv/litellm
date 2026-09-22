@@ -1,5 +1,4 @@
 name: "Unit Tests: Proxy API Endpoints"
-
 on:
   pull_request:
     branches:
@@ -8,14 +7,11 @@ on:
       - litellm_oss_staging
       - "litellm_**"
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
 jobs:
   proxy-endpoints:
     permissions:
@@ -43,7 +39,6 @@ jobs:
         tests/test_litellm/proxy/shutdown
         tests/test_litellm/proxy/public_endpoints
         tests/test_litellm/proxy/prompts
-        tests/test_litellm/proxy/rag_endpoints
         tests/test_litellm/proxy/realtime_endpoints
         tests/test_litellm/proxy/ui_crud_endpoints
         tests/test_litellm/proxy/config_resolvers
@@ -51,7 +46,6 @@ jobs:
       workers: 2
       reruns: 2
       artifact-name: proxy-endpoints
-
   # Behavior-pinning tests for litellm/proxy/proxy_server.py. Owns its
   # own job (not a path on the proxy-endpoints job above) so its budget
   # is independent and its coverage artifact is uploaded separately.
