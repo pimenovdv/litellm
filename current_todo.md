@@ -1,3 +1,3 @@
-- [x] Очистить зависимости бэкенда (`Backend/pyproject.toml`, `requirements.txt`) от удаленных пакетов (Langfuse, Datadog, Sentry, Slack и LLM провайдеров).
-- [x] Очистить зависимости бэкенда (продолжение) и запустить `uv pip compile` для обновления `uv.lock`.
-- [x] Очистить зависимости фронтенда (`frontend/package.json`) от неиспользуемых библиотек.
+- [x] Fix test errors
+- [x] Create PR test workflow
+- [x] Verify CI workflow deletion and branch protection compatibility
