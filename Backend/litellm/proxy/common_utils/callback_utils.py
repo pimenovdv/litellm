@@ -155,7 +155,6 @@ def initialize_callbacks_on_proxy(
             elif isinstance(callback, str) and callback == "lakera_prompt_injection":
                 from litellm.types.guardrails import lakeraAI_Moderation
 
-
                 init_params = {}
                 if "lakera_prompt_injection" in callback_specific_params and isinstance(
                     callback_specific_params["lakera_prompt_injection"], dict
