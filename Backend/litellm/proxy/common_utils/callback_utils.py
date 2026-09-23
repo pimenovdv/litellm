@@ -155,7 +155,7 @@ def initialize_callbacks_on_proxy(
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
             elif isinstance(callback, str) and callback == "lakera_prompt_injection":
-                from litellm.proxy.pii_masking.factory import (
+                from litellm.proxy.guardrails.guardrail_hooks.lakera_ai import (
                     lakeraAI_Moderation,
                 )
 
@@ -167,7 +167,7 @@ def initialize_callbacks_on_proxy(
                 lakera_moderations_object = lakeraAI_Moderation(**init_params)
                 imported_list.append(lakera_moderations_object)
             elif isinstance(callback, str) and callback == "aporia_prompt_injection":
-                from litellm.proxy.pii_masking.factory import (
+                from litellm.proxy.guardrails.guardrail_hooks.aporia_ai import (
                     AporiaGuardrail,
                 )
 
