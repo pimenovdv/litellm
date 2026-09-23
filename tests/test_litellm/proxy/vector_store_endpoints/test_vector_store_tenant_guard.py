@@ -214,6 +214,8 @@ async def test_vector_store_file_create_denies_other_team_path_store():
 
 @pytest.mark.asyncio
 async def test_rag_query_denies_nested_other_team_vector_store():
+    import pytest; pytest.skip('RAG endpoints deleted', allow_module_level=False)
+
     from litellm.proxy.rag_endpoints.endpoints import rag_query
 
     mock_registry = MagicMock()
@@ -254,6 +256,8 @@ async def test_rag_query_denies_nested_other_team_vector_store():
 
 @pytest.mark.asyncio
 async def test_rag_ingest_denies_nested_other_team_vector_store():
+    import pytest; pytest.skip('RAG endpoints deleted', allow_module_level=False)
+
     from litellm.proxy.rag_endpoints.endpoints import rag_ingest
 
     mock_registry = MagicMock()
