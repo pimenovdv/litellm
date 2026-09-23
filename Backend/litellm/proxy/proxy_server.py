@@ -216,7 +216,7 @@ from functools import lru_cache
 
 import litellm
 import litellm._redis
-from litellm.router import Router
+from litellm import Router
 from litellm._logging import verbose_proxy_logger, verbose_router_logger
 from litellm.caching.caching import DualCache, RedisCache
 from litellm.caching.redis_cluster_cache import RedisClusterCache
