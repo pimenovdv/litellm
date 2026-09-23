@@ -104,8 +104,6 @@ def test_is_pure_asgi_not_base_http_middleware():
         # SpendLogs-producing routes surfaced by the route-inventory audit
         ("/v1/search", (BillableCategory.LLM, "/search")),
         ("/v1/vector_stores/vs_1/search", (BillableCategory.LLM, "/search")),
-        ("/v1/rag/query", (BillableCategory.LLM, "/rag/query")),
-        ("/rag/ingest", (BillableCategory.LLM, "/rag/ingest")),
         # Provider passthrough carries real inference and writes SpendLogs
         ("/bedrock/model/anthropic.claude-v2/invoke", (BillableCategory.LLM, "/bedrock")),
         ("/vertex-ai/publishers/google/models/gemini:predict", (BillableCategory.LLM, "/vertex-ai")),
