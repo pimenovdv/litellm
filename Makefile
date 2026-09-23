@@ -274,10 +274,10 @@ test-unit-root: install-test-deps
 
 # Proxy unit tests (tests/proxy_unit_tests split alphabetically)
 test-proxy-unit-a: install-test-deps
-	$(UV_RUN) pytest tests/proxy_unit_tests/test_[a-o]*.py --tb=short -vv -n 2 --durations=20
+	$(UV_RUN) pytest tests/test_litellm/proxy/test_[a-o]*.py --tb=short -vv -n 2 --durations=20
 
 test-proxy-unit-b: install-test-deps
-	$(UV_RUN) pytest tests/proxy_unit_tests/test_[p-z]*.py --tb=short -vv -n 2 --durations=20
+	$(UV_RUN) pytest tests/test_litellm/proxy/test_[p-z]*.py --tb=short -vv -n 2 --durations=20
 
 test-integration: install-test-deps
 	$(UV_RUN) pytest tests/ -k "not test_litellm"
