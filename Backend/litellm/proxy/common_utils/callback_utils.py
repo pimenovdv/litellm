@@ -90,11 +90,11 @@ def initialize_callbacks_on_proxy(
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 imported_list.append(callback)
             elif isinstance(callback, str) and callback == "presidio":
+                presidio_logging_only: Optional[bool] = litellm_settings.get("presidio_logging_only", None)
                 from litellm.proxy.guardrails.presidio import (
                     _OPTIONAL_PresidioPIIMasking
                 )
 
-                presidio_logging_only: Optional[bool] = litellm_settings.get("presidio_logging_only", None)
                 if presidio_logging_only is not None:
                     presidio_logging_only = bool(presidio_logging_only)  # validate boolean given
 
@@ -155,9 +155,9 @@ def initialize_callbacks_on_proxy(
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
             elif isinstance(callback, str) and callback == "lakera_prompt_injection":
-                from litellm.proxy.guardrails.lakera_prompt_injection import lakeraAI_Moderation
 
                 init_params = {}
+                from litellm.proxy.guardrails.lakera_prompt_injection import lakeraAI_Moderation
                 if "lakera_prompt_injection" in callback_specific_params and isinstance(
                     callback_specific_params["lakera_prompt_injection"], dict
                 ):
@@ -165,8 +165,8 @@ def initialize_callbacks_on_proxy(
                 lakera_moderations_object = lakeraAI_Moderation(**init_params)
                 imported_list.append(lakera_moderations_object)
             elif isinstance(callback, str) and callback == "aporia_prompt_injection":
-                from litellm.proxy.guardrails.aporia_guardrail import AporiaGuardrail
 
+                from litellm.proxy.guardrails.aporia_guardrail import AporiaGuardrail
                 aporia_guardrail_object = AporiaGuardrail()
                 imported_list.append(aporia_guardrail_object)
             elif isinstance(callback, str) and callback == "google_text_moderation":
