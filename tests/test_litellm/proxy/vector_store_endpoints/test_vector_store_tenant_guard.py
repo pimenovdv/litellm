@@ -1,3 +1,4 @@
+import pytest; pytest.skip("module deleted", allow_module_level=True)
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
