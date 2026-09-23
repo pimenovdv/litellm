@@ -109,7 +109,6 @@ ROUTE_ENDPOINT_MAPPING = {
     "alist_skills": "/skills",
     "aget_skill": "/skills/{skill_id}",
     "adelete_skill": "/skills/{skill_id}",
-    "aingest": "/rag/ingest",
     # Google Interactions API routes
     "acreate_interaction": "/interactions",
     "aget_interaction": "/interactions/{interaction_id}",
