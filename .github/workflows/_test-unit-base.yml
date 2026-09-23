@@ -87,7 +87,6 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          cd Backend && \
           uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Run tests
@@ -100,7 +99,6 @@ jobs:
           DIST: ${{ inputs.dist }}
         run: |
           if [ "${WORKERS}" = "0" ]; then
-            cd Backend && \
             uv run --no-sync pytest ${TEST_PATH:?} \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
@@ -111,7 +109,6 @@ jobs:
               --cov-report=xml:coverage.xml \
               --cov-config=pyproject.toml
           else
-            cd Backend && \
             uv run --no-sync pytest ${TEST_PATH:?} \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
