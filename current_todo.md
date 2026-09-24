@@ -1,4 +1,4 @@
-- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py`.
-- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/common_utils/callback_utils.py` и `Backend/litellm/main.py`.
-- [x] Очистить ссылки на Guardrails в остальных файлах `Backend/litellm/proxy/`.
-- [ ] Удалить файлы и тесты Guardrails (директория `Backend/litellm/proxy/guardrails`, `Backend/litellm/types/guardrails.py`, `Backend/litellm/types/proxy/guardrails`).
+- [ ] Очистить ссылки на сторонние менеджеры секретов в `Backend/litellm/proxy/proxy_server.py`.
+- [ ] Очистить ссылки на сторонние менеджеры секретов в остальных модулях (например, Hashicorp, AWS Secret Manager).
+- [ ] Удалить файлы интеграции сторонних менеджеров секретов (сохранив локальную загрузку секретов).
+- [ ] Удалить неиспользуемые тесты менеджеров секретов.
