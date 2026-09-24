@@ -528,6 +528,10 @@ custom_prompt_dict: Dict[str, dict] = {}
 check_provider_endpoint = False
 
 
+try:
+    from .router import Router
+except ImportError:
+    pass
 ####### THREAD-SPECIFIC DATA ####################
 class MyLocal(threading.local):
     def __init__(self):
@@ -1228,3 +1232,7 @@ _key_management_settings: KeyManagementSettings = KeyManagementSettings()
 # client must be imported immediately as it's used as a decorator at function definition time
 from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
+try:
+    from .router import Router
+except ImportError:
+    pass
