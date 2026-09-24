@@ -373,8 +373,6 @@ def get_logging_caching_headers(request_data: Dict) -> Optional[Dict]:
         # user-facing metadata stays in metadata; merge both for headers.
         _metadata.update(litellm_metadata_bucket)
     headers = {}
-    if "applied_guardrails" in _metadata:
-        headers["x-litellm-applied-guardrails"] = ",".join(_metadata["applied_guardrails"])
 
     if "applied_policies" in _metadata:
         headers["x-litellm-applied-policies"] = ",".join(_metadata["applied_policies"])
@@ -407,16 +405,11 @@ def get_logging_caching_headers(request_data: Dict) -> Optional[Dict]:
 LITELLM_PROXY_INTERNAL_METADATA_KEYS = frozenset(
     {
         "applied_policies",
-        "applied_guardrails",
-        "policy_sources",
-        "guardrails",
-        "guardrail_config",
+                "policy_sources",
+                "guardrail_config",
         "_guardrail_pipelines",
-        "_pipeline_managed_guardrails",
         PRE_CALL_EXECUTED_GUARDRAILS_KEY,
-        "disable_global_guardrails",
         "disable_global_guardrail",
-        "opted_out_global_guardrails",
         "pillar_response_headers",
         "_pillar_response_headers_trusted",
         "pillar_flagged",
@@ -457,164 +450,5 @@ def sanitize_openai_provider_metadata(
     return sanitized or None
 
 
-def add_guardrail_to_applied_guardrails_header(request_data: Dict, guardrail_name: Optional[str]):
-    if guardrail_name is None:
-        return
-    _, _metadata = get_or_create_metadata_bucket(request_data)
-    if "applied_guardrails" in _metadata:
-        if guardrail_name not in _metadata["applied_guardrails"]:
-            _metadata["applied_guardrails"].append(guardrail_name)
-    else:
-        _metadata["applied_guardrails"] = [guardrail_name]
-
-
-def add_policy_to_applied_policies_header(request_data: Dict, policy_name: Optional[str]):
-    """
-    Add a policy name to the applied_policies list in request metadata.
-
-    This is used to track which policies were applied to a request,
-    similar to how applied_guardrails tracks guardrails.
-    """
-    if policy_name is None:
-        return
-    _, _metadata = get_or_create_metadata_bucket(request_data)
-    if "applied_policies" in _metadata:
-        if policy_name not in _metadata["applied_policies"]:
-            _metadata["applied_policies"].append(policy_name)
-    else:
-        _metadata["applied_policies"] = [policy_name]
-
-
-def add_policy_sources_to_metadata(request_data: Dict, policy_sources: Dict[str, str]):
-    """
-    Store policy match reasons in metadata for x-litellm-policy-sources header.
-
-    Args:
-        request_data: The request data dict
-        policy_sources: Map of policy_name -> matched_via reason
-    """
-    if not policy_sources:
-        return
-    _, _metadata = get_or_create_metadata_bucket(request_data)
-    existing = _metadata.get("policy_sources", {})
-    if not isinstance(existing, dict):
-        existing = {}
-    existing.update(policy_sources)
-    _metadata["policy_sources"] = existing
-
-
-def add_guardrail_response_to_standard_logging_object(
-    litellm_logging_obj: Optional["LiteLLMLogging"],
-    guardrail_response: StandardLoggingGuardrailInformation,
-):
-    if litellm_logging_obj is None:
-        return
-    standard_logging_object: Optional[StandardLoggingPayload] = litellm_logging_obj.model_call_details.get(
-        "standard_logging_object"
-    )
-    if standard_logging_object is None:
-        return
-    guardrail_information = standard_logging_object.get("guardrail_information", [])
-    if guardrail_information is None:
-        guardrail_information = []
-    guardrail_information.append(guardrail_response)
-    standard_logging_object["guardrail_information"] = guardrail_information
-
-    return standard_logging_object
-
-
-def process_callback(_callback: str, callback_type: str, environment_variables: dict) -> dict:
-    """Process a single callback and return its data with environment variables"""
-    env_vars = CustomLogger.get_callback_env_vars(_callback)
-
-    env_vars_dict: dict[str, str | None] = {}
-    for _var in env_vars:
-        stored_value = environment_variables.get(_var, None)
-        env_vars_dict[_var] = stored_value if stored_value is not None else os.getenv(_var)
-
-    return {"name": _callback, "variables": env_vars_dict, "type": callback_type}
-
-
-def normalize_callback_names(callbacks: Iterable[Any]) -> List[Any]:
-    if callbacks is None:
-        return []
-    return [c.lower() if isinstance(c, str) else c for c in callbacks]
-
-
-def encrypt_callback_vars(metadata: Any) -> Any:
-    """Return a deep copy of metadata with callback_vars values encrypted at rest.
-
-    Idempotent: a value that already decrypts cleanly is left unchanged so
-    round-trips through edit forms don't double-encrypt.
-    """
-    return _transform_callback_vars(metadata, _encrypt_if_plaintext)
-
-
-def decrypt_callback_vars(metadata: Any) -> Any:
-    """Return a deep copy of metadata with callback_vars values decrypted.
-
-    Legacy plaintext rows pass through unchanged (decrypt failure → original).
-    """
-    return _transform_callback_vars(metadata, _decrypt_or_passthrough)
-
-
-def _transform_callback_vars(metadata: Any, transform: Callable[[str, Any], Any]) -> Any:
-    if not isinstance(metadata, dict):
-        return metadata
-    out = copy.deepcopy(metadata)
-    logging_entries = out.get("logging")
-    if isinstance(logging_entries, list):
-        for entry in logging_entries:
-            if isinstance(entry, dict) and isinstance(entry.get("callback_vars"), dict):
-                entry["callback_vars"] = {k: transform(k, v) for k, v in entry["callback_vars"].items()}
-    callback_settings = out.get("callback_settings")
-    if isinstance(callback_settings, dict) and isinstance(callback_settings.get("callback_vars"), dict):
-        callback_settings["callback_vars"] = {k: transform(k, v) for k, v in callback_settings["callback_vars"].items()}
-    return out
-
-
-def is_sensitive_callback_key(
-    key: str,
-    extra: Optional[set[str]] = None,
-) -> bool:
-    """Return ``True`` if ``key`` is present in ``extra`` (checked as-is), or
-    if its lowercase form is in ``_EXTRA_SENSITIVE_CALLBACK_KEYS``, or if
-    ``_CALLBACK_VAR_MASKER.is_sensitive_key`` matches it.
-    """
-    if extra and key in extra:
-        return True
-    if key.lower() in _EXTRA_SENSITIVE_CALLBACK_KEYS:
-        return True
-    return _CALLBACK_VAR_MASKER.is_sensitive_key(key)
-
-
-def _encrypt_if_plaintext(key: str, value: Any) -> Any:
-    if not isinstance(value, str) or not value:
-        return value
-    if not is_sensitive_callback_key(key):
-        return value
-    if value.startswith(_CALLBACK_VAR_ENCRYPTED_PREFIX):
-        # Already encrypted — round-tripping ciphertext (e.g. UI Edit Settings
-        # save without changing the field) must not double-encrypt. Cheap
-        # prefix check is robust under salt-key rotation; a decrypt-based
-        # idempotency check would mis-classify K1-encrypted blobs as
-        # plaintext under K2 and wrap them a second time.
-        return value
-    try:
-        return _CALLBACK_VAR_ENCRYPTED_PREFIX + encrypt_value_helper(value)
-    except Exception:
-        # No salt key / master key configured — leave the value as-is rather
-        # than crash the write. Dev environments without LITELLM_SALT_KEY hit
-        # this path; production always has a master key so encryption proceeds.
-        return value
-
-
-def _decrypt_or_passthrough(key: str, value: Any) -> Any:
-    if not isinstance(value, str) or not value:
-        return value
-    if not value.startswith(_CALLBACK_VAR_ENCRYPTED_PREFIX):
-        # Legacy plaintext rows or non-credential fields — return as-is.
-        return value
-    inner = value[len(_CALLBACK_VAR_ENCRYPTED_PREFIX) :]
-    decrypted = decrypt_value_helper(value=inner, key=key, exception_type="debug", return_original_value=False)
-    return decrypted if decrypted is not None else value
+def add_guardrail_to_applied_guardrails_header(request_data, guardrail_name):
+    pass
