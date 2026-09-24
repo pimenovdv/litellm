@@ -50,14 +50,14 @@ jobs:
         run: |
           uv sync --frozen --group proxy-dev --group e2e-dev
 
-      # basedpyright resolves Prisma's generated client (Backend/Backend/litellm/proxy/schema.prisma)
+      # basedpyright resolves Prisma's generated client (Backend/litellm/proxy/schema.prisma)
       # only after `prisma generate` writes prisma/client.py et al. Without this the
       # DB wrappers typed against the generated client would degrade to Unknown.
       - name: Generate Prisma client
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema Backend/Backend/litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema Backend/litellm/proxy/schema.prisma
 
       - name: Check ruff format
         env:

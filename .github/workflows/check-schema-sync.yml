@@ -4,8 +4,7 @@ on:
   pull_request:
     paths:
       - 'schema.prisma'
-      - 'Backend/Backend/litellm/proxy/schema.prisma'
-      - 'litellm-proxy-extras/litellm_proxy_extras/schema.prisma'
+      - 'Backend/litellm/proxy/schema.prisma'
 
 permissions:
   contents: read
@@ -23,7 +22,7 @@ jobs:
 
       - name: Reject symlinked schema files
         run: |
-          for f in schema.prisma Backend/Backend/litellm/proxy/schema.prisma litellm-proxy-extras/litellm_proxy_extras/schema.prisma; do
+          for f in schema.prisma Backend/litellm/proxy/schema.prisma; do
             if [ -L "$f" ]; then
               echo "::error file=$f::$f is a symlink, which is not allowed"
               exit 1
@@ -34,15 +33,11 @@ jobs:
         run: |
           EXIT=0
 
-          diff schema.prisma Backend/Backend/litellm/proxy/schema.prisma || {
-            echo "::error file=Backend/Backend/litellm/proxy/schema.prisma::Backend/Backend/litellm/proxy/schema.prisma differs from root schema.prisma"
+          diff schema.prisma Backend/litellm/proxy/schema.prisma || {
+            echo "::error file=Backend/litellm/proxy/schema.prisma::Backend/litellm/proxy/schema.prisma differs from root schema.prisma"
             EXIT=1
           }
 
-          diff schema.prisma litellm-proxy-extras/litellm_proxy_extras/schema.prisma || {
-            echo "::error file=litellm-proxy-extras/litellm_proxy_extras/schema.prisma::litellm-proxy-extras/litellm_proxy_extras/schema.prisma differs from root schema.prisma"
-            EXIT=1
-          }
 
           if [ "$EXIT" -ne 0 ]; then
             echo ""
@@ -50,8 +45,7 @@ jobs:
             echo "The root schema.prisma is the source of truth."
             echo ""
             echo "To fix, run from the repo root:"
-            echo "  cp schema.prisma Backend/Backend/litellm/proxy/schema.prisma"
-            echo "  cp schema.prisma litellm-proxy-extras/litellm_proxy_extras/schema.prisma"
+            echo "  cp schema.prisma Backend/litellm/proxy/schema.prisma"
             exit 1
           fi
 
