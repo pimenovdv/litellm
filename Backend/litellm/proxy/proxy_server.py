@@ -5139,55 +5139,9 @@ class ProxyConfig:
         config_file_path: Optional[str] = None,
     ):
         """
-        Initialize the relevant secret manager if `key_management_system` is provided
+        Secret managers removed in this fork.
         """
-        if key_management_system is not None:
-            if key_management_system == KeyManagementSystem.AZURE_KEY_VAULT.value:
-                ### LOAD FROM AZURE KEY VAULT ###
-                load_from_azure_key_vault(use_azure_key_vault=True)
-            elif key_management_system == KeyManagementSystem.GOOGLE_KMS.value:
-                ### LOAD FROM GOOGLE KMS ###
-                load_google_kms(use_google_kms=True)
-            elif (
-                key_management_system == KeyManagementSystem.AWS_SECRET_MANAGER.value  # noqa: F405
-            ):
-                from litellm.types.secret_managers.main import (
-                    AWSSecretsManagerV2,
-                )
-
-                AWSSecretsManagerV2.load_aws_secret_manager(
-                    use_aws_secret_manager=True,
-                    key_management_settings=litellm._key_management_settings,
-                )
-            elif key_management_system == KeyManagementSystem.AWS_KMS.value:
-                load_aws_kms(use_aws_kms=True)
-            elif key_management_system == KeyManagementSystem.GOOGLE_SECRET_MANAGER.value:
-                from litellm.types.secret_managers.main import (
-                    GoogleSecretManager,
-                )
-
-                GoogleSecretManager()
-            elif key_management_system == KeyManagementSystem.HASHICORP_VAULT.value:
-                from litellm.types.secret_managers.main import (
-                    HashicorpSecretManager,
-                )
-
-                HashicorpSecretManager()
-            elif key_management_system == KeyManagementSystem.CYBERARK.value:
-                from litellm.types.secret_managers.main import (
-                    CyberarkSecretManager as CyberArkSecretManager,
-                )
-
-                CyberArkSecretManager()
-            elif key_management_system == KeyManagementSystem.CUSTOM.value:
-                ### LOAD CUSTOM SECRET MANAGER ###
-                from litellm.secret_managers.custom_secret_manager_loader import (
-                    load_custom_secret_manager,
-                )
-
-                load_custom_secret_manager(config_file_path=config_file_path)
-            else:
-                raise ValueError("Invalid Key Management System selected")
+        pass
 
     def get_model_info_with_id(self, model, db_model=False) -> RouterModelInfo:
         """
