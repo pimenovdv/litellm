@@ -1,4 +1,4 @@
-- [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py` и `Backend/litellm/proxy/_types.py` (часть 1).
+- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/public_endpoints/public_endpoints.py` и др.
 - [ ] Очистить Guardrails интеграции из `Backend/litellm/proxy/guardrails` (макс 3-5 файлов).
 - [ ] Удалить файлы настроек и хуки Guardrails.
 - [ ] Удалить секретные менеджеры и телеметрию (часть 1).
