@@ -164,7 +164,7 @@ def initialize_callbacks_on_proxy(
                 imported_list.append(lakera_moderations_object)
             elif isinstance(callback, str) and callback == "aporia_prompt_injection":
                 from litellm.types.guardrails import AporiaGuardrail
-                from litellm.types.guardrails import AporiaGuardrail
+
                 aporia_guardrail_object = AporiaGuardrail()
                 imported_list.append(aporia_guardrail_object)
             elif isinstance(callback, str) and callback == "google_text_moderation":
@@ -272,7 +272,9 @@ def initialize_callbacks_on_proxy(
                 )
                 imported_list.append(websearch_interception_obj)
             elif isinstance(callback, str) and callback == "datadog_cost_management":
-                from litellm.integrations.datadog.datadog_cost_management import DatadogCostManagementLogger
+                from litellm.integrations.datadog.datadog_cost_management import (
+                    DatadogCostManagementLogger,
+                )
 
                 init_params = {}
                 if "datadog_cost_management" in callback_specific_params and isinstance(
