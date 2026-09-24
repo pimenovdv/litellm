@@ -61,11 +61,11 @@ jobs:
           cache-dependency-path: ui/litellm-dashboard/package-lock.json
 
       - name: Install dashboard dependencies
-        working-directory: ui/litellm-dashboard
+        working-directory: frontend
         run: npm ci
 
       - name: Regenerate types from the live spec
-        working-directory: ui/litellm-dashboard
+        working-directory: frontend
         env:
           LITELLM_PYTHON: "uv run --no-sync python"
         run: npm run gen:api
