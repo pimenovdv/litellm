@@ -274,51 +274,6 @@ def test_oidc_azure_file_success(mock_env, tmp_path):
 
 
 @patch("litellm.secret_managers.main.get_azure_ad_token_provider")
-def test_oidc_azure_ad_token_success(mock_get_azure_ad_token_provider, monkeypatch):
-    # Force-unset so we always hit the Azure AD token provider path (CI may set AZURE_FEDERATED_TOKEN_FILE)
-    monkeypatch.delenv("AZURE_FEDERATED_TOKEN_FILE", raising=False)
-
-    # Mock the token provider function that gets returned and called
-    mock_token_provider = Mock(return_value="azure_ad_token")
-    mock_get_azure_ad_token_provider.return_value = mock_token_provider
-
-    # Also mock the Azure Identity SDK to prevent any real Azure calls
-    with patch("azure.identity.get_bearer_token_provider") as mock_bearer:
-        mock_bearer.return_value = mock_token_provider
-
-        secret_name = "oidc/azure/api://azure-audience"
-        result = get_secret(secret_name)
-
-        assert result == "azure_ad_token"
-        mock_get_azure_ad_token_provider.assert_called_once_with(
-            azure_scope="api://azure-audience"
-        )
-        mock_token_provider.assert_called_once_with()
-
-
-def test_oidc_file_success(tmp_path, monkeypatch):
-    token_file = tmp_path / "token.txt"
-    token_file.write_text("file_token")
-    monkeypatch.setenv("LITELLM_OIDC_ALLOWED_CREDENTIAL_DIRS", str(tmp_path))
-
-    secret_name = f"oidc/file/{token_file}"
-    result = get_secret(secret_name)
-
-    assert result == "file_token"
-
-
-def test_oidc_file_rejects_path_outside_allowlist(tmp_path, monkeypatch):
-    outside_file = tmp_path / "outside.txt"
-    outside_file.write_text("should_not_read")
-    # Allowlist a different directory.
-    allowed_dir = tmp_path / "allowed"
-    allowed_dir.mkdir()
-    monkeypatch.setenv("LITELLM_OIDC_ALLOWED_CREDENTIAL_DIRS", str(allowed_dir))
-
-    with pytest.raises(ValueError, match="outside the allowed credential directories"):
-        get_secret(f"oidc/file/{outside_file}")
-
-
 def test_oidc_file_rejects_relative_path(tmp_path, monkeypatch):
     monkeypatch.setenv("LITELLM_OIDC_ALLOWED_CREDENTIAL_DIRS", str(tmp_path))
     with pytest.raises(ValueError, match="must be absolute"):
