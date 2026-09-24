@@ -69,7 +69,6 @@ async def get_image_details_aio(image_url) -> Tuple[str, str]:
 
 
 @pytest.mark.skip(reason="Missing urls fixture")
-@pytest.mark.skip(reason="Missing urls fixture")
 async def test_asyncified(urls: list[str], iterations: int = 3) -> list[float]:
     times = []
     for _ in range(iterations):
@@ -80,7 +79,6 @@ async def test_asyncified(urls: list[str], iterations: int = 3) -> list[float]:
 
 
 @pytest.mark.skip(reason="Missing urls fixture")
-@pytest.mark.skip(reason="Missing urls fixture")
 async def test_async_httpx(urls: list[str], iterations: int = 3) -> list[float]:
     times = []
     for _ in range(iterations):
@@ -90,7 +88,6 @@ async def test_async_httpx(urls: list[str], iterations: int = 3) -> list[float]:
     return times
 
 
-@pytest.mark.skip(reason="Missing urls fixture")
 @pytest.mark.skip(reason="Missing urls fixture")
 async def test_aiohttp(urls: list[str], iterations: int = 3) -> list[float]:
     times = []
