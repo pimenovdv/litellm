@@ -1,4 +1,4 @@
-- [ ] Удалить файлы и тесты Guardrails (директория `Backend/litellm/proxy/guardrails`, `Backend/litellm/types/guardrails.py`, `Backend/litellm/types/proxy/guardrails`) (шаг 1: удалить ссылки из ядра).
-- [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py`.
-- [ ] Очистить ссылки на Guardrails в конфигурационных файлах и хуках.
-- [ ] Удалить сами файлы Guardrails.
+- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py`.
+- [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/common_utils/callback_utils.py` и `Backend/litellm/main.py`.
+- [ ] Очистить ссылки на Guardrails в остальных файлах `Backend/litellm/proxy/`.
+- [ ] Удалить файлы и тесты Guardrails (директория `Backend/litellm/proxy/guardrails`, `Backend/litellm/types/guardrails.py`, `Backend/litellm/types/proxy/guardrails`).
