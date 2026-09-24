@@ -8,7 +8,7 @@ on:
     paths:
       - "litellm/**"
       - "tests/benchmarks/**"
-      - "pyproject.toml"
+      - "Backend/pyproject.toml"
       - "uv.lock"
       - ".github/workflows/codspeed.yml"
       - ".github/actions/setup-uv-with-retries/**"
@@ -19,7 +19,7 @@ on:
     paths:
       - "litellm/**"
       - "tests/benchmarks/**"
-      - "pyproject.toml"
+      - "Backend/pyproject.toml"
       - "uv.lock"
       - ".github/workflows/codspeed.yml"
       - ".github/actions/setup-uv-with-retries/**"

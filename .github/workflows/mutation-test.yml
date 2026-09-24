@@ -1,7 +1,7 @@
 name: "Mutation Test (manual)"
 
 # Manually-triggered mutation testing. Runs mutmut against the scope
-# configured in [tool.mutmut] in pyproject.toml (currently the
+# configured in [tool.mutmut] in Backend/pyproject.toml (currently the
 # litellm/proxy/management_endpoints/ folder). Intended cadence is roughly
 # weekly — clicked from the Actions tab when someone wants a fresh report.
 #
