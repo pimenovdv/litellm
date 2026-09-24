@@ -67,7 +67,7 @@ jobs:
       - name: Regenerate types from the live spec
         working-directory: ui/litellm-dashboard
         env:
-          LITELLM_PYTHON: "PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python"
+          LITELLM_PYTHON: "PYTHONPATH=Backend uv run --no-sync python"
         run: npm run gen:api
 
       - name: Fail if types are stale

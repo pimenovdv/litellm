@@ -89,23 +89,23 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python scripts/ruff_strict_gate.py --base "$BASE_SHA"
+          PYTHONPATH=Backend uv run --no-sync python scripts/ruff_strict_gate.py --base "$BASE_SHA"
 
       - name: Check type-discipline budget (mutable collections / casts / type guards / kwargs / unexplained suppressions, delta vs base)
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python scripts/type_discipline_gate.py --base "$BASE_SHA"
+          PYTHONPATH=Backend uv run --no-sync python scripts/type_discipline_gate.py --base "$BASE_SHA"
 
       - name: Print OpenAI version
         run: |
-          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python -c "import openai; print(f'OpenAI version: {openai.__version__}')"
+          PYTHONPATH=Backend uv run --no-sync python -c "import openai; print(f'OpenAI version: {openai.__version__}')"
 
       - name: Check basedpyright budget (delta vs base)
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          (uv run --no-sync basedpyright --outputjson || true) | PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python scripts/type_check_gate.py --base "$BASE_SHA"
+          (uv run --no-sync basedpyright --outputjson || true) | PYTHONPATH=Backend uv run --no-sync python scripts/type_check_gate.py --base "$BASE_SHA"
 
       - name: Check tests/e2e basedpyright (zero errors)
         env:
@@ -120,12 +120,12 @@ jobs:
       - name: Check for circular imports
         run: |
           cd litellm
-          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python ../tests/documentation_tests/test_circular_imports.py
+          PYTHONPATH=Backend uv run --no-sync python ../tests/documentation_tests/test_circular_imports.py
           cd ..
 
       - name: Check import safety
         run: |
-          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python -c "from litellm import *" || (echo '🚨 import failed, this means you introduced unprotected imports! 🚨'; exit 1)
+          PYTHONPATH=Backend uv run --no-sync python -c "from litellm import *" || (echo '🚨 import failed, this means you introduced unprotected imports! 🚨'; exit 1)
 
   # Intentionally NON-GATING. This job turns red when a *-budget.json ceiling is
   # raised (or a rule/budget is dropped) so a loosening is obvious in review, but it
