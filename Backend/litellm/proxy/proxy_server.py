@@ -347,6 +347,10 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
+from litellm.proxy.guardrails.init_guardrails import (
+    init_guardrails_v2,
+    initialize_guardrails,
+)
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
@@ -3484,6 +3488,26 @@ def _is_remote_module_url(value: Any) -> bool:
     return isinstance(value, str) and (value.startswith("s3://") or value.startswith("gcs://"))
 
 
+def _scrub_guardrail_inner(inner: Dict[str, Any]) -> None:
+    """Strip remote-URL entries from a guardrail's ``callbacks`` list
+    and ``guardrail`` (v2 module-path) field. Mutates in place."""
+    cbs = inner.get("callbacks")
+    if isinstance(cbs, list):
+        cleaned = [c for c in cbs if not _is_remote_module_url(c)]
+        if len(cleaned) != len(cbs):
+            verbose_proxy_logger.warning(
+                "Refused %d remote-URL entries from DB-overlay litellm_settings.guardrails[...].callbacks",
+                len(cbs) - len(cleaned),
+            )
+            inner["callbacks"] = cleaned
+    if _is_remote_module_url(inner.get("guardrail")):
+        verbose_proxy_logger.warning(
+            "Refused remote-URL guardrail module from DB-overlay litellm_settings.guardrails[...].guardrail: %r",
+            inner.get("guardrail"),
+        )
+        inner["guardrail"] = None
+
+
 def _scrub_db_overlay_remote_module_loads(section: str, db_value: Any) -> Any:
     """Strip ``s3://`` / ``gcs://`` entries from the DB-overlay value for
     fields whose contents reach ``get_instance_fn``. The same scheme is
@@ -3534,6 +3558,25 @@ def _scrub_db_overlay_remote_module_loads(section: str, db_value: Any) -> Any:
                         item.get("custom_handler"),
                     )
                     item["custom_handler"] = None
+    # ``litellm_settings.guardrails`` is a list of single-key dicts in
+    # v1 ({guardrail_name: {callbacks: [...], default_on: bool}}) or a
+    # list of v2 entries ({guardrail_name, litellm_params: {guardrail:
+    # "module.path", callbacks: [...]}}). Both shapes terminate in
+    # ``callbacks`` (a list) or ``guardrail`` (a single dotted name)
+    # that flow into ``get_instance_fn`` during config load.
+    if section == "litellm_settings":
+        guardrails = sanitized.get("guardrails")
+        if isinstance(guardrails, list):
+            for entry in guardrails:
+                if not isinstance(entry, dict):
+                    continue
+                for inner in entry.values():
+                    if not isinstance(inner, dict):
+                        continue
+                    _scrub_guardrail_inner(inner)
+                lp = entry.get("litellm_params")
+                if isinstance(lp, dict):
+                    _scrub_guardrail_inner(lp)
 
     # ``general_settings.litellm_jwtauth.custom_validate`` is a nested
     # string field.
@@ -6132,6 +6175,8 @@ class ProxyConfig:
 
         ex. Vector Stores, Guardrails, MCP tools, etc.
         """
+        if self._should_load_db_object(object_type="guardrails"):
+            await self._init_guardrails_in_db(prisma_client=prisma_client)
 
         if self._should_load_db_object(object_type="policies"):
             await self._init_policies_in_db(prisma_client=prisma_client)
@@ -9816,6 +9861,10 @@ async def realtime_websocket_endpoint(
         "query_params": query_params,  # Only explicit params
     }
 
+    # Pass guardrails into data so pre-call guardrail processing picks them up
+    if guardrails:
+        data["guardrails"] = [g.strip() for g in guardrails.split(",") if g.strip()]
+
     # Use raw ASGI headers (already lowercase bytes) to avoid extra work
     headers_list = list(websocket.scope.get("headers") or [])
 
@@ -9834,7 +9883,7 @@ async def realtime_websocket_endpoint(
     ### ROUTE THE REQUEST ###
     base_llm_response_processor = ProxyBaseLLMRequestProcessing(data=data)
 
-    # Phase 1: pre-call processing (auth, rate limits).
+    # Phase 1: pre-call processing (auth, guardrails, rate limits).
     # Errors here (e.g. guardrail block) are sent back to the client as an
     # error event before closing, so the caller knows what happened.
     try:
