@@ -346,10 +346,6 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
-from litellm.proxy.guardrails.init_guardrails import (
-    init_guardrails_v2,
-    initialize_guardrails,
-)
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
@@ -4451,12 +4447,6 @@ class ProxyConfig:
                 elif key == "cache" and value is False:
                     pass
                 elif key == "guardrails":
-                    guardrail_name_config_map = initialize_guardrails(
-                        guardrails_config=value,
-                        premium_user=premium_user,
-                        config_file_path=config_file_path,
-                        litellm_settings=litellm_settings,
-                    )
 
                     litellm.guardrail_name_config_map = guardrail_name_config_map
 
@@ -5011,11 +5001,8 @@ class ProxyConfig:
         if config is not None:
             guardrails_v2 = config.get("guardrails", None)
         if guardrails_v2:
-            init_guardrails_v2(
-                all_guardrails=guardrails_v2,
-                config_file_path=config_file_path,
-                llm_router=router,
-            )
+            pass
+            pass
 
         # Policy Engine settings
         await self._init_policy_engine(
@@ -6174,7 +6161,7 @@ class ProxyConfig:
         ex. Vector Stores, Guardrails, MCP tools, etc.
         """
         if self._should_load_db_object(object_type="guardrails"):
-            await self._init_guardrails_in_db(prisma_client=prisma_client)
+            pass
 
         if self._should_load_db_object(object_type="policies"):
             await self._init_policies_in_db(prisma_client=prisma_client)
@@ -6595,17 +6582,8 @@ class ProxyConfig:
                 "litellm.proxy.proxy_server.py::ProxyConfig:_init_prompts_in_db - {}".format(str(e))
             )
 
-    async def _init_guardrails_in_db(self, prisma_client: PrismaClient):
-        from litellm.proxy.guardrails.guardrail_registry import (
-            IN_MEMORY_GUARDRAIL_HANDLER,
-            Guardrail,
-            GuardrailRegistry,
-        )
 
         try:
-            guardrails_in_db: List[Guardrail] = await GuardrailRegistry.get_all_guardrails_from_db(
-                prisma_client=prisma_client
-            )
             verbose_proxy_logger.debug("guardrails from the DB %s", str(guardrails_in_db))
             db_guardrail_ids: set = set()
             for guardrail in guardrails_in_db:
@@ -6618,7 +6596,6 @@ class ProxyConfig:
 
             # Drop in-memory DB-backed entries whose row was deleted on another
             # pod. Config-loaded entries are never touched.
-            IN_MEMORY_GUARDRAIL_HANDLER.reconcile_db_guardrails(db_guardrail_ids=db_guardrail_ids)
         except Exception as e:
             verbose_proxy_logger.exception(
                 "litellm.proxy.proxy_server.py::ProxyConfig:_init_guardrails_in_db - {}".format(str(e))
