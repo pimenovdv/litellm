@@ -72,7 +72,7 @@ jobs:
       - name: Run documentation validation tests
         if: steps.changes.outputs.decision != 'skip'
         run: |
-          uv run --no-sync python ./tests/documentation_tests/test_env_keys.py
-          uv run --no-sync python ./tests/documentation_tests/test_router_settings.py
-          uv run --no-sync python ./tests/documentation_tests/test_api_docs.py
-          uv run --no-sync python ./tests/documentation_tests/test_circular_imports.py
+          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python ./tests/documentation_tests/test_env_keys.py
+          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python ./tests/documentation_tests/test_router_settings.py
+          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python ./tests/documentation_tests/test_api_docs.py
+          PYTHONPATH=Backend PYTHONPATH=Backend uv run --no-sync python ./tests/documentation_tests/test_circular_imports.py
