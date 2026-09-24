@@ -578,6 +578,36 @@ def _custom_logger_class_exists_in_failure_callbacks(
     )
 
 
+def get_request_guardrails(kwargs: Dict[str, Any]) -> List[str]:
+    """
+    Get the request guardrails from the kwargs
+    """
+    metadata = kwargs.get("metadata") or {}
+    requester_metadata = metadata.get("requester_metadata") or {}
+    applied_guardrails = requester_metadata.get("guardrails") or []
+    return applied_guardrails
+
+
+def get_applied_guardrails(kwargs: Dict[str, Any]) -> List[str]:
+    """
+    - Add 'default_on' guardrails to the list
+    - Add request guardrails to the list
+    """
+
+    request_guardrails = get_request_guardrails(kwargs)
+    applied_guardrails = []
+    CustomGuardrail = _get_cached_custom_guardrail()
+    for callback in litellm.callbacks:
+        if callback is not None and isinstance(callback, CustomGuardrail):
+            if callback.guardrail_name is not None:
+                if callback.default_on is True:
+                    applied_guardrails.append(callback.guardrail_name)
+                elif callback.guardrail_name in request_guardrails:
+                    applied_guardrails.append(callback.guardrail_name)
+
+    return applied_guardrails
+
+
 def load_credentials_from_list(kwargs: dict):
     """
     Updates kwargs with the credentials if credential_name in kwarg
@@ -712,6 +742,7 @@ def function_setup(
         custom_llm_setup()
 
         ## GET APPLIED GUARDRAILS
+        applied_guardrails = get_applied_guardrails(kwargs)
 
         ## LOGGING SETUP
         function_id: Optional[str] = kwargs["id"] if "id" in kwargs else None
@@ -1008,6 +1039,7 @@ def function_setup(
             dynamic_async_success_callbacks=dynamic_async_success_callbacks,
             dynamic_async_failure_callbacks=dynamic_async_failure_callbacks,
             kwargs=kwargs,
+            applied_guardrails=applied_guardrails,
         )
 
         ## check if metadata is passed in
