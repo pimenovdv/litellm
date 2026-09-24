@@ -120,7 +120,9 @@ from litellm.llms.cohere.common_utils import CohereModelInfo
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
 from litellm.llms.openai_like.json_loader import JSONProviderRegistry
-from litellm.llms.vertex_ai_and_google_aistudio.common_utils import VertexAIModelRoute, get_vertex_ai_model_route
+    VertexAIModelRoute,
+    get_vertex_ai_model_route,
+)
 from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
 from litellm.types.completion import (
@@ -3546,7 +3548,8 @@ def _complete_vertex_ai(ctx: _CompletionDispatchContext) -> _CompletionDispatchR
         )
     elif model_route == VertexAIModelRoute.AGENT_ENGINE:
         # Vertex AI Agent Engine (Reasoning Engines)
-        from litellm.llms.vertex_ai_and_google_aistudio.vertex_ai_agent_engine.transformation import VertexAgentEngineConfig
+                    VertexAgentEngineConfig,
+        )
 
         vertex_agent_engine_config = VertexAgentEngineConfig()
 
@@ -7693,7 +7696,8 @@ def transcription(
             ),
         )
     elif custom_llm_provider == "soniox":
-        from litellm.llms.soniox.audio_transcription.handler import SonioxAudioTranscriptionHandler
+                    SonioxAudioTranscriptionHandler,
+        )
 
         response = SonioxAudioTranscriptionHandler().audio_transcriptions(
             model=model,
@@ -8035,12 +8039,21 @@ def speech(
                 litellm_params=litellm_params_dict,
             )
     elif custom_llm_provider == "elevenlabs":
-        from litellm.llms.elevenlabs.text_to_speech.transformation import ElevenLabsTextToSpeechConfig
+                    ElevenLabsTextToSpeechConfig,
+        )
 
         if text_to_speech_provider_config is None:
             text_to_speech_provider_config = ElevenLabsTextToSpeechConfig()
 
-        from litellm.llms.elevenlabs.text_to_speech.transformation import ElevenLabsTextToSpeechConfig
+        elevenlabs_config = cast(ElevenLabsTextToSpeechConfig, text_to_speech_provider_config)
+
+        voice_id = voice if isinstance(voice, str) else None
+        if voice_id is None or not voice_id.strip():
+            raise litellm.BadRequestError(
+                message="'voice' must resolve to an ElevenLabs voice id for ElevenLabs TTS",
+                model=model,
+                llm_provider=custom_llm_provider,
+            )
         voice_id = voice_id.strip()
 
         query_params = kwargs.pop(ElevenLabsTextToSpeechConfig.ELEVENLABS_QUERY_PARAMS_KEY, None)
@@ -8069,7 +8082,8 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "vertex_ai" or custom_llm_provider == "vertex_ai_beta":
-        from litellm.llms.vertex_ai_and_google_aistudio.text_to_speech.transformation import VertexAITextToSpeechConfig
+                    VertexAITextToSpeechConfig,
+        )
 
         generic_optional_params = GenericLiteLLMParams(**kwargs)
 
@@ -8095,7 +8109,16 @@ def speech(
             text_to_speech_provider_config = VertexAITextToSpeechConfig()
 
         # Cast to specific Vertex AI config type to access dispatch method
-        from litellm.llms.vertex_ai_and_google_aistudio.text_to_speech.transformation import VertexAITextToSpeechConfig
+        vertex_config = cast(VertexAITextToSpeechConfig, text_to_speech_provider_config)
+
+        # Store Vertex AI specific params in litellm_params_dict
+        litellm_params_dict.update(
+            {
+                "vertex_project": generic_optional_params.vertex_project,
+                "vertex_location": generic_optional_params.vertex_location,
+                "vertex_credentials": generic_optional_params.vertex_credentials,
+            }
+        )
 
         response = vertex_config.dispatch_text_to_speech(
             model=model,
@@ -8159,22 +8182,68 @@ def speech(
             **kwargs,
         )
     elif custom_llm_provider == "minimax":
-        from litellm.llms.minimax.text_to_speech.transformation import MinimaxTextToSpeechConfig
+                    MinimaxTextToSpeechConfig,
+        )
 
         # MiniMax Text-to-Speech
         if text_to_speech_provider_config is None:
             text_to_speech_provider_config = MinimaxTextToSpeechConfig()
 
-        from litellm.llms.minimax.text_to_speech.transformation import MinimaxTextToSpeechConfig
+        minimax_config = cast(MinimaxTextToSpeechConfig, text_to_speech_provider_config)
+
+        if api_base is not None:
+            litellm_params_dict["api_base"] = api_base
+        if api_key is not None:
+            litellm_params_dict["api_key"] = api_key
+
+        # Convert voice to string if it's a dict (minimax handler expects Optional[str])
+        voice_str: Optional[str] = None
+        if isinstance(voice, str):
+            voice_str = voice
+        elif isinstance(voice, dict):
+            # Extract voice_id from dict if needed
+            voice_str = voice.get("voice_id") or voice.get("id") or voice.get("name")
+
+        response = base_llm_http_handler.text_to_speech_handler(
+            model=model,
+            input=input,
+            voice=voice_str,
+            text_to_speech_provider_config=minimax_config,
+            text_to_speech_optional_params=optional_params,
+            custom_llm_provider=custom_llm_provider,
+            litellm_params=litellm_params_dict,
+            logging_obj=logging_obj,
+            timeout=timeout,
+            extra_headers=extra_headers,
+            client=client,
+            _is_async=aspeech or False,
+        )
     elif custom_llm_provider == "aws_polly":
-        from litellm.llms.bedrock.text_to_speech.transformation import AWSPollyTextToSpeechConfig
+                    AWSPollyTextToSpeechConfig,
+        )
 
         # AWS Polly Text-to-Speech
         if text_to_speech_provider_config is None:
             text_to_speech_provider_config = AWSPollyTextToSpeechConfig()
 
         # Cast to specific AWS Polly config type to access dispatch method
-        from litellm.llms.bedrock.text_to_speech.transformation import AWSPollyTextToSpeechConfig
+        aws_polly_config = cast(AWSPollyTextToSpeechConfig, text_to_speech_provider_config)
+
+        response = aws_polly_config.dispatch_text_to_speech(
+            model=model,
+            input=input,
+            voice=voice,
+            optional_params=optional_params,
+            litellm_params_dict=litellm_params_dict,
+            logging_obj=logging_obj,
+            timeout=timeout,
+            extra_headers=extra_headers,
+            base_llm_http_handler=base_llm_http_handler,
+            aspeech=aspeech or False,
+            api_base=api_base,
+            api_key=api_key,
+            **kwargs,
+        )
 
     if response is None:
         raise Exception(
