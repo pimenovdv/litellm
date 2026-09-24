@@ -142,9 +142,6 @@ def test_default_api_base():
             # Skip chatgpt as it requires OAuth authentication
             if provider == "chatgpt":
                 continue
-            # Skip ragflow as it requires specific model format: ragflow/chat/{id}/{model} or ragflow/agent/{id}/{model}
-            if provider == "ragflow":
-                continue
             _, _, _, api_base = _get_openai_compatible_provider_info(
                 model=f"{provider}/*", api_base=None, api_key=None, dynamic_api_key=None
             )
