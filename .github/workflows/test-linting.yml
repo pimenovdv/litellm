@@ -57,7 +57,7 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema Backend/litellm/proxy/schema.prisma
 
       - name: Check ruff format
         env:
@@ -178,7 +178,7 @@ jobs:
 
       - name: Run secret scan test
         run: |
-          uv run --frozen --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
+          PYTHONPATH=Backend uv run --frozen --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
 
       - name: Run ggshield secret scan
         env:

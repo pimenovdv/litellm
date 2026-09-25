@@ -61,7 +61,7 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema Backend/litellm/proxy/schema.prisma
 
       # mutmut 3.x runs tests inside a `mutants/` sandbox where it injects
       # mutation trampolines. uv installs the project as editable by default,
@@ -87,7 +87,7 @@ jobs:
         env:
           # Make the mutants/ sandbox win over site-packages on sys.path so the
           # trampolined files are imported instead of the installed copy.
-          PYTHONPATH: ${{ github.workspace }}/mutants
+          PYTHONPATH: ${{ github.workspace }}/mutants:${{ github.workspace }}/Backend
         run: |
           set -o pipefail
           mkdir -p mutants
