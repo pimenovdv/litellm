@@ -99,7 +99,8 @@ jobs:
           DIST: ${{ inputs.dist }}
         run: |
           if [ "${WORKERS}" = "0" ]; then
-            cd Backend && uv run --no-sync pytest ${TEST_PATH:?} \
+            TEST_PATH=$(echo "$TEST_PATH" | sed 's/tests\//..\/tests\//g' | sed 's/ tests\// ..\/tests\//g')
+          cd Backend && uv run --no-sync pytest ${TEST_PATH:?} \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
               --reruns "${RERUNS}" \
@@ -109,7 +110,8 @@ jobs:
               --cov-report=xml:coverage.xml \
               --cov-config=../Backend/pyproject.toml
           else
-            cd Backend && uv run --no-sync pytest ${TEST_PATH:?} \
+            TEST_PATH=$(echo "$TEST_PATH" | sed 's/tests\//..\/tests\//g' | sed 's/ tests\// ..\/tests\//g')
+          cd Backend && uv run --no-sync pytest ${TEST_PATH:?} \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
               -n "${WORKERS}" \
