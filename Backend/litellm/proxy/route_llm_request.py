@@ -109,7 +109,6 @@ ROUTE_ENDPOINT_MAPPING = {
     "alist_skills": "/skills",
     "aget_skill": "/skills/{skill_id}",
     "adelete_skill": "/skills/{skill_id}",
-    "aingest": "/rag/ingest",
     # Google Interactions API routes
     "acreate_interaction": "/interactions",
     "aget_interaction": "/interactions/{interaction_id}",
@@ -345,7 +344,6 @@ async def route_request(
         "alist_skills",
         "aget_skill",
         "adelete_skill",
-        "aingest",
         "anthropic_messages",
         "acreate_interaction",
         "aget_interaction",
@@ -539,7 +537,6 @@ async def route_request(
             "alist_skills",
             "aget_skill",
             "adelete_skill",
-            "aingest",
         ] and (data.get("model") is None or data.get("model") == ""):
             # These endpoints don't need a model, use custom_llm_provider directly
             return getattr(litellm, f"{route_type}")(**data)

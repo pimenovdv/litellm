@@ -1,5 +1,5 @@
-- [ ] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`, `Backend/litellm/types/rag.py`, `Backend/litellm/types/integrations/rag`) (макс 3-5 файлов).
-- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/proxy_server.py`.
-- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/middleware/billable_request_metrics_middleware.py` и `Backend/litellm/proxy/_types.py`.
-- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/public_endpoints/public_endpoints.py`, `Backend/litellm/proxy/route_llm_request.py`, `Backend/litellm/types/llms/custom_http.py` и `Backend/litellm/__init__.py`.
-- [ ] Очистить ссылки на RAG в `Backend/litellm/provider_endpoints_support_backup.json` и удалить оставшиеся тесты RAG.
+- [ ] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (различные хуки Guardrails) и файлы `Backend/litellm/types/proxy/guardrails/guardrail_hooks/*.py`.
+- [ ] Удалить оставшиеся файлы Guardrails в `Backend/litellm/proxy/guardrails` (`guardrail_helpers.py`, `guardrail_registry.py`, `guardrail_initializers.py`, `guardrail_endpoints.py`, `init_guardrails.py`).
+- [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py`.
+- [ ] Удалить Guardrail integrations: `Backend/litellm/integrations/custom_guardrail.py`, `Backend/litellm/proxy/pass_through_endpoints/passthrough_guardrails.py`, `Backend/litellm/types/guardrails.py`.
+- [ ] Вычистить код Guardrails из всех других модулей (например, `Backend/litellm/proxy/_types.py`, `Backend/litellm/proxy/route_llm_request.py`, и папок `guardrail_translation` в `llms/`).

@@ -13,15 +13,15 @@ ALLOWED_FILES = [
     "../../litellm/llms/openai/common_utils.py",
     "../../litellm/experimental_mcp_client/client.py",
     # when running on ci/cd
-    "./litellm/__init__.py",
-    "./litellm/llms/custom_httpx/http_handler.py",
-    "./litellm/router_utils/client_initalization_utils.py",
-    "./litellm/llms/custom_httpx/http_handler.py",
-    "./litellm/llms/huggingface_restapi.py",
-    "./litellm/llms/base.py",
-    "./litellm/llms/custom_httpx/httpx_handler.py",
-    "./litellm/llms/openai/common_utils.py",
-    "./litellm/experimental_mcp_client/client.py",
+    "./Backend/litellm/__init__.py",
+    "./Backend/litellm/llms/custom_httpx/http_handler.py",
+    "./Backend/litellm/router_utils/client_initalization_utils.py",
+    "./Backend/litellm/llms/custom_httpx/http_handler.py",
+    "./Backend/litellm/llms/huggingface_restapi.py",
+    "./Backend/litellm/llms/base.py",
+    "./Backend/litellm/llms/custom_httpx/httpx_handler.py",
+    "./Backend/litellm/llms/openai/common_utils.py",
+    "./Backend/litellm/experimental_mcp_client/client.py",
 ]
 
 warning_msg = "this is a serious violation that can impact latency. Creating Async clients per request can add +500ms per request"
