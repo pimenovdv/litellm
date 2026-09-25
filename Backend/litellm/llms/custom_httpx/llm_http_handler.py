@@ -34,8 +34,8 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES
 from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.realtime_streaming import RealTimeStreaming
 from litellm.litellm_core_utils.url_utils import encode_url_path_segment
-from litellm.llms.base_llm.anthropic_messages.transformation import (
-    BaseAnthropicMessagesConfig,
+from litellm.llms.base_llm.chat.transformation import (
+    BaseConfig,
 )
 from litellm.llms.base_llm.audio_transcription.transformation import (
     BaseAudioTranscriptionConfig,
@@ -1887,7 +1887,7 @@ class BaseLLMHTTPHandler:
         request_body: dict,
         stream: bool,
         logging_obj: LiteLLMLoggingObj,
-        provider_config: BaseAnthropicMessagesConfig,
+        provider_config: "BaseConfig",
         litellm_params: GenericLiteLLMParams,
         api_key: Optional[str],
         model: str,
@@ -1969,7 +1969,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseConfig",
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -2223,7 +2223,7 @@ class BaseLLMHTTPHandler:
         initial_response: AnthropicMessagesResponse,
         model: str,
         messages: list[dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseConfig",
         anthropic_messages_optional_request_params: dict,
         logging_obj: LiteLLMLoggingObj,
         custom_llm_provider: str,
@@ -2324,7 +2324,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: "BaseConfig",
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         _is_async: bool,

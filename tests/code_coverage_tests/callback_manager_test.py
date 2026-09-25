@@ -6,8 +6,8 @@ ALLOWED_FILES = [
     "../../litellm/litellm_core_utils/litellm.logging_callback_manager.py",
     "../../litellm/proxy/common_utils/callback_utils.py",
     # when running on ci/cd
-    "./litellm/litellm_core_utils/litellm.logging_callback_manager.py",
-    "./litellm/proxy/common_utils/callback_utils.py",
+    "./Backend/litellm/litellm_core_utils/litellm.logging_callback_manager.py",
+    "./Backend/litellm/proxy/common_utils/callback_utils.py",
 ]
 
 warning_msg = "this is a serious violation. Callbacks must only be modified through LoggingCallbackManager"

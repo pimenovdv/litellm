@@ -24,7 +24,7 @@ from openai.types.responses.tool_param import FunctionToolParam
 from pydantic import BaseModel
 
 import litellm
-from litellm import ModelResponse
+from litellm.types.utils import ModelResponse
 from litellm._logging import verbose_logger
 from litellm.llms.base_llm.base_model_iterator import BaseModelResponseIterator
 from litellm.llms.base_llm.bridges.completion_transformation import (
