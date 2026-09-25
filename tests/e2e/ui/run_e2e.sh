@@ -21,7 +21,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-DASHBOARD_DIR="$REPO_ROOT/ui/litellm-dashboard"
+DASHBOARD_DIR="$REPO_ROOT/frontend"
 IS_CI="${CI:-false}"
 CONTAINER_NAME="litellm-e2e-postgres-$$"
 MOCK_PID=""

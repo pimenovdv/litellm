@@ -9,8 +9,6 @@ markdown report with provider-specific breakdowns and test statistics.
 import os
 import sys
 import subprocess
-import os
-os.environ["PYTHONPATH"] = "Backend"
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from datetime import datetime
@@ -348,7 +346,9 @@ def run_tests(test_path: str = "tests/llm_translation/",
     print()
     
     # Run the tests
-    result = subprocess.run(cmd, capture_output=False)
+    env = os.environ.copy()
+    env["PYTHONPATH"] = "Backend"
+    result = subprocess.run(cmd, env=env, capture_output=False)
     
     # Generate the report regardless of test outcome
     if os.path.exists(junit_xml):

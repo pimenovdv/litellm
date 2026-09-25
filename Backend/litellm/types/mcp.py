@@ -224,7 +224,7 @@ class MCPCredentials(TypedDict, total=False):
 
 MCP_ADMIN_CONFIG_CREDENTIAL_KEYS: tuple[str, ...] = ("upstream_resource",)
 """Non-secret credential keys returned on read so the admin form can show and clear them. Mirrors
-``ADMIN_CONFIG_CREDENTIAL_KEYS`` in ``ui/litellm-dashboard/src/components/mcp_tools/types.tsx``."""
+``ADMIN_CONFIG_CREDENTIAL_KEYS`` in ``frontend/src/components/mcp_tools/types.tsx``."""
 
 
 class MCPServerCostInfo(TypedDict, total=False):

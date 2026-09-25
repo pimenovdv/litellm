@@ -50,11 +50,11 @@ hosted_config.yaml
 litellm/proxy/tests/node_modules
 litellm/proxy/tests/package.json
 litellm/proxy/tests/package-lock.json
-ui/litellm-dashboard/.next
-ui/litellm-dashboard/node_modules
-ui/litellm-dashboard/next-env.d.ts
-ui/litellm-dashboard/package.json
-ui/litellm-dashboard/package-lock.json
+frontend/.next
+frontend/node_modules
+frontend/next-env.d.ts
+frontend/package.json
+frontend/package-lock.json
 helm/litellm-helm/*.tgz
 helm/*.tgz
 litellm/proxy/vertex_key.json
@@ -140,7 +140,7 @@ crash.*.log
 # pytest coverage data
 .coverage
 
-ui/litellm-dashboard/out/
+frontend/out/
 litellm/llms/volcengine/
 litellm/llms/manus/
 

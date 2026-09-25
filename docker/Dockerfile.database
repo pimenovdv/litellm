@@ -22,10 +22,10 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
 
 WORKDIR /ui
 
-COPY ui/litellm-dashboard/package.json ui/litellm-dashboard/package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci --prefer-offline
 
-COPY ui/litellm-dashboard/ ./
+COPY frontend/ ./
 RUN npm run build
 
 FROM $LITELLM_BUILD_IMAGE AS builder
