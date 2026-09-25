@@ -82,7 +82,7 @@ def main():
     Main function to run the test.
     """
     # local
-    base_dir = "../../litellm/llms/azure"
+    base_dir = "../../Backend/litellm/llms/azure"
     azure_files = find_azure_files(base_dir)
     print(f"Found {len(azure_files)} Azure Python files to check")
 

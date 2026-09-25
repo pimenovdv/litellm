@@ -81,7 +81,7 @@ def check_get_model_cost_key_performance():
     """
     Check that _get_model_cost_key doesn't contain O(n) operations.
     """
-    utils_file = "./litellm/utils.py"
+    utils_file = "./Backend/litellm/utils.py"
 
     if not os.path.exists(utils_file):
         print(f"Warning: File {utils_file} does not exist.")
