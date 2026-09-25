@@ -11,7 +11,7 @@ import sys
 
 import pytest
 
-sys.path.insert(0, os.path.abspath("../.."))
+sys.path.insert(0, os.path.abspath("../../Backend"))
 
 from tests._vcr_conftest_common import (  # noqa: E402,F401
     VerboseReporterState,
