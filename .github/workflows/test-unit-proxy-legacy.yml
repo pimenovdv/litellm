@@ -90,7 +90,7 @@ jobs:
         env:
           TEST_PATH: ${{ matrix.test-group.path }}
         run: |
-          PYTHONPATH=Backend uv run --no-sync pytest ${TEST_PATH} \
+          uv run --no-sync pytest ${TEST_PATH} \
             --tb=short -vv \
             --maxfail=10 \
             -n 2 \
