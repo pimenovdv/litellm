@@ -87,7 +87,7 @@ jobs:
         env:
           # Make the mutants/ sandbox win over site-packages on sys.path so the
           # trampolined files are imported instead of the installed copy.
-          PYTHONPATH: ${{ github.workspace }}/mutants
+          PYTHONPATH: ${{ github.workspace }}/mutants:${{ github.workspace }}/Backend
         run: |
           set -o pipefail
           mkdir -p mutants
