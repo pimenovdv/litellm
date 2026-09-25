@@ -81,6 +81,8 @@ def client_no_auth():
 
 
 def test_login_v2_returns_redirect_url_and_sets_cookie(monkeypatch):
+
+
     import pytest; pytest.skip('Out of scope')
     mock_login_result = {"user_id": "test-user"}
     mock_prisma_client = MagicMock()
@@ -3622,6 +3624,7 @@ class TestPriceDataReloadAPI:
         return TestClient(app)
 
     def test_reload_model_cost_map_admin_access(self, client_with_auth):
+
         import pytest; pytest.skip('Out of scope')
         """Test that admin users can access the reload endpoint"""
         # Save the original model_cost so the endpoint's direct assignment
@@ -3744,6 +3747,7 @@ class TestPriceDataReloadAPI:
         assert "Hours must be greater than 0" in data["detail"]
 
     def test_cancel_model_cost_map_reload_admin_access(self, client_with_auth):
+
         import pytest; pytest.skip('Out of scope')
         """Test that admin users can cancel periodic reload"""
         with patch("litellm.proxy.proxy_server.prisma_client") as mock_prisma:
@@ -3773,6 +3777,7 @@ class TestPriceDataReloadAPI:
         assert "Admin role required" in data["detail"]
 
     def test_get_model_cost_map_reload_status_admin_access(self, client_with_auth):
+
         import pytest; pytest.skip('Out of scope')
         """Test that admin users can get reload status"""
         with patch("litellm.proxy.proxy_server.prisma_client") as mock_prisma:
@@ -3833,6 +3838,7 @@ class TestPriceDataReloadAPI:
             assert data["next_run"] == None
 
     def test_get_model_cost_map_reload_status_no_interval(self, client_with_auth):
+
         import pytest; pytest.skip('Out of scope')
         """Test that status returns not scheduled when no interval is configured"""
         with patch("litellm.proxy.proxy_server.prisma_client") as mock_prisma:
@@ -3883,6 +3889,7 @@ class TestPriceDataReloadIntegration:
         return TestClient(app)
 
     def test_complete_reload_flow(self, client_with_auth):
+
         import pytest; pytest.skip('Out of scope')
         """Test the complete reload flow from API to model cost update"""
         # Mock the model cost map
@@ -3920,6 +3927,7 @@ class TestPriceDataReloadIntegration:
             _invalidate_model_cost_lowercase_map()
 
     def test_distributed_reload_check_function(self):
+
         import pytest; pytest.skip('Out of scope')
         """Test the _check_and_reload_model_cost_map function"""
         from litellm.proxy.proxy_server import ProxyConfig
@@ -3991,6 +3999,7 @@ class TestPriceDataReloadIntegration:
             _invalidate_model_cost_lowercase_map()
 
     def test_distributed_reload_preserves_interval_hours(self):
+
         import pytest; pytest.skip('Out of scope')
         """Test that _check_and_reload_model_cost_map preserves interval_hours after reload.
 
@@ -4034,6 +4043,7 @@ class TestPriceDataReloadIntegration:
             _invalidate_model_cost_lowercase_map()
 
     def test_manual_reload_preserves_interval_hours(self):
+
         import pytest; pytest.skip('Out of scope')
         """Test that manual reload via /reload/model_cost_map preserves existing interval_hours.
 
@@ -5320,6 +5330,8 @@ def test_update_config_fields_uppercases_env_vars(monkeypatch):
 
 
 def test_encrypt_env_variables_for_db_is_idempotent(monkeypatch):
+
+
     import pytest; pytest.skip('Out of scope')
     """
     Regression: /config/update and save_config must not stack a second
@@ -5428,6 +5440,8 @@ def test_get_prompt_spec_for_db_prompt_with_versions():
 
 
 def test_root_redirect_when_docs_url_not_root_and_redirect_url_set(monkeypatch):
+
+
     import pytest; pytest.skip('Out of scope')
     from fastapi.responses import RedirectResponse
 
@@ -8597,6 +8611,7 @@ class TestLazyFeaturesNotImportedAtStartup:
     """
 
     def test_heavy_modules_absent_at_startup(self):
+
         import pytest; pytest.skip('Out of scope')
         # Static scan of proxy_server.py source — catches any top-level
         # `from <lazy_module> import` that would defeat lazy loading.
@@ -9235,6 +9250,8 @@ def test_get_config_list_includes_cancel_on_disconnect(monkeypatch):
 
 
 def test_get_config_list_includes_skip_user_budget_on_team_key(monkeypatch):
+
+
     import pytest; pytest.skip('Out of scope')
     """Related to #12905: the opt-out flag must be discoverable via /config/list so
     it renders as a Boolean toggle on the Admin UI General Settings table. This
