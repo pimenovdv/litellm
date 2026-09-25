@@ -55,11 +55,11 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          cd Backend && uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Start the proxy
         run: |
-          nohup uv run --no-sync litellm --config tests/e2e/load/weekly_anomaly_config.yml --port 4000 > proxy.log 2>&1 &
+          nohup cd Backend && uv run --no-sync litellm --config tests/e2e/load/weekly_anomaly_config.yml --port 4000 > proxy.log 2>&1 &
           for _ in $(seq 1 90); do
             if curl -fs http://localhost:4000/health/liveliness > /dev/null; then
               exit 0
@@ -74,7 +74,7 @@ jobs:
         env:
           E2E_WEEKLY_ANOMALY: "1"
         run: |
-          uv run --no-sync pytest tests/e2e/load/test_weekly_session_anomaly_e2e.py -v --tb=short -rA
+          cd Backend && uv run --no-sync pytest tests/e2e/load/test_weekly_session_anomaly_e2e.py -v --tb=short -rA
 
       - name: Show proxy log on failure
         if: failure()

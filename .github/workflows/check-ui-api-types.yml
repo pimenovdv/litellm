@@ -41,7 +41,7 @@ jobs:
           path: |
             ~/.cache/uv
             .venv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          key: ${{ runner.os }}-uv-${{ hashFiles('Backend/uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
 
@@ -51,7 +51,7 @@ jobs:
       - name: Generate Prisma client
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
-        run: uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+        run: cd Backend && uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Set up Node.js
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
@@ -67,7 +67,7 @@ jobs:
       - name: Regenerate types from the live spec
         working-directory: ui/litellm-dashboard
         env:
-          LITELLM_PYTHON: "uv run --no-sync python"
+          LITELLM_PYTHON: "cd Backend && uv run --no-sync python"
         run: npm run gen:api
 
       - name: Fail if types are stale

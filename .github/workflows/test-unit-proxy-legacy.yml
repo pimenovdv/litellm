@@ -69,7 +69,7 @@ jobs:
           path: |
             ~/.cache/uv
             .venv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          key: ${{ runner.os }}-uv-${{ hashFiles('Backend/uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
 
@@ -83,14 +83,14 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          cd Backend && uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Run tests - ${{ matrix.test-group.name }}
         if: steps.changes.outputs.decision != 'skip'
         env:
           TEST_PATH: ${{ matrix.test-group.path }}
         run: |
-          uv run --no-sync pytest ${TEST_PATH} \
+          cd Backend && uv run --no-sync pytest ${TEST_PATH} \
             --tb=short -vv \
             --maxfail=10 \
             -n 2 \
