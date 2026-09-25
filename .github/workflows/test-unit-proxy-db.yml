@@ -220,6 +220,70 @@ jobs:
             workers: 4
             dist: loadscope
             timeout: 15
+
+          - test-group: misc-catchall
+            test-path: >-
+              tests/test_litellm/proxy/test_aiohttp_cleanup_closed.py
+              tests/test_litellm/proxy/test_aiohttp_session_recovery.py
+              tests/test_litellm/proxy/test_api_key_masking_in_errors.py
+              tests/test_litellm/proxy/test_audio_speech_prometheus_hooks.py
+              tests/test_litellm/proxy/test_batch_expiry.py
+              tests/test_litellm/proxy/test_batch_metadata_none_fix.py
+              tests/test_litellm/proxy/test_batch_retrieve_bedrock.py
+              tests/test_litellm/proxy/test_batch_x_litellm_model_encoding.py
+              tests/test_litellm/proxy/test_blocked_response_usage.py
+              tests/test_litellm/proxy/test_budget_reservation.py
+              tests/test_litellm/proxy/test_caching_routes.py
+              tests/test_litellm/proxy/test_chat_completion_metadata.py
+              tests/test_litellm/proxy/test_common_request_processing.py
+              tests/test_litellm/proxy/test_component_allowlists.py
+              tests/test_litellm/proxy/test_cors_config.py
+              tests/test_litellm/proxy/test_custom_proxy.py
+              tests/test_litellm/proxy/test_dynamic_mcp_route.py
+              tests/test_litellm/proxy/test_empty_model_list.py
+              tests/test_litellm/proxy/test_enforce_user_param.py
+              tests/test_litellm/proxy/test_fallback_management_endpoints.py
+              tests/test_litellm/proxy/test_fastapi_offline_routes.py
+              tests/test_litellm/proxy/test_filter_models_by_team_access_group.py
+              tests/test_litellm/proxy/test_health_check_functions.py
+              tests/test_litellm/proxy/test_health_check_max_tokens.py
+              tests/test_litellm/proxy/test_langfuse_passthrough_security.py
+              tests/test_litellm/proxy/test_lazy_openapi_snapshot.py
+              tests/test_litellm/proxy/test_litellm_pre_call_utils.py
+              tests/test_litellm/proxy/test_max_budget_env_var.py
+              tests/test_litellm/proxy/test_mcp_asgi_response.py
+              tests/test_litellm/proxy/test_model_based_routing_files_batches.py
+              tests/test_litellm/proxy/test_model_dump_with_preserved_fields.py
+              tests/test_litellm/proxy/test_model_id_header_propagation.py
+              tests/test_litellm/proxy/test_model_info_default_limits.py
+              tests/test_litellm/proxy/test_model_level_guardrails.py
+              tests/test_litellm/proxy/test_model_list_healthy_only.py
+              tests/test_litellm/proxy/test_modify_response_streaming_passthrough.py
+              tests/test_litellm/proxy/test_openapi_schema_validation.py
+              tests/test_litellm/proxy/test_plugin_routes.py
+              tests/test_litellm/proxy/test_pricing_field_strip.py
+              tests/test_litellm/proxy/test_prometheus_cleanup.py
+              tests/test_litellm/proxy/test_provider_url_destination_guard.py
+              tests/test_litellm/proxy/test_proxy_cli.py
+              tests/test_litellm/proxy/test_proxy_logging_hook_detection.py
+              tests/test_litellm/proxy/test_proxy_types.py
+              tests/test_litellm/proxy/test_pyroscope.py
+              tests/test_litellm/proxy/test_read_model_list.py
+              tests/test_litellm/proxy/test_redis_auth_cache_flag.py
+              tests/test_litellm/proxy/test_response_model_sanitization.py
+              tests/test_litellm/proxy/test_route_a2a_models.py
+              tests/test_litellm/proxy/test_route_llm_request.py
+              tests/test_litellm/proxy/test_sensitive_route_auth.py
+              tests/test_litellm/proxy/test_shared_health_check.py
+              tests/test_litellm/proxy/test_spend_log_cleanup.py
+              tests/test_litellm/proxy/test_swagger_chat_completions.py
+              tests/test_litellm/proxy/test_team_member_update.py
+              tests/test_litellm/proxy/test_team_org_move.py
+              tests/test_litellm/proxy/test_tools_allowlist_enforcement.py
+              tests/test_litellm/proxy/test_update_llm_router_resilience.py
+            workers: 4
+            dist: loadscope
+            timeout: 15
     uses: ./.github/workflows/_test-unit-base.yml
     with:
       test-path: ${{ matrix.test-path }}
