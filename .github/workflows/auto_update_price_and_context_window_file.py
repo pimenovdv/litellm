@@ -97,12 +97,12 @@ def transform_vercel_ai_gateway_data(data):
         if "pricing" in row:
             if "input_cache_read" in row["pricing"] and row["pricing"]["input_cache_read"] is not None:
                 obj['cache_read_input_token_cost'] = float(f"{float(row['pricing']['input_cache_read']):e}")
-            
+
             if "input_cache_write" in row["pricing"] and row["pricing"]["input_cache_write"] is not None:
                 obj['cache_creation_input_token_cost'] = float(f"{float(row['pricing']['input_cache_write']):e}")
 
         mode = "embedding" if "embedding" in row["id"].lower() else "chat"
-        
+
         obj.update({"litellm_provider": "vercel_ai_gateway", "mode": mode})
 
         transformed[f'vercel_ai_gateway/{row["id"]}'] = obj
@@ -133,17 +133,17 @@ def main():
 
     # Load local data from file
     local_data = load_local_data(local_file_path)
-    
+
     # Fetch OpenRouter data
     openrouter_data = asyncio.run(fetch_data(openrouter_url))
     # Transform the fetched OpenRouter data
     openrouter_data = transform_openrouter_data(openrouter_data)
-    
+
     # Fetch Vercel AI Gateway data
     vercel_data = asyncio.run(fetch_data(vercel_ai_gateway_url))
     # Transform the fetched Vercel AI Gateway data
     vercel_data = transform_vercel_ai_gateway_data(vercel_data)
-    
+
     # Combine both datasets
     all_remote_data = {**openrouter_data, **vercel_data}
 

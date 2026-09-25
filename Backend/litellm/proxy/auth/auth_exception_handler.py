@@ -14,7 +14,6 @@ from litellm.proxy._types import (
     ProxyException,
     UserAPIKeyAuth,
 )
-from litellm.integrations.otel.runtime import seed_request_identity
 from litellm.proxy.auth.auth_utils import _get_request_ip_address
 from litellm.proxy.db.exception_handler import PrismaDBExceptionHandler
 from litellm.types.services import ServiceTypes
@@ -115,10 +114,7 @@ class UserAPIKeyAuthExceptionHandler:
             # Stamp identity onto the request's server span now, before the request
             # is rejected; the OTEL failure hooks don't touch the server span, so
             # without this the failed trace would carry no team/key attributes.
-            seed_request_identity(
-                user_api_key_dict,
-                model=request_data.get("model"),
-            )
+            pass
 
             # Budget checks live in tenant-scoped helpers (key / team / org / tag)
             # that don't see the request model, so the BudgetExceededError they

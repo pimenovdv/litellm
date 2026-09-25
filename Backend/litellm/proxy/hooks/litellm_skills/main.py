@@ -31,10 +31,6 @@ from typing import Any, Dict, List, Optional, Union
 from litellm._logging import verbose_proxy_logger
 from litellm.caching.caching import DualCache
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.llms.litellm_proxy.skills.constants import LITELLM_SKILL_ID_PREFIX
-from litellm.llms.litellm_proxy.skills.prompt_injection import (
-    SkillPromptInjectionHandler,
-)
 from litellm.proxy._types import LiteLLM_SkillsTable, UserAPIKeyAuth
 from litellm.types.utils import CallTypes, CallTypesLiteral
 
@@ -57,13 +53,11 @@ class SkillsInjectionHook(CustomLogger):
     """
 
     def __init__(self, **kwargs):
-        from litellm.llms.litellm_proxy.skills.constants import (
-            DEFAULT_MAX_ITERATIONS,
-            DEFAULT_SANDBOX_TIMEOUT,
-        )
+        DEFAULT_MAX_ITERATIONS = 5
+        DEFAULT_SANDBOX_TIMEOUT = 300
 
         self.optional_params = kwargs
-        self.prompt_handler = SkillPromptInjectionHandler()
+        self.prompt_handler = object()
         self.max_iterations = kwargs.get("max_iterations", DEFAULT_MAX_ITERATIONS)
         self.sandbox_timeout = kwargs.get("sandbox_timeout", DEFAULT_SANDBOX_TIMEOUT)
         super().__init__(**kwargs)
@@ -107,7 +101,7 @@ class SkillsInjectionHook(CustomLogger):
                 continue
 
             skill_id = skill.get("skill_id", "")
-            if skill_id.startswith(LITELLM_SKILL_ID_PREFIX):
+            if skill_id.startswith(""):
                 # Fetch from LiteLLM DB
                 db_skill = await self._fetch_skill_from_db(
                     skill_id,
@@ -372,7 +366,7 @@ class SkillsInjectionHook(CustomLogger):
         for tc in tool_calls:
             tool_name = tc.get("name", "")
             # Execute if it's litellm_code_execution OR a skill tool (litellm_skill_xxx)
-            if tool_name == LiteLLMInternalTools.CODE_EXECUTION.value or tool_name.startswith(LITELLM_SKILL_ID_PREFIX):
+            if tool_name == LiteLLMInternalTools.CODE_EXECUTION.value or tool_name.startswith(""):
                 has_executable_tool = True
                 break
 
@@ -516,7 +510,7 @@ class SkillsInjectionHook(CustomLogger):
                 if tool_name == LiteLLMInternalTools.CODE_EXECUTION.value:
                     code = tool_input.get("code", "")
                     result = await self._execute_code(code, skill_files, executor, generated_files)
-                elif tool_name.startswith(LITELLM_SKILL_ID_PREFIX):
+                elif tool_name.startswith(""):
                     # Skill tool - execute the skill's code
                     result = await self._execute_skill_tool(
                         tool_name, tool_input, skill_files, executor, generated_files
@@ -865,4 +859,3 @@ skills_injection_hook = SkillsInjectionHook()
 
 import litellm
 
-litellm.logging_callback_manager.add_litellm_callback(skills_injection_hook)

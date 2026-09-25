@@ -1,5 +1,6 @@
-- [ ] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`, `Backend/litellm/types/rag.py`, `Backend/litellm/types/integrations/rag`) (макс 3-5 файлов).
-- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/proxy_server.py`.
-- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/middleware/billable_request_metrics_middleware.py` и `Backend/litellm/proxy/_types.py`.
-- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/public_endpoints/public_endpoints.py`, `Backend/litellm/proxy/route_llm_request.py`, `Backend/litellm/types/llms/custom_http.py` и `Backend/litellm/__init__.py`.
-- [ ] Очистить ссылки на RAG в `Backend/litellm/provider_endpoints_support_backup.json` и удалить оставшиеся тесты RAG.
+## Удалить Guardrails (директория Backend/litellm/proxy/guardrails, ссылки в коде)
+
+- [x] Шаг 1: Удалить основные директории Guardrails (`Backend/litellm/proxy/guardrails`, `Backend/litellm/types/proxy/guardrails`, `Backend/litellm/types/guardrails.py`) и обновить `todo.md`.
+- [x] Шаг 2: Удалить директории `guardrail_translation` во всех подпапках LLM провайдеров (`Backend/litellm/llms/**/guardrail_translation`) и удалить интеграцию `Backend/litellm/integrations/custom_guardrail.py`.
+- [ ] Шаг 3: Удалить связанные тесты Guardrails (`tests/e2e/guardrails`, `tests/guardrails_tests`, `tests/test_litellm/proxy/guardrails`, и другие `*guardrail*` тесты).
+- [ ] Шаг 4: Очистить остаточные импорты и ссылки на `guardrails` в `Backend/litellm/proxy/proxy_server.py`, `Backend/litellm/router.py` и `Backend/litellm/utils.py`.

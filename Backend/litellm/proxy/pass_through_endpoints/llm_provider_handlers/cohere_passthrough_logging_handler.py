@@ -4,18 +4,13 @@ from typing import List, Optional, Union
 import httpx
 
 import litellm
-from litellm import stream_chunk_builder
+from litellm.main import stream_chunk_builder
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
 from litellm.litellm_core_utils.litellm_logging import (
     get_standard_logging_object_payload,
 )
 from litellm.litellm_core_utils.streaming_handler import CustomStreamWrapper
 from litellm.llms.base_llm.chat.transformation import BaseConfig
-from litellm.llms.cohere.chat.v2_transformation import CohereV2ChatConfig
-from litellm.llms.cohere.common_utils import (
-    ModelResponseIterator as CohereModelResponseIterator,
-)
-from litellm.llms.cohere.embed.v1_transformation import CohereEmbeddingConfig
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
 from litellm.types.passthrough_endpoints.pass_through_endpoints import (
     PassthroughStandardLoggingPayload,
@@ -35,7 +30,7 @@ class CoherePassthroughLoggingHandler(BasePassthroughLoggingHandler):
         return LlmProviders.COHERE
 
     def get_provider_config(self, model: str) -> BaseConfig:
-        return CohereV2ChatConfig()
+        return BaseConfig()
 
     def _build_complete_streaming_response(
         self,
@@ -43,10 +38,6 @@ class CoherePassthroughLoggingHandler(BasePassthroughLoggingHandler):
         litellm_logging_obj: LiteLLMLoggingObj,
         model: str,
     ) -> Optional[Union[ModelResponse, TextCompletionResponse]]:
-        cohere_model_response_iterator = CohereModelResponseIterator(
-            streaming_response=None,
-            sync_stream=False,
-        )
         litellm_custom_stream_wrapper = CustomStreamWrapper(
             completion_stream=cohere_model_response_iterator,
             model=model,
@@ -85,7 +76,7 @@ class CoherePassthroughLoggingHandler(BasePassthroughLoggingHandler):
         if "/v1/embed" in url_route:
             model = request_body.get("model", response_body.get("model", ""))
             try:
-                cohere_embed_config = CohereEmbeddingConfig()
+                cohere_embed_config = BaseConfig()
                 litellm_model_response = litellm.EmbeddingResponse()
                 handler_instance = CoherePassthroughLoggingHandler()
 

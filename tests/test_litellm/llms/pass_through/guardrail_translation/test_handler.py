@@ -34,4 +34,3 @@ class TestRegistry:
             guardrail_translation_mappings[CallTypes.pass_through]
             is PassThroughEndpointHandler
         )
-

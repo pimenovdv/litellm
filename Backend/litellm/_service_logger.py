@@ -6,8 +6,6 @@ import litellm
 from litellm._logging import verbose_logger
 
 from .integrations.custom_logger import CustomLogger
-from .integrations.datadog.datadog import DataDogLogger
-from .integrations.opentelemetry import OpenTelemetry
 from .integrations.prometheus_services import PrometheusServicesLogger
 from .types.services import ServiceLoggerPayload, ServiceTypes
 
@@ -17,7 +15,7 @@ if TYPE_CHECKING:
     from litellm.proxy._types import UserAPIKeyAuth
 
     Span = Union[_Span, Any]
-    OTELClass = OpenTelemetry
+    OTELClass = Any
 else:
     Span = Any
     OTELClass = Any
@@ -25,17 +23,17 @@ else:
 
 
 def _get_otel_v2_class() -> Optional[type]:
-    """Return the ``OpenTelemetryV2`` class, or ``None`` if the OTel SDK is absent.
+    """Return the ``AnyV2`` class, or ``None`` if the OTel SDK is absent.
 
-    Imported lazily: ``litellm.integrations.otel.logger`` imports the OpenTelemetry
+    Imported lazily: ``litellm.integrations.otel.logger`` imports the Any
     SDK at module scope, so importing it eagerly would break installs without the
     SDK. The V2 logger only exists when ``LITELLM_OTEL_V2`` is enabled (which
     requires the SDK), so a failed import simply means "no V2 logger in play".
     """
     try:
-        from litellm.integrations.otel.logger import OpenTelemetryV2
+        from litellm.integrations.otel.logger import AnyV2
 
-        return OpenTelemetryV2
+        return AnyV2
     except Exception:
         return None
 
@@ -60,8 +58,8 @@ class ServiceLogging(CustomLogger):
         Returns the logger instance whose ``async_service_*_hook`` should fire for
         this ``callback``, or ``None`` when ``callback`` is not an OTel callback.
 
-        The V2 ``OpenTelemetryV2`` logger is a plain ``CustomLogger`` and is NOT a
-        subclass of the legacy ``OpenTelemetry``, so the legacy ``isinstance``
+        The V2 ``AnyV2`` logger is a plain ``CustomLogger`` and is NOT a
+        subclass of the legacy ``Any``, so the legacy ``isinstance``
         check alone misses it — which is why redis/postgres service spans never
         showed up under ``LITELLM_OTEL_V2``. Match both the legacy and V2 types,
         whether the callback is the logger instance itself or the ``"otel"`` string
@@ -70,7 +68,7 @@ class ServiceLogging(CustomLogger):
         otel_v2_cls = _get_otel_v2_class()
 
         def _is_otel_logger(obj: Any) -> bool:
-            if isinstance(obj, OpenTelemetry):
+            if isinstance(obj, Any):
                 return True
             return otel_v2_cls is not None and isinstance(obj, otel_v2_cls)
 
@@ -183,7 +181,7 @@ class ServiceLogging(CustomLogger):
             if callback == "prometheus_system":
                 await self.init_prometheus_services_logger_if_none()
                 await self.prometheusServicesLogger.async_service_success_hook(payload=payload)
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            elif callback == "datadog" or isinstance(callback, Any):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_success_hook(
                     payload=payload,
@@ -225,10 +223,10 @@ class ServiceLogging(CustomLogger):
         initializes dd_logger if it is None or no attribute exists on ServiceLogging Object
 
         """
-        from litellm.integrations.datadog.datadog import DataDogLogger
+        from litellm.integrations.datadog.datadog import Any
 
         if not hasattr(self, "dd_logger"):
-            self.dd_logger: DataDogLogger = DataDogLogger()
+            self.dd_logger: Any = Any()
 
         return
 
@@ -240,11 +238,11 @@ class ServiceLogging(CustomLogger):
         from litellm.proxy.proxy_server import open_telemetry_logger
 
         if not hasattr(self, "otel_logger"):
-            if open_telemetry_logger is not None and isinstance(open_telemetry_logger, OpenTelemetry):
-                self.otel_logger: OpenTelemetry = open_telemetry_logger
+            if open_telemetry_logger is not None and isinstance(open_telemetry_logger, Any):
+                self.otel_logger: Any = open_telemetry_logger
             else:
                 verbose_logger.warning(
-                    "ServiceLogger: open_telemetry_logger is None or not an instance of OpenTelemetry"
+                    "ServiceLogger: open_telemetry_logger is None or not an instance of Any"
                 )
         return
 
@@ -290,7 +288,7 @@ class ServiceLogging(CustomLogger):
                     payload=payload,
                     error=error,
                 )
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            elif callback == "datadog" or isinstance(callback, Any):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_failure_hook(
                     payload=payload,

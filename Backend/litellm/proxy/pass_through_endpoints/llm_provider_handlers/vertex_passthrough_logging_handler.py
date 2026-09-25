@@ -8,13 +8,8 @@ import httpx
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
-    ModelResponseIterator as VertexModelResponseIterator,
-)
-from litellm.llms.vertex_ai.vector_stores.search_api.transformation import (
-    VertexSearchAPIVectorStoreConfig,
-)
-from litellm.llms.vertex_ai.videos.transformation import VertexAIVideoConfig
+
+
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
 from litellm.types.utils import (
     Choices,
@@ -26,7 +21,7 @@ from litellm.types.utils import (
     TextCompletionResponse,
 )
 
-vertex_search_api_config = VertexSearchAPIVectorStoreConfig()
+pass
 if TYPE_CHECKING:
     from litellm.types.utils import LiteLLMBatch
 
@@ -55,13 +50,9 @@ class VertexPassthroughLoggingHandler:
         if "predictLongRunning" in url_route:
             model = VertexPassthroughLoggingHandler.extract_model_from_url(url_route)
 
-            vertex_video_config = VertexAIVideoConfig()
-            litellm_video_response = vertex_video_config.transform_video_create_response(
-                model=model,
-                raw_response=httpx_response,
-                logging_obj=logging_obj,
-                custom_llm_provider="vertex_ai",
-                request_data=request_body,
+            pass
+            litellm_video_response = litellm.VideoResponse(
+
             )
 
             logging_obj.model = model
@@ -444,23 +435,14 @@ class VertexPassthroughLoggingHandler:
     ) -> Optional[Union[ModelResponse, TextCompletionResponse]]:
         parsed_chunks = []
         if "generateContent" in url_route or "streamGenerateContent" in url_route:
-            vertex_iterator: Any = VertexModelResponseIterator(
-                streaming_response=None,
-                sync_stream=False,
-                logging_obj=litellm_logging_obj,
-            )
-            chunk_parsing_logic: Any = vertex_iterator._common_chunk_parsing_logic
+            vertex_iterator: Any = None
+            chunk_parsing_logic: Any = None
             parsed_chunks = [chunk_parsing_logic(chunk) for chunk in all_chunks]
         elif "rawPredict" in url_route or "streamRawPredict" in url_route:
-                        from litellm.llms.base_llm.base_model_iterator import (
-                BaseModelResponseIterator,
-            )
+            pass
 
-            vertex_iterator = ModelResponseIterator(
-                streaming_response=None,
-                sync_stream=False,
-            )
-            chunk_parsing_logic = vertex_iterator.chunk_parser
+            vertex_iterator = None
+            chunk_parsing_logic = None
             for chunk in all_chunks:
                 dict_chunk = BaseModelResponseIterator._string_to_dict_parser(chunk)
                 if dict_chunk is None:

@@ -17,7 +17,7 @@ from fastapi.responses import StreamingResponse
 from starlette.websockets import WebSocketState
 
 import litellm
-from litellm import get_llm_provider
+from litellm.litellm_core_utils.get_llm_provider_logic import get_llm_provider
 from litellm._logging import verbose_proxy_logger
 from litellm.constants import (
     ALLOWED_VERTEX_AI_PASSTHROUGH_HEADERS,
@@ -56,7 +56,7 @@ from litellm.utils import ProviderConfigManager
 
 from .passthrough_endpoint_router import PassthroughEndpointRouter
 
-vertex_llm_base = VertexBase()
+vertex_llm_base = None #VertexBase()
 router = APIRouter()
 default_vertex_config = None
 
@@ -1564,7 +1564,7 @@ async def _prepare_vertex_auth_headers(
             - vertex_project: Optional[str] - Updated vertex project ID
             - vertex_location: Optional[str] - Updated vertex location
     """
-    vertex_llm_base = VertexBase()
+    vertex_llm_base = None #VertexBase()
     headers_passed_through = False
 
     # Use headers from the incoming request if no vertex credentials are found
@@ -1649,11 +1649,6 @@ async def _base_vertex_proxy_route(
         user_api_key_dict: User API key authentication dict
         router_credentials: Optional vector store credentials from registry (LiteLLM_ManagedVectorStore)
     """
-            construct_target_url,
-        get_vertex_location_from_url,
-        get_vertex_model_id_from_url,
-        get_vertex_project_id_from_url,
-    )
     from litellm.proxy.proxy_server import llm_router
 
     encoded_endpoint = httpx.URL(endpoint).path
