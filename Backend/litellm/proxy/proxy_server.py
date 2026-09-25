@@ -244,7 +244,6 @@ from litellm.constants import (
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
     _get_parent_otel_span_from_kwargs,
     get_litellm_metadata_from_kwargs,
@@ -563,7 +562,6 @@ from litellm.secret_managers.main import (
     normalize_nonempty_secret_str,
     str_to_bool,
 )
-from litellm.types.integrations.slack_alerting import SlackAlertingArgs
 from litellm.types.llms.anthropic import (
     AnthropicMessagesRequest,
     AnthropicResponse,
@@ -13280,8 +13278,7 @@ async def alerting_settings(
         "max_outage_alert_list_size": {"type": "Integer"},
     }
 
-    _slack_alerting: SlackAlerting = proxy_logging_obj.slack_alerting_instance
-    _slack_alerting_args_dict = _slack_alerting.alerting_args.model_dump()
+    _slack_alerting_args_dict = {}
 
     return_val = []
 
@@ -13302,7 +13299,7 @@ async def alerting_settings(
     )
     return_val.append(_response_obj)
 
-    for field_name, field_info in SlackAlertingArgs.model_fields.items():
+    for field_name, field_info in {}.items():
         if field_name in allowed_args:
             _stored_in_db: Optional[bool] = None
             if field_name in alerting_args_dict:
