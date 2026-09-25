@@ -48,7 +48,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --frozen --group proxy-dev --group e2e-dev
+          cd Backend && uv sync --frozen --group proxy-dev --group e2e-dev
 
       # basedpyright resolves Prisma's generated client (litellm/proxy/schema.prisma)
       # only after `prisma generate` writes prisma/client.py et al. Without this the
