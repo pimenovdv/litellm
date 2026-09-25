@@ -12,9 +12,7 @@ import sys
 
 import pytest
 
-sys.path.insert(
-    0, os.path.abspath("../..")
-)  # Adds the parent directory to the system path
+sys.path.insert(0, os.path.abspath("../../Backend"))  # Adds the parent directory to the system path
 
 import litellm  # noqa: E402
 
@@ -123,7 +121,7 @@ def event_loop():
 
 @pytest.fixture(scope="function", autouse=True)
 def setup_and_teardown(event_loop):  # Add event_loop as a dependency
-    sys.path.insert(0, os.path.abspath("../.."))
+    sys.path.insert(0, os.path.abspath("../../Backend"))
 
     import litellm
 

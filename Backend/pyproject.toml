@@ -233,15 +233,9 @@ healthcheck = [
 ]
 
 [build-system]
-requires = ["maturin==1.9.4"]
-build-backend = "maturin"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.maturin]
-manifest-path = "litellm-rust/crates/python-bridge/Cargo.toml"
-module-name = "litellm.rust_bridge._native"
-python-source = "."
-bindings = "pyo3"
-include = ["litellm/proxy/_experimental/out/**"]
 exclude = [
     "litellm/proxy/enterprise",
     "litellm/proxy/enterprise/**",
@@ -275,7 +269,7 @@ litellm-proxy-extras = { workspace = true }
 litellm-enterprise = { workspace = true }
 
 [tool.uv.workspace]
-members = ["enterprise", "litellm-proxy-extras"]
+members = ["enterprise", "../litellm-proxy-extras"]
 
 [tool.isort]
 profile = "black"

@@ -13,9 +13,7 @@ import sys
 from pathlib import Path
 import pytest
 
-sys.path.insert(
-    0, os.path.abspath("../..")
-)  # Adds the parent directory to the system path
+sys.path.insert(0, os.path.abspath("../../Backend"))  # Adds the parent directory to the system path
 import asyncio
 
 import litellm
@@ -338,7 +336,7 @@ def setup_and_teardown():
     Use this sparingly - most state should be handled by isolate_litellm_state.
     Only reload modules here if absolutely necessary.
     """
-    sys.path.insert(0, os.path.abspath("../.."))
+    sys.path.insert(0, os.path.abspath("../../Backend"))
 
     import litellm
 

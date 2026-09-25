@@ -24,7 +24,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
     InMemorySpanExporter,
 )
 
-sys.path.insert(0, os.path.abspath("../../.."))
+sys.path.insert(0, os.path.abspath("../../../Backend"))
 
 import litellm
 from litellm.integrations.opentelemetry import OpenTelemetry
