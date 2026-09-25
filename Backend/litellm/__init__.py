@@ -1228,9 +1228,3 @@ _key_management_settings: KeyManagementSettings = KeyManagementSettings()
 # client must be imported immediately as it's used as a decorator at function definition time
 from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
-
-
-class Router:
-    pass
-
-from .router import Router
