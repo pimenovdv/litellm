@@ -1232,3 +1232,5 @@ from litellm.secret_managers.main import get_secret, get_secret_str
 
 class Router:
     pass
+
+from .router import Router
