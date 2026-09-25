@@ -57,7 +57,7 @@ def _find_fastuuid_imports_in_file(
 
 def scan_directory_for_fastuuid(base_dir: str) -> List[Dict[str, Any]]:
     violations: List[Dict[str, Any]] = []
-    scan_root = os.path.join(base_dir, "litellm")
+    scan_root = os.path.join(base_dir, "Backend", "litellm")
     for root, _, files in os.walk(scan_root):
         for filename in files:
             if filename.endswith(".py"):

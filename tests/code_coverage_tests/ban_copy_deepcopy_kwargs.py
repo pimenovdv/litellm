@@ -101,7 +101,7 @@ def find_copy_deepcopy_kwargs_in_directory(directory):
 
 if __name__ == "__main__":
     # Check for copy.deepcopy(kwargs) usage in the litellm directory
-    directory_path = "./litellm"
+    directory_path = "./Backend/litellm"
     violations = find_copy_deepcopy_kwargs_in_directory(directory_path)
 
     print("\n" + "=" * 80)
