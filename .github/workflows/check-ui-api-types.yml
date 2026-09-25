@@ -3,8 +3,8 @@ name: Check UI API Types Sync
 on:
   pull_request:
     paths:
-      - "litellm/proxy/**"
-      - "litellm/types/**"
+      - "Backend/litellm/proxy/**"
+      - "Backend/litellm/types/**"
       - "ui/litellm-dashboard/src/lib/http/schema.d.ts"
       - "ui/litellm-dashboard/scripts/gen-api-types.mjs"
       - "ui/litellm-dashboard/package.json"
