@@ -1,4 +1,3 @@
-import pytest; pytest.skip("module deleted", allow_module_level=True)
 import asyncio
 import importlib
 import json
