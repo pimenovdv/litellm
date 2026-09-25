@@ -1,5 +1,5 @@
 import pytest
-pytest.skip('Skipping completely broken test file due to out-of-scope missing dependencies', allow_module_level=True)
+pytest.skip('Skipping broken test file due to systemic branch issues', allow_module_level=True)
 import os
 import sys
 import traceback
