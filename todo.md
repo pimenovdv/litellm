@@ -10,8 +10,7 @@
 - [x] Удалить все неиспользуемые интеграции из `Backend/litellm/integrations/` (Langfuse, Datadog, Sentry, Slack и др.).
 - [x] Удалить поддержку всех сторонних LLM-провайдеров из `Backend/litellm/llms/`, оставив исключительно `openai`.
 - [x] Вырезать лишний функционал из ядра системы (RAG, Guardrails, сторонние менеджеры секретов, телеметрию).
-- [x] Очистить корневую директорию от неактуальных артефактов (например, `.circleci`, `.devcontainer`, `.semgrep`, `litellm-proxy-extras`, `packaging` и др.).
-- [ ] Очистить списки зависимостей (`pyproject.toml`, `requirements.txt`, `uv.lock`, `package.json` во фронтенде) от неиспользуемых библиотек.
+- [x] Очистить списки зависимостей (`pyproject.toml`, `requirements.txt`, `uv.lock`, `package.json` во фронтенде) от неиспользуемых библиотек.
 
 ## 3. Документирование кода
 - [ ] Добавить и актуализировать docstrings для всех модулей, классов и функций бэкенда (`Backend/`).
