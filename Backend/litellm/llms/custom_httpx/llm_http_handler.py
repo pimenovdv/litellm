@@ -163,7 +163,8 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-            AnthropicMessagesStreamingResponse,
+    from litellm.llms.anthropic.chat.transformation import (
+        AnthropicMessagesStreamingResponse,
     )
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
@@ -2157,7 +2158,8 @@ class BaseLLMHTTPHandler:
 
         initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
         if stream:
-                            AnthropicMessagesStreamingResponse,
+            from litellm.llms.anthropic.chat.transformation import (
+                AnthropicMessagesStreamingResponse,
                 anthropic_messages_stream_hidden_params,
             )
 
@@ -2180,7 +2182,8 @@ class BaseLLMHTTPHandler:
                     hidden_params=stream_hidden_params,
                 )
 
-                            AgenticAnthropicStreamingIterator,
+            from litellm.types.llms.anthropic import (
+                AgenticAnthropicStreamingIterator,
             )
 
             initial_response = AgenticAnthropicStreamingIterator(
@@ -2307,9 +2310,11 @@ class BaseLLMHTTPHandler:
     def _rust_anthropic_messages_fake_stream(
         rust_response: AnthropicMessagesResponse,
     ) -> "AnthropicMessagesStreamingResponse":
-                    FakeAnthropicMessagesStreamIterator,
+        from litellm.llms.anthropic.chat.transformation import (
+            FakeAnthropicMessagesStreamIterator,
         )
-                    AnthropicMessagesStreamHiddenParams,
+        from litellm.llms.anthropic.chat.transformation import (
+            AnthropicMessagesStreamHiddenParams,
             AnthropicMessagesStreamingResponse,
         )
 
@@ -5349,7 +5354,8 @@ class BaseLLMHTTPHandler:
             from typing import cast
 
             from litellm._logging import verbose_logger
-                            FakeAnthropicMessagesStreamIterator,
+            from litellm.llms.anthropic.chat.transformation import (
+                FakeAnthropicMessagesStreamIterator,
             )
             from litellm.types.llms.anthropic_messages.anthropic_response import (
                 AnthropicMessagesResponse,

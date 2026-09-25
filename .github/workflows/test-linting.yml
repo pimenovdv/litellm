@@ -44,7 +44,7 @@ jobs:
 
       - name: Check uv.lock is up to date
         run: |
-          uv lock --check || (echo "❌ uv.lock is out of sync with Backend/pyproject.toml. Run 'uv lock' locally and commit the result." && exit 1)
+          cd Backend && uv lock --check || (echo "❌ uv.lock is out of sync with Backend/pyproject.toml. Run 'uv lock' locally and commit the result." && exit 1)
 
       - name: Install dependencies
         run: |

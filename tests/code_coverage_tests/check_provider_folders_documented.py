@@ -48,7 +48,7 @@ def get_repo_root() -> Path:
 def get_llm_provider_folders() -> Set[str]:
     """Get all provider folder names from litellm/llms directory."""
     repo_root = get_repo_root()
-    llms_dir = repo_root / "litellm" / "llms"
+    llms_dir = repo_root / "Backend" / "litellm" / "llms"
 
     if not llms_dir.exists():
         print(f"❌ ERROR: Could not find llms directory at {llms_dir}")
@@ -65,7 +65,7 @@ def get_llm_provider_folders() -> Set[str]:
 def load_provider_endpoints_file() -> Dict:
     """Load the provider_endpoints_support.json file."""
     repo_root = get_repo_root()
-    file_path = repo_root / "provider_endpoints_support.json"
+    file_path = repo_root / "Backend" / "litellm" / "provider_endpoints_support_backup.json"
 
     if not file_path.exists():
         print(
@@ -80,7 +80,7 @@ def load_provider_endpoints_file() -> Dict:
 def get_openai_like_providers() -> Set[str]:
     """Get all provider names from litellm/llms/openai_like/providers.json."""
     repo_root = get_repo_root()
-    providers_file = repo_root / "litellm" / "llms" / "openai_like" / "providers.json"
+    providers_file = repo_root / "Backend" / "litellm" / "llms" / "openai_like" / "providers.json"
 
     if not providers_file.exists():
         print(

@@ -90,7 +90,8 @@ def initialize_callbacks_on_proxy(
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 imported_list.append(callback)
             elif isinstance(callback, str) and callback == "presidio":
-                                    _OPTIONAL_PresidioPIIMasking,
+                from litellm.proxy.pii_masking.presidio import (
+                    _OPTIONAL_PresidioPIIMasking,
                 )
 
                 presidio_logging_only: Optional[bool] = litellm_settings.get("presidio_logging_only", None)
@@ -154,7 +155,8 @@ def initialize_callbacks_on_proxy(
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
             elif isinstance(callback, str) and callback == "lakera_prompt_injection":
-                                    lakeraAI_Moderation,
+                from litellm.proxy.pii_masking.lakera import (
+                    lakeraAI_Moderation,
                 )
 
                 init_params = {}
@@ -165,8 +167,12 @@ def initialize_callbacks_on_proxy(
                 lakera_moderations_object = lakeraAI_Moderation(**init_params)
                 imported_list.append(lakera_moderations_object)
             elif isinstance(callback, str) and callback == "aporia_prompt_injection":
-                                    AporiaGuardrail,
-                )
+                try:
+                    from enterprise.enterprise_hooks.aporia import (
+                        AporiaGuardrail,
+                    )
+                except ImportError:
+                    raise Exception("Trying to use Aporia," + CommonProxyErrors.missing_enterprise_package_docker.value)
 
                 aporia_guardrail_object = AporiaGuardrail()
                 imported_list.append(aporia_guardrail_object)
