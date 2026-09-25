@@ -48,22 +48,22 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd Backend && uv sync --frozen --group proxy-dev --group e2e-dev
+          uv sync --frozen --group proxy-dev --group e2e-dev
 
-      # basedpyright resolves Prisma's generated client (Backend/litellm/proxy/schema.prisma)
+      # basedpyright resolves Prisma's generated client (litellm/proxy/schema.prisma)
       # only after `prisma generate` writes prisma/client.py et al. Without this the
       # DB wrappers typed against the generated client would degrade to Unknown.
       - name: Generate Prisma client
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema Backend/Backend/litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Check ruff format
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          git diff --name-only --diff-filter=ACMR "$BASE_SHA"...HEAD -- 'Backend/litellm/**/*.py' | grep -v '^Backend/litellm/enterprise/' > "$RUNNER_TEMP/ruff_format_files.txt" || true
+          git diff --name-only --diff-filter=ACMR "$BASE_SHA"...HEAD -- 'litellm/**/*.py' | grep -v '^litellm/enterprise/' > "$RUNNER_TEMP/ruff_format_files.txt" || true
           if [ ! -s "$RUNNER_TEMP/ruff_format_files.txt" ]; then
             echo "No changed litellm Python files to check with ruff format."
             exit 0
@@ -81,7 +81,7 @@ jobs:
 
       - name: Run Ruff linting
         run: |
-          cd Backend/litellm
+          cd litellm
           uv run --no-sync ruff check .
           cd ..
 
@@ -119,8 +119,8 @@ jobs:
 
       - name: Check for circular imports
         run: |
-          cd Backend/litellm
-          uv run --no-sync python ../../tests/documentation_tests/test_circular_imports.py
+          cd litellm
+          uv run --no-sync python ../tests/documentation_tests/test_circular_imports.py
           cd ..
 
       - name: Check import safety
