@@ -233,8 +233,8 @@ healthcheck = [
 ]
 
 [build-system]
-requires = ["maturin==1.9.4"]
-build-backend = "maturin"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.maturin]
 manifest-path = "litellm-rust/crates/python-bridge/Cargo.toml"
@@ -267,11 +267,10 @@ override-dependencies = [
     "packaging>=24.0",
 ]
 default-groups = ["dev"]
-required-version = ">=0.10.9"
+required-version = ">=0.10.8"
 exclude-newer = "3 days"
 
 [tool.uv.sources]
-litellm-proxy-extras = { workspace = true }
 litellm-enterprise = { workspace = true }
 
 [tool.uv.workspace]
