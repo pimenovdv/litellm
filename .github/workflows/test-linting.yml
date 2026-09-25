@@ -109,7 +109,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           if git diff --name-only --diff-filter=ACMRD "$BASE_SHA"...HEAD -- 'tests/e2e/**/*.py' | grep -q .; then
-            cd Backend && uv run --no-sync basedpyright tests/e2e
+            cd Backend && uv run --no-sync basedpyright ../tests/e2e
           else
             echo "No changed tests/e2e Python files; skipping."
           fi
@@ -174,7 +174,7 @@ jobs:
 
       - name: Run secret scan test
         run: |
-          cd Backend && uv run --frozen --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
+          cd Backend && uv run --frozen --with 'pytest==9.0.2' pytest ../tests/litellm/test_no_hardcoded_secrets.py -v
 
       - name: Run ggshield secret scan
         env:
