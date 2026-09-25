@@ -128,7 +128,6 @@ from litellm.utils import (
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
-    from opentelemetry.trace import Span as _Span
 
     OpenTelemetry = Any
 
@@ -347,10 +346,6 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
-from litellm.proxy.guardrails.init_guardrails import (
-    init_guardrails_v2,
-    initialize_guardrails,
-)
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
@@ -507,7 +502,6 @@ from litellm.proxy.pass_through_endpoints.pass_through_endpoints import (
     router as pass_through_router,
 )
 from litellm.proxy.public_endpoints import router as public_endpoints_router
-from litellm.proxy.rag_endpoints.endpoints import router as rag_router
 from litellm.proxy.rerank_endpoints.endpoints import router as rerank_router
 from litellm.proxy.response_api_endpoints.endpoints import router as response_router
 from litellm.proxy.route_llm_request import route_request
@@ -1003,7 +997,6 @@ async def proxy_startup_event(app: FastAPI):
         from litellm.integrations.otel.model.config import is_otel_v2_enabled
 
         if is_otel_v2_enabled():
-            from opentelemetry import trace as _otel_trace
 
             from litellm.integrations.otel.logger import (
                 OpenTelemetryV2,
@@ -1011,7 +1004,7 @@ async def proxy_startup_event(app: FastAPI):
             )
             from litellm.litellm_core_utils.litellm_logging import _in_memory_loggers
 
-            registered = open_telemetry_logger if isinstance(open_telemetry_logger, OpenTelemetryV2) else None
+            registered = None
             publish_global_otel_v2_provider(
                 _in_memory_loggers,  # any-ok: pre-existing untyped List[Any] global
                 _otel_trace.set_tracer_provider,
@@ -1952,7 +1945,6 @@ user_debug = False
 user_max_tokens = None
 user_request_timeout = None
 user_temperature = None
-user_telemetry = True
 user_config = None
 user_headers = None
 user_config_file_path: Optional[str] = None
@@ -2013,7 +2005,6 @@ disable_spend_logs = False
 jwt_handler = JWTHandler()
 prompt_injection_detection_obj: Optional[_OPTIONAL_PromptInjectionDetection] = None
 store_model_in_db: bool = False
-open_telemetry_logger: Optional[OpenTelemetry] = None
 ### INITIALIZE GLOBAL LOGGING OBJECT ###
 proxy_logging_obj: ProxyLogging = ProxyLogging(user_api_key_cache=user_api_key_cache, premium_user=premium_user)
 ### REDIS QUEUE ###
@@ -3489,26 +3480,6 @@ def _is_remote_module_url(value: Any) -> bool:
     return isinstance(value, str) and (value.startswith("s3://") or value.startswith("gcs://"))
 
 
-def _scrub_guardrail_inner(inner: Dict[str, Any]) -> None:
-    """Strip remote-URL entries from a guardrail's ``callbacks`` list
-    and ``guardrail`` (v2 module-path) field. Mutates in place."""
-    cbs = inner.get("callbacks")
-    if isinstance(cbs, list):
-        cleaned = [c for c in cbs if not _is_remote_module_url(c)]
-        if len(cleaned) != len(cbs):
-            verbose_proxy_logger.warning(
-                "Refused %d remote-URL entries from DB-overlay litellm_settings.guardrails[...].callbacks",
-                len(cbs) - len(cleaned),
-            )
-            inner["callbacks"] = cleaned
-    if _is_remote_module_url(inner.get("guardrail")):
-        verbose_proxy_logger.warning(
-            "Refused remote-URL guardrail module from DB-overlay litellm_settings.guardrails[...].guardrail: %r",
-            inner.get("guardrail"),
-        )
-        inner["guardrail"] = None
-
-
 def _scrub_db_overlay_remote_module_loads(section: str, db_value: Any) -> Any:
     """Strip ``s3://`` / ``gcs://`` entries from the DB-overlay value for
     fields whose contents reach ``get_instance_fn``. The same scheme is
@@ -3559,25 +3530,6 @@ def _scrub_db_overlay_remote_module_loads(section: str, db_value: Any) -> Any:
                         item.get("custom_handler"),
                     )
                     item["custom_handler"] = None
-    # ``litellm_settings.guardrails`` is a list of single-key dicts in
-    # v1 ({guardrail_name: {callbacks: [...], default_on: bool}}) or a
-    # list of v2 entries ({guardrail_name, litellm_params: {guardrail:
-    # "module.path", callbacks: [...]}}). Both shapes terminate in
-    # ``callbacks`` (a list) or ``guardrail`` (a single dotted name)
-    # that flow into ``get_instance_fn`` during config load.
-    if section == "litellm_settings":
-        guardrails = sanitized.get("guardrails")
-        if isinstance(guardrails, list):
-            for entry in guardrails:
-                if not isinstance(entry, dict):
-                    continue
-                for inner in entry.values():
-                    if not isinstance(inner, dict):
-                        continue
-                    _scrub_guardrail_inner(inner)
-                lp = entry.get("litellm_params")
-                if isinstance(lp, dict):
-                    _scrub_guardrail_inner(lp)
 
     # ``general_settings.litellm_jwtauth.custom_validate`` is a nested
     # string field.
@@ -4348,7 +4300,6 @@ class ProxyConfig:
             redis_usage_cache, \
             store_model_in_db, \
             premium_user, \
-            open_telemetry_logger, \
             health_check_details, \
             proxy_batch_polling_interval, \
             proxy_config_reload_interval_seconds, \
@@ -5183,55 +5134,9 @@ class ProxyConfig:
         config_file_path: Optional[str] = None,
     ):
         """
-        Initialize the relevant secret manager if `key_management_system` is provided
+        Secret managers removed in this fork.
         """
-        if key_management_system is not None:
-            if key_management_system == KeyManagementSystem.AZURE_KEY_VAULT.value:
-                ### LOAD FROM AZURE KEY VAULT ###
-                load_from_azure_key_vault(use_azure_key_vault=True)
-            elif key_management_system == KeyManagementSystem.GOOGLE_KMS.value:
-                ### LOAD FROM GOOGLE KMS ###
-                load_google_kms(use_google_kms=True)
-            elif (
-                key_management_system == KeyManagementSystem.AWS_SECRET_MANAGER.value  # noqa: F405
-            ):
-                from litellm.types.secret_managers.main import (
-                    AWSSecretsManagerV2,
-                )
-
-                AWSSecretsManagerV2.load_aws_secret_manager(
-                    use_aws_secret_manager=True,
-                    key_management_settings=litellm._key_management_settings,
-                )
-            elif key_management_system == KeyManagementSystem.AWS_KMS.value:
-                load_aws_kms(use_aws_kms=True)
-            elif key_management_system == KeyManagementSystem.GOOGLE_SECRET_MANAGER.value:
-                from litellm.types.secret_managers.main import (
-                    GoogleSecretManager,
-                )
-
-                GoogleSecretManager()
-            elif key_management_system == KeyManagementSystem.HASHICORP_VAULT.value:
-                from litellm.types.secret_managers.main import (
-                    HashicorpSecretManager,
-                )
-
-                HashicorpSecretManager()
-            elif key_management_system == KeyManagementSystem.CYBERARK.value:
-                from litellm.types.secret_managers.main import (
-                    CyberarkSecretManager as CyberArkSecretManager,
-                )
-
-                CyberArkSecretManager()
-            elif key_management_system == KeyManagementSystem.CUSTOM.value:
-                ### LOAD CUSTOM SECRET MANAGER ###
-                from litellm.secret_managers.custom_secret_manager_loader import (
-                    load_custom_secret_manager,
-                )
-
-                load_custom_secret_manager(config_file_path=config_file_path)
-            else:
-                raise ValueError("Invalid Key Management System selected")
+        pass
 
     def get_model_info_with_id(self, model, db_model=False) -> RouterModelInfo:
         """
@@ -6176,8 +6081,6 @@ class ProxyConfig:
 
         ex. Vector Stores, Guardrails, MCP tools, etc.
         """
-        if self._should_load_db_object(object_type="guardrails"):
-            await self._init_guardrails_in_db(prisma_client=prisma_client)
 
         if self._should_load_db_object(object_type="policies"):
             await self._init_policies_in_db(prisma_client=prisma_client)
@@ -6889,7 +6792,6 @@ async def initialize(
     max_tokens=None,
     request_timeout=600,
     max_budget=None,
-    telemetry=False,
     drop_params=True,
     add_function_to_prompt=True,
     headers=None,
@@ -6905,7 +6807,6 @@ async def initialize(
         user_user_max_tokens, \
         user_request_timeout, \
         user_temperature, \
-        user_telemetry, \
         user_headers, \
         experimental, \
         llm_model_list, \
@@ -7012,7 +6913,6 @@ async def initialize(
         dynamic_config["general"]["max_budget"] = litellm.max_budget
     if experimental:
         pass
-    user_telemetry = telemetry
 
 
 # for streaming
@@ -9862,10 +9762,6 @@ async def realtime_websocket_endpoint(
         "query_params": query_params,  # Only explicit params
     }
 
-    # Pass guardrails into data so pre-call guardrail processing picks them up
-    if guardrails:
-        data["guardrails"] = [g.strip() for g in guardrails.split(",") if g.strip()]
-
     # Use raw ASGI headers (already lowercase bytes) to avoid extra work
     headers_list = list(websocket.scope.get("headers") or [])
 
@@ -9884,7 +9780,7 @@ async def realtime_websocket_endpoint(
     ### ROUTE THE REQUEST ###
     base_llm_response_processor = ProxyBaseLLMRequestProcessing(data=data)
 
-    # Phase 1: pre-call processing (auth, guardrails, rate limits).
+    # Phase 1: pre-call processing (auth, rate limits).
     # Errors here (e.g. guardrail block) are sent back to the client as an
     # error event before closing, so the caller knows what happened.
     try:
@@ -16283,7 +16179,6 @@ app.include_router(response_router)
 app.include_router(public_endpoints_router)
 app.include_router(rerank_router)
 app.include_router(ocr_router)
-app.include_router(rag_router)
 app.include_router(video_router)
 app.include_router(container_router)
 app.include_router(search_router)

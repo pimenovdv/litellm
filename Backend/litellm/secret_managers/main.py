@@ -15,7 +15,6 @@ from litellm.llms.custom_httpx.http_handler import HTTPHandler
 from litellm.secret_managers.get_azure_ad_token_provider import (
     get_azure_ad_token_provider,
 )
-from litellm.secret_managers.secret_manager_handler import get_secret_from_manager
 
 oidc_cache = DualCache()
 
@@ -313,48 +312,12 @@ def get_secret(
             raise ValueError("Unsupported OIDC provider")
 
     try:
-        if _should_read_secret_from_secret_manager() and litellm.secret_manager_client is not None:
-            try:
-                client = litellm.secret_manager_client
-                key_manager = "local"
-                if key_management_system is not None:
-                    key_manager = key_management_system.value
-
-                if key_management_settings is not None:
-                    if (
-                        key_management_settings.hosted_keys is not None
-                        and secret_name not in key_management_settings.hosted_keys
-                    ):  # allow user to specify which keys to check in hosted key manager
-                        key_manager = "local"
-
-                # Delegate to the secret manager handler
-                secret = get_secret_from_manager(
-                    client=client,
-                    key_manager=key_manager,
-                    secret_name=secret_name,
-                    key_management_settings=key_management_settings,
-                )
-            except Exception as e:  # check if it's in os.environ
-                verbose_logger.error(
-                    f"Defaulting to os.environ value for key={secret_name}. An exception occurred - {str(e)}.\n\n{traceback.format_exc()}"
-                )
-                secret = os.getenv(secret_name)
-            try:
-                if isinstance(secret, str):
-                    secret_value_as_bool = ast.literal_eval(secret)
-                    if isinstance(secret_value_as_bool, bool):
-                        return secret_value_as_bool
-                    else:
-                        return secret
-            except Exception:
-                return secret
+        secret = os.environ.get(secret_name)
+        secret_value_as_bool = str_to_bool(secret) if secret is not None else None
+        if secret_value_as_bool is not None and isinstance(secret_value_as_bool, bool):
+            return secret_value_as_bool
         else:
-            secret = os.environ.get(secret_name)
-            secret_value_as_bool = str_to_bool(secret) if secret is not None else None
-            if secret_value_as_bool is not None and isinstance(secret_value_as_bool, bool):
-                return secret_value_as_bool
-            else:
-                return secret
+            return secret
     except Exception as e:
         if default_value is not None:
             return default_value
