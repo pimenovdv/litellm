@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd Backend && uv lock --check
-          .github/scripts/uv_sync_with_retries.sh --frozen --group proxy-dev --extra proxy --extra semantic-router
+          cd Backend && ../.github/scripts/uv_sync_with_retries.sh --frozen --group proxy-dev --extra proxy --extra semantic-router
 
       - name: Run MCP tests
         run: |
