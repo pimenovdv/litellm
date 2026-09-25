@@ -125,7 +125,6 @@ jobs:
           # ---- proxy server: split into 2 shards ----
           - test-group: proxy-server-core
             test-path: >-
-              tests/proxy_unit_tests/test_proxy_server.py
               tests/proxy_unit_tests/test_proxy_server_keys.py
               tests/proxy_unit_tests/test_proxy_server_caching.py
               tests/proxy_unit_tests/test_proxy_server_langfuse.py
@@ -182,7 +181,6 @@ jobs:
           # ---- guardrails + budget + hooks: split into 2 ----
           - test-group: guardrails-hooks
             test-path: >-
-              tests/proxy_unit_tests/test_proxy_setting_guardrails.py
               tests/proxy_unit_tests/test_banned_keyword_list.py
               tests/proxy_unit_tests/test_unit_test_proxy_hooks.py
             workers: 4

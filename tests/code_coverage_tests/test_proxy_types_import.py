@@ -10,7 +10,7 @@ def test_proxy_types_not_imported():
     """
     # Read the litellm/__init__.py file
     # local_init_file = "../litellm/"
-    init_file_path = os.path.join("./litellm", "__init__.py")
+    init_file_path = os.path.join("./Backend/litellm", "__init__.py")
     if not os.path.exists(init_file_path):
         raise Exception(f"Could not find {init_file_path}")
 
