@@ -107,7 +107,7 @@ jobs:
               --durations=20 \
               --cov=./litellm \
               --cov-report=xml:coverage.xml \
-              --cov-config=pyproject.toml
+              --cov-config=../Backend/pyproject.toml
           else
             cd Backend && uv run --no-sync pytest ${TEST_PATH:?} \
               --tb=short -vv \
@@ -119,7 +119,7 @@ jobs:
               --durations=20 \
               --cov=./litellm \
               --cov-report=xml:coverage.xml \
-              --cov-config=pyproject.toml
+              --cov-config=../Backend/pyproject.toml
           fi
 
       - name: Save coverage report
