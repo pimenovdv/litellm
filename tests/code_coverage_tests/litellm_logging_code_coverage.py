@@ -64,7 +64,7 @@ ignored_function_names = [
 
 
 def main():
-    logging_file = "./litellm/litellm_core_utils/litellm_logging.py"
+    logging_file = "./Backend/litellm/litellm_core_utils/litellm_logging.py"
     tests_dir = "./tests/"
 
     # LOCAL TESTING

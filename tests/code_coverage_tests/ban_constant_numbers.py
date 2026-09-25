@@ -128,7 +128,7 @@ def check_file(filename):
 
 def main():
     exit_code = 0
-    folder = "../../litellm"
+    folder = "../../Backend/litellm"
     ignore_files = [
         "constants.py",
         "proxy_cli.py",

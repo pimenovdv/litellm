@@ -1,7 +1,7 @@
 name: "Detect backend-relevant changes"
 description: >-
   Classify the pull request's changed files with .circleci/scripts/classify_changes.sh
-  and expose decision=run|skip. decision=skip means only ui/**, **.md or **.mdx files
+  and expose decision=run|skip. decision=skip means only frontend/**, **.md or **.mdx files
   changed, so callers can short-circuit expensive steps while the job still completes
   successfully and satisfies its required status check. The decision defaults to run for
   any non pull_request event or whenever the changed set cannot be resolved, so tests are

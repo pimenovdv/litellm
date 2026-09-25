@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 8
     defaults:
       run:
-        working-directory: ui/litellm-dashboard
+        working-directory: frontend
 
     steps:
       - name: Checkout repository

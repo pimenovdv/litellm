@@ -165,7 +165,7 @@ def find_requests_usage(directory: str) -> List[Tuple[str, int, str]]:
 
 def main():
     # Get directory from command line argument or use current directory
-    directory = "../../litellm"
+    directory = "../../Backend/litellm"
 
     # Find requests library usages
     results = find_requests_usage(directory)

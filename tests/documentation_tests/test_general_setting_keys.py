@@ -2,7 +2,7 @@ import os
 import re
 
 # Define the base directory for the litellm repository and documentation path
-repo_base = "./litellm"  # Change this to your actual path
+repo_base = "./Backend/litellm"  # Change this to your actual path
 
 
 # Regular expressions to capture the keys used in general_settings.get() and general_settings[]

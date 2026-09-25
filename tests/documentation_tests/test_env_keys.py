@@ -2,7 +2,7 @@ import os
 import re
 
 # Define the base directory for the litellm repository and documentation path
-repo_base = "./litellm"  # Change this to your actual path
+repo_base = "./Backend/litellm"  # Change this to your actual path
 
 # Regular expressions to capture the keys used in os.getenv() and litellm.get_secret()
 getenv_pattern = re.compile(r'os\.getenv\(\s*[\'"]([^\'"]+)[\'"]\s*(?:,\s*[^)]*)?\)')
