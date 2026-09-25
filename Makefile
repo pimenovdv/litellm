@@ -272,7 +272,7 @@ test-unit-other: install-test-deps
 test-unit-root: install-test-deps
 	$(UV_RUN) pytest tests/test_litellm/test_*.py --tb=short -vv -n 4 --durations=20
 
-# Proxy unit tests (tests/test_litellm/proxy split alphabetically)
+# Proxy unit tests (tests/proxy_unit_tests split alphabetically)
 test-proxy-unit-a: install-test-deps
 	$(UV_RUN) pytest tests/test_litellm/proxy/test_[a-o]*.py --tb=short -vv -n 2 --durations=20
 

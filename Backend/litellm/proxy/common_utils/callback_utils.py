@@ -61,7 +61,9 @@ def initialize_callbacks_on_proxy(
         imported_list: List[Any] = []
         for callback in value:  # ["presidio", <my-custom-callback>]
             if isinstance(callback, str) and callback == "compression_interception":
-                from litellm.integrations.compression_interception.handler import CompressionInterceptionLogger
+                from litellm.integrations.compression_interception.handler import (
+                    CompressionInterceptionLogger,
+                )
 
                 compression_interception_obj = CompressionInterceptionLogger.initialize_from_proxy_config(
                     litellm_settings=litellm_settings,
@@ -151,9 +153,9 @@ def initialize_callbacks_on_proxy(
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
             elif isinstance(callback, str) and callback == "lakera_prompt_injection":
-                init_params = {}
                 from litellm.proxy.guardrails.lakera_prompt_injection import lakeraAI_Moderation
 
+                init_params = {}
                 if "lakera_prompt_injection" in callback_specific_params and isinstance(
                     callback_specific_params["lakera_prompt_injection"], dict
                 ):
