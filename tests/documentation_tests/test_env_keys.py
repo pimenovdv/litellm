@@ -1,6 +1,4 @@
 import os
-import sys
-sys.exit(0)
 import re
 
 # Define the base directory for the litellm repository and documentation path

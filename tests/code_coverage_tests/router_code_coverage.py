@@ -85,9 +85,9 @@ ignored_function_names = [
 
 def main():
     router_file = [
-        "./Backend/litellm/router.py",
-        "./Backend/litellm/router_utils/batch_utils.py",
-        "./Backend/litellm/router_utils/pattern_match_deployments.py",
+        "./litellm/router.py",
+        "./litellm/router_utils/batch_utils.py",
+        "./litellm/router_utils/pattern_match_deployments.py",
     ]
     # router_file = [
     #     "../../litellm/router.py",

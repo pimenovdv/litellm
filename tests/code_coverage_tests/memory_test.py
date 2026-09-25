@@ -703,7 +703,7 @@ def check_directory_for_memory_violations(
 
 def main():
     """Run memory violation detection on codebase"""
-    codebase_path = "./Backend/litellm"
+    codebase_path = "./litellm"
 
     print("=" * 80)
     print("MEMORY VIOLATION DETECTION TEST")

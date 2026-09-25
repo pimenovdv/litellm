@@ -66,13 +66,13 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema Backend/litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       # Run the same documentation tests that CircleCI ran (as direct Python scripts)
       - name: Run documentation validation tests
         if: steps.changes.outputs.decision != 'skip'
         run: |
-          PYTHONPATH=Backend uv run --no-sync python ./tests/documentation_tests/test_env_keys.py
-          PYTHONPATH=Backend uv run --no-sync python ./tests/documentation_tests/test_router_settings.py
-          PYTHONPATH=Backend uv run --no-sync python ./tests/documentation_tests/test_api_docs.py
-          PYTHONPATH=Backend uv run --no-sync python ./tests/documentation_tests/test_circular_imports.py
+          uv run --no-sync python ./tests/documentation_tests/test_env_keys.py
+          uv run --no-sync python ./tests/documentation_tests/test_router_settings.py
+          uv run --no-sync python ./tests/documentation_tests/test_api_docs.py
+          uv run --no-sync python ./tests/documentation_tests/test_circular_imports.py

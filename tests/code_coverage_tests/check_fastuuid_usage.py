@@ -3,7 +3,7 @@ import os
 from typing import List, Dict, Any
 
 
-ALLOWED_FILE = os.path.normpath("Backend/litellm/_uuid.py")
+ALLOWED_FILE = os.path.normpath("litellm/_uuid.py")
 
 
 def _to_module_path(relative_path: str) -> str:

@@ -326,10 +326,6 @@ def run_tests(test_path: str = "tests/llm_translation/",
     # Run pytest
     cmd = [
         "uv", "run", "--no-sync", "pytest", test_path,
-    ]
-    import os
-    env = os.environ.copy()
-    env['PYTHONPATH'] = 'Backend'
         f"--junitxml={junit_xml}",
         "-v",
         "--tb=short",
@@ -337,14 +333,10 @@ def run_tests(test_path: str = "tests/llm_translation/",
         "-n", "auto"
     ]
     
-    import os
-    env = os.environ.copy()
-    env["PYTHONPATH"] = "Backend"
-
     # Add timeout if pytest-timeout is installed
     try:
         subprocess.run(["uv", "run", "--no-sync", "python", "-c", "import pytest_timeout"], 
-                      capture_output=True, check=True, env=env)
+                      capture_output=True, check=True)
         cmd.extend(["--timeout=300"])
     except:
         print_colored("Warning: pytest-timeout not installed, skipping timeout option", Colors.YELLOW)
@@ -354,10 +346,7 @@ def run_tests(test_path: str = "tests/llm_translation/",
     print()
     
     # Run the tests
-    import os
-    env = os.environ.copy()
-    env["PYTHONPATH"] = "Backend"
-    result = subprocess.run(cmd, capture_output=False, env=env)
+    result = subprocess.run(cmd, capture_output=False)
     
     # Generate the report regardless of test outcome
     if os.path.exists(junit_xml):

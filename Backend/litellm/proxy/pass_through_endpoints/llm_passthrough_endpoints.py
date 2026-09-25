@@ -1649,8 +1649,7 @@ async def _base_vertex_proxy_route(
         user_api_key_dict: User API key authentication dict
         router_credentials: Optional vector store credentials from registry (LiteLLM_ManagedVectorStore)
     """
-    from litellm.llms.vertex_ai_and_google_aistudio.common_utils import (
-        construct_target_url,
+            construct_target_url,
         get_vertex_location_from_url,
         get_vertex_model_id_from_url,
         get_vertex_project_id_from_url,

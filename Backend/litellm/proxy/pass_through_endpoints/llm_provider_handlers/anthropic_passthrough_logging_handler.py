@@ -12,7 +12,6 @@ from litellm.litellm_core_utils.litellm_logging import use_custom_pricing_for_mo
 from litellm.litellm_core_utils.prompt_templates.common_utils import (
     get_content_from_model_response,
 )
-from litellm.llms.anthropic.chat.transformation import (
     ModelResponseIterator as AnthropicModelResponseIterator,
 )
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
@@ -772,8 +771,7 @@ class AnthropicPassthroughLoggingHandler:
         import base64
 
         from litellm._uuid import uuid
-        from litellm.types.utils import Choices, SpecialEnums
-        from litellm.llms.anthropic.batches.transformation import AnthropicBatchesConfig
+                from litellm.types.utils import Choices, SpecialEnums
 
         try:
             _json_response = httpx_response.json()

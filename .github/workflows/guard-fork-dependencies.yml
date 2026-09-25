@@ -9,8 +9,9 @@ on:
       - "litellm_**"
     paths:
       - "uv.lock"
-      - "Backend/pyproject.toml"
-      - "Backend/enterprise/pyproject.toml"
+      - "pyproject.toml"
+      - "litellm-proxy-extras/pyproject.toml"
+      - "enterprise/pyproject.toml"
 
 permissions: {}
 
@@ -42,7 +43,7 @@ jobs:
           fi
           echo "uv.lock is unchanged."
 
-      - name: Reject new dependencies in Backend/pyproject.toml files
+      - name: Reject new dependencies in pyproject.toml files
         shell: bash
         run: |
           set -euo pipefail
@@ -126,8 +127,9 @@ jobs:
             return 0
           }
 
-          check_deps base/Backend/pyproject.toml pr/Backend/pyproject.toml "Backend/pyproject.toml" || had_error=1
-          check_deps base/Backend/enterprise/pyproject.toml pr/Backend/enterprise/pyproject.toml "Backend/enterprise/pyproject.toml" || had_error=1
+          check_deps base/pyproject.toml pr/pyproject.toml "pyproject.toml" || had_error=1
+          check_deps base/litellm-proxy-extras/pyproject.toml pr/litellm-proxy-extras/pyproject.toml "litellm-proxy-extras/pyproject.toml" || had_error=1
+          check_deps base/enterprise/pyproject.toml pr/enterprise/pyproject.toml "enterprise/pyproject.toml" || had_error=1
 
           if [ "$had_error" -ne 0 ]; then
             echo ""
@@ -135,4 +137,4 @@ jobs:
             exit 1
           fi
 
-          echo "All Backend/pyproject.toml files passed dependency check."
+          echo "All pyproject.toml files passed dependency check."

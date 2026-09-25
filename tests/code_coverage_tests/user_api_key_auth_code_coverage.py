@@ -84,7 +84,7 @@ ignored_function_names = [
 
 def main():
     # router_file = [
-    #     "./Backend/litellm/user_api_key_auth.py",
+    #     "./litellm/user_api_key_auth.py",
     # ]
     router_file = [
         "../../litellm/proxy/auth/user_api_key_auth.py",

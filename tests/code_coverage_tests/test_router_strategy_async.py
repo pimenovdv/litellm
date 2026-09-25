@@ -80,7 +80,6 @@ def test_router_strategy_async_cache_calls():
     """Test that all cache calls in async functions are properly async"""
     strategy_dir = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "Backend",
         "litellm",
         "router_strategy",
     )

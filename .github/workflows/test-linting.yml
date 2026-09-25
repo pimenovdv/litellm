@@ -44,20 +44,20 @@ jobs:
 
       - name: Check uv.lock is up to date
         run: |
-          cd Backend && uv lock --check || (echo "❌ uv.lock is out of sync with Backend/pyproject.toml. Run 'uv lock' locally and commit the result." && exit 1)
+          uv lock --check || (echo "❌ uv.lock is out of sync with pyproject.toml. Run 'uv lock' locally and commit the result." && exit 1)
 
       - name: Install dependencies
         run: |
           uv sync --frozen --group proxy-dev --group e2e-dev
 
-      # basedpyright resolves Prisma's generated client (Backend/litellm/proxy/schema.prisma)
+      # basedpyright resolves Prisma's generated client (litellm/proxy/schema.prisma)
       # only after `prisma generate` writes prisma/client.py et al. Without this the
       # DB wrappers typed against the generated client would degrade to Unknown.
       - name: Generate Prisma client
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema Backend/litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Check ruff format
         env:
@@ -89,23 +89,23 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          PYTHONPATH=Backend uv run --no-sync python scripts/ruff_strict_gate.py --base "$BASE_SHA"
+          uv run --no-sync python scripts/ruff_strict_gate.py --base "$BASE_SHA"
 
       - name: Check type-discipline budget (mutable collections / casts / type guards / kwargs / unexplained suppressions, delta vs base)
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          PYTHONPATH=Backend uv run --no-sync python scripts/type_discipline_gate.py --base "$BASE_SHA"
+          uv run --no-sync python scripts/type_discipline_gate.py --base "$BASE_SHA"
 
       - name: Print OpenAI version
         run: |
-          PYTHONPATH=Backend uv run --no-sync python -c "import openai; print(f'OpenAI version: {openai.__version__}')"
+          uv run --no-sync python -c "import openai; print(f'OpenAI version: {openai.__version__}')"
 
       - name: Check basedpyright budget (delta vs base)
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          (uv run --no-sync basedpyright --outputjson || true) | PYTHONPATH=Backend uv run --no-sync python scripts/type_check_gate.py --base "$BASE_SHA"
+          (uv run --no-sync basedpyright --outputjson || true) | uv run --no-sync python scripts/type_check_gate.py --base "$BASE_SHA"
 
       - name: Check tests/e2e basedpyright (zero errors)
         env:
@@ -120,12 +120,12 @@ jobs:
       - name: Check for circular imports
         run: |
           cd litellm
-          PYTHONPATH=Backend uv run --no-sync python ../tests/documentation_tests/test_circular_imports.py
+          uv run --no-sync python ../tests/documentation_tests/test_circular_imports.py
           cd ..
 
       - name: Check import safety
         run: |
-          PYTHONPATH=Backend uv run --no-sync python -c "from litellm import *" || (echo '🚨 import failed, this means you introduced unprotected imports! 🚨'; exit 1)
+          uv run --no-sync python -c "from litellm import *" || (echo '🚨 import failed, this means you introduced unprotected imports! 🚨'; exit 1)
 
   # Intentionally NON-GATING. This job turns red when a *-budget.json ceiling is
   # raised (or a rule/budget is dropped) so a loosening is obvious in review, but it
@@ -178,7 +178,7 @@ jobs:
 
       - name: Run secret scan test
         run: |
-          PYTHONPATH=Backend uv run --frozen --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
+          uv run --frozen --with 'pytest==9.0.2' pytest tests/litellm/test_no_hardcoded_secrets.py -v
 
       - name: Run ggshield secret scan
         env:

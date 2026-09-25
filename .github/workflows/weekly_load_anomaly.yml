@@ -55,7 +55,7 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema Backend/litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Start the proxy
         run: |
@@ -74,7 +74,7 @@ jobs:
         env:
           E2E_WEEKLY_ANOMALY: "1"
         run: |
-          PYTHONPATH=Backend uv run --no-sync pytest tests/e2e/load/test_weekly_session_anomaly_e2e.py -v --tb=short -rA
+          uv run --no-sync pytest tests/e2e/load/test_weekly_session_anomaly_e2e.py -v --tb=short -rA
 
       - name: Show proxy log on failure
         if: failure()
