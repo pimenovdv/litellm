@@ -84,7 +84,7 @@ ignored_function_names = [
 
 def main():
     router_file = [
-        "../../Backend/litellm/proxy/pass_through_endpoints/llm_provider_handlers/anthropic_passthrough_logging_handler.py",
+        "../../litellm/proxy/pass_through_endpoints/llm_provider_handlers/anthropic_passthrough_logging_handler.py",
     ]
     tests_dir = "../../tests/"
 

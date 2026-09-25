@@ -96,11 +96,11 @@ jobs:
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          uv run --no-sync prisma generate --schema Backend/litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Generate proxy OpenAPI schema
         run: |
-          PYTHONPATH=Backend uv run --no-sync python terraform/provider/tools/dump_openapi.py "${RUNNER_TEMP}/openapi.json"
+          uv run --no-sync python terraform/provider/tools/dump_openapi.py "${RUNNER_TEMP}/openapi.json"
 
       - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
         with:

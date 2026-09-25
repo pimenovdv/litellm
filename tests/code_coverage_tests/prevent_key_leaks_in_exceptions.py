@@ -137,7 +137,7 @@ def check_directory_for_args_string(directory_path):
 def main():
     # Update this path to point to your codebase root directory
     # codebase_path = "../../litellm"  # Adjust as needed
-    codebase_path = "./Backend/litellm"
+    codebase_path = "./litellm"
 
     violations = check_directory_for_args_string(codebase_path)
 

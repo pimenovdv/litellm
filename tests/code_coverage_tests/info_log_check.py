@@ -389,7 +389,7 @@ def main():
     ###################
     # Running in CI/CD
     ###################
-    base_dir = "./Backend/litellm"  # Adjust this path as needed
+    base_dir = "./litellm"  # Adjust this path as needed
 
     print(f"Checking for sensitive logging in: {base_dir}")
 

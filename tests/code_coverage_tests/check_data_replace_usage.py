@@ -108,7 +108,7 @@ def scan_directory(base_dir):
 def main():
     # Start from the project root directory
 
-    base_dir = "./Backend/litellm"
+    base_dir = "./litellm"
 
     # Local testing
     # base_dir = "../../litellm"
