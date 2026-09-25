@@ -44,7 +44,7 @@ jobs:
       - name: Set up uv
         uses: ./.github/actions/setup-uv-with-retries
         with:
-          version: "0.10.9"
+          version: "0.10.8"
 
       - name: Cache uv dependencies
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0

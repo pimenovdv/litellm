@@ -33,7 +33,7 @@ jobs:
       - name: Set up uv
         uses: ./.github/actions/setup-uv-with-retries
         with:
-          version: "0.10.9"
+          version: "0.10.8"
 
       - name: Run Semgrep (custom rules)
         run: uv tool run --from 'semgrep==1.157.0' semgrep scan --config .semgrep/rules . --error

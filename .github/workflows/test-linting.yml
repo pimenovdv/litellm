@@ -35,7 +35,7 @@ jobs:
       - name: Set up uv
         uses: ./.github/actions/setup-uv-with-retries
         with:
-          version: "0.10.9"
+          version: "0.10.8"
 
       - name: Clean Python cache
         run: |
@@ -170,7 +170,7 @@ jobs:
       - name: Set up uv
         uses: ./.github/actions/setup-uv-with-retries
         with:
-          version: "0.10.9"
+          version: "0.10.8"
 
       - name: Run secret scan test
         run: |
