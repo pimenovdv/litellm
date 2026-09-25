@@ -1294,7 +1294,7 @@ _UTILS_MODULE_IMPORT_MAP = {
         "CustomStreamWrapper",
     ),
     "BaseGoogleGenAIGenerateContentConfig": (
-        "litellm.llms.base_llm.google_genai.transformation",
+        "litellm.google_genai.adapters.transformation",
         "BaseGoogleGenAIGenerateContentConfig",
     ),
     "BaseOCRConfig": ("litellm.llms.base_llm.ocr.transformation", "BaseOCRConfig"),
