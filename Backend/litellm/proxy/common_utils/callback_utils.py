@@ -61,9 +61,7 @@ def initialize_callbacks_on_proxy(
         imported_list: List[Any] = []
         for callback in value:  # ["presidio", <my-custom-callback>]
             if isinstance(callback, str) and callback == "compression_interception":
-                from litellm.integrations.compression_interception.handler import (
-                    CompressionInterceptionLogger,
-                )
+                from litellm.integrations.compression_interception.handler import CompressionInterceptionLogger
 
                 compression_interception_obj = CompressionInterceptionLogger.initialize_from_proxy_config(
                     litellm_settings=litellm_settings,
