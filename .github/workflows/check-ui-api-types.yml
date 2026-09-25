@@ -18,6 +18,9 @@ jobs:
   check-sync:
     name: Verify schema.d.ts matches the proxy OpenAPI spec
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     timeout-minutes: 15
     steps:
       - name: Checkout repository
@@ -46,12 +49,12 @@ jobs:
             ${{ runner.os }}-uv-
 
       - name: Install backend dependencies
-        run: cd Backend && ../.github/scripts/uv_sync_with_retries.sh --frozen --group ci --group proxy-dev --extra google --extra proxy --extra semantic-router
+        run: ../.github/scripts/uv_sync_with_retries.sh --frozen --group ci --group proxy-dev --extra google --extra proxy --extra semantic-router
 
       - name: Generate Prisma client
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
-        run: cd Backend && uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+        run: uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Set up Node.js
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
@@ -67,7 +70,7 @@ jobs:
       - name: Regenerate types from the live spec
         working-directory: ui/litellm-dashboard
         env:
-          LITELLM_PYTHON: "cd Backend && uv run --no-sync python"
+          LITELLM_PYTHON: "uv run --no-sync python"
         run: npm run gen:api
 
       - name: Fail if types are stale

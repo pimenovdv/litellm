@@ -18,6 +18,9 @@ concurrency:
 jobs:
   code-quality:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     timeout-minutes: 15
 
     steps:
@@ -53,79 +56,79 @@ jobs:
             ${{ runner.os }}-uv-
 
       - name: Install dependencies
-        run: cd Backend && uv sync --frozen --all-groups --all-extras
+        run: uv sync --frozen --all-groups --all-extras
 
       - name: check_licenses
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/check_licenses.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/check_licenses.py
 
       - name: check_provider_folders_documented
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/check_provider_folders_documented.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/check_provider_folders_documented.py
 
       - name: router_code_coverage
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/router_code_coverage.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/router_code_coverage.py
 
       - name: test_chat_completion_imports
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/test_chat_completion_imports.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/test_chat_completion_imports.py
 
       - name: info_log_check
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/info_log_check.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/info_log_check.py
 
       - name: check_guardrail_apply_decorator
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/check_guardrail_apply_decorator.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/check_guardrail_apply_decorator.py
 
       - name: test_ban_set_verbose
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/test_ban_set_verbose.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/test_ban_set_verbose.py
 
       - name: code_qa_check_tests
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/code_qa_check_tests.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/code_qa_check_tests.py
 
       - name: check_get_model_cost_key_performance
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/check_get_model_cost_key_performance.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/check_get_model_cost_key_performance.py
 
       - name: test_proxy_types_import
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/test_proxy_types_import.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/test_proxy_types_import.py
 
       - name: callback_manager_test
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/callback_manager_test.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/callback_manager_test.py
 
       - name: recursive_detector
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/recursive_detector.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/recursive_detector.py
 
       - name: test_router_strategy_async
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/test_router_strategy_async.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/test_router_strategy_async.py
 
       - name: litellm_logging_code_coverage
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/litellm_logging_code_coverage.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/litellm_logging_code_coverage.py
 
       - name: ensure_async_clients_test
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/ensure_async_clients_test.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/ensure_async_clients_test.py
 
       - name: enforce_llms_folder_style
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/enforce_llms_folder_style.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/enforce_llms_folder_style.py
 
       - name: prevent_key_leaks_in_exceptions
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/prevent_key_leaks_in_exceptions.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/prevent_key_leaks_in_exceptions.py
 
       - name: check_unsafe_enterprise_import
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/check_unsafe_enterprise_import.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/check_unsafe_enterprise_import.py
 
       - name: ban_copy_deepcopy_kwargs
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/ban_copy_deepcopy_kwargs.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/ban_copy_deepcopy_kwargs.py
 
       - name: check_fastuuid_usage
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/check_fastuuid_usage.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/check_fastuuid_usage.py
 
       - name: check_e2e_no_raw_requests
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/check_e2e_no_raw_requests.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/check_e2e_no_raw_requests.py
 
       - name: memory_test
-        run: cd Backend && uv run --no-sync python ../tests/code_coverage_tests/memory_test.py
+        run: uv run --no-sync python ../tests/code_coverage_tests/memory_test.py
 
       - name: documentation_test_env_keys
-        run: cd Backend && uv run --no-sync python ../tests/documentation_tests/test_env_keys.py
+        run: uv run --no-sync python ../tests/documentation_tests/test_env_keys.py
 
       - name: documentation_test_router_settings
-        run: cd Backend && uv run --no-sync python ../tests/documentation_tests/test_router_settings.py
+        run: uv run --no-sync python ../tests/documentation_tests/test_router_settings.py
 
       - name: documentation_test_api_docs
-        run: cd Backend && uv run --no-sync python ../tests/documentation_tests/test_api_docs.py
+        run: uv run --no-sync python ../tests/documentation_tests/test_api_docs.py

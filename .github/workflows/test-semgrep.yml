@@ -18,6 +18,9 @@ concurrency:
 jobs:
   semgrep:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     timeout-minutes: 10
 
     steps:

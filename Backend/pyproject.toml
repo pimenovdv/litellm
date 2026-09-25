@@ -251,7 +251,7 @@ override-dependencies = [
     "packaging>=24.0",
 ]
 default-groups = ["dev"]
-required-version = ">=0.10.8"
+required-version = ">=0.10.9"
 exclude-newer = "3 days"
 
 [tool.uv.sources]
@@ -259,7 +259,7 @@ litellm-proxy-extras = { workspace = true }
 litellm-enterprise = { workspace = true }
 
 [tool.uv.workspace]
-members = ["enterprise", "../litellm-proxy-extras"]
+members = ["enterprise", "litellm-proxy-extras"]
 
 [tool.isort]
 profile = "black"
@@ -324,6 +324,3 @@ pytest_add_cli_args = [
 [tool.coverage.run]
 source = ["litellm"]
 relative_files = true
-
-[tool.setuptools]
-packages = ["litellm", "gateway", "enterprise", "backend"]

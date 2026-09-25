@@ -27,10 +27,13 @@ jobs:
   provider-checks:
     name: gofmt, vet, build, test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     timeout-minutes: 10
     defaults:
       run:
-        working-directory: terraform/provider
+        working-directory: ../terraform/provider
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
         with:
@@ -38,9 +41,9 @@ jobs:
 
       - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
         with:
-          go-version-file: terraform/provider/go.mod
+          go-version-file: ../terraform/provider/go.mod
           cache: true
-          cache-dependency-path: terraform/provider/go.sum
+          cache-dependency-path: ../terraform/provider/go.sum
 
       - name: gofmt
         run: |
@@ -62,6 +65,9 @@ jobs:
   endpoint-drift:
     name: Provider endpoints vs proxy OpenAPI schema
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
@@ -90,24 +96,24 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd Backend && ../.github/scripts/uv_sync_with_retries.sh --frozen --group ci --group proxy-dev --extra google --extra proxy --extra semantic-router
+          ../.github/scripts/uv_sync_with_retries.sh --frozen --group ci --group proxy-dev --extra google --extra proxy --extra semantic-router
 
       - name: Generate Prisma client
         env:
           PRISMA_BINARY_CACHE_DIR: ${{ runner.temp }}/prisma-cache
         run: |
-          cd Backend && uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+          uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
 
       - name: Generate proxy OpenAPI schema
         run: |
-          cd Backend && uv run --no-sync python terraform/provider/tools/dump_openapi.py "${RUNNER_TEMP}/openapi.json"
+          uv run --no-sync python ../terraform/provider/tools/dump_openapi.py "${RUNNER_TEMP}/openapi.json"
 
       - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
         with:
-          go-version-file: terraform/provider/go.mod
+          go-version-file: ../terraform/provider/go.mod
           cache: true
-          cache-dependency-path: terraform/provider/go.sum
+          cache-dependency-path: ../terraform/provider/go.sum
 
       - name: Audit provider endpoints against the schema
-        working-directory: terraform/provider
+        working-directory: ../terraform/provider
         run: go run ./tools/endpointaudit -provider-dir ./litellm -spec "${RUNNER_TEMP}/openapi.json"
