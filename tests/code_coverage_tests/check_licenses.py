@@ -314,9 +314,9 @@ class LicenseChecker:
                 with open(requirements_file) as f:
                     requirement_lines = f.readlines()
             else:
-                with open("pyproject.toml", "rb") as f:
+                with open("Backend/pyproject.toml", "rb") as f:
                     pyproject = tomllib.load(f)
-                with open("uv.lock", "rb") as f:
+                with open("Backend/uv.lock", "rb") as f:
                     lock_data = tomllib.load(f)
 
                 requirement_lines = list(pyproject["project"].get("dependencies", []))

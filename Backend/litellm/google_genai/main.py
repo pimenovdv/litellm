@@ -12,7 +12,7 @@ from litellm.constants import request_timeout
 # Import the adapter for fallback to completion format
 from litellm.google_genai.adapters.handler import GenerateContentToCompletionHandler
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.base_llm.google_genai.transformation import (
+from litellm.google_genai.adapters.transformation import (
     BaseGoogleGenAIGenerateContentConfig,
 )
 from litellm.llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler

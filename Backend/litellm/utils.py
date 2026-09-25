@@ -300,7 +300,7 @@ if TYPE_CHECKING:
         redact_message_input_output_from_logging,
     )
     from litellm.litellm_core_utils.streaming_handler import CustomStreamWrapper
-    from litellm.llms.base_llm.google_genai.transformation import (
+    from litellm.google_genai.adapters.transformation import (
         BaseGoogleGenAIGenerateContentConfig,
     )
     from litellm.llms.base_llm.ocr.transformation import BaseOCRConfig

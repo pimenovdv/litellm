@@ -9,7 +9,7 @@ from litellm.proxy.pass_through_endpoints.success_handler import (
 from litellm.types.passthrough_endpoints.pass_through_endpoints import EndpointType
 
 if TYPE_CHECKING:
-    from litellm.llms.base_llm.google_genai.transformation import (
+    from litellm.google_genai.adapters.transformation import (
         BaseGoogleGenAIGenerateContentConfig,
     )
 else:
