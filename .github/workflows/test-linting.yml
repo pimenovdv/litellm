@@ -77,7 +77,7 @@ jobs:
           echo "Last 3 commits:"
           git log --oneline -3
           echo "File content around line 43:"
-          head -50 litellm/litellm_core_utils/custom_logger_registry.py | tail -10
+          head -50 Backend/litellm/litellm_core_utils/custom_logger_registry.py | tail -10
 
       - name: Run Ruff linting
         run: |
