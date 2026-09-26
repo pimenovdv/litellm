@@ -34,17 +34,10 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES
 from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.realtime_streaming import RealTimeStreaming
 from litellm.litellm_core_utils.url_utils import encode_url_path_segment
-from litellm.llms.base_llm.anthropic_messages.transformation import (
-    BaseAnthropicMessagesConfig,
-)
-from litellm.llms.base_llm.audio_transcription.transformation import (
-    BaseAudioTranscriptionConfig,
-)
 from litellm.llms.base_llm.base_model_iterator import (
     BaseModelResponseIterator,
     MockResponseIterator,
 )
-from litellm.llms.base_llm.batches.transformation import BaseBatchesConfig
 from litellm.llms.base_llm.chat.transformation import BaseConfig
 from litellm.llms.base_llm.containers.transformation import BaseContainerConfig
 from litellm.llms.base_llm.embedding.transformation import BaseEmbeddingConfig
@@ -53,25 +46,12 @@ from litellm.llms.base_llm.files.transformation import (
     BaseFilesConfig,
     BaseFileUploadStream,
 )
-from litellm.llms.base_llm.google_genai.transformation import (
-    BaseGoogleGenAIGenerateContentConfig,
-)
-from litellm.llms.base_llm.image_edit.transformation import BaseImageEditConfig
-from litellm.llms.base_llm.image_generation.transformation import (
-    BaseImageGenerationConfig,
-)
 from litellm.llms.base_llm.ocr.transformation import BaseOCRConfig, OCRResponse
 from litellm.llms.base_llm.realtime.transformation import BaseRealtimeConfig
 from litellm.llms.base_llm.rerank.transformation import BaseRerankConfig
 from litellm.llms.base_llm.responses.transformation import BaseResponsesAPIConfig
 from litellm.llms.base_llm.search.transformation import BaseSearchConfig, SearchResponse
 from litellm.llms.base_llm.skills.transformation import BaseSkillsAPIConfig
-from litellm.llms.base_llm.text_to_speech.transformation import BaseTextToSpeechConfig
-from litellm.llms.base_llm.vector_store.transformation import BaseVectorStoreConfig
-from litellm.llms.base_llm.vector_store_files.transformation import (
-    BaseVectorStoreFilesConfig,
-)
-from litellm.llms.base_llm.videos.transformation import BaseVideoConfig
 from litellm.llms.custom_httpx.http_handler import (
     AsyncHTTPHandler,
     HTTPHandler,
@@ -163,8 +143,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-            AnthropicMessagesStreamingResponse,
-    )
+    from litellm.types.llms.anthropic import AnthropicMessagesStreamingResponse
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
         CancelEvalResponse,
@@ -1177,7 +1156,7 @@ class BaseLLMHTTPHandler:
         api_key: Optional[str],
         api_base: Optional[str],
         headers: Optional[Dict[str, Any]],
-        provider_config: BaseAudioTranscriptionConfig,
+        provider_config: type(None),
     ) -> Tuple[dict, str, Union[dict, bytes, None], Optional[dict]]:
         """
         Shared logic for preparing audio transcription requests.
@@ -1237,7 +1216,7 @@ class BaseLLMHTTPHandler:
 
     def _transform_audio_transcription_response(
         self,
-        provider_config: BaseAudioTranscriptionConfig,
+        provider_config: type(None),
         model: str,
         response: httpx.Response,
         model_response: TranscriptionResponse,
@@ -1266,7 +1245,7 @@ class BaseLLMHTTPHandler:
         client: Optional[Union[HTTPHandler, AsyncHTTPHandler]] = None,
         atranscription: bool = False,
         headers: Optional[Dict[str, Any]] = None,
-        provider_config: Optional[BaseAudioTranscriptionConfig] = None,
+        provider_config: Optional[type(None)] = None,
         shared_session: Optional["ClientSession"] = None,
     ) -> Union[TranscriptionResponse, Coroutine[Any, Any, TranscriptionResponse]]:
         if provider_config is None:
@@ -1351,7 +1330,7 @@ class BaseLLMHTTPHandler:
         custom_llm_provider: str,
         client: Optional[Union[HTTPHandler, AsyncHTTPHandler]] = None,
         headers: Optional[Dict[str, Any]] = None,
-        provider_config: Optional[BaseAudioTranscriptionConfig] = None,
+        provider_config: Optional[type(None)] = None,
         shared_session: Optional["ClientSession"] = None,
     ) -> TranscriptionResponse:
         if provider_config is None:
@@ -1887,7 +1866,7 @@ class BaseLLMHTTPHandler:
         request_body: dict,
         stream: bool,
         logging_obj: LiteLLMLoggingObj,
-        provider_config: BaseAnthropicMessagesConfig,
+        provider_config: type(None),
         litellm_params: GenericLiteLLMParams,
         api_key: Optional[str],
         model: str,
@@ -1969,7 +1948,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: type(None),
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -2157,9 +2136,7 @@ class BaseLLMHTTPHandler:
 
         initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
         if stream:
-                            AnthropicMessagesStreamingResponse,
-                anthropic_messages_stream_hidden_params,
-            )
+            from litellm.types.llms.anthropic import AnthropicMessagesStreamingResponse, AnthropicMessagesStreamHiddenParams
 
             completion_stream = anthropic_messages_provider_config.get_async_streaming_response_iterator(
                 model=model,
@@ -2180,8 +2157,7 @@ class BaseLLMHTTPHandler:
                     hidden_params=stream_hidden_params,
                 )
 
-                            AgenticAnthropicStreamingIterator,
-            )
+            from litellm.llms.anthropic.chat.handler import AgenticAnthropicStreamingIterator
 
             initial_response = AgenticAnthropicStreamingIterator(
                 completion_stream=completion_stream,
@@ -2223,7 +2199,7 @@ class BaseLLMHTTPHandler:
         initial_response: AnthropicMessagesResponse,
         model: str,
         messages: list[dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: type(None),
         anthropic_messages_optional_request_params: dict,
         logging_obj: LiteLLMLoggingObj,
         custom_llm_provider: str,
@@ -2307,11 +2283,8 @@ class BaseLLMHTTPHandler:
     def _rust_anthropic_messages_fake_stream(
         rust_response: AnthropicMessagesResponse,
     ) -> "AnthropicMessagesStreamingResponse":
-                    FakeAnthropicMessagesStreamIterator,
-        )
-                    AnthropicMessagesStreamHiddenParams,
-            AnthropicMessagesStreamingResponse,
-        )
+        from litellm.llms.anthropic.chat.handler import FakeAnthropicMessagesStreamIterator
+        from litellm.types.llms.anthropic import AnthropicMessagesStreamHiddenParams, AnthropicMessagesStreamingResponse
 
         completion_stream = cast(AsyncIterator[bytes], FakeAnthropicMessagesStreamIterator(response=rust_response))
         hidden_params = AnthropicMessagesStreamHiddenParams(additional_headers={"x-litellm-rust": "true"})
@@ -2324,7 +2297,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: BaseAnthropicMessagesConfig,
+        anthropic_messages_provider_config: type(None),
         anthropic_messages_optional_request_params: Dict,
         custom_llm_provider: str,
         _is_async: bool,
@@ -3775,7 +3748,7 @@ class BaseLLMHTTPHandler:
         self,
         create_batch_data: "CreateBatchRequest",
         litellm_params: dict,
-        provider_config: "BaseBatchesConfig",
+        provider_config: "type(None)",
         headers: dict,
         api_base: Optional[str],
         api_key: Optional[str],
@@ -3887,7 +3860,7 @@ class BaseLLMHTTPHandler:
         self,
         batch_id: str,
         litellm_params: dict,
-        provider_config: "BaseBatchesConfig",
+        provider_config: "type(None)",
         headers: dict,
         api_base: Optional[str],
         api_key: Optional[str],
@@ -3973,7 +3946,7 @@ class BaseLLMHTTPHandler:
         self,
         transformed_request: Union[bytes, str, dict],
         litellm_params: dict,
-        provider_config: "BaseBatchesConfig",
+        provider_config: "type(None)",
         headers: dict,
         api_base: str,
         logging_obj: "LiteLLMLoggingObj",
@@ -4052,7 +4025,7 @@ class BaseLLMHTTPHandler:
         self,
         transformed_request: Union[bytes, str, dict],
         litellm_params: dict,
-        provider_config: "BaseBatchesConfig",
+        provider_config: "type(None)",
         headers: dict,
         api_base: Optional[str],
         logging_obj: "LiteLLMLoggingObj",
@@ -5349,8 +5322,7 @@ class BaseLLMHTTPHandler:
             from typing import cast
 
             from litellm._logging import verbose_logger
-                            FakeAnthropicMessagesStreamIterator,
-            )
+            from litellm.llms.anthropic.chat.handler import FakeAnthropicMessagesStreamIterator
             from litellm.types.llms.anthropic_messages.anthropic_response import (
                 AnthropicMessagesResponse,
             )
@@ -5366,7 +5338,7 @@ class BaseLLMHTTPHandler:
         response: Any,
         model: str,
         messages: List[Dict],
-        anthropic_messages_provider_config: "BaseAnthropicMessagesConfig",
+        anthropic_messages_provider_config: "type(None)",
         anthropic_messages_optional_request_params: Dict,
         logging_obj: "LiteLLMLoggingObj",
         stream: bool,
@@ -5694,17 +5666,17 @@ class BaseLLMHTTPHandler:
             BaseConfig,
             BaseRerankConfig,
             BaseResponsesAPIConfig,
-            BaseImageEditConfig,
-            BaseImageGenerationConfig,
-            BaseVectorStoreConfig,
-            BaseVectorStoreFilesConfig,
-            BaseGoogleGenAIGenerateContentConfig,
-            BaseAnthropicMessagesConfig,
-            BaseBatchesConfig,
+            type(None),
+            type(None),
+            type(None),
+            type(None),
+            type(None),
+            type(None),
+            type(None),
             BaseOCRConfig,
-            BaseVideoConfig,
+            type(None),
             BaseSearchConfig,
-            BaseTextToSpeechConfig,
+            type(None),
             BaseSkillsAPIConfig,
             "BasePassthroughConfig",
             "BaseContainerConfig",
@@ -6310,7 +6282,7 @@ class BaseLLMHTTPHandler:
         model: str,
         image: Any,
         prompt: Optional[str],
-        image_edit_provider_config: BaseImageEditConfig,
+        image_edit_provider_config: type(None),
         image_edit_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -6430,7 +6402,7 @@ class BaseLLMHTTPHandler:
         model: str,
         image: FileTypes,
         prompt: Optional[str],
-        image_edit_provider_config: BaseImageEditConfig,
+        image_edit_provider_config: type(None),
         image_edit_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -6528,7 +6500,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         prompt: str,
-        image_generation_provider_config: BaseImageGenerationConfig,
+        image_generation_provider_config: type(None),
         image_generation_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: Dict,
@@ -6655,7 +6627,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         prompt: str,
-        image_generation_provider_config: BaseImageGenerationConfig,
+        image_generation_provider_config: type(None),
         image_generation_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: Dict,
@@ -6763,7 +6735,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         prompt: str,
-        video_generation_provider_config: BaseVideoConfig,
+        video_generation_provider_config: type(None),
         video_generation_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -6887,7 +6859,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         prompt: str,
-        video_generation_provider_config: "BaseVideoConfig",
+        video_generation_provider_config: "type(None)",
         video_generation_optional_request_params: Dict,
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
@@ -6988,7 +6960,7 @@ class BaseLLMHTTPHandler:
     def video_content_handler(
         self,
         video_id: str,
-        video_content_provider_config: BaseVideoConfig,
+        video_content_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -7078,7 +7050,7 @@ class BaseLLMHTTPHandler:
     async def async_video_content_handler(
         self,
         video_id: str,
-        video_content_provider_config: BaseVideoConfig,
+        video_content_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -7157,7 +7129,7 @@ class BaseLLMHTTPHandler:
         self,
         video_id: str,
         prompt: str,
-        video_remix_provider_config: BaseVideoConfig,
+        video_remix_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7256,7 +7228,7 @@ class BaseLLMHTTPHandler:
         self,
         video_id: str,
         prompt: str,
-        video_remix_provider_config: BaseVideoConfig,
+        video_remix_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7339,7 +7311,7 @@ class BaseLLMHTTPHandler:
         self,
         name: str,
         video: Any,
-        video_provider_config: BaseVideoConfig,
+        video_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7423,7 +7395,7 @@ class BaseLLMHTTPHandler:
         self,
         name: str,
         video: Any,
-        video_provider_config: BaseVideoConfig,
+        video_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7494,7 +7466,7 @@ class BaseLLMHTTPHandler:
     def video_get_character_handler(
         self,
         character_id: str,
-        video_provider_config: BaseVideoConfig,
+        video_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7563,7 +7535,7 @@ class BaseLLMHTTPHandler:
     async def async_video_get_character_handler(
         self,
         character_id: str,
-        video_provider_config: BaseVideoConfig,
+        video_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7622,7 +7594,7 @@ class BaseLLMHTTPHandler:
         self,
         prompt: str,
         video_id: str,
-        video_provider_config: BaseVideoConfig,
+        video_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7731,7 +7703,7 @@ class BaseLLMHTTPHandler:
         self,
         prompt: str,
         video_id: str,
-        video_provider_config: BaseVideoConfig,
+        video_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7828,7 +7800,7 @@ class BaseLLMHTTPHandler:
         prompt: str,
         video_id: str,
         seconds: str,
-        video_provider_config: BaseVideoConfig,
+        video_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -7917,7 +7889,7 @@ class BaseLLMHTTPHandler:
         prompt: str,
         video_id: str,
         seconds: str,
-        video_provider_config: BaseVideoConfig,
+        video_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -8046,7 +8018,7 @@ class BaseLLMHTTPHandler:
         after: Optional[str],
         limit: Optional[int],
         order: Optional[str],
-        video_list_provider_config: BaseVideoConfig,
+        video_list_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -8127,7 +8099,7 @@ class BaseLLMHTTPHandler:
     async def async_video_delete_handler(
         self,
         video_id: str,
-        video_delete_provider_config: BaseVideoConfig,
+        video_delete_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -8203,7 +8175,7 @@ class BaseLLMHTTPHandler:
     def video_status_handler(
         self,
         video_id: str,
-        video_status_provider_config: BaseVideoConfig,
+        video_status_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -8308,7 +8280,7 @@ class BaseLLMHTTPHandler:
     async def async_video_status_handler(
         self,
         video_id: str,
-        video_status_provider_config: BaseVideoConfig,
+        video_status_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params,
         logging_obj,
@@ -9394,7 +9366,7 @@ class BaseLLMHTTPHandler:
         vector_store_id: str,
         query: Union[str, List[str]],
         vector_store_search_optional_params: VectorStoreSearchOptionalRequestParams,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -9492,7 +9464,7 @@ class BaseLLMHTTPHandler:
         vector_store_id: str,
         query: Union[str, List[str]],
         vector_store_search_optional_params: VectorStoreSearchOptionalRequestParams,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -9586,7 +9558,7 @@ class BaseLLMHTTPHandler:
     async def async_vector_store_create_handler(
         self,
         vector_store_create_optional_params: VectorStoreCreateOptionalRequestParams,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -9646,7 +9618,7 @@ class BaseLLMHTTPHandler:
     def vector_store_create_handler(
         self,
         vector_store_create_optional_params: VectorStoreCreateOptionalRequestParams,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -9716,7 +9688,7 @@ class BaseLLMHTTPHandler:
     async def async_vector_store_retrieve_handler(
         self,
         vector_store_id: str,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -9769,7 +9741,7 @@ class BaseLLMHTTPHandler:
     def vector_store_retrieve_handler(
         self,
         vector_store_id: str,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -9836,7 +9808,7 @@ class BaseLLMHTTPHandler:
         before: Optional[str],
         limit: Optional[int],
         order: Optional[str],
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -9900,7 +9872,7 @@ class BaseLLMHTTPHandler:
         before: Optional[str],
         limit: Optional[int],
         order: Optional[str],
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -9976,7 +9948,7 @@ class BaseLLMHTTPHandler:
         self,
         vector_store_id: str,
         vector_store_update_optional_params: VectorStoreCreateOptionalRequestParams,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10042,7 +10014,7 @@ class BaseLLMHTTPHandler:
         self,
         vector_store_id: str,
         vector_store_update_optional_params: VectorStoreCreateOptionalRequestParams,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10119,7 +10091,7 @@ class BaseLLMHTTPHandler:
     async def async_vector_store_delete_handler(
         self,
         vector_store_id: str,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10170,7 +10142,7 @@ class BaseLLMHTTPHandler:
     def vector_store_delete_handler(
         self,
         vector_store_id: str,
-        vector_store_provider_config: BaseVectorStoreConfig,
+        vector_store_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10237,7 +10209,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         create_request: VectorStoreFileCreateRequest,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10302,7 +10274,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         create_request: VectorStoreFileCreateRequest,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10379,7 +10351,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         query_params: VectorStoreFileListQueryParams,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10443,7 +10415,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         query_params: VectorStoreFileListQueryParams,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10519,7 +10491,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         file_id: str,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10578,7 +10550,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         file_id: str,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10648,7 +10620,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         file_id: str,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10709,7 +10681,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         file_id: str,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10785,7 +10757,7 @@ class BaseLLMHTTPHandler:
         vector_store_id: str,
         file_id: str,
         update_request: VectorStoreFileUpdateRequest,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10851,7 +10823,7 @@ class BaseLLMHTTPHandler:
         vector_store_id: str,
         file_id: str,
         update_request: VectorStoreFileUpdateRequest,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10929,7 +10901,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         file_id: str,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -10988,7 +10960,7 @@ class BaseLLMHTTPHandler:
         *,
         vector_store_id: str,
         file_id: str,
-        vector_store_files_provider_config: BaseVectorStoreFilesConfig,
+        vector_store_files_provider_config: type(None),
         custom_llm_provider: str,
         litellm_params: GenericLiteLLMParams,
         logging_obj: LiteLLMLoggingObj,
@@ -11063,7 +11035,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         contents: Any,
-        generate_content_provider_config: BaseGoogleGenAIGenerateContentConfig,
+        generate_content_provider_config: type(None),
         generate_content_config_dict: Dict,
         tools: Any,
         custom_llm_provider: str,
@@ -11195,7 +11167,7 @@ class BaseLLMHTTPHandler:
         self,
         model: str,
         contents: Any,
-        generate_content_provider_config: BaseGoogleGenAIGenerateContentConfig,
+        generate_content_provider_config: type(None),
         generate_content_config_dict: Dict,
         tools: Any,
         custom_llm_provider: str,
@@ -11314,7 +11286,7 @@ class BaseLLMHTTPHandler:
         model: str,
         input: str,
         voice: Optional[str],
-        text_to_speech_provider_config: BaseTextToSpeechConfig,
+        text_to_speech_provider_config: type(None),
         text_to_speech_optional_params: Dict,
         custom_llm_provider: str,
         litellm_params: Dict,
@@ -11429,7 +11401,7 @@ class BaseLLMHTTPHandler:
         model: str,
         input: str,
         voice: Optional[str],
-        text_to_speech_provider_config: BaseTextToSpeechConfig,
+        text_to_speech_provider_config: type(None),
         text_to_speech_optional_params: Dict,
         custom_llm_provider: str,
         litellm_params: Dict,

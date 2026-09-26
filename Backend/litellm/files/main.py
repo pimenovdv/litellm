@@ -35,14 +35,10 @@ from litellm.files.streaming import FileContentStreamingResponse
 from litellm.files.types import FileContentProvider, FileContentStreamingResult
 from litellm.litellm_core_utils.get_llm_provider_logic import get_llm_provider
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.azure.common_utils import get_azure_credentials
-from litellm.llms.azure.files.handler import AzureOpenAIFilesAPI
-from litellm.llms.bedrock.files.handler import BedrockFilesHandler
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
 from litellm.llms.openai.common_utils import get_openai_credentials
 from litellm.llms.openai.openai import FileDeleted, FileObject, OpenAIFilesAPI
-from litellm.llms.vertex_ai.files.handler import VertexAIFilesHandler
 from litellm.types.llms.openai import (
     CreateFileRequest,
     FileContentRequest,
@@ -78,9 +74,9 @@ def _should_sdk_support_streaming(
 
 
 openai_files_instance = OpenAIFilesAPI()
-azure_files_instance = AzureOpenAIFilesAPI()
-vertex_ai_files_instance = VertexAIFilesHandler()
-bedrock_files_instance = BedrockFilesHandler()
+azure_files_instance = None
+vertex_ai_files_instance = None
+bedrock_files_instance = None
 #################################################
 
 

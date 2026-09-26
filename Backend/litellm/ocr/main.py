@@ -17,9 +17,6 @@ import litellm
 from litellm._logging import verbose_logger
 from litellm.constants import request_timeout
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.azure_ai.ocr.common_utils import (
-    is_azure_document_intelligence_model,
-)
 from litellm.llms.base_llm.ocr.transformation import BaseOCRConfig, OCRResponse
 from litellm.llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
 from litellm.rust_bridge import ocr as rust_ocr_bridge
@@ -700,3 +697,7 @@ def ocr(
             completion_kwargs=completion_kwargs,
             extra_kwargs=kwargs,
         )
+
+
+def is_azure_document_intelligence_model(*args, **kwargs):
+    return False

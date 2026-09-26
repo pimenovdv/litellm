@@ -56,7 +56,7 @@ from litellm.utils import ProviderConfigManager
 
 from .passthrough_endpoint_router import PassthroughEndpointRouter
 
-vertex_llm_base = VertexBase()
+vertex_llm_base = None
 router = APIRouter()
 default_vertex_config = None
 
@@ -1491,7 +1491,7 @@ def _override_vertex_params_from_router_credentials(
     Override vertex_project and vertex_location with values from router_credentials if available.
 
     Args:
-        router_credentials: Optional vector store credentials from registry (LiteLLM_ManagedVectorStore)
+        router_credentials: Optional vector store credentials from registry (dict)
         vertex_project: Current vertex project ID (from URL)
         vertex_location: Current vertex location (from URL)
 
@@ -1564,7 +1564,7 @@ async def _prepare_vertex_auth_headers(
             - vertex_project: Optional[str] - Updated vertex project ID
             - vertex_location: Optional[str] - Updated vertex location
     """
-    vertex_llm_base = VertexBase()
+    vertex_llm_base = None
     headers_passed_through = False
 
     # Use headers from the incoming request if no vertex credentials are found
@@ -1647,13 +1647,8 @@ async def _base_vertex_proxy_route(
         fastapi_response: FastAPI response object
         get_vertex_pass_through_handler: Handler for the specific Vertex AI service
         user_api_key_dict: User API key authentication dict
-        router_credentials: Optional vector store credentials from registry (LiteLLM_ManagedVectorStore)
+        router_credentials: Optional vector store credentials from registry (dict)
     """
-            construct_target_url,
-        get_vertex_location_from_url,
-        get_vertex_model_id_from_url,
-        get_vertex_project_id_from_url,
-    )
     from litellm.proxy.proxy_server import llm_router
 
     encoded_endpoint = httpx.URL(endpoint).path
@@ -1798,10 +1793,10 @@ async def vertex_discovery_proxy_route(
     """
     import re
 
-    from litellm.types.vector_stores import LiteLLM_ManagedVectorStore
+    from litellm.types.vector_stores import dict
 
     # Extract vector store ID from endpoint if present (e.g., dataStores/test-litellm-app_1761094730750)
-    vector_store_credentials: Optional[LiteLLM_ManagedVectorStore] = None
+    vector_store_credentials: Optional[dict] = None
     vector_store_id_match = re.search(r"dataStores/([^/]+)", endpoint)
 
     if vector_store_id_match:

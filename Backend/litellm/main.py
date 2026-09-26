@@ -38,9 +38,7 @@ from typing import (
     Type,
     Union,
     cast,
-    get_args,
 )
-
 from litellm._logging import _redact_string
 from litellm._uuid import uuid
 
@@ -65,7 +63,6 @@ from litellm.utils import (
     get_litellm_params,
     get_optional_params,
     peek_reasoning_summary_aliases,
-    strip_reasoning_summary_aliases_from_optional_params,
 )
 
 # Logging is imported lazily when needed to avoid loading litellm_logging at import time
@@ -75,53 +72,24 @@ if TYPE_CHECKING:
 
 from litellm.constants import (
     DEFAULT_MOCK_RESPONSE_COMPLETION_TOKEN_COUNT,
-    DEFAULT_MOCK_RESPONSE_PROMPT_TOKEN_COUNT,
 )
 from litellm.exceptions import LiteLLMUnknownProvider
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.audio_utils.utils import (
     calculate_request_duration,
-    get_audio_file_for_health_check,
-)
-from litellm.litellm_core_utils.chat_completion_agentic_loop import (
-    maybe_run_chat_completion_agentic_loop,
 )
 from litellm.litellm_core_utils.completion_timeout import CompletionTimeout
 from litellm.litellm_core_utils.dd_tracing import tracer
 from litellm.litellm_core_utils.get_litellm_params import (
     AWS_CREDENTIAL_KWARGS_KEYS,
-    OPTIONAL_KWARGS_KEYS,
-)
-from litellm.litellm_core_utils.get_provider_specific_headers import (
-    ProviderSpecificHeaderUtils,
 )
 from litellm.litellm_core_utils.health_check_utils import (
     _create_health_check_response,
-    _filter_model_params,
 )
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
 from litellm.litellm_core_utils.mock_functions import (
     mock_embedding,
-    mock_image_generation,
-)
-from litellm.litellm_core_utils.prompt_templates.common_utils import (
-    get_content_from_model_response,
-)
-from litellm.litellm_core_utils.request_timeout_resolver import (
-    get_configured_request_timeout,
-)
-from litellm.llms.base_llm import BaseConfig, BaseImageGenerationConfig
-from litellm.llms.base_llm.base_model_iterator import (
-    convert_model_response_to_streaming,
-)
-from litellm.llms.bedrock.common_utils import BedrockModelInfo
-from litellm.llms.cohere.common_utils import CohereModelInfo
-from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
-from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
-from litellm.llms.openai_like.json_loader import JSONProviderRegistry
-    VertexAIModelRoute,
-    get_vertex_ai_model_route,
 )
 from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
@@ -134,7 +102,6 @@ from litellm.types.utils import (
     CustomPricingLiteLLMParams,
     ModelResponseStream,
     RawRequestTypedDict,
-    StreamingChoices,
 )
 from litellm.utils import (
     Choices,
@@ -175,7 +142,6 @@ from litellm.utils import (
     validate_and_fix_openai_tools,
     validate_and_fix_thinking_param,
     validate_chat_completion_tool_choice,
-    validate_openai_optional_params,
 )
 
 from ._logging import verbose_logger
@@ -183,12 +149,10 @@ from .caching.caching import disable_cache, enable_cache, update_cache
 from .litellm_core_utils.core_helpers import safe_deep_copy
 from .litellm_core_utils.fallback_utils import (
     async_completion_with_fallbacks,
-    completion_with_fallbacks,
 )
 from .litellm_core_utils.prompt_templates.common_utils import (
     add_system_prompt_to_messages,
     get_completion_messages,
-    update_messages_with_model_file_ids,
 )
 from .litellm_core_utils.prompt_templates.factory import (
     custom_prompt,
@@ -196,76 +160,60 @@ from .litellm_core_utils.prompt_templates.factory import (
     map_system_message_pt,
     ollama_pt,
     prompt_factory,
-    stringify_json_tool_call_content,
 )
 from .litellm_core_utils.streaming_chunk_builder_utils import ChunkProcessor
-from .llms.anthropic.chat import AnthropicChatCompletion
-from .llms.azure.audio_transcriptions import AzureAudioTranscription
-from .llms.azure.azure import AzureChatCompletion, _check_dynamic_azure_params
-from .llms.azure.chat.o_series_handler import AzureOpenAIO1ChatCompletion
-from .llms.azure.completion.handler import AzureTextCompletion
-from .llms.azure_ai.anthropic.handler import AzureAnthropicChatCompletion
-from .llms.azure_ai.embed import AzureAIEmbedding
-from .llms.bedrock.chat import BedrockConverseLLM, BedrockLLM
-from .llms.bedrock.embed.embedding import BedrockEmbedding
-from .llms.bedrock.image_edit.handler import BedrockImageEdit
-from .llms.bedrock.image_generation.image_handler import BedrockImageGeneration
-from .llms.bytez.chat.transformation import BytezChatConfig
-from .llms.clarifai.chat.transformation import ClarifaiConfig
-from .llms.codestral.completion.handler import CodestralTextCompletion
-from .llms.cohere.embed import handler as cohere_embed
-from .llms.custom_httpx.aiohttp_handler import BaseLLMAIOHTTPHandler
-from .llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
-from .llms.custom_llm import CustomLLM, custom_chat_llm_router
-from .llms.databricks.embed.handler import DatabricksEmbeddingHandler
-from .llms.deprecated_providers import aleph_alpha, palm
-from .llms.gdc.chat.transformation import GDCGeminiConfig
-from .llms.gemini.common_utils import get_api_key_from_env
-from .llms.groq.chat.handler import GroqChatCompletion
-from .llms.heroku.chat.transformation import HerokuChatConfig
-from .llms.huggingface.embedding.handler import HuggingFaceEmbedding
-from .llms.lemonade.chat.transformation import LemonadeChatConfig
-from .llms.nlp_cloud.chat.handler import completion as nlp_cloud_chat_completion
-from .llms.nvidia_riva.audio_transcription.handler import (
-    NvidiaRivaAudioTranscription,
-)
-from .llms.nvidia_riva.audio_transcription.transformation import (
-    NvidiaRivaAudioTranscriptionConfig,
-)
-from .llms.oci.chat.transformation import OCIChatConfig
-from .llms.ollama.completion import handler as ollama
-from .llms.oobabooga.chat import oobabooga
-from .llms.openai.completion.handler import OpenAITextCompletion
-from .llms.openai.image_variations.handler import OpenAIImageVariationsHandler
-from .llms.openai.openai import OpenAIChatCompletion
-from .llms.openai.transcriptions.handler import OpenAIAudioTranscription
-from .llms.openai_like.chat.handler import OpenAILikeChatHandler
-from .llms.openai_like.embedding.handler import OpenAILikeEmbeddingHandler
-from .llms.ovhcloud.chat.transformation import OVHCloudChatConfig
-from .llms.petals.completion import handler as petals_handler
-from .llms.predibase.chat.handler import PredibaseChatCompletion
-from .llms.replicate.chat.handler import completion as replicate_chat_completion
-from .llms.sagemaker.chat.handler import SagemakerChatHandler
-from .llms.sagemaker.completion.handler import SagemakerLLM
-from .llms.sap.chat.handler import GenAIHubOrchestration
-from .llms.vertex_ai import vertex_ai_non_gemini
-from .llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import VertexLLM
-from .llms.vertex_ai.gemini_embeddings.batch_embed_content_handler import (
-    GoogleBatchEmbeddings,
-)
-from .llms.vertex_ai.image_generation.image_generation_handler import (
-    VertexImageGeneration,
-)
-from .llms.vertex_ai.multimodal_embeddings.embedding_handler import (
-    VertexMultimodalEmbedding,
-)
-from .llms.vertex_ai.vertex_ai_partner_models.main import VertexAIPartnerModels
-from .llms.vertex_ai.vertex_embeddings.embedding_handler import VertexEmbedding
-from .llms.vertex_ai.vertex_gemma_models.main import VertexAIGemmaModels
-from .llms.vertex_ai.vertex_model_garden.main import VertexAIModelGardenModels
-from .llms.vllm.completion import handler as vllm_handler
-from .llms.watsonx.chat.handler import WatsonXChatHandler
-from .llms.watsonx.common_utils import IBMWatsonXMixin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from .types.llms.anthropic import AnthropicThinkingParam
 from .types.llms.openai import (
     ChatCompletionAssistantMessage,
@@ -275,7 +223,6 @@ from .types.llms.openai import (
     ChatCompletionUserMessage,
     HttpxBinaryResponseContent,
     OpenAIModerationResponse,
-    OpenAIWebSearchOptions,
 )
 from .types.utils import (
     AdapterCompletionStreamWrapper,
@@ -286,55 +233,54 @@ from .types.utils import (
     LlmProviders,
     PromptTokensDetails,
     ProviderSpecificHeader,
-    all_litellm_params,
 )
 
 ####### ENVIRONMENT VARIABLES ###################
-openai_chat_completions = OpenAIChatCompletion()
-openai_text_completions = OpenAITextCompletion()
-openai_audio_transcriptions = OpenAIAudioTranscription()
-nvidia_riva_audio_transcriptions = NvidiaRivaAudioTranscription()
-openai_image_variations = OpenAIImageVariationsHandler()
-groq_chat_completions = GroqChatCompletion()
-sap_gen_ai_hub_chat_completions = GenAIHubOrchestration()
-sap_gen_ai_hub_emb = GenAIHubOrchestration()
-azure_ai_embedding = AzureAIEmbedding()
-anthropic_chat_completions = AnthropicChatCompletion()
-azure_anthropic_chat_completions = AzureAnthropicChatCompletion()
-azure_chat_completions = AzureChatCompletion()
-azure_o1_chat_completions = AzureOpenAIO1ChatCompletion()
-azure_text_completions = AzureTextCompletion()
-azure_audio_transcriptions = AzureAudioTranscription()
-huggingface_embed = HuggingFaceEmbedding()
-predibase_chat_completions = PredibaseChatCompletion()
-codestral_text_completions = CodestralTextCompletion()
-bedrock_converse_chat_completion = BedrockConverseLLM()
-bedrock_embedding = BedrockEmbedding()
-bedrock_image_generation = BedrockImageGeneration()
-bedrock_image_edit = BedrockImageEdit()
-vertex_chat_completion = VertexLLM()
-vertex_embedding = VertexEmbedding()
-vertex_multimodal_embedding = VertexMultimodalEmbedding()
-vertex_image_generation = VertexImageGeneration()
-google_batch_embeddings = GoogleBatchEmbeddings()
-vertex_partner_models_chat_completion = VertexAIPartnerModels()
-vertex_gemma_chat_completion = VertexAIGemmaModels()
-vertex_model_garden_chat_completion = VertexAIModelGardenModels()
-gdc_transformation = GDCGeminiConfig()
-# vertex_text_to_speech is now replaced by VertexAITextToSpeechConfig
-sagemaker_llm = SagemakerLLM()
-watsonx_chat_completion = WatsonXChatHandler()
-openai_like_embedding = OpenAILikeEmbeddingHandler()
-openai_like_chat_completion = OpenAILikeChatHandler()
-databricks_embedding = DatabricksEmbeddingHandler()
-base_llm_http_handler = BaseLLMHTTPHandler()
-base_llm_aiohttp_handler = BaseLLMAIOHTTPHandler()
-sagemaker_chat_completion = SagemakerChatHandler()
-bytez_transformation = BytezChatConfig()
-heroku_transformation = HerokuChatConfig()
-oci_transformation = OCIChatConfig()
-ovhcloud_transformation = OVHCloudChatConfig()
-lemonade_transformation = LemonadeChatConfig()
+openai_chat_completions = None
+openai_text_completions = None
+openai_audio_transcriptions = None
+nvidia_riva_audio_transcriptions = None
+openai_image_variations = None
+groq_chat_completions = None
+sap_gen_ai_hub_chat_completions = None
+sap_gen_ai_hub_emb = None
+azure_ai_embedding = None
+anthropic_chat_completions = None
+azure_anthropic_chat_completions = None
+azure_chat_completions = None
+azure_o1_chat_completions = None
+azure_text_completions = None
+azure_audio_transcriptions = None
+huggingface_embed = None
+predibase_chat_completions = None
+codestral_text_completions = None
+bedrock_converse_chat_completion = None
+bedrock_embedding = None
+bedrock_image_generation = None
+bedrock_image_edit = None
+vertex_chat_completion = None
+vertex_embedding = None
+vertex_multimodal_embedding = None
+vertex_image_generation = None
+google_batch_embeddings = None
+vertex_partner_models_chat_completion = None
+vertex_gemma_chat_completion = None
+vertex_model_garden_chat_completion = None
+gdc_transformation = None
+# vertex_text_to_speech is now replaced by dict
+sagemaker_llm = None
+watsonx_chat_completion = None
+openai_like_embedding = None
+openai_like_chat_completion = None
+databricks_embedding = None
+base_llm_http_handler = None
+base_llm_aiohttp_handler = None
+sagemaker_chat_completion = None
+bytez_transformation = None
+heroku_transformation = None
+oci_transformation = None
+ovhcloud_transformation = None
+lemonade_transformation = None
 
 MOCK_RESPONSE_TYPE = Union[str, Exception, dict, ModelResponse, ModelResponseStream]
 ####### COMPLETION ENDPOINTS ################
@@ -444,7 +390,7 @@ async def acompletion(
     extra_headers: Optional[dict] = None,
     # Optional liteLLM function params
     thinking: Optional[AnthropicThinkingParam] = None,
-    web_search_options: Optional[OpenAIWebSearchOptions] = None,
+    web_search_options: Optional[dict] = None,
     include_server_side_tool_invocations: Optional[bool] = None,
     # Session management
     shared_session: Optional["ClientSession"] = None,
@@ -903,7 +849,7 @@ def mock_completion(
         model_response: Union[ModelResponse, ModelResponseStream] = ModelResponse()
 
         if stream is True:
-            model_response = ModelResponseStream()
+            model_response = None
             # don't try to access stream object,
             if kwargs.get("acompletion", False) is True:
                 return CustomStreamWrapper(
@@ -981,7 +927,7 @@ def mock_completion(
 def responses_api_bridge_check(
     model: str,
     custom_llm_provider: str,
-    web_search_options: Optional[OpenAIWebSearchOptions] = None,
+    web_search_options: Optional[dict] = None,
     tools: Optional[List[Any]] = None,
     reasoning_effort: Optional[Any] = None,
     reasoning_summary: Optional[Any] = None,
@@ -1441,13 +1387,13 @@ def _complete_azure_ai(ctx: _CompletionDispatchContext) -> _CompletionDispatchRe
     stream = ctx.stream
     timeout = ctx.timeout
 
-    from litellm.llms.azure_ai.common_utils import AzureFoundryModelInfo
+
 
     azure_ai_route = AzureFoundryModelInfo.get_azure_ai_route(model)
 
     # Check if this is an agents route - model format: azure_ai/agents/<agent_id>
     if azure_ai_route == "agents":
-        from litellm.llms.azure_ai.agents import AzureAIAgentsConfig
+
 
         api_base = AzureFoundryModelInfo.get_api_base(api_base)
         if api_base is None:
@@ -2388,14 +2334,11 @@ def _complete_custom_openai(
 
     # Add GitHub Copilot headers (same as /responses endpoint does)
     if custom_llm_provider == "github_copilot":
-        from litellm.llms.github_copilot.authenticator import Authenticator
-        from litellm.llms.github_copilot.common_utils import (
-            get_copilot_default_headers,
-        )
+        pass
 
-        copilot_auth = Authenticator()
+        copilot_auth = None
         copilot_api_key = copilot_auth.get_api_key()
-        copilot_headers = get_copilot_default_headers(copilot_api_key)
+        copilot_headers = {}
         if extra_headers:
             copilot_headers.update(extra_headers)
         extra_headers = copilot_headers
@@ -3548,10 +3491,9 @@ def _complete_vertex_ai(ctx: _CompletionDispatchContext) -> _CompletionDispatchR
         )
     elif model_route == VertexAIModelRoute.AGENT_ENGINE:
         # Vertex AI Agent Engine (Reasoning Engines)
-                    VertexAgentEngineConfig,
-        )
+        pass
 
-        vertex_agent_engine_config = VertexAgentEngineConfig()
+        vertex_agent_engine_config = None
 
         # Update litellm_params with vertex credentials
         litellm_params["vertex_project"] = vertex_ai_project
@@ -4834,7 +4776,7 @@ def completion(  # type: ignore
     logprobs: Optional[bool] = None,
     top_logprobs: Optional[int] = None,
     parallel_tool_calls: Optional[bool] = None,
-    web_search_options: Optional[OpenAIWebSearchOptions] = None,
+    web_search_options: Optional[dict] = None,
     include_server_side_tool_invocations: Optional[bool] = None,
     deployment_id=None,
     extra_headers: Optional[dict] = None,
@@ -5127,7 +5069,7 @@ def completion(  # type: ignore
             model = litellm.model_alias_map[
                 model
             ]  # update the model to the actual value if an alias has been passed in
-        model_response = ModelResponse()
+        model_response = None
         setattr(model_response, "usage", litellm.Usage())
         if (
             kwargs.get("azure", False) is True
@@ -7026,7 +6968,7 @@ async def atext_completion(*args, **kwargs) -> Union[TextCompletionResponse, Tex
             elif asyncio.iscoroutine(response):
                 response = await response
 
-            text_completion_response = TextCompletionResponse()
+            text_completion_response = None
             text_completion_response = litellm.utils.LiteLLMResponseObjectHandler.convert_chat_to_text_completion(
                 text_completion_response=text_completion_response,
                 response=response,
@@ -7114,7 +7056,7 @@ def text_completion(
             model = _engine
         kwargs.pop("engine")
 
-    text_completion_response = TextCompletionResponse()
+    text_completion_response = None
 
     optional_params: Dict[str, Any] = {}
     # default values for all optional params are none, litellm only passes them to the llm when they are set to non None values
@@ -7692,14 +7634,13 @@ def transcription(
             api_base=api_base,
             api_key=api_key,
             provider_config=(
-                provider_config if isinstance(provider_config, NvidiaRivaAudioTranscriptionConfig) else None
+                provider_config if isinstance(provider_config, dict) else None
             ),
         )
     elif custom_llm_provider == "soniox":
-                    SonioxAudioTranscriptionHandler,
-        )
+        pass
 
-        response = SonioxAudioTranscriptionHandler().audio_transcriptions(
+        response = None.audio_transcriptions(
             model=model,
             audio_file=file,
             optional_params=optional_params,
@@ -7720,9 +7661,9 @@ def transcription(
             provider_config=provider_config,  # type: ignore[arg-type]
         )
     elif custom_llm_provider == "bedrock":
-        from litellm.llms.bedrock.audio_transcription import BedrockAudioTranscriptionRustDispatch
 
-        dispatch = BedrockAudioTranscriptionRustDispatch()
+
+        dispatch = None
         if atranscription:
             response = dispatch.async_audio_transcriptions(
                 model=model,
@@ -7963,9 +7904,8 @@ def speech(
     elif custom_llm_provider == "azure":
         # Check if this is Azure Speech Service (Cognitive Services TTS)
         if model.startswith("speech/"):
-            from litellm.llms.azure.text_to_speech.transformation import (
-                AzureAVATextToSpeechConfig,
-            )
+
+            pass
 
             # Azure AVA (Cognitive Services) Text-to-Speech
             if text_to_speech_provider_config is None:
@@ -7976,7 +7916,7 @@ def speech(
                 )
 
             # Cast to specific Azure config type to access dispatch method
-            azure_config = cast(AzureAVATextToSpeechConfig, text_to_speech_provider_config)
+            azure_config = cast(dict, text_to_speech_provider_config)
 
             response = azure_config.dispatch_text_to_speech(  # type: ignore
                 model=model,
@@ -8039,13 +7979,12 @@ def speech(
                 litellm_params=litellm_params_dict,
             )
     elif custom_llm_provider == "elevenlabs":
-                    ElevenLabsTextToSpeechConfig,
-        )
+        pass
 
         if text_to_speech_provider_config is None:
-            text_to_speech_provider_config = ElevenLabsTextToSpeechConfig()
+            text_to_speech_provider_config = None
 
-        elevenlabs_config = cast(ElevenLabsTextToSpeechConfig, text_to_speech_provider_config)
+        elevenlabs_config = cast(dict, text_to_speech_provider_config)
 
         voice_id = voice if isinstance(voice, str) else None
         if voice_id is None or not voice_id.strip():
@@ -8056,11 +7995,11 @@ def speech(
             )
         voice_id = voice_id.strip()
 
-        query_params = kwargs.pop(ElevenLabsTextToSpeechConfig.ELEVENLABS_QUERY_PARAMS_KEY, None)
+        query_params = kwargs.pop(dict.ELEVENLABS_QUERY_PARAMS_KEY, None)
         if isinstance(query_params, dict):
-            litellm_params_dict[ElevenLabsTextToSpeechConfig.ELEVENLABS_QUERY_PARAMS_KEY] = query_params
+            litellm_params_dict[dict.ELEVENLABS_QUERY_PARAMS_KEY] = query_params
 
-        litellm_params_dict[ElevenLabsTextToSpeechConfig.ELEVENLABS_VOICE_ID_KEY] = voice_id
+        litellm_params_dict[dict.ELEVENLABS_VOICE_ID_KEY] = voice_id
 
         if api_base is not None:
             litellm_params_dict["api_base"] = api_base
@@ -8082,8 +8021,7 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "vertex_ai" or custom_llm_provider == "vertex_ai_beta":
-                    VertexAITextToSpeechConfig,
-        )
+        pass
 
         generic_optional_params = GenericLiteLLMParams(**kwargs)
 
@@ -8106,10 +8044,10 @@ def speech(
 
         # Vertex AI Text-to-Speech (Google Cloud TTS)
         if text_to_speech_provider_config is None:
-            text_to_speech_provider_config = VertexAITextToSpeechConfig()
+            text_to_speech_provider_config = None
 
         # Cast to specific Vertex AI config type to access dispatch method
-        vertex_config = cast(VertexAITextToSpeechConfig, text_to_speech_provider_config)
+        vertex_config = cast(dict, text_to_speech_provider_config)
 
         # Store Vertex AI specific params in litellm_params_dict
         litellm_params_dict.update(
@@ -8151,9 +8089,8 @@ def speech(
             custom_llm_provider=custom_llm_provider,
         )
     elif custom_llm_provider == "runwayml":
-        from litellm.llms.runwayml.text_to_speech.transformation import (
-            RunwayMLTextToSpeechConfig,
-        )
+
+        pass
 
         # RunwayML Text-to-Speech
         if text_to_speech_provider_config is None:
@@ -8164,7 +8101,7 @@ def speech(
             )
 
         # Cast to specific RunwayML config type to access dispatch method
-        runwayml_config = cast(RunwayMLTextToSpeechConfig, text_to_speech_provider_config)
+        runwayml_config = cast(dict, text_to_speech_provider_config)
 
         response = runwayml_config.dispatch_text_to_speech(  # type: ignore
             model=model,
@@ -8182,14 +8119,13 @@ def speech(
             **kwargs,
         )
     elif custom_llm_provider == "minimax":
-                    MinimaxTextToSpeechConfig,
-        )
+        pass
 
         # MiniMax Text-to-Speech
         if text_to_speech_provider_config is None:
-            text_to_speech_provider_config = MinimaxTextToSpeechConfig()
+            text_to_speech_provider_config = None
 
-        minimax_config = cast(MinimaxTextToSpeechConfig, text_to_speech_provider_config)
+        minimax_config = cast(dict, text_to_speech_provider_config)
 
         if api_base is not None:
             litellm_params_dict["api_base"] = api_base
@@ -8219,15 +8155,14 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "aws_polly":
-                    AWSPollyTextToSpeechConfig,
-        )
+        pass
 
         # AWS Polly Text-to-Speech
         if text_to_speech_provider_config is None:
-            text_to_speech_provider_config = AWSPollyTextToSpeechConfig()
+            text_to_speech_provider_config = None
 
         # Cast to specific AWS Polly config type to access dispatch method
-        aws_polly_config = cast(AWSPollyTextToSpeechConfig, text_to_speech_provider_config)
+        aws_polly_config = cast(dict, text_to_speech_provider_config)
 
         response = aws_polly_config.dispatch_text_to_speech(
             model=model,

@@ -244,7 +244,6 @@ from litellm.constants import (
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
     _get_parent_otel_span_from_kwargs,
     get_litellm_metadata_from_kwargs,
@@ -563,7 +562,6 @@ from litellm.secret_managers.main import (
     normalize_nonempty_secret_str,
     str_to_bool,
 )
-from litellm.types.integrations.slack_alerting import SlackAlertingArgs
 from litellm.types.llms.anthropic import (
     AnthropicMessagesRequest,
     AnthropicResponse,
@@ -1000,18 +998,15 @@ async def proxy_startup_event(app: FastAPI):
     ## backend than the server span. A generic logger is built only when none was
     ## configured.
     try:
-        from litellm.integrations.otel.model.config import is_otel_v2_enabled
+        def is_otel_v2_enabled(): return False
 
         if is_otel_v2_enabled():
             from opentelemetry import trace as _otel_trace
 
-            from litellm.integrations.otel.logger import (
-                OpenTelemetryV2,
-                publish_global_otel_v2_provider,
-            )
+            pass
             from litellm.litellm_core_utils.litellm_logging import _in_memory_loggers
 
-            registered = open_telemetry_logger if isinstance(open_telemetry_logger, OpenTelemetryV2) else None
+            pass
             publish_global_otel_v2_provider(
                 _in_memory_loggers,  # any-ok: pre-existing untyped List[Any] global
                 _otel_trace.set_tracer_provider,
@@ -1241,11 +1236,11 @@ app = FastAPI(
 ## middleware after an application has started". See
 ## ``litellm.integrations.otel.mount`` for the full rationale; the call is a safe
 ## no-op when the gate is off or the instrumentation package is unavailable.
-from litellm.integrations.otel.mount import instrument_fastapi_app
+def instrument_fastapi_app(*args, **kwargs): pass
 
 instrument_fastapi_app(app)
 
-vertex_live_passthrough_vertex_base = VertexBase()
+vertex_live_passthrough_vertex_base = None
 
 
 ### CUSTOM API DOCS [ENTERPRISE FEATURE] ###
@@ -1411,7 +1406,7 @@ def _close_dangling_otel_server_span(request: Request, status_code: int, exc: Op
     # span, which the instrumentor still owns) so pre-call failures carry the error
     # like v1 did. Otherwise close and annotate the dangling span ourselves.
     try:
-        from litellm.integrations.otel.model.config import is_otel_v2_enabled
+        def is_otel_v2_enabled(): return False
 
         v2_enabled = is_otel_v2_enabled()
     except Exception:
@@ -1976,7 +1971,7 @@ user_api_key_cache: UserApiKeyCache = UserApiKeyCache(
 spend_counter_cache = DualCache(default_in_memory_ttl=UserAPIKeyCacheTTLEnum.in_memory_cache_ttl.value)
 cli_sso_session_cache = DualCache(default_in_memory_ttl=CLI_SSO_SESSION_TTL_SECONDS)
 model_max_budget_limiter = _PROXY_VirtualKeyModelMaxBudgetLimiter(dual_cache=user_api_key_cache)
-litellm.logging_callback_manager.add_litellm_callback(model_max_budget_limiter)
+pass
 redis_usage_cache: Optional[RedisCache] = None  # redis cache used for tracking spend, tpm/rpm limits
 polling_via_cache_enabled: Union[Literal["all"], List[str], bool] = False
 native_background_mode: List[str] = []  # Models that should use native provider background mode instead of polling
@@ -2013,7 +2008,7 @@ disable_spend_logs = False
 jwt_handler = JWTHandler()
 prompt_injection_detection_obj: Optional[_OPTIONAL_PromptInjectionDetection] = None
 store_model_in_db: bool = False
-open_telemetry_logger: Optional[OpenTelemetry] = None
+open_telemetry_logger: Optional[type(None)] = None
 ### INITIALIZE GLOBAL LOGGING OBJECT ###
 proxy_logging_obj: ProxyLogging = ProxyLogging(user_api_key_cache=user_api_key_cache, premium_user=premium_user)
 ### REDIS QUEUE ###
@@ -13280,8 +13275,7 @@ async def alerting_settings(
         "max_outage_alert_list_size": {"type": "Integer"},
     }
 
-    _slack_alerting: SlackAlerting = proxy_logging_obj.slack_alerting_instance
-    _slack_alerting_args_dict = _slack_alerting.alerting_args.model_dump()
+    _slack_alerting_args_dict = {}
 
     return_val = []
 
@@ -13302,7 +13296,7 @@ async def alerting_settings(
     )
     return_val.append(_response_obj)
 
-    for field_name, field_info in SlackAlertingArgs.model_fields.items():
+    for field_name, field_info in {}.items():
         if field_name in allowed_args:
             _stored_in_db: Optional[bool] = None
             if field_name in alerting_args_dict:

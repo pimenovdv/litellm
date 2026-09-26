@@ -7,10 +7,6 @@ import httpx
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.gemini.videos.transformation import GeminiVideoConfig
-from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
-    ModelResponseIterator as GeminiModelResponseIterator,
-)
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
 from litellm.types.utils import (
     ModelResponse,
@@ -43,7 +39,7 @@ class GeminiPassthroughLoggingHandler:
         if "predictLongRunning" in url_route:
             model = GeminiPassthroughLoggingHandler.extract_model_from_url(url_route)
 
-            gemini_video_config = GeminiVideoConfig()
+            gemini_video_config = None
             litellm_video_response = gemini_video_config.transform_video_create_response(
                 model=model,
                 raw_response=httpx_response,

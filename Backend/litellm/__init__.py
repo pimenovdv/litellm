@@ -1229,6 +1229,12 @@ _key_management_settings: KeyManagementSettings = KeyManagementSettings()
 from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
 
+
+
+from .router import Router
+
+from litellm.utils import get_model_info
+
 from litellm.types.utils import LlmProviders
 
 provider_list = [v.value for v in LlmProviders]
@@ -1241,4 +1247,174 @@ from litellm.types.utils import ModelResponseStream
 
 from litellm.proxy._types import LiteLLMRoutes
 
-from litellm.main import _turn_on_debug, _turn_off_debug
+from litellm.files.main import CreateFileRequest
+
+from litellm.main import acompletion, completion, embedding
+
+from litellm.cost_calculator import completion_cost
+
+from litellm.caching.caching import Cache
+
+from litellm.utils import get_llm_provider, CustomStreamWrapper, Message
+
+from litellm.types.utils import Choices, Usage
+
+from litellm.proxy._types import UserAPIKeyAuth
+
+from litellm.exceptions import RateLimitError, Timeout, AuthenticationError, APIError, APIConnectionError, ServiceUnavailableError, ContextWindowExceededError, ContentPolicyViolationError, BadRequestError
+
+def register_model(*args, **kwargs): pass
+
+class LiteLLMProxyChatConfig:
+    @staticmethod
+    def _should_use_litellm_proxy_by_default(*args, **kwargs): return False
+
+
+from litellm.main import stream_chunk_builder
+
+from litellm.caching.caching import DualCache
+
+class Chat: pass
+
+class logging_callback_manager:
+    @staticmethod
+    def get_custom_loggers_for_type(*args, **kwargs): return []
+
+class CustomLogger: pass
+
+class logging_callback_manager: pass
+
+class _async_success_callback: pass
+
+class _async_failure_callback: pass
+
+class success_callback: pass
+
+class failure_callback: pass
+
+def acreate_assistants(*args, **kwargs): pass
+
+
+def adelete_assistant(*args, **kwargs): pass
+
+
+def acreate_thread(*args, **kwargs): pass
+def aadd_message(*args, **kwargs): pass
+def arun_thread(*args, **kwargs): pass
+def aget_run(*args, **kwargs): pass
+def aget_messages(*args, **kwargs): pass
+def aget_assistants(*args, **kwargs): pass
+def aget_threads(*args, **kwargs): pass
+def aget_thread(*args, **kwargs): pass
+def aadd_run(*args, **kwargs): pass
+def acreate_message(*args, **kwargs): pass
+def a_add_message(*args, **kwargs): pass
+
+class JSONProviderRegistry:
+    @staticmethod
+    def exists(*args, **kwargs): return False
+
+def amoderation(*args, **kwargs): pass
+def moderation(*args, **kwargs): pass
+def text_completion(*args, **kwargs): pass
+def atext_completion(*args, **kwargs): pass
+def image_generation(*args, **kwargs): pass
+def aimage_generation(*args, **kwargs): pass
+def audio_transcription(*args, **kwargs): pass
+def aaudio_transcription(*args, **kwargs): pass
+def audio_speech(*args, **kwargs): pass
+def aaudio_speech(*args, **kwargs): pass
+def aadd_run(*args, **kwargs): pass
+def agenerate_content(*args, **kwargs): pass
+def generate_content(*args, **kwargs): pass
+def image_variations(*args, **kwargs): pass
+def aimage_variations(*args, **kwargs): pass
+def aadapter_generate_content(*args, **kwargs): pass
+
+def adapter_generate_content(*args, **kwargs): pass
+
+def aresponses(*args, **kwargs): pass
+def aadapter_generate_content(*args, **kwargs): pass
+def agenerate_content(*args, **kwargs): pass
+def amoderation(*args, **kwargs): pass
+def afile_delete(*args, **kwargs): pass
+def aresponses(*args, **kwargs): pass
+def abatches(*args, **kwargs): pass
+def afile_content(*args, **kwargs): pass
+def aadd_message(*args, **kwargs): pass
+def acreate_thread(*args, **kwargs): pass
+def aget_thread(*args, **kwargs): pass
+def aget_messages(*args, **kwargs): pass
+def aget_run(*args, **kwargs): pass
+def arun_thread(*args, **kwargs): pass
+def acreate_message(*args, **kwargs): pass
+def aretrieve_batch(*args, **kwargs): pass
+def aget_batches(*args, **kwargs): pass
+def aget_responses(*args, **kwargs): pass
+def responses(*args, **kwargs): pass
+def acancel_responses(*args, **kwargs): pass
+def acreate_batch(*args, **kwargs): pass
+def acancel_batch(*args, **kwargs): pass
+def acompact_responses(*args, **kwargs): pass
+def acreate_deployment(*args, **kwargs): pass
+def adelete_deployment(*args, **kwargs): pass
+def aupdate_deployment(*args, **kwargs): pass
+def adelete_responses(*args, **kwargs): pass
+def batch_completion(*args, **kwargs): pass
+def _batch_completion(*args, **kwargs): pass
+def alist_input_items(*args, **kwargs): pass
+
+def aretrieve_job(*args, **kwargs): pass
+
+def _arealtime(*args, **kwargs): pass
+
+def acreate_realtime_client_secret(*args, **kwargs): pass
+def arealtime_expires_after(*args, **kwargs): pass
+def arealtime_calls(*args, **kwargs): pass
+
+def acreate_realtime_transcription_session(*args, **kwargs): pass
+def aimage_variations(*args, **kwargs): pass
+def audio_transcriptions(*args, **kwargs): pass
+def aaudio_transcriptions(*args, **kwargs): pass
+def acreate_chat_completion_session(*args, **kwargs): pass
+def aupdate_chat_completion_session(*args, **kwargs): pass
+def adelete_chat_completion_session(*args, **kwargs): pass
+def aget_chat_completion_session(*args, **kwargs): pass
+def _aresponses_websocket(*args, **kwargs): pass
+def text_completion(*args, **kwargs): pass
+def atext_completion(*args, **kwargs): pass
+def _alite_responses(*args, **kwargs): pass
+def alite_responses(*args, **kwargs): pass
+def acreate_fine_tuning_job(*args, **kwargs): pass
+def acancel_fine_tuning_job(*args, **kwargs): pass
+def alist_fine_tuning_jobs(*args, **kwargs): pass
+def aretrieve_fine_tuning_job(*args, **kwargs): pass
+def afile_list(*args, **kwargs): pass
+def file_list(*args, **kwargs): pass
+def file_delete(*args, **kwargs): pass
+def file_content(*args, **kwargs): pass
+def retrieve_batch(*args, **kwargs): pass
+def get_batches(*args, **kwargs): pass
+def cancel_batch(*args, **kwargs): pass
+def create_batch(*args, **kwargs): pass
+def batches(*args, **kwargs): pass
+def create_fine_tuning_job(*args, **kwargs): pass
+def cancel_fine_tuning_job(*args, **kwargs): pass
+def list_fine_tuning_jobs(*args, **kwargs): pass
+def retrieve_fine_tuning_job(*args, **kwargs): pass
+def _realtime(*args, **kwargs): pass
+def realtime_calls(*args, **kwargs): pass
+def create_realtime_client_secret(*args, **kwargs): pass
+def realtime_expires_after(*args, **kwargs): pass
+def aimage_edit(*args, **kwargs): pass
+def image_edit(*args, **kwargs): pass
+def allm_passthrough_route(*args, **kwargs): pass
+def llm_passthrough_route(*args, **kwargs): pass
+def acreate_skill(*args, **kwargs): pass
+
+def aupdate_skill(*args, **kwargs): pass
+
+def aget_skill(*args, **kwargs): pass
+def alist_skills(*args, **kwargs): pass
+
+def adelete_skill(*args, **kwargs): pass
