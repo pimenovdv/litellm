@@ -1,5 +1,5 @@
 - [x] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 1, до 5 файлов).
 - [x] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 2, до 5 файлов).
 - [x] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 3, до 5 файлов).
-- [ ] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 4, до 5 файлов).
+- [x] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 4, до 5 файлов).
 - [ ] Удалить оставшиеся тесты и ссылки для Guardrails.
