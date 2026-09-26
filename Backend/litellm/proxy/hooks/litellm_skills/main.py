@@ -31,10 +31,7 @@ from typing import Any, Dict, List, Optional, Union
 from litellm._logging import verbose_proxy_logger
 from litellm.caching.caching import DualCache
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.llms.litellm_proxy.skills.constants import LITELLM_SKILL_ID_PREFIX
-from litellm.llms.litellm_proxy.skills.prompt_injection import (
-    SkillPromptInjectionHandler,
-)
+LITELLM_SKILL_ID_PREFIX = ''
 from litellm.proxy._types import LiteLLM_SkillsTable, UserAPIKeyAuth
 from litellm.types.utils import CallTypes, CallTypesLiteral
 
@@ -57,15 +54,11 @@ class SkillsInjectionHook(CustomLogger):
     """
 
     def __init__(self, **kwargs):
-        from litellm.llms.litellm_proxy.skills.constants import (
-            DEFAULT_MAX_ITERATIONS,
-            DEFAULT_SANDBOX_TIMEOUT,
-        )
 
         self.optional_params = kwargs
-        self.prompt_handler = SkillPromptInjectionHandler()
-        self.max_iterations = kwargs.get("max_iterations", DEFAULT_MAX_ITERATIONS)
-        self.sandbox_timeout = kwargs.get("sandbox_timeout", DEFAULT_SANDBOX_TIMEOUT)
+        self.prompt_handler = type(None)()
+        self.max_iterations = kwargs.get("max_iterations", 3)
+        self.sandbox_timeout = kwargs.get("sandbox_timeout", 60)
         super().__init__(**kwargs)
 
     async def async_pre_call_hook(
@@ -865,4 +858,3 @@ skills_injection_hook = SkillsInjectionHook()
 
 import litellm
 
-litellm.logging_callback_manager.add_litellm_callback(skills_injection_hook)

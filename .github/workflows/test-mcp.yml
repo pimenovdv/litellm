@@ -1,4 +1,4 @@
-name: LiteLLM MCP Tests (folder - tests/mcp_tests)
+name: LiteLLM MCP Tests (folder - ../tests/mcp_tests)
 
 on:
   pull_request:
@@ -14,6 +14,9 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     timeout-minutes: 25
 
     steps:
@@ -34,13 +37,13 @@ jobs:
       - name: Set up uv
         uses: ./.github/actions/setup-uv-with-retries
         with:
-          version: "0.10.9"
+          version: "0.10.8"
 
       - name: Install dependencies
         run: |
           uv lock --check
-          .github/scripts/uv_sync_with_retries.sh --frozen --group proxy-dev --extra proxy --extra semantic-router
+          ../.github/scripts/uv_sync_with_retries.sh --frozen --group proxy-dev --extra proxy --extra semantic-router
 
       - name: Run MCP tests
         run: |
-          uv run --no-sync pytest tests/mcp_tests -x -vv -n 4 --cov=./litellm --cov-report=xml --durations=5
+          uv run --no-sync pytest ../tests/mcp_tests -x -vv -n 4 --cov=./litellm --cov-report=xml --durations=5

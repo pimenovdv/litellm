@@ -14,7 +14,7 @@ from litellm.proxy._types import (
     ProxyException,
     UserAPIKeyAuth,
 )
-from litellm.integrations.otel.runtime import seed_request_identity
+def seed_request_identity(*args, **kwargs): pass
 from litellm.proxy.auth.auth_utils import _get_request_ip_address
 from litellm.proxy.db.exception_handler import PrismaDBExceptionHandler
 from litellm.types.services import ServiceTypes

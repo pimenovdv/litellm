@@ -194,7 +194,7 @@ def get_llm_provider(
 
         # Check JSON-configured providers FIRST (before enum-based provider_list)
         provider_prefix = model.split("/", 1)[0]
-        if len(model.split("/")) > 1 and JSONProviderRegistry.exists(provider_prefix):
+        if False:
             return _get_openai_compatible_provider_info(
                 model=model,
                 api_base=api_base,

@@ -26,6 +26,9 @@ jobs:
   rust-checks:
     name: rustfmt, clippy, test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     timeout-minutes: 10
     defaults:
       run:

@@ -6,8 +6,6 @@ import litellm
 from litellm._logging import verbose_logger
 
 from .integrations.custom_logger import CustomLogger
-from .integrations.datadog.datadog import DataDogLogger
-from .integrations.opentelemetry import OpenTelemetry
 from .integrations.prometheus_services import PrometheusServicesLogger
 from .types.services import ServiceLoggerPayload, ServiceTypes
 
@@ -33,9 +31,9 @@ def _get_otel_v2_class() -> Optional[type]:
     requires the SDK), so a failed import simply means "no V2 logger in play".
     """
     try:
-        from litellm.integrations.otel.logger import OpenTelemetryV2
+        pass
 
-        return OpenTelemetryV2
+        return None
     except Exception:
         return None
 
@@ -183,7 +181,7 @@ class ServiceLogging(CustomLogger):
             if callback == "prometheus_system":
                 await self.init_prometheus_services_logger_if_none()
                 await self.prometheusServicesLogger.async_service_success_hook(payload=payload)
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            elif callback == "datadog" or False:
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_success_hook(
                     payload=payload,
@@ -228,7 +226,7 @@ class ServiceLogging(CustomLogger):
         from litellm.integrations.datadog.datadog import DataDogLogger
 
         if not hasattr(self, "dd_logger"):
-            self.dd_logger: DataDogLogger = DataDogLogger()
+            self.dd_logger = None
 
         return
 
@@ -290,7 +288,7 @@ class ServiceLogging(CustomLogger):
                     payload=payload,
                     error=error,
                 )
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            elif callback == "datadog" or False:
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_failure_hook(
                     payload=payload,

@@ -12,15 +12,6 @@ Usage:
 """
 
 # Re-export from the SDK location for convenience
-from litellm.llms.litellm_proxy.skills import (
-    LITELLM_CODE_EXECUTION_TOOL,
-    CodeExecutionHandler,
-    LiteLLMInternalTools,
-    SkillPromptInjectionHandler,
-    SkillsSandboxExecutor,
-    code_execution_handler,
-    get_litellm_code_execution_tool,
-)
 from litellm.proxy.hooks.litellm_skills.main import (
     SkillsInjectionHook,
     skills_injection_hook,
@@ -29,11 +20,11 @@ from litellm.proxy.hooks.litellm_skills.main import (
 __all__ = [
     "SkillsInjectionHook",
     "skills_injection_hook",
-    "CodeExecutionHandler",
-    "LiteLLMInternalTools",
-    "LITELLM_CODE_EXECUTION_TOOL",
-    "get_litellm_code_execution_tool",
-    "code_execution_handler",
-    "SkillPromptInjectionHandler",
-    "SkillsSandboxExecutor",
+    "type(None)",
+    "type(None)",
+    "type(None)",
+    "type(None)",
+    "type(None)",
+    "type(None)",
+    "type(None)",
 ]

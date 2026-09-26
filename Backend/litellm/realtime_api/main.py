@@ -8,7 +8,6 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES, request
 from litellm.litellm_core_utils.get_llm_provider_logic import get_llm_provider
 from litellm.llms.base_llm.realtime.transformation import BaseRealtimeConfig
 from litellm.llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
-from litellm.llms.xai.common_utils import XAIModelInfo
 from litellm.secret_managers.main import get_secret_str
 from litellm.types.realtime import (
     RealtimeClientSecretRequest,
@@ -23,20 +22,14 @@ from litellm.utils import ProviderConfigManager
 
 from ..litellm_core_utils.get_litellm_params import get_litellm_params
 from ..litellm_core_utils.litellm_logging import Logging as LiteLLMLogging
-from ..llms.azure.realtime.handler import AzureOpenAIRealtime
-from ..llms.bedrock.realtime.handler import BedrockRealtime
 from ..llms.custom_httpx.http_handler import get_shared_realtime_ssl_context
-from ..llms.openai.realtime.handler import OpenAIRealtime
-from ..llms.vertex_ai.realtime.transformation import VertexAIRealtimeConfig
-from ..llms.vertex_ai.vertex_llm_base import VertexBase
-from ..llms.xai.realtime.handler import XAIRealtime
 from ..utils import client as wrapper_client
 
-azure_realtime = AzureOpenAIRealtime()
-openai_realtime = OpenAIRealtime()
-bedrock_realtime = BedrockRealtime()
-xai_realtime = XAIRealtime()
-vertex_llm_base = VertexBase()
+azure_realtime = None
+openai_realtime = None
+bedrock_realtime = None
+xai_realtime = None
+vertex_llm_base = None
 base_llm_http_handler = BaseLLMHTTPHandler()
 
 

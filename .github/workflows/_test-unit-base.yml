@@ -44,6 +44,9 @@ jobs:
   run:
     name: Run tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     timeout-minutes: ${{ inputs.timeout-minutes }}
     outputs:
       decision: ${{ steps.changes.outputs.decision }}
@@ -65,7 +68,7 @@ jobs:
       - name: Set up uv
         uses: ./.github/actions/setup-uv-with-retries
         with:
-          version: "0.10.9"
+          version: "0.10.8"
 
       - name: Cache uv dependencies
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
@@ -73,14 +76,14 @@ jobs:
           path: |
             ~/.cache/uv
             .venv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          key: ${{ runner.os }}-uv-${{ hashFiles('Backend/uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
 
       - name: Install dependencies
         if: steps.changes.outputs.decision != 'skip'
         run: |
-          .github/scripts/uv_sync_with_retries.sh --frozen --group ci --group proxy-dev --extra google --extra proxy --extra semantic-router --extra saml
+          ../.github/scripts/uv_sync_with_retries.sh --frozen --group ci --group proxy-dev --extra google --extra proxy --extra semantic-router --extra saml
 
       - name: Generate Prisma client
         if: steps.changes.outputs.decision != 'skip'
@@ -99,7 +102,7 @@ jobs:
           DIST: ${{ inputs.dist }}
         run: |
           if [ "${WORKERS}" = "0" ]; then
-            uv run --no-sync pytest ${TEST_PATH:?} \
+            uv run --no-sync pytest $(echo "${TEST_PATH:?}" | sed 's/tests\//..\/tests\//g' | sed 's/ tests\// ..\/tests\//g') \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
               --reruns "${RERUNS}" \
@@ -107,9 +110,9 @@ jobs:
               --durations=20 \
               --cov=./litellm \
               --cov-report=xml:coverage.xml \
-              --cov-config=pyproject.toml
+              --cov-config=../Backend/pyproject.toml
           else
-            uv run --no-sync pytest ${TEST_PATH:?} \
+            uv run --no-sync pytest $(echo "${TEST_PATH:?}" | sed 's/tests\//..\/tests\//g' | sed 's/ tests\// ..\/tests\//g') \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
               -n "${WORKERS}" \
@@ -119,7 +122,7 @@ jobs:
               --durations=20 \
               --cov=./litellm \
               --cov-report=xml:coverage.xml \
-              --cov-config=pyproject.toml
+              --cov-config=../Backend/pyproject.toml
           fi
 
       - name: Save coverage report
@@ -135,6 +138,9 @@ jobs:
     needs: run
     if: always() && needs.run.outputs.decision != 'skip'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
     permissions:
       contents: read
       id-token: write
