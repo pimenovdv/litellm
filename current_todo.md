@@ -1,5 +1,5 @@
-- [x] Очистить зависимости, относящиеся к удаленным интеграциям (langfuse, datadog, sentry, slack и т.д.), в `pyproject.toml` (секции dependencies и optional-dependencies).
-- [x] Очистить зависимости, относящиеся к удаленным интеграциям, в корневых файлах `requirements.txt` (если они существуют).
-- [ ] Удалить устаревшие или неиспользуемые LLM зависимости (кроме openai) из `pyproject.toml` и `requirements.txt`.
-- [ ] Очистить неиспользуемые зависимости, связанные с RAG и Guardrails (например, redis, vector-databases, tokenizers, lakera, aporia) из конфигураций бэкенда.
-- [ ] Провести аудит и очистку зависимостей во фронтенде (файл `frontend/package.json`), удалив пакеты, связанные с вырезанным функционалом.
+- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/proxy_server.py`.
+- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/middleware/billable_request_metrics_middleware.py` и `Backend/litellm/proxy/_types.py`.
+- [ ] Очистить ссылки на RAG в `Backend/litellm/proxy/public_endpoints/public_endpoints.py`, `Backend/litellm/proxy/route_llm_request.py`, `Backend/litellm/types/llms/custom_http.py` и `Backend/litellm/__init__.py`.
+- [ ] Очистить ссылки на RAG в `Backend/litellm/provider_endpoints_support_backup.json` и удалить оставшиеся тесты RAG.
+- [ ] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`, `Backend/litellm/types/rag.py`, `Backend/litellm/types/integrations/rag`) (макс 3-5 файлов).
