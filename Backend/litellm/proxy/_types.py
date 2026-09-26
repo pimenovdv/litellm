@@ -443,8 +443,7 @@ class LiteLLMRoutes(enum.Enum):
     #########################################################
     passthrough_routes_wildcard = [f"{route}/*" for route in mapped_pass_through_routes]
 
-    litellm_native_routes = [
-    ]
+    litellm_native_routes = []
 
     anthropic_routes = [
         "/v1/messages",
