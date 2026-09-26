@@ -248,9 +248,7 @@
         "bedrock_invoke": true,
         "bedrock_converse": true,
         "vector_stores_search": true,
-        "count_tokens": true,
-        "rag_ingest": true,
-        "rag_query": true
+        "count_tokens": true
       }
     },
     "s3_vectors": {
@@ -1064,8 +1062,6 @@
         "vector_stores_search": true,
         "count_tokens": true,
         "fine_tuning": true,
-        "rag_ingest": true,
-        "rag_query": true,
         "generateContent": true,
         "realtime": true
       }
@@ -1088,7 +1084,6 @@
         "a2a": true,
         "vector_stores_search": true,
         "count_tokens": true,
-        "rag_ingest": true,
         "realtime": true,
         "generateContent": true
       }
@@ -1688,8 +1683,6 @@
         "container_files": true,
         "fine_tuning": true,
         "image_variations": true,
-        "rag_ingest": true,
-        "rag_query": true,
         "realtime": true,
         "text_completion": true
       }
@@ -2701,20 +2694,6 @@
       "leftnav_label": "/ocr",
       "provider_json_field": "ocr",
       "url": "https://docs.litellm.ai/docs/ocr"
-    },
-    "rag_ingest": {
-      "docs_label": "rag_ingest",
-      "display_name": "RAG Ingest API",
-      "leftnav_label": "/rag/ingest",
-      "provider_json_field": "rag_ingest",
-      "url": "https://docs.litellm.ai/docs/rag_ingest"
-    },
-    "rag_query": {
-      "docs_label": "rag_query",
-      "display_name": "RAG Query API",
-      "leftnav_label": "/rag/query",
-      "provider_json_field": "rag_query",
-      "url": "https://docs.litellm.ai/docs/rag_query"
     },
     "realtime": {
       "docs_label": "realtime",
