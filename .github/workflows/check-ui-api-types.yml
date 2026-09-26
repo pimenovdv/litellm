@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "Backend/litellm/proxy/**"
-      - "litellm/types/**"
+      - "Backend/litellm/types/**"
       - "frontend/src/lib/http/schema.d.ts"
       - "frontend/scripts/gen-api-types.mjs"
       - "frontend/package.json"
