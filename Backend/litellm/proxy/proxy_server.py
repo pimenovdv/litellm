@@ -347,10 +347,6 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
-from litellm.proxy.guardrails.init_guardrails import (
-    init_guardrails_v2,
-    initialize_guardrails,
-)
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
@@ -5009,10 +5005,6 @@ class ProxyConfig:
             router._update_redis_cache(cache=redis_usage_cache)
 
         # Guardrail settings
-        guardrails_v2: Optional[List[Dict]] = None
-
-        if config is not None:
-            guardrails_v2 = config.get("guardrails", None)
         if guardrails_v2:
             init_guardrails_v2(
                 all_guardrails=guardrails_v2,
@@ -6176,8 +6168,6 @@ class ProxyConfig:
 
         ex. Vector Stores, Guardrails, MCP tools, etc.
         """
-        if self._should_load_db_object(object_type="guardrails"):
-            await self._init_guardrails_in_db(prisma_client=prisma_client)
 
         if self._should_load_db_object(object_type="policies"):
             await self._init_policies_in_db(prisma_client=prisma_client)
@@ -6597,13 +6587,6 @@ class ProxyConfig:
             verbose_proxy_logger.debug(
                 "litellm.proxy.proxy_server.py::ProxyConfig:_init_prompts_in_db - {}".format(str(e))
             )
-
-    async def _init_guardrails_in_db(self, prisma_client: PrismaClient):
-        from litellm.proxy.guardrails.guardrail_registry import (
-            IN_MEMORY_GUARDRAIL_HANDLER,
-            Guardrail,
-            GuardrailRegistry,
-        )
 
         try:
             guardrails_in_db: List[Guardrail] = await GuardrailRegistry.get_all_guardrails_from_db(
@@ -10749,7 +10732,6 @@ def _get_provider_token_counter(
     except Exception:
         # If provider detection fails, fall back to manual checks
         if full_model.startswith("anthropic/") or "anthropic" in full_model.lower():
-
             anthropic_model_info = AnthropicModelInfo()
             return anthropic_model_info.get_token_counter(), model, custom_llm_provider
 
