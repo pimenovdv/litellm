@@ -23,7 +23,6 @@ class httpxSpecialProvider(str, Enum):
     SSO_HANDLER = "sso_handler"
     Search = "search"
     MCP = "mcp"
-    RAG = "rag"
     A2AProvider = "a2a_provider"
     AgentHealthCheck = "agent_health_check"
     A2A = "a2a"
