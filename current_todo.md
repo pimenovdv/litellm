@@ -1,5 +1,5 @@
-- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py`.
-- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/route_llm_request.py` и `Backend/litellm/proxy/_types.py`.
-- [x] Удалить директорию `Backend/litellm/proxy/guardrails` (до 5 файлов за раз, часть 1).
-- [x] Удалить директорию `Backend/litellm/proxy/guardrails` (до 5 файлов за раз, часть 2).
-- [x] Удалить оставшиеся тесты и ссылки для Guardrails.
+- [x] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 1, до 5 файлов).
+- [ ] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 2, до 5 файлов).
+- [ ] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 3, до 5 файлов).
+- [ ] Удалить директорию `Backend/litellm/proxy/guardrails/guardrail_hooks` (часть 4, до 5 файлов).
+- [ ] Удалить оставшиеся тесты и ссылки для Guardrails.
