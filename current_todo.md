@@ -1,4 +1,4 @@
-- [ ] Очистить зависимости, относящиеся к удаленным интеграциям (langfuse, datadog, sentry, slack и т.д.), в `pyproject.toml` (секции dependencies и optional-dependencies).
+- [x] Очистить зависимости, относящиеся к удаленным интеграциям (langfuse, datadog, sentry, slack и т.д.), в `pyproject.toml` (секции dependencies и optional-dependencies).
 - [ ] Очистить зависимости, относящиеся к удаленным интеграциям, в корневых файлах `requirements.txt` (если они существуют).
 - [ ] Удалить устаревшие или неиспользуемые LLM зависимости (кроме openai) из `pyproject.toml` и `requirements.txt`.
 - [ ] Очистить неиспользуемые зависимости, связанные с RAG и Guardrails (например, redis, vector-databases, tokenizers, lakera, aporia) из конфигураций бэкенда.
