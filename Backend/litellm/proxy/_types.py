@@ -47,7 +47,6 @@ from litellm.types.utils import (
     ModelResponse,
     ProviderField,
     StandardCallbackDynamicParams,
-    StandardLoggingGuardrailInformation,
     StandardLoggingMCPToolCall,
     StandardLoggingModelInformation,
     StandardLoggingPayloadErrorInformation,
@@ -76,7 +75,6 @@ class SupportedDBObjectType(str, enum.Enum):
 
     MODELS = "models"
     MCP = "mcp"
-    GUARDRAILS = "guardrails"
     POLICIES = "policies"
     VECTOR_STORES = "vector_stores"
     PASS_THROUGH_ENDPOINTS = "pass_through_endpoints"
@@ -443,13 +441,6 @@ class LiteLLMRoutes(enum.Enum):
     #########################################################
     passthrough_routes_wildcard = [f"{route}/*" for route in mapped_pass_through_routes]
 
-    litellm_native_routes = [
-        "/rag/ingest",
-        "/v1/rag/ingest",
-        "/rag/query",
-        "/v1/rag/query",
-    ]
-
     anthropic_routes = [
         "/v1/messages",
         "/v1/messages/count_tokens",
@@ -510,9 +501,7 @@ class LiteLLMRoutes(enum.Enum):
         "/v1beta/agents/{name}/versions",
     ]
 
-    apply_guardrail_routes = [
-        "/guardrails/apply_guardrail",
-    ]
+    apply_guardrail_routes = []
 
     llm_api_routes = (
         openai_routes
@@ -522,7 +511,6 @@ class LiteLLMRoutes(enum.Enum):
         + passthrough_routes_wildcard
         + apply_guardrail_routes
         + mcp_inference_routes
-        + litellm_native_routes
         + agent_routes
     )
     info_routes = [
@@ -718,8 +706,6 @@ class LiteLLMRoutes(enum.Enum):
             "/tag/list",
             "/v1/models/{model_id}",
             "/models/{model_id}",
-            "/guardrails/list",
-            "/v2/guardrails/list",
             "/project/list",
             "/project/info",
             # Read-only search tool routes power the Search Tools UI page.
@@ -769,10 +755,7 @@ class LiteLLMRoutes(enum.Enum):
         "/invitation/new",
         "/invitation/delete",
         # Team guardrail submission - requires team-scoped key; endpoint enforces team_id
-        "/guardrails/register",
         # Team guardrail submissions - endpoint scopes results to caller's teams (non-admin)
-        "/guardrails/submissions",
-        "/guardrails/submissions/{guardrail_id}",
     ]  # routes that manage their own allowed/disallowed logic
 
     ## Org Admin Routes ##
@@ -841,11 +824,6 @@ class LiteLLMRoutes(enum.Enum):
             # Invitation viewing (admin viewer cannot create/delete; can read).
             "/invitation/info",
             # Guardrails / Policies pages (read-only views).
-            "/guardrails/list",
-            "/v2/guardrails/list",
-            "/guardrails/submissions",
-            "/guardrails/submissions/{guardrail_id}",
-            "/guardrails/usage/overview",
             "/policies/attachments/list",
             # MCP semantic filter settings (read).
             "/get/mcp_semantic_filter_settings",
@@ -2315,7 +2293,7 @@ class ConfigGeneralSettings(LiteLLMPydanticObjectBase):
     proxy_config_reload_interval_seconds: int = Field(
         30,
         gt=0,
-        description="how often (in seconds) each pod reloads config-in-DB objects (models, credentials, guardrails, etc.) when store_model_in_db is enabled; lower values speed up multi-pod convergence at the cost of more DB load. Applied on proxy startup",
+        description="how often (in seconds) each pod reloads config-in-DB objects (models, credentials, etc.) when store_model_in_db is enabled; lower values speed up multi-pod convergence at the cost of more DB load. Applied on proxy startup",
     )
     cancel_on_disconnect: Optional[bool] = Field(
         None,
@@ -2380,7 +2358,7 @@ class ConfigGeneralSettings(LiteLLMPydanticObjectBase):
     user_header_mappings: Optional[List[UserHeaderMapping]] = None
     supported_db_objects: Optional[List[SupportedDBObjectType]] = Field(
         None,
-        description="Fine-grained control over which object types to load from the database when store_model_in_db is True. Available types: 'models', 'mcp', 'guardrails', 'vector_stores', 'pass_through_endpoints', 'prompts', 'model_cost_map', 'tools', 'config_overrides'. If not set, all objects are loaded (default behavior).",
+        description="Fine-grained control over which object types to load from the database when store_model_in_db is True. Available types: 'models', 'mcp', 'vector_stores', 'pass_through_endpoints', 'prompts', 'model_cost_map', 'tools', 'config_overrides'. If not set, all objects are loaded (default behavior).",
     )
     user_mcp_management_mode: Optional[UserMCPManagementMode] = Field(
         None,
@@ -2636,7 +2614,7 @@ class UserAPIKeyAuth(LiteLLM_VerificationTokenView):  # the expected response ob
     # per-request object_permission fetches in downstream checks (vector stores, etc.)
     team_object_permission: Optional[LiteLLM_ObjectPermissionTable] = None
     # Decoded upstream IdP claims (groups, roles, etc.) propagated by JWT auth machinery
-    # and forwarded into outbound tokens by guardrails such as MCPJWTSigner.
+    # and forwarded into outbound tokens by MCPJWTSigner.
     jwt_claims: Optional[Dict] = None
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
@@ -3300,8 +3278,6 @@ class SpendLogsMetadata(TypedDict):
     applied_guardrails: Optional[List[str]]
     mcp_tool_call_metadata: Optional[StandardLoggingMCPToolCall]
     vector_store_request_metadata: Optional[List[StandardLoggingVectorStoreRequest]]
-    guardrail_information: Optional[List[StandardLoggingGuardrailInformation]]
-    eval_information: Optional[Any]
     status: StandardLoggingPayloadStatus
     proxy_server_request: Optional[str]
     batch_models: Optional[List[str]]
@@ -4005,7 +3981,6 @@ class UserManagementEndpointParamDocStringEnums(str, enum.Enum):
     config_doc_str = """Optional[dict] - [DEPRECATED PARAM] User-specific config."""
     allowed_cache_controls_doc_str = """Optional[list] - List of allowed cache control values. Example - ["no-cache", "no-store"]. See all values - https://docs.litellm.ai/docs/proxy/caching#turn-on--off-caching-per-request-"""
     blocked_doc_str = """Optional[bool] - [Not Implemented Yet] Whether the user is blocked."""
-    guardrails_doc_str = """Optional[List[str]] - [Not Implemented Yet] List of active guardrails for the user"""
     permissions_doc_str = (
         """Optional[dict] - [Not Implemented Yet] User-specific permissions, eg. turning off pii masking."""
     )
@@ -4055,8 +4030,6 @@ LiteLLM_ManagementEndpoint_MetadataFields = [
 ]
 
 LiteLLM_ManagementEndpoint_MetadataFields_Premium = [
-    "disable_global_guardrails",
-    "guardrails",
     "policies",
     "tags",
     "team_member_key_duration",
