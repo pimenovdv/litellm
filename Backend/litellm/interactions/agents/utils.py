@@ -43,6 +43,5 @@ def get_provider_agents_api_config(
     Return a provider-specific BaseAgentsAPIConfig if the provider has a
     native agent-creation API, or None otherwise.
     """
-    from litellm.types.utils import LlmProviders
 
     return None

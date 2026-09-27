@@ -38,7 +38,6 @@ def get_provider_interactions_api_config(
     Returns:
         The provider-specific interactions API config, or None if not supported
     """
-    from litellm.types.utils import LlmProviders
 
 
     return None
