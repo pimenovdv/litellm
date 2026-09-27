@@ -12,7 +12,6 @@ import litellm
 from litellm._logging import verbose_logger
 from litellm.caching.caching import DualCache
 from litellm.llms.custom_httpx.http_handler import HTTPHandler
-from litellm.secret_managers.secret_manager_handler import get_secret_from_manager
 
 oidc_cache = DualCache()
 

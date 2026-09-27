@@ -501,7 +501,6 @@ secret_manager_client: Optional[Any] = (
     None  # list of instantiated key management clients - e.g. azure kv, infisical, etc.
 )
 _google_kms_resource_name: Optional[str] = None
-_key_management_system: Optional["KeyManagementSystem"] = None
 # Note: KeyManagementSettings must be eagerly imported because _key_management_settings
 # is accessed during import time in secret_managers/main.py
 # We'll import it after the lazy import system is set up
@@ -1223,4 +1222,3 @@ _key_management_settings: KeyManagementSettings = KeyManagementSettings()
 
 # client must be imported immediately as it's used as a decorator at function definition time
 from .utils import client
-from litellm.secret_managers.main import get_secret, get_secret_str

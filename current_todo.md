@@ -2,4 +2,4 @@
 - [x] Вырезать функционал Guardrails из ядра Backend/litellm/proxy/guardrails (удалить макс 3-5 файлов).
 - [x] Вырезать ссылки на Guardrails в Backend/litellm/__init__.py, Backend/litellm/proxy/proxy_server.py.
 - [x] Удалить сторонние менеджеры секретов (Backend/litellm/secret_managers) (макс 3-5 файлов).
-- [ ] Удалить оставшиеся сторонние менеджеры секретов и обновить todo.md.
+- [x] Удалить оставшиеся сторонние менеджеры секретов и обновить todo.md.
