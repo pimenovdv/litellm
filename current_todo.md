@@ -1,5 +1,4 @@
-- [x] Вырезать функционал Guardrails из Backend/litellm/types/guardrails.py.
-- [x] Вырезать функционал Guardrails из ядра Backend/litellm/proxy/guardrails (удалить макс 3-5 файлов).
-- [x] Вырезать ссылки на Guardrails в Backend/litellm/__init__.py, Backend/litellm/proxy/proxy_server.py.
-- [x] Удалить сторонние менеджеры секретов (Backend/litellm/secret_managers) (макс 3-5 файлов).
-- [x] Удалить оставшиеся сторонние менеджеры секретов и обновить todo.md.
+- [ ] Очистить зависимости бэкенда в pyproject.toml и requirements.txt.
+- [ ] Очистить зависимости в uv.lock (запустить команду обновления).
+- [ ] Очистить зависимости фронтенда в frontend/package.json.
+- [ ] Завершить родительскую задачу и обновить todo.md.
