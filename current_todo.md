@@ -1,4 +1,4 @@
 - [x] Удалить Guardrails: очистить `Backend/litellm/proxy/guardrails/` и удалить упоминания Guardrails из `Backend/litellm/proxy/proxy_server.py`.
-- [x] Удалить Guardrails: очистить `Backend/litellm/proxy/_types.py` от конфигураций Guardrails.
+- [ ] Удалить Guardrails: очистить `Backend/litellm/proxy/_types.py` от конфигураций Guardrails.
 - [ ] Удалить сторонние менеджеры секретов: удалить файлы `Backend/litellm/secret_managers/` (кроме локальных/базовых) и их импорты.
-- [ ] Удалить телеметрию: очистить `Backend/litellm/proxy/utils.py` и `Backend/litellm/proxy/proxy_server.py` от вызовов сбора телеметрии.
+- [x] Удалить телеметрию: очистить `Backend/litellm/proxy/utils.py` и `Backend/litellm/proxy/proxy_server.py` от вызовов сбора телеметрии.
