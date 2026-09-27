@@ -11,7 +11,8 @@ This is an __init__.py file to allow the following interface
 """
 
 from typing import Any, AsyncIterator, Coroutine, Dict, Iterator, List, Optional, Union
-from .types import AnthropicMessagesResponse
+    AnthropicMessagesResponse,
+)
 
 
 async def acreate(
@@ -134,11 +135,7 @@ def create(
         container=container,
         **kwargs,
     )
-
-
 def _async_anthropic_messages(*args, **kwargs):
     pass
-
-
 def _sync_anthropic_messages(*args, **kwargs):
     pass

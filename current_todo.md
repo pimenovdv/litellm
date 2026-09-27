@@ -1,4 +1,4 @@
 - [x] Удалить оставшиеся файлы `guardrail_hooks` и `pass_through_endpoints` (часть 9, до 5 файлов).
-- [ ] Удалить файлы `guardrail` из `example_config_yaml` и `integrations` (часть 10, до 5 файлов).
-- [x] Удалить файлы `guardrail` из `types` и базовых `llms` (часть 11, до 5 файлов).
+- [x] Удалить файлы `guardrail` из `example_config_yaml` и `integrations` (часть 10, до 5 файлов).
+- [ ] Удалить файлы `guardrail` из `types` и базовых `llms` (часть 11, до 5 файлов).
 - [ ] Очистить файлы тестов Guardrails (часть 12, до 5 файлов).
