@@ -128,14 +128,10 @@ from litellm.utils import (
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
-    from opentelemetry.trace import Span as _Span
 
-    OpenTelemetry = Any
-
-    Span = Union[_Span, Any]
+    Span = Any
 else:
     Span = Any
-    OpenTelemetry = Any
 
 REALTIME_REQUEST_SCOPE_TEMPLATE: Dict[str, Any] = {
     "type": "http",
@@ -599,7 +595,6 @@ except Exception:
     version = "0.0.0"
 litellm.suppress_debug_info = True
 import json
-from typing import Union
 
 from fastapi import (
     Depends,
@@ -1948,7 +1943,6 @@ user_debug = False
 user_max_tokens = None
 user_request_timeout = None
 user_temperature = None
-user_telemetry = True
 user_config = None
 user_headers = None
 user_config_file_path: Optional[str] = None
@@ -2009,7 +2003,6 @@ disable_spend_logs = False
 jwt_handler = JWTHandler()
 prompt_injection_detection_obj: Optional[_OPTIONAL_PromptInjectionDetection] = None
 store_model_in_db: bool = False
-open_telemetry_logger: Optional[OpenTelemetry] = None
 ### INITIALIZE GLOBAL LOGGING OBJECT ###
 proxy_logging_obj: ProxyLogging = ProxyLogging(user_api_key_cache=user_api_key_cache, premium_user=premium_user)
 ### REDIS QUEUE ###
@@ -4324,7 +4317,6 @@ class ProxyConfig:
             redis_usage_cache, \
             store_model_in_db, \
             premium_user, \
-            open_telemetry_logger, \
             health_check_details, \
             proxy_batch_polling_interval, \
             proxy_config_reload_interval_seconds, \
@@ -6858,7 +6850,6 @@ async def initialize(
     max_tokens=None,
     request_timeout=600,
     max_budget=None,
-    telemetry=False,
     drop_params=True,
     add_function_to_prompt=True,
     headers=None,
@@ -6874,7 +6865,6 @@ async def initialize(
         user_user_max_tokens, \
         user_request_timeout, \
         user_temperature, \
-        user_telemetry, \
         user_headers, \
         experimental, \
         llm_model_list, \
@@ -6981,7 +6971,6 @@ async def initialize(
         dynamic_config["general"]["max_budget"] = litellm.max_budget
     if experimental:
         pass
-    user_telemetry = telemetry
 
 
 # for streaming
@@ -10718,7 +10707,6 @@ def _get_provider_token_counter(
     except Exception:
         # If provider detection fails, fall back to manual checks
         if full_model.startswith("anthropic/") or "anthropic" in full_model.lower():
-
             anthropic_model_info = AnthropicModelInfo()
             return anthropic_model_info.get_token_counter(), model, custom_llm_provider
 

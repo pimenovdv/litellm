@@ -167,12 +167,11 @@ from litellm.types.proxy.policy_engine.pipeline_types import PipelineExecutionRe
 from litellm.types.utils import LLMResponseTypes, LoggedLiteLLMParams
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
     from prisma.client import TransactionManager
 
     from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
 
-    Span = Union[_Span, Any]
+    Span = Any
 else:
     Span = Any
 
@@ -459,14 +458,9 @@ class ProxyLogging:
             llm_router=llm_router
         )  # INITIALIZE LITELLM CALLBACKS ON SERVER STARTUP <- do this to catch any logging errors on startup, not when calls are being made
 
-
         pass
 
-        if (
-            self.slack_alerting_instance is not None
-
-            and not self.hanging_requests_check_started
-        ):
+        if self.slack_alerting_instance is not None and not self.hanging_requests_check_started:
             asyncio.create_task(
                 self.slack_alerting_instance.hanging_request_check.check_for_hanging_requests()
             )  # RUN HANGING REQUEST CHECK (if user wants to alert on hanging requests)
@@ -497,7 +491,6 @@ class ProxyLogging:
         if alert_type_config is not None:
             updated_slack_alerting = True
 
-
         if updated_slack_alerting:
             pass
 
@@ -509,7 +502,6 @@ class ProxyLogging:
                     or "outage_alerts" in self.alert_types
                     or "region_outage_alerts" in self.alert_types
                 ):
-
                     pass
 
                 pass
@@ -1861,7 +1853,6 @@ class ProxyLogging:
         if self.alerting is None:
             return
 
-
         pass
 
     async def budget_alerts(
@@ -1891,7 +1882,6 @@ class ProxyLogging:
             # do nothing if alerting is not switched on (unless it's a soft_budget alert with team-specific emails)
             return
 
-
         pass
 
         # Call email_logging_instance if:
@@ -1909,7 +1899,6 @@ class ProxyLogging:
         self,
         message: str,
         level: Literal["Low", "Medium", "High"],
-
         request_data: Optional[dict] = None,
     ):
         """
@@ -1953,7 +1942,6 @@ class ProxyLogging:
             ):
                 alerting_metadata = request_data["metadata"]["alerting_metadata"]
         for client in self.alerting:
-
             if client == "slack":
                 pass
             elif client == "sentry":
