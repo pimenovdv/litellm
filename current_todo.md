@@ -1,4 +1,3 @@
-- [x] Удалить Guardrails: очистить `Backend/litellm/proxy/guardrails/` и удалить упоминания Guardrails из `Backend/litellm/proxy/proxy_server.py`.
-- [x] Удалить Guardrails: очистить `Backend/litellm/proxy/_types.py` от конфигураций Guardrails.
-- [x] Удалить сторонние менеджеры секретов: удалить файлы `Backend/litellm/secret_managers/` (кроме локальных/базовых) и их импорты.
-- [x] Удалить телеметрию: очистить `Backend/litellm/proxy/utils.py` и `Backend/litellm/proxy/proxy_server.py` от вызовов сбора телеметрии.
+- [ ] Очистить `pyproject.toml` от неиспользуемых библиотек (langfuse, datadog, sentry-sdk, etc).
+- [ ] Очистить `requirements.txt` от неиспользуемых библиотек (удаленных интеграций).
+- [ ] Очистить `frontend/package.json` от неиспользуемых зависимостей.
