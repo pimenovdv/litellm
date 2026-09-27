@@ -155,7 +155,7 @@ class VertexPassthroughLoggingHandler:
                 vertex_ai_partner_model_config = get_vertex_ai_partner_model_config(
                     model=model,
                     vertex_publisher_or_api_spec=vertex_publisher_or_api_spec,
-                )
+            )
                 litellm_prediction_response = vertex_ai_partner_model_config.transform_response(
                     model=model,
                     raw_response=httpx_response,
@@ -172,7 +172,7 @@ class VertexPassthroughLoggingHandler:
                             "content": "no-message-pass-through-endpoint",
                         }
                     ],
-                )
+            )
 
             kwargs = VertexPassthroughLoggingHandler._create_vertex_response_logging_payload_for_generate_content(
                 litellm_model_response=litellm_prediction_response,
@@ -452,7 +452,7 @@ class VertexPassthroughLoggingHandler:
             chunk_parsing_logic: Any = vertex_iterator._common_chunk_parsing_logic
             parsed_chunks = [chunk_parsing_logic(chunk) for chunk in all_chunks]
         elif "rawPredict" in url_route or "streamRawPredict" in url_route:
-                        from litellm.llms.base_llm.base_model_iterator import (
+            from litellm.llms.base_llm.base_model_iterator import (
                 BaseModelResponseIterator,
             )
 
@@ -568,7 +568,7 @@ class VertexPassthroughLoggingHandler:
                             "imageEmbedding",
                             "videoEmbeddings",
                         ]
-                    ):
+            )
                         return True
 
         return False
@@ -638,8 +638,8 @@ class VertexPassthroughLoggingHandler:
                 litellm_batch_response = (
                     VertexAIBatchTransformation.transform_vertex_ai_batch_response_to_openai_batch_response(
                         response=_json_response
-                    )
-                )
+            )
+            )
 
                 # Extract batch ID and model from the response
                 batch_id = VertexAIBatchTransformation._get_batch_id_from_vertex_ai_batch_response(_json_response)
@@ -651,7 +651,7 @@ class VertexPassthroughLoggingHandler:
 
                 unified_id_string = SpecialEnums.LITELLM_MANAGED_BATCH_COMPLETE_STR.value.format(
                     actual_model_id, batch_id
-                )
+            )
                 unified_object_id = base64.urlsafe_b64encode(unified_id_string.encode()).decode().rstrip("=")
 
                 # Store the managed object for cost tracking
@@ -662,7 +662,7 @@ class VertexPassthroughLoggingHandler:
                     model_object_id=batch_id,
                     logging_obj=logging_obj,
                     **kwargs,
-                )
+            )
 
                 # Create a batch job response for logging
                 litellm_model_response = ModelResponse()
@@ -687,7 +687,7 @@ class VertexPassthroughLoggingHandler:
                                 "unified_object_id": unified_object_id,
                             },
                         },
-                    )
+            )
                 ]
 
                 # Set response cost to 0 initially (will be updated when batch completes)
@@ -730,7 +730,7 @@ class VertexPassthroughLoggingHandler:
                                 "status_code": httpx_response.status_code,
                             },
                         },
-                    )
+            )
                 ]
 
                 kwargs["response_cost"] = 0.0
@@ -766,7 +766,7 @@ class VertexPassthroughLoggingHandler:
                             "error": str(e),
                         },
                     },
-                )
+            )
             ]
 
             kwargs["response_cost"] = 0.0
@@ -823,7 +823,7 @@ class VertexPassthroughLoggingHandler:
                     permissions={},  # Set to empty dict instead of None
                     model_max_budget={},  # Set to empty dict instead of None
                     model_spend={},  # Set to empty dict instead of None
-                )
+            )
 
                 # Store the unified object for batch cost tracking
                 import asyncio
@@ -836,16 +836,16 @@ class VertexPassthroughLoggingHandler:
                         model_object_id=model_object_id,
                         file_purpose="batch",
                         user_api_key_dict=user_api_key_dict,
-                    )
-                )
+            )
+            )
 
                 verbose_proxy_logger.info(
                     f"Stored batch managed object with unified_object_id={unified_object_id}, batch_id={model_object_id}"
-                )
+            )
             else:
                 verbose_proxy_logger.warning(
                     "Managed files hook not available, cannot store batch object for cost tracking"
-                )
+            )
 
         except Exception as e:
             verbose_proxy_logger.error(f"Error storing batch managed object: {e}")
