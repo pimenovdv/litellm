@@ -84,8 +84,6 @@ extra_proxy = [
             # Not in PyPI proxy extra.
             # Not in PyPI proxy extra.
     "resend>=2.23.0,<3.0",
-    "redisvl>=0.4.1,<1.0",
-    "a2a-sdk>=1.1.0,<2.0",
 ]
 utils = [
     # Not in Docker or PyPI proxy extra.
@@ -194,7 +192,6 @@ proxy-dev = [
     "opentelemetry-sdk==1.28.0",
     "opentelemetry-exporter-otlp==1.28.0",
     "opentelemetry-instrumentation-fastapi==0.49b0",
-        "a2a-sdk==1.1.0",
 ]
 ci = [
     # These are lazily imported at call sites; keep them out of core deps to
@@ -267,15 +264,10 @@ override-dependencies = [
     "packaging>=24.0",
 ]
 default-groups = ["dev"]
-required-version = ">=0.10.9"
+required-version = ">=0.10.8"
 exclude-newer = "3 days"
 
-[tool.uv.sources]
-litellm-proxy-extras = { workspace = true }
-litellm-enterprise = { workspace = true }
 
-[tool.uv.workspace]
-members = ["enterprise", "litellm-proxy-extras"]
 
 [tool.isort]
 profile = "black"
