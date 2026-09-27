@@ -1,3 +1,7 @@
+"""
+LiteLLM Main Module.
+This module provides the core initialization and configuration for the LiteLLM backend system.
+"""
 ### Hide pydantic namespace conflict warnings globally ###
 from __future__ import annotations
 

@@ -1,3 +1,7 @@
+"""
+LiteLLM Proxy Server Module.
+This module contains the main FastAPI application and routing logic for the proxy server.
+"""
 import asyncio
 import copy
 import enum
