@@ -1,4 +1,4 @@
-- [ ] Очистить ссылки на Guardrails в `Backend/litellm/__init__.py` и `Backend/litellm/types/guardrails.py`.
+- [x] Очистить ссылки на Guardrails в `Backend/litellm/__init__.py` и `Backend/litellm/types/guardrails.py`.
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/_types.py` и `Backend/litellm/proxy/middleware/billable_request_metrics_middleware.py`.
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/public_endpoints/public_endpoints.py` и `Backend/litellm/proxy/route_llm_request.py`.
 - [ ] Очистить импорты и инициализацию Guardrails в `Backend/litellm/proxy/proxy_server.py`.
