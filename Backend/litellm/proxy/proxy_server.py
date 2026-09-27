@@ -347,10 +347,6 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
-from litellm.proxy.guardrails.init_guardrails import (
-    init_guardrails_v2,
-    initialize_guardrails,
-)
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
@@ -3487,26 +3483,6 @@ _DB_OVERLAY_REMOTE_MODULE_LIST_FIELDS: Dict[str, Tuple[str, ...]] = {
 
 def _is_remote_module_url(value: Any) -> bool:
     return isinstance(value, str) and (value.startswith("s3://") or value.startswith("gcs://"))
-
-
-def _scrub_guardrail_inner(inner: Dict[str, Any]) -> None:
-    """Strip remote-URL entries from a guardrail's ``callbacks`` list
-    and ``guardrail`` (v2 module-path) field. Mutates in place."""
-    cbs = inner.get("callbacks")
-    if isinstance(cbs, list):
-        cleaned = [c for c in cbs if not _is_remote_module_url(c)]
-        if len(cleaned) != len(cbs):
-            verbose_proxy_logger.warning(
-                "Refused %d remote-URL entries from DB-overlay litellm_settings.guardrails[...].callbacks",
-                len(cbs) - len(cleaned),
-            )
-            inner["callbacks"] = cleaned
-    if _is_remote_module_url(inner.get("guardrail")):
-        verbose_proxy_logger.warning(
-            "Refused remote-URL guardrail module from DB-overlay litellm_settings.guardrails[...].guardrail: %r",
-            inner.get("guardrail"),
-        )
-        inner["guardrail"] = None
 
 
 def _scrub_db_overlay_remote_module_loads(section: str, db_value: Any) -> Any:
