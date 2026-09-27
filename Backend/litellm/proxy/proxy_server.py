@@ -242,7 +242,6 @@ from litellm.constants import (
     PROXY_CONFIG_RELOAD_INTERVAL_SECONDS,
 )
 from litellm.exceptions import RejectedRequestError
-from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
@@ -347,10 +346,6 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
-from litellm.proxy.guardrails.init_guardrails import (
-    init_guardrails_v2,
-    initialize_guardrails,
-)
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
@@ -4453,15 +4448,6 @@ class ProxyConfig:
                         verbose_proxy_logger.debug(f"{blue_color_code}Set Cache on LiteLLM Proxy{reset_color_code}")
                 elif key == "cache" and value is False:
                     pass
-                elif key == "guardrails":
-                    guardrail_name_config_map = initialize_guardrails(
-                        guardrails_config=value,
-                        premium_user=premium_user,
-                        config_file_path=config_file_path,
-                        litellm_settings=litellm_settings,
-                    )
-
-                    litellm.guardrail_name_config_map = guardrail_name_config_map
 
                 elif key == "global_prompt_directory":
                     from litellm.integrations.dotprompt import (
@@ -6176,8 +6162,6 @@ class ProxyConfig:
 
         ex. Vector Stores, Guardrails, MCP tools, etc.
         """
-        if self._should_load_db_object(object_type="guardrails"):
-            await self._init_guardrails_in_db(prisma_client=prisma_client)
 
         if self._should_load_db_object(object_type="policies"):
             await self._init_policies_in_db(prisma_client=prisma_client)
@@ -6598,12 +6582,6 @@ class ProxyConfig:
                 "litellm.proxy.proxy_server.py::ProxyConfig:_init_prompts_in_db - {}".format(str(e))
             )
 
-    async def _init_guardrails_in_db(self, prisma_client: PrismaClient):
-        from litellm.proxy.guardrails.guardrail_registry import (
-            IN_MEMORY_GUARDRAIL_HANDLER,
-            Guardrail,
-            GuardrailRegistry,
-        )
 
         try:
             guardrails_in_db: List[Guardrail] = await GuardrailRegistry.get_all_guardrails_from_db(
