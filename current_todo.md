@@ -1,5 +1,10 @@
-- [ ] Очистить Guardrails из `Backend/litellm/llms/base_llm/guardrail_translation/` и `Backend/litellm/llms/openai/embeddings/guardrail_translation/` (макс 3-5 файлов).
-- [ ] Очистить Guardrails из `Backend/litellm/llms/openai/transcriptions/guardrail_translation/`, `Backend/litellm/llms/openai/chat/guardrail_translation/`, и `Backend/litellm/llms/openai/completions/guardrail_translation/` (макс 3-5 файлов).
-- [ ] Очистить Guardrails из `Backend/litellm/proxy/guardrails/` (удалить директорию, макс 3-5 файлов).
-- [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py`, `Backend/litellm/proxy/route_llm_request.py`, `Backend/litellm/proxy/common_request_processing.py`.
-- [ ] Очистить ссылки на Guardrails в типах, утилитах и тестах.
+- [ ] Удалить `Backend/litellm/llms/openai/embeddings/guardrail_translation/handler.py` и `Backend/litellm/llms/openai/embeddings/guardrail_translation/__init__.py`.
+- [ ] Удалить `Backend/litellm/llms/openai/transcriptions/guardrail_translation/handler.py` и `Backend/litellm/llms/openai/transcriptions/guardrail_translation/__init__.py`.
+- [ ] Удалить `Backend/litellm/llms/openai/responses/guardrail_translation/handler.py`, `Backend/litellm/llms/openai/responses/guardrail_translation/__init__.py`, `README.md`.
+- [ ] Удалить `Backend/litellm/llms/openai/image_generation/guardrail_translation/handler.py` и `Backend/litellm/llms/openai/image_generation/guardrail_translation/__init__.py`.
+- [ ] Удалить `Backend/litellm/llms/openai/chat/guardrail_translation/handler.py` и `Backend/litellm/llms/openai/chat/guardrail_translation/__init__.py`.
+- [ ] Удалить `Backend/litellm/llms/openai/speech/guardrail_translation/handler.py` и `Backend/litellm/llms/openai/speech/guardrail_translation/__init__.py`.
+- [ ] Удалить `Backend/litellm/llms/openai/completion/guardrail_translation/handler.py` и `Backend/litellm/llms/openai/completion/guardrail_translation/__init__.py`.
+- [ ] Удалить `Backend/litellm/proxy/_experimental/mcp_server/guardrail_translation/handler.py` и `Backend/litellm/proxy/_experimental/mcp_server/guardrail_translation/__init__.py`.
+- [ ] Удалить `Backend/litellm/llms/base_llm/guardrail_translation/base_translation.py` и `Backend/litellm/llms/base_llm/guardrail_translation/utils.py`.
+- [ ] Очистить ссылки на Guardrails в `Backend/litellm/llms/__init__.py`, `Backend/litellm/proxy/common_request_processing.py` и других файлах, использующих `guardrail_translation`.
