@@ -12,9 +12,6 @@ import litellm
 from litellm._logging import verbose_logger
 from litellm.caching.caching import DualCache
 from litellm.llms.custom_httpx.http_handler import HTTPHandler
-from litellm.secret_managers.get_azure_ad_token_provider import (
-    get_azure_ad_token_provider,
-)
 from litellm.secret_managers.secret_manager_handler import get_secret_from_manager
 
 oidc_cache = DualCache()
@@ -276,7 +273,6 @@ def get_secret(
                 verbose_logger.warning(
                     "AZURE_FEDERATED_TOKEN_FILE not found in environment will use Azure AD token provider"
                 )
-                azure_token_provider = get_azure_ad_token_provider(azure_scope=oidc_aud)
                 try:
                     oidc_token = azure_token_provider()
                     if oidc_token is None:

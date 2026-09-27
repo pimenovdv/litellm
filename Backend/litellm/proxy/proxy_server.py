@@ -5136,13 +5136,6 @@ class ProxyConfig:
                 )
 
                 CyberArkSecretManager()
-            elif key_management_system == KeyManagementSystem.CUSTOM.value:
-                ### LOAD CUSTOM SECRET MANAGER ###
-                from litellm.secret_managers.custom_secret_manager_loader import (
-                    load_custom_secret_manager,
-                )
-
-                load_custom_secret_manager(config_file_path=config_file_path)
             else:
                 raise ValueError("Invalid Key Management System selected")
 
