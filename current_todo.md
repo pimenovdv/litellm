@@ -1,4 +1,4 @@
-- [x] Очистить зависимости бэкенда в pyproject.toml и requirements.txt.
-- [x] Очистить зависимости в uv.lock (запустить команду обновления).
-- [x] Очистить зависимости фронтенда в frontend/package.json.
-- [x] Завершить родительскую задачу и обновить todo.md.
+- [ ] Добавить docstrings в Backend/litellm/__init__.py и Backend/litellm/proxy/proxy_server.py
+- [ ] Обновить JSDoc во frontend/litellm-dashboard
+- [ ] Обновить README.md
+- [ ] Обновить родительскую задачу в todo.md
