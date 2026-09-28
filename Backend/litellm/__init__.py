@@ -1227,6 +1227,6 @@ _key_management_settings: KeyManagementSettings = KeyManagementSettings()
 
 # client must be imported immediately as it's used as a decorator at function definition time
 from .utils import client
-
-# Note: RAG routing and logic previously removed
 from litellm.secret_managers.main import get_secret, get_secret_str
+
+# RAG logic fully cleaned
