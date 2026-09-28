@@ -1,32 +1,40 @@
-# LiteLLM Offline OpenAI Gateway
+<h1 align="center">
+  <br>
+  <a href="https://litellm.ai"><img src="https://raw.githubusercontent.com/BerriAI/litellm/main/docs/my-website/static/img/litellm_logo.png" alt="LiteLLM" width="30%"></a>
+  <br>
+  LiteLLM
+  <br>
+</h1>
 
-This project is a customized, offline-first branch of [LiteLLM](https://github.com/BerriAI/litellm). It has been stripped of external SaaS integrations, telemetry, and non-essential features (like RAG and Semantic Caching) to serve as a secure, isolated OpenAI-compatible Gateway for internal enterprise deployments.
+<h4 align="center">Call 100+ LLM APIs using the OpenAI format - Bedrock, Azure, OpenAI, Cohere, Anthropic, Ollama, Sagemaker, HuggingFace, Replicate</h4>
+
+<p align="center">
+  <a href="https://github.com/BerriAI/litellm/actions/workflows/main.yml">
+    <img src="https://github.com/BerriAI/litellm/actions/workflows/main.yml/badge.svg" alt="CI">
+  </a>
+  <a href="https://pypi.org/project/litellm/">
+    <img src="https://img.shields.io/pypi/v/litellm" alt="PyPI Version">
+  </a>
+</p>
 
 ## Architecture
+LiteLLM is split into two parts:
+- `Backend`: Python backend, providing the core LiteLLM routing, proxy logic, and integrations.
+- `frontend`: NextJS dashboard to manage the backend.
 
-The project consists of two main components separated for independent scaling:
+## Quick Start
+To start the backend and frontend locally:
+1. Navigate to the backend:
+`cd Backend`
+2. Install dependencies:
+`uv sync`
+3. Run the backend proxy:
+`uv run litellm --config config.yaml`
 
-1.  **Backend (Python)**: A lightweight API gateway built on FastAPI that handles routing, rate limiting (Redis), budget management (PostgreSQL), and exact-match caching. It connects exclusively to your internal or custom endpoints (`api_base`).
-2.  **Frontend (Next.js)**: A dashboard (`ui/litellm-dashboard`) for managing users, keys, and budgets, completely decoupled from the backend codebase and communicating strictly via REST API.
+4. For the frontend:
+`cd frontend/litellm-dashboard`
+`npm install`
+`npm run dev`
 
-## Features Kept
-- **OpenAI Provider Support**: Fully supports custom `api_base` targets.
-- **Routing & Fallbacks**: Supports advanced load balancing and fallback mechanisms across internal nodes.
-- **Auth & Budgets**: RBAC, API key generation, and budget limits relying purely on local PostgreSQL and Redis.
-- **Caching**: Exact-match caching using a local Redis instance.
-- **Monitoring**: Local `/metrics` endpoint for Prometheus.
-
-## Running Locally
-
-You can launch the entire stack using `docker-compose`:
-
-```bash
-docker-compose up -d
-```
-
-This will spin up:
--   `litellm`: The Python API Gateway (Port: 4000)
--   `frontend`: The Next.js Admin Dashboard (Port: 3000)
--   `db`: PostgreSQL database for accounts and keys
--   `redis`: Redis cache for rate limiting and exact matching
-
+## Contribution
+Check out `todo.md` for our ongoing migration checklist and development tasks.

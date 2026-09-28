@@ -1,4 +1,4 @@
 - [x] Добавить docstrings в Backend/litellm/__init__.py и Backend/litellm/proxy/proxy_server.py
 - [x] Обновить JSDoc во frontend/litellm-dashboard
-- [ ] Обновить README.md
+- [x] Обновить README.md
 - [ ] Обновить родительскую задачу в todo.md
