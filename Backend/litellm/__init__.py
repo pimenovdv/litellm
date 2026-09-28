@@ -162,6 +162,7 @@ _custom_logger_compatible_callbacks_literal = Literal[
     "compression_interception",
     "newrelic",
 ]
+cold_storage_custom_logger: Optional[_custom_logger_compatible_callbacks_literal] = None
 logged_real_time_event_types: Optional[Union[List[str], Literal["*"]]] = None
 _known_custom_logger_compatible_callbacks: List = list(get_args(_custom_logger_compatible_callbacks_literal))
 callbacks: List[
