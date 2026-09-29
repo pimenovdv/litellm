@@ -1023,6 +1023,7 @@ class CustomGuardrail(CustomLogger):
         # Convert None to empty dict to satisfy type requirements
         guardrail_response: Union[Dict[str, Any], str] = {} if response is None else response
 
+        # For apply_guardrail functions in custom_code_guardrail scenario,
         # simplify the logged response to "allow", "deny", or "mask"
         if original_inputs is not None and isinstance(response, dict):
             # Check if inputs were modified by comparing them
@@ -1089,6 +1090,8 @@ class CustomGuardrail(CustomLogger):
         guardrail_status: GuardrailStatus = (
             "guardrail_intervened" if self._is_guardrail_intervention(e) else "guardrail_failed_to_respond"
         )
+        # For custom_code_guardrail scenario, log as "deny" instead of full exception
+        # Check if this is from custom_code_guardrail by checking the class name
         guardrail_response: Union[Exception, str] = e
         if "CustomCodeGuardrail" in self.__class__.__name__:
             guardrail_response = "deny"
