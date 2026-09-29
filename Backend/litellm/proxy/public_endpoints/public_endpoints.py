@@ -94,8 +94,6 @@ _ENDPOINT_METADATA: Dict[str, Dict[str, str]] = {
     "generateContent": {"label": "Generate Content", "endpoint": "/generateContent"},
     "bedrock_invoke": {"label": "Bedrock Invoke", "endpoint": "/bedrock/invoke"},
     "bedrock_converse": {"label": "Bedrock Converse", "endpoint": "/bedrock/converse"},
-    "rag_ingest": {"label": "RAG Ingest", "endpoint": "/rag/ingest"},
-    "rag_query": {"label": "RAG Query", "endpoint": "/rag/query"},
 }
 
 _SLUG_SUFFIX_RE = re.compile(r"\s*\(`[^`]+`\)\s*$")
