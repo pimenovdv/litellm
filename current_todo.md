@@ -1,5 +1,4 @@
-- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails/guardrail_hooks/custom_code` (удалить файлы: `custom_code_guardrail.py`, `primitives.py`, `response_rejection_code.py`, `sandbox.py`) (макс 3-5 файлов)
-- [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (удалить файлы хуков: макс 3-5 файлов)
+- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (удалить файлы хуков: макс 3-5 файлов)
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/types/proxy/guardrails` (удалить файлы типов: макс 3-5 файлов)
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/pass_through_endpoints` и `Backend/litellm/proxy/example_config_yaml` (удалить файлы: макс 3-5 файлов)
 - [ ] Очистить ссылки на Guardrails в остальных файлах `Backend/litellm/proxy/` и `Backend/enterprise/` (удалить файлы: макс 3-5 файлов)
