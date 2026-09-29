@@ -2702,20 +2702,6 @@
       "provider_json_field": "ocr",
       "url": "https://docs.litellm.ai/docs/ocr"
     },
-    "rag_ingest": {
-      "docs_label": "rag_ingest",
-      "display_name": "RAG Ingest API",
-      "leftnav_label": "/rag/ingest",
-      "provider_json_field": "rag_ingest",
-      "url": "https://docs.litellm.ai/docs/rag_ingest"
-    },
-    "rag_query": {
-      "docs_label": "rag_query",
-      "display_name": "RAG Query API",
-      "leftnav_label": "/rag/query",
-      "provider_json_field": "rag_query",
-      "url": "https://docs.litellm.ai/docs/rag_query"
-    },
     "realtime": {
       "docs_label": "realtime",
       "display_name": "OpenAI Realtime API",
