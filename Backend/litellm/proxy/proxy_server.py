@@ -10748,6 +10748,7 @@ def _get_provider_token_counter(
     except Exception:
         # If provider detection fails, fall back to manual checks
         if full_model.startswith("anthropic/") or "anthropic" in full_model.lower():
+
             anthropic_model_info = AnthropicModelInfo()
             return anthropic_model_info.get_token_counter(), model, custom_llm_provider
 
