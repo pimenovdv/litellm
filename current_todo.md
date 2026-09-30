@@ -1,4 +1,4 @@
-- [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 1 - custom_code: 5 файлов)
+- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 1 - custom_code: 5 файлов)
 - [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 2 - mcp_jwt_signer, mcp_end_user_permission, mcp_security: 6 файлов)
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 3 - generic_guardrail_api, unified_guardrail: 5 файлов)
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 4 - openai, block_code_execution: 5 файлов)
