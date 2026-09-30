@@ -76,7 +76,6 @@ class SupportedDBObjectType(str, enum.Enum):
 
     MODELS = "models"
     MCP = "mcp"
-    GUARDRAILS = "guardrails"
     POLICIES = "policies"
     VECTOR_STORES = "vector_stores"
     PASS_THROUGH_ENDPOINTS = "pass_through_endpoints"
@@ -510,17 +509,12 @@ class LiteLLMRoutes(enum.Enum):
         "/v1beta/agents/{name}/versions",
     ]
 
-    apply_guardrail_routes = [
-        "/guardrails/apply_guardrail",
-    ]
-
     llm_api_routes = (
         openai_routes
         + anthropic_routes
         + google_routes
         + mapped_pass_through_routes
         + passthrough_routes_wildcard
-        + apply_guardrail_routes
         + mcp_inference_routes
         + litellm_native_routes
         + agent_routes
@@ -718,8 +712,6 @@ class LiteLLMRoutes(enum.Enum):
             "/tag/list",
             "/v1/models/{model_id}",
             "/models/{model_id}",
-            "/guardrails/list",
-            "/v2/guardrails/list",
             "/project/list",
             "/project/info",
             # Read-only search tool routes power the Search Tools UI page.
@@ -768,11 +760,6 @@ class LiteLLMRoutes(enum.Enum):
         # Invitation routes - org/team admins checked in endpoint via _user_has_admin_privileges
         "/invitation/new",
         "/invitation/delete",
-        # Team guardrail submission - requires team-scoped key; endpoint enforces team_id
-        "/guardrails/register",
-        # Team guardrail submissions - endpoint scopes results to caller's teams (non-admin)
-        "/guardrails/submissions",
-        "/guardrails/submissions/{guardrail_id}",
     ]  # routes that manage their own allowed/disallowed logic
 
     ## Org Admin Routes ##
@@ -841,8 +828,6 @@ class LiteLLMRoutes(enum.Enum):
             # Invitation viewing (admin viewer cannot create/delete; can read).
             "/invitation/info",
             # Guardrails / Policies pages (read-only views).
-            "/guardrails/list",
-            "/v2/guardrails/list",
             "/guardrails/submissions",
             "/guardrails/submissions/{guardrail_id}",
             "/guardrails/usage/overview",
