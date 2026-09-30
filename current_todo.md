@@ -1,4 +1,3 @@
-- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/common_request_processing.py` и `Backend/litellm/types/utils.py`.
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py`.
 - [ ] Удалить оставшиеся ссылки и типы Guardrails из ядра.
 - [ ] Удалить файлы Guardrails (директория `Backend/litellm/proxy/guardrails`, `Backend/litellm/types/guardrails.py`, и др.) (макс 3-5 файлов).
