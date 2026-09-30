@@ -1,5 +1,5 @@
-- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/proxy_server.py`.
-- [ ] Очистить ссылки на Guardrails в файлах конфигурации, роутерах и обработчиках (`route_llm_request.py`, `_types.py` и др.).
-- [ ] Удалить оставшиеся тесты Guardrails в директории `tests/` (макс 3-5 файлов).
-- [ ] Удалить файлы интеграций Guardrails (директория `Backend/litellm/proxy/guardrails/guardrail_hooks` и аналогичные) (Batch 1).
-- [ ] Удалить оставшиеся базовые классы и утилиты Guardrails (например, `guardrail_registry.py`) (Batch 2).
+- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/proxy_server.py`.
+- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/middleware/billable_request_metrics_middleware.py` и `Backend/litellm/proxy/_types.py`.
+- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/public_endpoints/public_endpoints.py`, `Backend/litellm/proxy/route_llm_request.py`, `Backend/litellm/types/llms/custom_http.py` и `Backend/litellm/__init__.py`.
+- [x] Очистить ссылки на RAG в `Backend/litellm/provider_endpoints_support_backup.json` и удалить оставшиеся тесты RAG.
+- [ ] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`, `Backend/litellm/types/rag.py`, `Backend/litellm/types/integrations/rag`) (макс 3-5 файлов).
