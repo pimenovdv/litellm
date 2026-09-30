@@ -417,7 +417,6 @@ class CallTypes(str, Enum):
     avector_store_search = "avector_store_search"
 
     ingest = "ingest"
-    aingest = "aingest"
     query = "query"
     aquery = "aquery"
 
