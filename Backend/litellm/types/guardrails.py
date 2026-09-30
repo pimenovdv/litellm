@@ -112,7 +112,6 @@ class SupportedGuardrailIntegrations(Enum):
     PROMPTGUARD = "promptguard"
     XECGUARD = "xecguard"
     PROMPT_SECURITY = "prompt_security"
-    GENERIC_GUARDRAIL_API = "generic_guardrail_api"
     QUALIFIRE = "qualifire"
     CUSTOM_CODE = "custom_code"
     OVALIX = "ovalix"
