@@ -4,7 +4,7 @@
 - [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 4 - openai, block_code_execution: 5 файлов)
 - [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 5 - tool_policy, root_hooks: 4 файла)
 - [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 6 - litellm_content_filter_1)
-- [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 7 - litellm_content_filter_2)
+- [x] Очистить ссылки на Guardrails в `Backend/litellm/proxy/guardrails` (Партия 7 - litellm_content_filter_2)
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/types/proxy/guardrails` (удалить файлы типов: макс 3-5 файлов)
 - [ ] Очистить ссылки на Guardrails в `Backend/litellm/proxy/pass_through_endpoints` и `Backend/litellm/proxy/example_config_yaml` (удалить файлы: макс 3-5 файлов)
 - [ ] Очистить ссылки на Guardrails в остальных файлах `Backend/litellm/proxy/` и `Backend/enterprise/` (удалить файлы: макс 3-5 файлов)
