@@ -417,6 +417,9 @@ class CallTypes(str, Enum):
     avector_store_search = "avector_store_search"
 
     ingest = "ingest"
+    aingest = "aingest"
+    query = "query"
+    aquery = "aquery"
 
     #########################################################
     # Container Call Types
@@ -1274,7 +1277,7 @@ class Message(SafeAttributeModel, OpenAIObject):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -1896,7 +1899,7 @@ class ModelResponseStream(ModelResponseBase):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -1995,7 +1998,7 @@ class ModelResponse(ModelResponseBase):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -2088,7 +2091,7 @@ class EmbeddingResponse(OpenAIObject):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -2139,7 +2142,7 @@ class TextChoices(OpenAIObject):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -2303,7 +2306,7 @@ class ImageObject(OpenAIImage):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -2409,7 +2412,7 @@ class ImageResponse(OpenAIImageResponse, BaseLiteLLMOpenAIResponseObject):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -2461,7 +2464,7 @@ class TranscriptionResponse(OpenAIObject):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -3660,7 +3663,7 @@ class LiteLLMBatch(Batch):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
@@ -3693,7 +3696,7 @@ class LiteLLMRealtimeStreamLoggingObject(LiteLLMPydanticObjectBase):
 
     def json(self, **kwargs):  # type: ignore
         try:
-            return self.model_dump()
+            return self.model_dump()  # noqa
         except Exception:
             # if using pydantic v1
             return self.dict()
