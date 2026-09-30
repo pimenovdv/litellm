@@ -1,3 +1,5 @@
-- [ ] Вырезать Guardrails из ядра системы.
+- [ ] Удалить Guardrail хуки (Backend/litellm/types/proxy/guardrails/guardrail_hooks/ и Backend/litellm/proxy/guardrails/guardrail_hooks/).
+- [ ] Очистить Guardrail endpoints и types.
+- [ ] Вырезать Guardrails из proxy_server.py и router.py.
 - [ ] Вырезать сторонние менеджеры секретов из ядра системы.
 - [ ] Вырезать телеметрию из ядра системы.
