@@ -2446,7 +2446,11 @@ async def openid_configuration(request: Request):
     # MCP servers and gateways (e.g. AWS Bedrock AgentCore Gateway) can resolve
     # the signing keys and verify liteLLM-issued tokens.
     try:
-        signer = None
+        from litellm.proxy.guardrails.guardrail_hooks.mcp_jwt_signer.mcp_jwt_signer import (
+            get_mcp_jwt_signer,
+        )
+
+        signer = get_mcp_jwt_signer()
         if signer is not None:
             request_base_url = get_request_base_url(request)
             if isinstance(response, dict):
@@ -2472,7 +2476,11 @@ async def jwks_json(request: Request):
     Returns an empty key set if MCPJWTSigner is not configured.
     """
     try:
-        signer = None
+        from litellm.proxy.guardrails.guardrail_hooks.mcp_jwt_signer.mcp_jwt_signer import (
+            get_mcp_jwt_signer,
+        )
+
+        signer = get_mcp_jwt_signer()
         if signer is not None:
             return JSONResponse(
                 content=signer.get_jwks(),
