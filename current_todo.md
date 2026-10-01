@@ -3,4 +3,3 @@
 - [ ] Удалить файлы интеграций Guardrails из `Backend/litellm/proxy/guardrails` (часть 1, макс 3-5 файлов).
 - [ ] Удалить файлы интеграций Guardrails из `Backend/litellm/proxy/guardrails` (часть 2, макс 3-5 файлов).
 - [ ] Очистить оставшиеся тесты и ссылки на Guardrails.
-termination_step

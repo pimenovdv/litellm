@@ -1,25 +1,29 @@
-import os  # noqa: E402
+import os
 import sys
 
 from dotenv import load_dotenv
 
 load_dotenv()
+import io
+import os
 
 # this file is to test litellm/proxy
 
 sys.path.insert(
     0, os.path.abspath("../..")
 )  # Adds the parent directory to the system path
-import logging  # noqa: E402
+import asyncio
+import logging
 
-import pytest  # noqa: E402
-from fastapi import Request  # noqa: E402
-from starlette.datastructures import URL, Headers  # noqa: E402
+import pytest
+from fastapi import Request
+from starlette.datastructures import URL, Headers, QueryParams
 
-from litellm.proxy._types import LiteLLMRoutes  # noqa: E402
-from litellm.proxy.auth.auth_utils import get_request_route  # noqa: E402
-from litellm.proxy.auth.route_checks import RouteChecks  # noqa: E402
-from litellm.proxy.proxy_server import app  # noqa: E402
+import litellm
+from litellm.proxy._types import LiteLLMRoutes
+from litellm.proxy.auth.auth_utils import get_request_route
+from litellm.proxy.auth.route_checks import RouteChecks
+from litellm.proxy.proxy_server import app
 
 # Configure logging
 logging.basicConfig(
@@ -109,6 +113,10 @@ def test_routes_on_litellm_proxy():
         ("/bedrock/model/cohere.command-r-v1:0/converse", True),
         ("/vertex-ai/model/text-embedding-004/embeddings", True),
         # LiteLLM native RAG routes
+        ("/rag/ingest", True),
+        ("/v1/rag/ingest", True),
+        ("/rag/query", True),
+        ("/v1/rag/query", True),
     ],
 )
 def test_is_llm_api_route(route: str, expected: bool):

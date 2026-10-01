@@ -1428,8 +1428,44 @@ def test_containers_routes_are_llm_api_routes(route):
     assert RouteChecks.is_llm_api_route(route) is True
 
 
+@pytest.mark.parametrize(
+    "route",
+    [
+        "/rag/ingest",
+        "/v1/rag/ingest",
+        "/rag/query",
+        "/v1/rag/query",
+    ],
+)
+def test_rag_routes_are_llm_api_routes(route):
+    """Test that RAG routes are recognized as LLM API routes (internal_user_viewer can access)"""
+
+    assert RouteChecks.is_llm_api_route(route) is True
 
 
+def test_rag_routes_accessible_to_internal_user_viewer():
+    """
+    Test that internal_user_viewer can access RAG routes (/rag/ingest, /rag/query).
+
+    internal_user_viewer should be able to call RAG endpoints like chat/completions
+    since they are LLM API routes. For /rag/ingest, they can only add to existing
+    vector stores (enforced in the endpoint).
+    """
+
+    valid_token = UserAPIKeyAuth(
+        user_id="test_user",
+        user_role=LitellmUserRoles.INTERNAL_USER_VIEW_ONLY.value,
+    )
+
+    for route in ["/rag/ingest", "/v1/rag/ingest", "/rag/query", "/v1/rag/query"]:
+        RouteChecks.non_proxy_admin_allowed_routes_check(
+            user_obj=None,
+            _user_role=LitellmUserRoles.INTERNAL_USER_VIEW_ONLY.value,
+            route=route,
+            request=MagicMock(spec=Request),
+            valid_token=valid_token,
+            request_data={},
+        )
 
 
 @pytest.mark.parametrize(
@@ -1640,7 +1676,7 @@ def test_proxy_admin_viewer_can_access_global_spend_tags():
 # Routes returning proxy-wide spend across every team / customer / api_key.
 # Sourced from `LiteLLMRoutes.global_spend_tracking_routes` so any future
 # additions to that list are exercised by these tests automatically.
-from litellm.proxy._types import LiteLLMRoutes  # noqa: E402
+from litellm.proxy._types import LiteLLMRoutes
 
 GLOBAL_SPEND_ROUTES = LiteLLMRoutes.global_spend_tracking_routes.value
 
@@ -2465,10 +2501,10 @@ def test_available_roles_accessible_to_non_admin_users(user_role):
 
 # ── _user_is_org_admin tests ──────────────────────────────────────────────────
 
-from datetime import datetime  # noqa: E402
+from datetime import datetime
 
-from litellm.proxy._types import LiteLLM_OrganizationMembershipTable  # noqa: E402
-from litellm.proxy.auth.auth_checks_organization import _user_is_org_admin  # noqa: E402
+from litellm.proxy._types import LiteLLM_OrganizationMembershipTable
+from litellm.proxy.auth.auth_checks_organization import _user_is_org_admin
 
 
 def _make_org_admin_user(org_id: str) -> LiteLLM_UserTable:
@@ -2560,7 +2596,7 @@ def test_org_admin_of_multiple_orgs_can_operate_on_both():
 
 
 # ── LIT-4221: /team/update org-context resolution from team_id ────────────────
-from litellm.proxy.auth.auth_checks_organization import (  # noqa: E402
+from litellm.proxy.auth.auth_checks_organization import (
     add_team_org_context_to_request_body,
 )
 
@@ -2752,7 +2788,7 @@ def test_patch_team_route_has_same_reach_as_team_update():
     """/team/{team_id} is reachable by org admins (in org_admin_allowed_routes) but
     NOT by regular internal users or the role-agnostic self_managed_routes — the
     latter would open /team/new (the collision footgun) to any authenticated user."""
-    from litellm.proxy._types import LiteLLMRoutes  # noqa: E402
+    from litellm.proxy._types import LiteLLMRoutes
 
     assert RouteChecks.check_route_access(
         route="/team/abc-123", allowed_routes=LiteLLMRoutes.org_admin_allowed_routes.value
@@ -2857,7 +2893,7 @@ async def test_initialize_pass_through_registers_wildcard_for_auth_subpath():
     - Dedup: calling init twice does not duplicate entries
     - Cleanup: removing the endpoint cleans up openai_routes
     """
-    from litellm.proxy._types import LiteLLMRoutes  # noqa: E402
+    from litellm.proxy._types import LiteLLMRoutes
     from litellm.proxy.pass_through_endpoints.pass_through_endpoints import (
         InitPassThroughEndpointHelpers,
         initialize_pass_through_endpoints,
