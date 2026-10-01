@@ -372,6 +372,8 @@ class RouteChecks:
         if RouteChecks.check_route_access(route=route, allowed_routes=LiteLLMRoutes.agent_routes.value):
             return True
 
+        # fuzzy match routes like "/v1/threads/thread_49EIN5QF32s4mH20M7GFKdlZ"
+        # Check for routes with placeholders or wildcard patterns
         for openai_route in LiteLLMRoutes.openai_routes.value:
             # Replace placeholders with regex pattern
             # placeholders are written as "/threads/{thread_id}"
