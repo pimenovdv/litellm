@@ -3,5 +3,5 @@
 - [x] Очистить ссылки на RAG в `Backend/litellm/proxy/public_endpoints/public_endpoints.py`, `Backend/litellm/proxy/route_llm_request.py`, `Backend/litellm/types/llms/custom_http.py` и `Backend/litellm/__init__.py`.
 - [x] Очистить ссылки на RAG в `Backend/litellm/provider_endpoints_support_backup.json` (удаляем только из json)
 - [x] Удалить файлы `Backend/litellm/types/rag.py` и `Backend/litellm/types/integrations/rag`.
-- [x] Удалить оставшиеся тесты RAG.
-- [x] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`).
+- [ ] Удалить оставшиеся тесты RAG.
+- [ ] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`).
