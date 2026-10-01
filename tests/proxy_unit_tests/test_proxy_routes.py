@@ -4,18 +4,22 @@ import sys
 from dotenv import load_dotenv
 
 load_dotenv()
+import io
+import os
 
 # this file is to test litellm/proxy
 
 sys.path.insert(
     0, os.path.abspath("../..")
 )  # Adds the parent directory to the system path
+import asyncio
 import logging
 
 import pytest
 from fastapi import Request
-from starlette.datastructures import URL, Headers
+from starlette.datastructures import URL, Headers, QueryParams
 
+import litellm
 from litellm.proxy._types import LiteLLMRoutes
 from litellm.proxy.auth.auth_utils import get_request_route
 from litellm.proxy.auth.route_checks import RouteChecks
@@ -54,6 +58,7 @@ def test_routes_on_litellm_proxy():
 
     _all_routes = []
     for route in app.routes:
+
         _path_as_str = str(route.path)
         if ":path" in _path_as_str:
             # remove the :path
@@ -75,9 +80,9 @@ def test_routes_on_litellm_proxy():
                 "/"
             )  # Remove the trailing * and any trailing /
             # Check if base path exists (e.g., /containers or /v1/containers)
-            assert base_path in _all_routes, (
-                f"Wildcard pattern {route} requires base path {base_path} to exist"
-            )
+            assert (
+                base_path in _all_routes
+            ), f"Wildcard pattern {route} requires base path {base_path} to exist"
         else:
             assert route in _all_routes
 
@@ -108,6 +113,10 @@ def test_routes_on_litellm_proxy():
         ("/bedrock/model/cohere.command-r-v1:0/converse", True),
         ("/vertex-ai/model/text-embedding-004/embeddings", True),
         # LiteLLM native RAG routes
+        ("/rag/ingest", True),
+        ("/v1/rag/ingest", True),
+        ("/rag/query", True),
+        ("/v1/rag/query", True),
     ],
 )
 def test_is_llm_api_route(route: str, expected: bool):
@@ -218,9 +227,9 @@ def test_get_request_route_not_bypassed_by_malformed_host(host_header: str):
             path=protected_path, host_header=host_header
         )
         result = get_request_route(request)
-        assert result == protected_path, (
-            f"Host: {host_header!r} caused route {protected_path!r} to resolve as {result!r}"
-        )
+        assert (
+            result == protected_path
+        ), f"Host: {host_header!r} caused route {protected_path!r} to resolve as {result!r}"
 
 
 # ---------------------------------------------------------------------------
