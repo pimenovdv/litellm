@@ -1,5 +1,5 @@
-- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/proxy_server.py`.
-- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/middleware/billable_request_metrics_middleware.py` и `Backend/litellm/proxy/_types.py`.
-- [x] Очистить ссылки на RAG в `Backend/litellm/proxy/public_endpoints/public_endpoints.py`, `Backend/litellm/proxy/route_llm_request.py`, `Backend/litellm/types/llms/custom_http.py` и `Backend/litellm/__init__.py`.
-- [x] Очистить ссылки на RAG в `Backend/litellm/provider_endpoints_support_backup.json` и удалить оставшиеся тесты RAG.
-- [ ] Удалить файлы RAG (директория `Backend/litellm/proxy/rag_endpoints`, `Backend/litellm/types/rag.py`, `Backend/litellm/types/integrations/rag`) (макс 3-5 файлов).
+- [ ] Очистить pyproject.toml бэкенда от неиспользуемых библиотек (например, старые зависимости Guardrails, телеметрии, неактуальных провайдеров).
+- [ ] Очистить requirements.txt бэкенда от неиспользуемых библиотек.
+- [ ] Очистить uv.lock бэкенда от неиспользуемых библиотек (перегенерация lock-файла после очистки pyproject).
+- [ ] Очистить package.json во фронтенде от неиспользуемых библиотек (например, неиспользуемые компоненты, старые инструменты сборки).
+- [ ] Запустить тесты для проверки корректности очистки зависимостей.
