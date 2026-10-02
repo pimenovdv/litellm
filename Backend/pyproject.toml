@@ -59,7 +59,6 @@ proxy = [
     "websockets>=15.0.1,<16.0",
                 "mcp>=1.28.1,<2.0",
     "litellm-proxy-extras==0.4.81",
-    "litellm-enterprise==0.1.52",
     "RestrictedPython>=8.1,<9.0",
     "rich>=13.9.4,<14.0",
     "InquirerPy>=0.3.4,<1.0",
@@ -257,7 +256,6 @@ exclude-newer = "3 days"
 
 [tool.uv.sources]
 litellm-proxy-extras = { path = "../litellm-proxy-extras" }
-litellm-enterprise = { path = "../enterprise" }
 
 [tool.isort]
 profile = "black"
