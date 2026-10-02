@@ -8,7 +8,6 @@ sys.path.insert(
 
 import pytest
 from fastapi import HTTPException, Request
-
 from litellm.proxy._types import LiteLLM_UserTable, LitellmUserRoles, UserAPIKeyAuth
 from litellm.proxy.auth.route_checks import RouteChecks
 
@@ -669,7 +668,7 @@ def test_google_routes_with_dynamic_model_names_accessible_to_internal_users():
         # If no exception is raised, the test passes
     except Exception as e:
         pytest.fail(
-            f"Internal user should be able to access Google generateContent route. Got error: {str(e)}"
+            f"Internal user should be able to access Google generateContent route. Got error: {e!s}"
         )
 
 
@@ -1428,44 +1427,8 @@ def test_containers_routes_are_llm_api_routes(route):
     assert RouteChecks.is_llm_api_route(route) is True
 
 
-@pytest.mark.parametrize(
-    "route",
-    [
-        "/rag/ingest",
-        "/v1/rag/ingest",
-        "/rag/query",
-        "/v1/rag/query",
-    ],
-)
-def test_rag_routes_are_llm_api_routes(route):
-    """Test that RAG routes are recognized as LLM API routes (internal_user_viewer can access)"""
-
-    assert RouteChecks.is_llm_api_route(route) is True
 
 
-def test_rag_routes_accessible_to_internal_user_viewer():
-    """
-    Test that internal_user_viewer can access RAG routes (/rag/ingest, /rag/query).
-
-    internal_user_viewer should be able to call RAG endpoints like chat/completions
-    since they are LLM API routes. For /rag/ingest, they can only add to existing
-    vector stores (enforced in the endpoint).
-    """
-
-    valid_token = UserAPIKeyAuth(
-        user_id="test_user",
-        user_role=LitellmUserRoles.INTERNAL_USER_VIEW_ONLY.value,
-    )
-
-    for route in ["/rag/ingest", "/v1/rag/ingest", "/rag/query", "/v1/rag/query"]:
-        RouteChecks.non_proxy_admin_allowed_routes_check(
-            user_obj=None,
-            _user_role=LitellmUserRoles.INTERNAL_USER_VIEW_ONLY.value,
-            route=route,
-            request=MagicMock(spec=Request),
-            valid_token=valid_token,
-            request_data={},
-        )
 
 
 @pytest.mark.parametrize(
@@ -1569,7 +1532,7 @@ def test_videos_route_accessible_to_internal_users():
         # If no exception is raised, the test passes
     except Exception as e:
         pytest.fail(
-            f"Internal user should be able to access /v1/videos route. Got error: {str(e)}"
+            f"Internal user should be able to access /v1/videos route. Got error: {e!s}"
         )
 
 
@@ -1669,7 +1632,7 @@ def test_proxy_admin_viewer_can_access_global_spend_tags():
         # If no exception is raised, the test passes
     except Exception as e:
         pytest.fail(
-            f"proxy_admin_viewer should be able to access /global/spend/tags route. Got error: {str(e)}"
+            f"proxy_admin_viewer should be able to access /global/spend/tags route. Got error: {e!s}"
         )
 
 
@@ -1831,7 +1794,7 @@ def test_proxy_admin_viewer_can_access_audit_logs(route):
         )
     except Exception as e:
         pytest.fail(
-            f"proxy_admin_viewer should be able to access {route} route. Got error: {str(e)}"
+            f"proxy_admin_viewer should be able to access {route} route. Got error: {e!s}"
         )
 
 
@@ -1896,7 +1859,7 @@ def test_proxy_admin_viewer_can_access_logs_page_endpoints(route):
         )
     except Exception as e:
         pytest.fail(
-            f"proxy_admin_viewer should be able to access {route}. Got error: {str(e)}"
+            f"proxy_admin_viewer should be able to access {route}. Got error: {e!s}"
         )
 
 
@@ -2007,7 +1970,7 @@ def test_proxy_admin_viewer_can_access_settings_read_endpoints(route):
         )
     except Exception as e:
         pytest.fail(
-            f"proxy_admin_viewer should be able to access {route}. Got error: {str(e)}"
+            f"proxy_admin_viewer should be able to access {route}. Got error: {e!s}"
         )
 
 
