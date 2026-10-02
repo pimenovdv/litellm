@@ -65,13 +65,13 @@ class TestOpenAIRealtimeRedaction:
         )
 
     def _call_kwargs(self):
-        return dict(
-            model="gpt-4",
-            websocket=AsyncMock(),
-            logging_obj=MagicMock(),
-            api_base="https://api.openai.com/",
-            api_key="test-key",
-        )
+        return {
+            "model": "gpt-4",
+            "websocket": AsyncMock(),
+            "logging_obj": MagicMock(),
+            "api_base": "https://api.openai.com/",
+            "api_key": "test-key",
+        }
 
     @pytest.mark.asyncio
     async def test_invalid_status_code_redacts_reason(self):

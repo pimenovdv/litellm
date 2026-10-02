@@ -8,7 +8,6 @@ sys.path.insert(
 
 import pytest
 from fastapi import HTTPException, Request
-
 from litellm.proxy._types import LiteLLM_UserTable, LitellmUserRoles, UserAPIKeyAuth
 from litellm.proxy.auth.route_checks import RouteChecks
 
@@ -669,7 +668,7 @@ def test_google_routes_with_dynamic_model_names_accessible_to_internal_users():
         # If no exception is raised, the test passes
     except Exception as e:
         pytest.fail(
-            f"Internal user should be able to access Google generateContent route. Got error: {str(e)}"
+            f"Internal user should be able to access Google generateContent route. Got error: {e!s}"
         )
 
 
@@ -1428,10 +1427,6 @@ def test_containers_routes_are_llm_api_routes(route):
     assert RouteChecks.is_llm_api_route(route) is True
 
 
-
-
-
-
 @pytest.mark.parametrize(
     "route",
     [
@@ -1533,7 +1528,7 @@ def test_videos_route_accessible_to_internal_users():
         # If no exception is raised, the test passes
     except Exception as e:
         pytest.fail(
-            f"Internal user should be able to access /v1/videos route. Got error: {str(e)}"
+            f"Internal user should be able to access /v1/videos route. Got error: {e!s}"
         )
 
 
@@ -1559,9 +1554,9 @@ def test_videos_route_with_virtual_key_llm_api_routes():
         result = RouteChecks.is_virtual_key_allowed_to_call_route(
             route=route, valid_token=valid_token
         )
-        assert (
-            result is True
-        ), f"Virtual key with llm_api_routes should be able to access {route}"
+        assert result is True, (
+            f"Virtual key with llm_api_routes should be able to access {route}"
+        )
 
 
 def test_non_proxy_admin_wildcard_allowed_routes():
@@ -1633,7 +1628,7 @@ def test_proxy_admin_viewer_can_access_global_spend_tags():
         # If no exception is raised, the test passes
     except Exception as e:
         pytest.fail(
-            f"proxy_admin_viewer should be able to access /global/spend/tags route. Got error: {str(e)}"
+            f"proxy_admin_viewer should be able to access /global/spend/tags route. Got error: {e!s}"
         )
 
 
@@ -1795,7 +1790,7 @@ def test_proxy_admin_viewer_can_access_audit_logs(route):
         )
     except Exception as e:
         pytest.fail(
-            f"proxy_admin_viewer should be able to access {route} route. Got error: {str(e)}"
+            f"proxy_admin_viewer should be able to access {route} route. Got error: {e!s}"
         )
 
 
@@ -1860,7 +1855,7 @@ def test_proxy_admin_viewer_can_access_logs_page_endpoints(route):
         )
     except Exception as e:
         pytest.fail(
-            f"proxy_admin_viewer should be able to access {route}. Got error: {str(e)}"
+            f"proxy_admin_viewer should be able to access {route}. Got error: {e!s}"
         )
 
 
@@ -1971,7 +1966,7 @@ def test_proxy_admin_viewer_can_access_settings_read_endpoints(route):
         )
     except Exception as e:
         pytest.fail(
-            f"proxy_admin_viewer should be able to access {route}. Got error: {str(e)}"
+            f"proxy_admin_viewer should be able to access {route}. Got error: {e!s}"
         )
 
 
@@ -2632,7 +2627,9 @@ def test_team_update_gate_allows_org_admin_with_resolved_org():
     """Post-resolution (organization_id present), an org admin of that org clears
     the gate for /team/update."""
     user_obj = _make_org_admin_user("org-1")
-    valid_token = UserAPIKeyAuth(user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value)
+    valid_token = UserAPIKeyAuth(
+        user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value
+    )
     request = MagicMock(spec=Request)
     request.method = "POST"
     request.query_params = {}
@@ -2652,7 +2649,9 @@ def test_team_update_gate_rejects_without_org_context():
     the gate still rejects /team/update — the fix adds no blanket allow. Guards
     against re-widening the route (e.g. dropping it into self_managed_routes)."""
     user_obj = _make_org_admin_user("org-1")
-    valid_token = UserAPIKeyAuth(user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value)
+    valid_token = UserAPIKeyAuth(
+        user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value
+    )
     request = MagicMock(spec=Request)
     request.method = "POST"
     request.query_params = {}
@@ -2672,7 +2671,9 @@ def test_team_update_gate_rejects_cross_org_admin_with_resolved_org():
     """Even after the target team's org is resolved, an org admin of a DIFFERENT
     org is rejected at the gate (no cross-org escalation)."""
     user_obj = _make_org_admin_user("org-1")
-    valid_token = UserAPIKeyAuth(user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value)
+    valid_token = UserAPIKeyAuth(
+        user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value
+    )
     request = MagicMock(spec=Request)
     request.method = "POST"
     request.query_params = {}
@@ -2755,7 +2756,8 @@ def test_patch_team_route_has_same_reach_as_team_update():
     from litellm.proxy._types import LiteLLMRoutes
 
     assert RouteChecks.check_route_access(
-        route="/team/abc-123", allowed_routes=LiteLLMRoutes.org_admin_allowed_routes.value
+        route="/team/abc-123",
+        allowed_routes=LiteLLMRoutes.org_admin_allowed_routes.value,
     )
     assert not RouteChecks.check_route_access(
         route="/team/abc-123", allowed_routes=LiteLLMRoutes.internal_user_routes.value
@@ -2776,7 +2778,9 @@ def test_patch_team_gate_allows_org_admin_with_resolved_org():
     """Post-resolution, an org admin of the team's org clears the coarse gate for
     PATCH /team/{team_id} — parity with /team/update."""
     user_obj = _make_org_admin_user("org-1")
-    valid_token = UserAPIKeyAuth(user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value)
+    valid_token = UserAPIKeyAuth(
+        user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value
+    )
 
     RouteChecks.non_proxy_admin_allowed_routes_check(
         user_obj=user_obj,
@@ -2797,7 +2801,9 @@ def test_patch_team_gate_rejects_regular_internal_user():
         user_role=LitellmUserRoles.INTERNAL_USER.value,
         organization_memberships=None,
     )
-    valid_token = UserAPIKeyAuth(user_id="regular-user", user_role=LitellmUserRoles.INTERNAL_USER.value)
+    valid_token = UserAPIKeyAuth(
+        user_id="regular-user", user_role=LitellmUserRoles.INTERNAL_USER.value
+    )
 
     with pytest.raises(Exception):
         RouteChecks.non_proxy_admin_allowed_routes_check(
@@ -2813,7 +2819,9 @@ def test_patch_team_gate_rejects_regular_internal_user():
 def test_patch_team_gate_rejects_cross_org_admin():
     """An org admin of a DIFFERENT org is rejected even after org resolution."""
     user_obj = _make_org_admin_user("org-1")
-    valid_token = UserAPIKeyAuth(user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value)
+    valid_token = UserAPIKeyAuth(
+        user_id="org-admin-user", user_role=LitellmUserRoles.INTERNAL_USER.value
+    )
 
     with pytest.raises(Exception):
         RouteChecks.non_proxy_admin_allowed_routes_check(
@@ -2833,7 +2841,9 @@ def test_patch_team_gate_rejects_view_only_admin():
         user_id="viewer",
         user_role=LitellmUserRoles.PROXY_ADMIN_VIEW_ONLY.value,
     )
-    valid_token = UserAPIKeyAuth(user_id="viewer", user_role=LitellmUserRoles.PROXY_ADMIN_VIEW_ONLY.value)
+    valid_token = UserAPIKeyAuth(
+        user_id="viewer", user_role=LitellmUserRoles.PROXY_ADMIN_VIEW_ONLY.value
+    )
 
     with pytest.raises(Exception):
         RouteChecks.non_proxy_admin_allowed_routes_check(
@@ -2976,9 +2986,9 @@ def test_legitimate_passthrough_routes_still_classified_as_llm_route(route):
     """Legitimate passthrough routes must still pass is_llm_api_route."""
     from litellm.proxy.auth.route_checks import RouteChecks
 
-    assert (
-        RouteChecks.is_llm_api_route(route=route) is True
-    ), f"{route!r} should be classified as an LLM API route"
+    assert RouteChecks.is_llm_api_route(route=route) is True, (
+        f"{route!r} should be classified as an LLM API route"
+    )
 
 
 @pytest.mark.parametrize(
