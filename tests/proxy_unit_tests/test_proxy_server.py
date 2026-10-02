@@ -2147,7 +2147,7 @@ async def test_model_info_alias_without_prisma(hidden):
 
     assert alias_found is (not hidden)
 
-    
+
 @pytest.mark.parametrize("hidden", [True, False])
 @pytest.mark.asyncio
 @pytest.mark.skip(reason="Requires reliable external DB connection (prisma).")

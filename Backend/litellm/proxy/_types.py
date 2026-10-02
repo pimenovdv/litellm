@@ -76,7 +76,6 @@ class SupportedDBObjectType(str, enum.Enum):
 
     MODELS = "models"
     MCP = "mcp"
-    GUARDRAILS = "guardrails"
     POLICIES = "policies"
     VECTOR_STORES = "vector_stores"
     PASS_THROUGH_ENDPOINTS = "pass_through_endpoints"
@@ -511,7 +510,6 @@ class LiteLLMRoutes(enum.Enum):
     ]
 
     apply_guardrail_routes = [
-        "/guardrails/apply_guardrail",
     ]
 
     llm_api_routes = (
@@ -841,11 +839,6 @@ class LiteLLMRoutes(enum.Enum):
             # Invitation viewing (admin viewer cannot create/delete; can read).
             "/invitation/info",
             # Guardrails / Policies pages (read-only views).
-            "/guardrails/list",
-            "/v2/guardrails/list",
-            "/guardrails/submissions",
-            "/guardrails/submissions/{guardrail_id}",
-            "/guardrails/usage/overview",
             "/policies/attachments/list",
             # MCP semantic filter settings (read).
             "/get/mcp_semantic_filter_settings",
@@ -929,7 +922,6 @@ class ProxyChatCompletionRequest(LiteLLMPydanticObjectBase):
     metadata: Optional[Dict[str, Any]] = None
 
     # Optional LiteLLM params
-    guardrails: Optional[List[str]] = None
     caching: Optional[bool] = None
     num_retries: Optional[int] = None
     context_window_fallback_dict: Optional[Dict[str, str]] = None
@@ -1055,7 +1047,6 @@ class GenerateRequestBase(LiteLLMPydanticObjectBase):
     model_tpm_limit: Optional[dict] = None
     mcp_rpm_limit: Optional[Dict[str, int]] = None
     tag_rpm_limit: Optional[dict[str, int]] = None
-    guardrails: Optional[List[str]] = None
     policies: Optional[List[str]] = None
     prompts: Optional[List[str]] = None
     blocked: Optional[bool] = None
@@ -1079,7 +1070,6 @@ class KeyRequestBase(GenerateRequestBase):
     key: Optional[str] = None
     budget_id: Optional[str] = None
     tags: Optional[List[str]] = None
-    disable_global_guardrails: Optional[bool] = None
     throttle_on_budget_exceeded: Optional[bool] = None
     enforced_params: Optional[List[str]] = None
     allowed_routes: Optional[list] = []
@@ -1770,12 +1760,10 @@ from litellm.models.team import TeamBase as TeamBase  # noqa: E402
 class NewTeamRequest(TeamBase):
     model_aliases: Optional[dict] = None
     tags: Optional[list] = None
-    guardrails: Optional[List[str]] = None
     policies: Optional[List[str]] = None
     prompts: Optional[List[str]] = None
     object_permission: Optional[LiteLLM_ObjectPermissionBase] = None
     allowed_passthrough_routes: Optional[list] = None
-    disable_global_guardrails: Optional[bool] = None
     secret_manager_settings: Optional[dict] = None
     model_rpm_limit: Optional[Dict[str, int]] = None
     rpm_limit_type: Optional[Literal["guaranteed_throughput", "best_effort_throughput"]] = (
@@ -1819,7 +1807,6 @@ class UpdateTeamRequest(LiteLLMPydanticObjectBase):
     models: Optional[list] = None
     blocked: Optional[bool] = None
     budget_duration: Optional[str] = None
-    guardrails: Optional[List[str]] = None
     policies: Optional[List[str]] = None
     """
 
@@ -1836,10 +1823,8 @@ class UpdateTeamRequest(LiteLLMPydanticObjectBase):
     budget_duration: Optional[str] = None
     tags: Optional[list] = None
     model_aliases: Optional[dict] = None
-    guardrails: Optional[List[str]] = None
     policies: Optional[List[str]] = None
     object_permission: Optional[LiteLLM_ObjectPermissionBase] = None
-    disable_global_guardrails: Optional[bool] = None
     team_member_budget: Optional[float] = None
     team_member_budget_duration: Optional[str] = None
     team_member_rpm_limit: Optional[int] = None
@@ -2038,25 +2023,8 @@ class DynamoDBArgs(LiteLLMPydanticObjectBase):
     assume_role_aws_session_name: Optional[str] = None
 
 
-class PassThroughGuardrailSettings(LiteLLMPydanticObjectBase):
-    """
-    Settings for a specific guardrail on a passthrough endpoint.
-
-    Allows field-level targeting for guardrail execution.
-    """
-
-    request_fields: Optional[List[str]] = Field(
-        default=None,
-        description="JSONPath expressions for input field targeting (pre_call). Examples: 'query', 'documents[*].text', 'messages[*].content'. If not specified, guardrail runs on entire request payload.",
-    )
-    response_fields: Optional[List[str]] = Field(
-        default=None,
-        description="JSONPath expressions for output field targeting (post_call). Examples: 'results[*].text', 'output'. If not specified, guardrail runs on entire response payload.",
-    )
 
 
-# Type alias for the guardrails dict: guardrail_name -> settings (or None for defaults)
-PassThroughGuardrailsConfig = Dict[str, Optional[PassThroughGuardrailSettings]]
 
 
 class PassThroughGenericEndpoint(LiteLLMPydanticObjectBase):
@@ -2089,10 +2057,6 @@ class PassThroughGenericEndpoint(LiteLLMPydanticObjectBase):
     auth: bool = Field(
         default=True,
         description="Whether authentication is required for the pass-through endpoint. Defaults to True so a pass-through silently created without an explicit value still requires a valid LiteLLM API key — set to False only if the endpoint is meant to be a public forwarder (e.g. an unauthenticated webhook target).",
-    )
-    guardrails: Optional[PassThroughGuardrailsConfig] = Field(
-        default=None,
-        description="Guardrails configuration for this passthrough endpoint. Dict keys are guardrail names, values are optional settings for field targeting. When set, all org/team/key level guardrails will also execute. Defaults to None (no guardrails execute).",
     )
     is_from_config: bool = Field(
         default=False,
@@ -2636,7 +2600,6 @@ class UserAPIKeyAuth(LiteLLM_VerificationTokenView):  # the expected response ob
     # per-request object_permission fetches in downstream checks (vector stores, etc.)
     team_object_permission: Optional[LiteLLM_ObjectPermissionTable] = None
     # Decoded upstream IdP claims (groups, roles, etc.) propagated by JWT auth machinery
-    # and forwarded into outbound tokens by guardrails such as MCPJWTSigner.
     jwt_claims: Optional[Dict] = None
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
@@ -2876,7 +2839,6 @@ class NewProjectRequest(LiteLLM_BudgetTable):
     budget_id: Optional[str] = None
     metadata: Optional[dict] = None
     tags: Optional[List[str]] = None
-    guardrails: Optional[List[str]] = None
     policies: Optional[List[str]] = None
     models: List[str] = []
     model_rpm_limit: Optional[dict] = None
@@ -2908,7 +2870,6 @@ class UpdateProjectRequest(LiteLLM_BudgetTable):
     team_id: Optional[str] = None
     metadata: Optional[dict] = None
     tags: Optional[List[str]] = None
-    guardrails: Optional[List[str]] = None
     policies: Optional[List[str]] = None
     models: Optional[List[str]] = None
     model_rpm_limit: Optional[dict] = None
@@ -3297,7 +3258,6 @@ class SpendLogsMetadata(TypedDict):
     spend_logs_metadata: Optional[dict]  # special param to log k,v pairs to spendlogs for a call
     requester_ip_address: Optional[str]
     litellm_call_id: Optional[str]
-    applied_guardrails: Optional[List[str]]
     mcp_tool_call_metadata: Optional[StandardLoggingMCPToolCall]
     vector_store_request_metadata: Optional[List[StandardLoggingVectorStoreRequest]]
     guardrail_information: Optional[List[StandardLoggingGuardrailInformation]]
@@ -4005,7 +3965,6 @@ class UserManagementEndpointParamDocStringEnums(str, enum.Enum):
     config_doc_str = """Optional[dict] - [DEPRECATED PARAM] User-specific config."""
     allowed_cache_controls_doc_str = """Optional[list] - List of allowed cache control values. Example - ["no-cache", "no-store"]. See all values - https://docs.litellm.ai/docs/proxy/caching#turn-on--off-caching-per-request-"""
     blocked_doc_str = """Optional[bool] - [Not Implemented Yet] Whether the user is blocked."""
-    guardrails_doc_str = """Optional[List[str]] - [Not Implemented Yet] List of active guardrails for the user"""
     permissions_doc_str = (
         """Optional[dict] - [Not Implemented Yet] User-specific permissions, eg. turning off pii masking."""
     )
@@ -4055,8 +4014,6 @@ LiteLLM_ManagementEndpoint_MetadataFields = [
 ]
 
 LiteLLM_ManagementEndpoint_MetadataFields_Premium = [
-    "disable_global_guardrails",
-    "guardrails",
     "policies",
     "tags",
     "team_member_key_duration",

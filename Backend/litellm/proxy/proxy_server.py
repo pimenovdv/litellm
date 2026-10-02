@@ -242,7 +242,6 @@ from litellm.constants import (
     PROXY_CONFIG_RELOAD_INTERVAL_SECONDS,
 )
 from litellm.exceptions import RejectedRequestError
-from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
@@ -347,10 +346,6 @@ from litellm.proxy.discovery_endpoints import ui_discovery_endpoints_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import router as fine_tuning_router
 from litellm.proxy.fine_tuning_endpoints.endpoints import set_fine_tuning_config
 from litellm.proxy.google_endpoints.endpoints import router as google_router
-from litellm.proxy.guardrails.init_guardrails import (
-    init_guardrails_v2,
-    initialize_guardrails,
-)
 from litellm.proxy.health_check import (
     health_check_filter_kwargs_from_general_settings,
     perform_health_check,
@@ -3488,24 +3483,6 @@ def _is_remote_module_url(value: Any) -> bool:
     return isinstance(value, str) and (value.startswith("s3://") or value.startswith("gcs://"))
 
 
-def _scrub_guardrail_inner(inner: Dict[str, Any]) -> None:
-    """Strip remote-URL entries from a guardrail's ``callbacks`` list
-    and ``guardrail`` (v2 module-path) field. Mutates in place."""
-    cbs = inner.get("callbacks")
-    if isinstance(cbs, list):
-        cleaned = [c for c in cbs if not _is_remote_module_url(c)]
-        if len(cleaned) != len(cbs):
-            verbose_proxy_logger.warning(
-                "Refused %d remote-URL entries from DB-overlay litellm_settings.guardrails[...].callbacks",
-                len(cbs) - len(cleaned),
-            )
-            inner["callbacks"] = cleaned
-    if _is_remote_module_url(inner.get("guardrail")):
-        verbose_proxy_logger.warning(
-            "Refused remote-URL guardrail module from DB-overlay litellm_settings.guardrails[...].guardrail: %r",
-            inner.get("guardrail"),
-        )
-        inner["guardrail"] = None
 
 
 def _scrub_db_overlay_remote_module_loads(section: str, db_value: Any) -> Any:
@@ -3565,18 +3542,7 @@ def _scrub_db_overlay_remote_module_loads(section: str, db_value: Any) -> Any:
     # ``callbacks`` (a list) or ``guardrail`` (a single dotted name)
     # that flow into ``get_instance_fn`` during config load.
     if section == "litellm_settings":
-        guardrails = sanitized.get("guardrails")
-        if isinstance(guardrails, list):
-            for entry in guardrails:
-                if not isinstance(entry, dict):
-                    continue
-                for inner in entry.values():
-                    if not isinstance(inner, dict):
-                        continue
-                    _scrub_guardrail_inner(inner)
-                lp = entry.get("litellm_params")
-                if isinstance(lp, dict):
-                    _scrub_guardrail_inner(lp)
+        pass
 
     # ``general_settings.litellm_jwtauth.custom_validate`` is a nested
     # string field.
@@ -6175,8 +6141,6 @@ class ProxyConfig:
 
         ex. Vector Stores, Guardrails, MCP tools, etc.
         """
-        if self._should_load_db_object(object_type="guardrails"):
-            await self._init_guardrails_in_db(prisma_client=prisma_client)
 
         if self._should_load_db_object(object_type="policies"):
             await self._init_policies_in_db(prisma_client=prisma_client)
@@ -8966,45 +8930,6 @@ async def chat_completion(
             return model_dump_with_preserved_fields(result, exclude_unset=True)
         else:
             return result
-    except ModifyResponseException as e:
-        # Guardrail flagged content in passthrough mode - return 200 with violation message
-        _data = e.request_data
-        # Capture logging_obj before post_call_failure_hook pops it from _data.
-        _logging_obj = _data.get("litellm_logging_obj")
-        await proxy_logging_obj.post_call_failure_hook(
-            user_api_key_dict=user_api_key_dict,
-            original_exception=e,
-            request_data=_data,
-        )
-        _chat_response = litellm.ModelResponse()
-        _chat_response.model = e.model  # type: ignore
-        _chat_response.choices[0].message.content = e.message  # type: ignore
-        _chat_response.choices[0].finish_reason = "content_filter"  # type: ignore
-        # Report the blocked LLM response's real usage (set before the stream
-        # branch so both paths carry it); zero for pre-call blocks.
-        _chat_response.usage = _blocked_response_usage(e.original_response)  # type: ignore
-
-        if data.get("stream", None) is not None and data["stream"] is True:
-            _iterator = litellm.utils.ModelResponseIterator(model_response=_chat_response, convert_to_delta=True)
-            _streaming_response = litellm.CustomStreamWrapper(
-                completion_stream=_iterator,
-                model=e.model,
-                custom_llm_provider="cached_response",
-                logging_obj=_logging_obj,
-            )
-            selected_data_generator = select_data_generator(
-                response=_streaming_response,
-                user_api_key_dict=user_api_key_dict,
-                request_data=_data,
-                request=request,
-            )
-
-            return StreamingResponse(
-                selected_data_generator,
-                media_type="text/event-stream",
-                status_code=200,  # Return 200 for passthrough mode
-            )
-        return _chat_response
     except RejectedRequestError as e:
         _data = e.request_data
         await proxy_logging_obj.post_call_failure_hook(
@@ -9118,48 +9043,6 @@ async def completion(
             user_api_base=user_api_base,
             version=version,
         )
-    except ModifyResponseException as e:
-        # Guardrail flagged content in passthrough mode - return 200 with violation message
-        _data = e.request_data
-        await proxy_logging_obj.post_call_failure_hook(
-            user_api_key_dict=user_api_key_dict,
-            original_exception=e,
-            request_data=_data,
-        )
-
-        if _data.get("stream", None) is not None and _data["stream"] is True:
-            _text_response = litellm.ModelResponse()
-            # Set text attribute dynamically for text completion format
-            setattr(_text_response.choices[0], "text", e.message)
-            _text_response.model = e.model  # type: ignore[assignment]
-            _usage = _blocked_response_usage(e.original_response)
-            # Set usage attribute dynamically (ModelResponse accepts usage in __init__ but it's not in type definition)
-            setattr(_text_response, "usage", _usage)
-            _iterator = litellm.utils.ModelResponseIterator(model_response=_text_response, convert_to_delta=True)
-            _streaming_response = litellm.TextCompletionStreamWrapper(
-                completion_stream=_iterator,
-                model=e.model,
-            )
-
-            selected_data_generator = select_data_generator(
-                response=_streaming_response,
-                user_api_key_dict=user_api_key_dict,
-                request_data=_data,
-                request=request,
-            )
-
-            return StreamingResponse(
-                selected_data_generator,
-                media_type="text/event-stream",
-                status_code=200,  # Return 200 for passthrough mode
-            )
-        else:
-            _response = litellm.TextCompletionResponse()
-            _response.choices[0].text = e.message
-            _response.model = e.model  # type: ignore
-            _usage = _blocked_response_usage(e.original_response)
-            _response.usage = _usage  # type: ignore
-            return _response
     except RejectedRequestError as e:
         _data = e.request_data
         await proxy_logging_obj.post_call_failure_hook(

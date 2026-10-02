@@ -215,8 +215,6 @@ overwrite_user_with_key_hash: bool = (
     False  # force the outgoing `user` param to the hashed api key, so providers see a stable, tamper-proof id
 )
 store_audit_logs = False  # Enterprise feature, allow users to see audit logs
-skip_system_message_in_guardrail: bool = False
-skip_tool_message_in_guardrail: bool = False
 ### end of callbacks #############
 
 email: Optional[str] = (
@@ -338,16 +336,6 @@ WATSONX_DEFAULT_API_VERSION = "2024-03-13"
 COHERE_DEFAULT_EMBEDDING_INPUT_TYPE: "COHERE_EMBEDDING_INPUT_TYPES" = "search_document"
 ### CREDENTIALS ###
 credential_list: List["CredentialItem"] = []
-### GUARDRAILS ###
-llamaguard_model_name: Optional[str] = None
-openai_moderations_model_name: Optional[str] = None
-presidio_ad_hoc_recognizers: Optional[str] = None
-google_moderation_confidence_threshold: Optional[float] = None
-llamaguard_unsafe_content_categories: Optional[str] = None
-blocked_user_list: Optional[Union[str, List]] = None
-banned_keywords_list: Optional[Union[str, List]] = None
-llm_guard_mode: Literal["all", "key-specific", "request-specific"] = "all"
-guardrail_name_config_map: Dict[str, GuardrailItem] = {}
 include_cost_in_streaming_usage: bool = False
 reasoning_auto_summary: bool = False
 ### PROMPTS ####
