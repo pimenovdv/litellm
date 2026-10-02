@@ -76,7 +76,6 @@ class TestOpenAIRealtimeRedaction:
     @pytest.mark.asyncio
     async def test_invalid_status_code_redacts_reason(self):
         import websockets.exceptions
-
         from litellm.llms.openai.realtime.handler import OpenAIRealtime
 
         handler = OpenAIRealtime()
@@ -118,7 +117,6 @@ class TestAzureRealtimeRedaction:
     @pytest.mark.asyncio
     async def test_invalid_status_code_redacts_reason(self):
         import websockets.exceptions
-
         from litellm.llms.azure.realtime.handler import AzureOpenAIRealtime
 
         handler = AzureOpenAIRealtime()
@@ -154,7 +152,7 @@ class TestBedrockRealtimeRedaction:
         secret_error = RuntimeError(
             "Failed with aws_secret_access_key=AKIAIOSFODNN7EXAMPLE123456"
         )
-        reason = _redact_string(f"Internal error: {str(secret_error)}")
+        reason = _redact_string(f"Internal error: {secret_error!s}")
         assert "AKIAIOSFODNN7EXAMPLE123456" not in reason
 
 
@@ -188,7 +186,3 @@ class TestProxyStreamingDataGeneratorRedaction:
         assert "sk-1234567890abcdefghij" not in redacted_tb
         assert "Traceback" in redacted_tb
         assert "RuntimeError" in redacted_tb
-
-
-
-
