@@ -10,31 +10,30 @@ sys.path.insert(
     0, os.path.abspath("../../..")
 )  # Adds the parent directory to the system path
 
-import pytest
-from fastapi import status
-
 import litellm
 import litellm.proxy.proxy_server
+import pytest
+from fastapi import status
 from litellm.caching.dual_cache import DualCache
 from litellm.proxy._types import (
-    LiteLLMRoutes,
-    LiteLLM_JWTAuth,
+    JWTRoutingOverride,
     LiteLLM_BudgetTable,
     LiteLLM_EndUserTable,
+    LiteLLM_JWTAuth,
     LiteLLM_UserTable,
+    LiteLLMRoutes,
     LitellmUserRoles,
     ProxyErrorTypes,
     ProxyException,
     UserAPIKeyAuth,
-    JWTRoutingOverride,
 )
+from litellm.proxy.auth.auth_checks import _cache_key_object, get_key_object
 from litellm.proxy.auth.handle_jwt import JWTHandler
-from litellm.proxy.auth.auth_checks import get_key_object, _cache_key_object
 from litellm.proxy.auth.route_checks import RouteChecks
 from litellm.proxy.auth.user_api_key_auth import (
     _check_key_model_budget_with_fallback,
-    _PendingAutoRegister,
     _matches_routing_override,
+    _PendingAutoRegister,
     _reserve_budget_after_common_checks,
     _route_requires_auth_despite_public,
     _routing_selector_matches_claim,
@@ -449,13 +448,12 @@ async def test_user_custom_auth_skips_post_custom_auth_checks_by_default():
     The outer gate (litellm.enable_post_custom_auth_checks, default False) must
     short-circuit that call so the fast path returns the validated token unchanged.
     """
-    from fastapi import Request
-    from starlette.datastructures import URL
-
     import litellm
     import litellm.proxy.proxy_server as _proxy_server_mod
+    from fastapi import Request
     from litellm.proxy._types import LitellmUserRoles
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
+    from starlette.datastructures import URL
 
     trusted_token = UserAPIKeyAuth(
         api_key="sk-custom-auth-trusted",
@@ -507,13 +505,12 @@ async def test_user_custom_auth_runs_post_custom_auth_checks_when_opt_in():
     must invoke _run_post_custom_auth_checks so deployments that rely on the
     v1.82.6 DB-lookup behavior keep working after an explicit opt-in.
     """
-    from fastapi import Request
-    from starlette.datastructures import URL
-
     import litellm
     import litellm.proxy.proxy_server as _proxy_server_mod
+    from fastapi import Request
     from litellm.proxy._types import LitellmUserRoles
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
+    from starlette.datastructures import URL
 
     trusted_token = UserAPIKeyAuth(
         api_key="sk-custom-auth-trusted",
@@ -564,13 +561,12 @@ async def test_enterprise_custom_auth_skips_post_custom_auth_checks_by_default()
     enterprise_custom_auth branch. Greptile explicitly asked for both branches to
     be covered in PR #24589 and the fix touches both return paths.
     """
-    from fastapi import Request
-    from starlette.datastructures import URL
-
     import litellm
     import litellm.proxy.proxy_server as _proxy_server_mod
+    from fastapi import Request
     from litellm.proxy._types import LitellmUserRoles
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
+    from starlette.datastructures import URL
 
     trusted_token = UserAPIKeyAuth(
         api_key="sk-enterprise-custom-auth-trusted",
@@ -627,13 +623,12 @@ async def test_enterprise_custom_auth_runs_post_custom_auth_checks_when_opt_in()
     set, _run_post_custom_auth_checks must still fire so users who depend on the
     v1.82.6 behavior have a working migration path.
     """
-    from fastapi import Request
-    from starlette.datastructures import URL
-
     import litellm
     import litellm.proxy.proxy_server as _proxy_server_mod
+    from fastapi import Request
     from litellm.proxy._types import LitellmUserRoles
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
+    from starlette.datastructures import URL
 
     trusted_token = UserAPIKeyAuth(
         api_key="sk-enterprise-custom-auth-trusted",
@@ -1013,18 +1008,6 @@ def test_route_checks_is_llm_api_route():
             route=route
         ), f"Route {route} should be identified as LLM API route"
 
-    # Test LiteLLM native RAG routes
-    rag_routes = [
-        "/rag/ingest",
-        "/v1/rag/ingest",
-        "/rag/query",
-        "/v1/rag/query",
-    ]
-    for route in rag_routes:
-        assert RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should be identified as LLM API route"
-
     # Test routes with placeholders
     placeholder_routes = [
         "/v1/threads/thread_49EIN5QF32s4mH20M7GFKdlZ",
@@ -1103,8 +1086,6 @@ async def test_proxy_admin_expired_key_from_cache():
     from datetime import datetime, timedelta, timezone
 
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy._types import (
         LitellmUserRoles,
         ProxyErrorTypes,
@@ -1113,6 +1094,7 @@ async def test_proxy_admin_expired_key_from_cache():
     )
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
     from litellm.proxy.proxy_server import hash_token
+    from starlette.datastructures import URL
 
     # Create an expired PROXY_ADMIN key
     api_key = "sk-test-proxy-admin-key"
@@ -1242,10 +1224,9 @@ async def test_scim_deactivated_user_key_is_rejected():
     rejected by the auth flow (defense in depth on top of key-level blocking).
     """
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
     from litellm.proxy.proxy_server import hash_token
+    from starlette.datastructures import URL
 
     api_key = "sk-scim-deactivated-user-key"
     hashed_key = hash_token(api_key)
@@ -1310,18 +1291,17 @@ async def test_scim_deactivated_user_key_is_rejected():
                 "litellm.proxy.auth.user_api_key_auth.get_user_object",
                 new_callable=AsyncMock,
                 return_value=deactivated_user,
-            ),
+            ),pytest.raises(ProxyException) as exc_info
         ):
-            with pytest.raises(ProxyException) as exc_info:
-                await _user_api_key_auth_builder(
-                    request=request,
-                    api_key=f"Bearer {api_key}",
-                    azure_api_key_header="",
-                    anthropic_api_key_header=None,
-                    google_ai_studio_api_key_header=None,
-                    azure_apim_header=None,
-                    request_data={},
-                )
+            await _user_api_key_auth_builder(
+                request=request,
+                api_key=f"Bearer {api_key}",
+                azure_api_key_header="",
+                anthropic_api_key_header=None,
+                google_ai_studio_api_key_header=None,
+                azure_apim_header=None,
+                request_data={},
+            )
 
         assert "deactivated via SCIM" in str(exc_info.value.message)
     finally:
@@ -1336,10 +1316,9 @@ async def test_cached_proxy_admin_key_sets_via_virtual_key_marker():
     the cache-hit boundary must restore it or cached admin traffic silently
     bypasses overwrite_user_with_key_hash stamping."""
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
     from litellm.proxy.proxy_server import hash_token
+    from starlette.datastructures import URL
 
     api_key = "sk-cached-admin-marker-test"
     hashed_key = hash_token(api_key)
@@ -1420,10 +1399,9 @@ async def test_master_key_auth_sets_via_virtual_key_marker():
     the auth path substitutes the stable alias for api_key and must mark the
     result as proxy-validated."""
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.constants import LITELLM_PROXY_MASTER_KEY_ALIAS
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
+    from starlette.datastructures import URL
 
     master_key = "sk-master-key"
 
@@ -1489,10 +1467,9 @@ async def test_db_virtual_key_auth_sets_via_virtual_key_marker():
     forge-stripped from validated input, so the DB auth path setting it by
     post-construction assignment is the only thing that turns stamping on."""
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
     from litellm.proxy.proxy_server import hash_token
+    from starlette.datastructures import URL
 
     api_key = "sk-via-virtual-key-marker-test"
     hashed_key = hash_token(api_key)
@@ -2689,11 +2666,10 @@ async def test_user_api_key_auth_builder_no_blocking_calls():
     the hot auth path — those methods call Redis synchronously and block the
     event loop. Only async_* variants are allowed.
     """
-    from starlette.datastructures import URL
-    from starlette.requests import Request
-
     from litellm.proxy._types import LitellmUserRoles, UserAPIKeyAuth
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
+    from starlette.datastructures import URL
+    from starlette.requests import Request
 
     _blocking_methods = [
         "set_cache",
@@ -2821,15 +2797,14 @@ async def test_team_metadata_refreshed_from_team_object_during_auth():
     at the "Check 6" team-auth step in _user_api_key_auth_builder, so stale
     team_metadata persisted for the lifetime of the key cache entry.
     """
-    from starlette.datastructures import URL
-    from starlette.requests import Request
-
     from litellm.proxy._types import (
         LiteLLM_TeamTableCachedObj,
         LitellmUserRoles,
         UserAPIKeyAuth,
     )
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
+    from starlette.datastructures import URL
+    from starlette.requests import Request
 
     api_key = "sk-test-team-metadata-refresh"
 
@@ -3160,11 +3135,10 @@ async def test_centralized_common_checks_tolerates_db_errors_when_fetching_conte
     objects so enforcement runs against whatever the token recorded."""
     import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy.auth.auth_exception_handler import (
         DB_UNAVAILABLE_FALLBACK_USER_ID,
     )
+    from starlette.datastructures import URL
 
     token = UserAPIKeyAuth(
         api_key="fallback",
@@ -3341,9 +3315,8 @@ async def test_centralized_common_checks_short_circuits_when_master_key_unset():
     route for a test/dev setup that was previously wide-open."""
     import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy._types import LitellmUserRoles
+    from starlette.datastructures import URL
 
     token = UserAPIKeyAuth(
         api_key="sk-test", user_id="u", user_role=LitellmUserRoles.INTERNAL_USER
@@ -3619,12 +3592,11 @@ async def test_centralized_common_checks_team_404_does_not_zero_other_contexts()
     project enforcement whenever the token's team_id was stale."""
     import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import HTTPException, Request
-    from starlette.datastructures import URL
-
     from litellm.proxy._types import (
         LiteLLM_EndUserTable,
         LiteLLM_ProjectTableCachedObj,
     )
+    from starlette.datastructures import URL
 
     token = UserAPIKeyAuth(
         api_key="sk-test",
@@ -3715,13 +3687,12 @@ async def test_centralized_common_checks_user_http_exception_isolates_to_user_on
     common_checks intact so their enforcement still runs."""
     import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import HTTPException, Request
-    from starlette.datastructures import URL
-
     from litellm.proxy._types import (
         LiteLLM_EndUserTable,
         LiteLLM_ProjectTableCachedObj,
         LiteLLM_TeamTableCachedObj,
     )
+    from starlette.datastructures import URL
 
     token = UserAPIKeyAuth(
         api_key="sk-test",
@@ -3813,9 +3784,8 @@ async def test_centralized_common_checks_backfills_org_id_from_team(key_org_id, 
     explicitly pinned org_id must win over the team's org."""
     import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy._types import LiteLLM_TeamTableCachedObj
+    from starlette.datastructures import URL
 
     token = UserAPIKeyAuth(api_key="sk-test", user_id="u", team_id="t1", org_id=key_org_id)
     request = Request(scope={"type": "http"})
@@ -3865,10 +3835,9 @@ async def test_cli_session_token_org_backfilled_from_team(monkeypatch):
     the same way the SQL view does for DB keys."""
     import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy._types import LiteLLM_TeamTableCachedObj, LiteLLM_UserTable
     from litellm.proxy.auth.auth_checks import ExperimentalUIJWTToken
+    from starlette.datastructures import URL
 
     monkeypatch.setenv("LITELLM_SALT_KEY", "sk-test-salt-lit4688")
 
@@ -3966,14 +3935,12 @@ async def test_master_key_auth_substitutes_alias_for_api_key():
     would propagate downstream and be hashed into spend logs, Prometheus
     ``/metrics`` labels, or audit trails) and never the master-key hash.
     """
+    import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.constants import LITELLM_PROXY_MASTER_KEY_ALIAS
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
     from litellm.proxy.utils import hash_token
-
-    import litellm.proxy.proxy_server as _proxy_server_mod
+    from starlette.datastructures import URL
 
     attrs = _proxy_server_attrs_for_custom_auth(user_custom_auth=None)
     master_key = attrs["master_key"]
@@ -4014,10 +3981,9 @@ async def test_user_api_key_auth_sets_end_user_id_when_builder_skips_it():
     Krrish flagged the removal of this fallback as a regression risk; this
     test pins the behaviour so future refactors don't silently drop it.
     """
+    import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import Request
     from starlette.datastructures import URL
-
-    import litellm.proxy.proxy_server as _proxy_server_mod
 
     builder_token = UserAPIKeyAuth(api_key="sk-test", user_id="u1")
     # builder did NOT set end_user_id (e.g. master_key=None early return)
@@ -4072,10 +4038,9 @@ async def test_user_api_key_auth_does_not_overwrite_end_user_id_set_by_builder()
     path), the wrapper-level safety net must not run a second resolution
     pass — that would re-extract from the request body and could
     overwrite a value the builder explicitly chose to set."""
+    import litellm.proxy.proxy_server as _proxy_server_mod
     from fastapi import Request
     from starlette.datastructures import URL
-
-    import litellm.proxy.proxy_server as _proxy_server_mod
 
     builder_token = UserAPIKeyAuth(
         api_key="sk-test", user_id="u1", end_user_id="builder-resolved-id"
@@ -4150,11 +4115,10 @@ async def _run_builder_with_key_lookup(get_key_object_mock):
     """Drive the real auth builder with ``get_key_object`` replaced by the
     given mock. Returns the builder result. Patches ``seed_request_identity``
     so the failure path doesn't touch OTEL."""
-    from fastapi import Request
-    from starlette.datastructures import URL
-
     import litellm.proxy.proxy_server as _proxy_server_mod
+    from fastapi import Request
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
+    from starlette.datastructures import URL
 
     attrs = _proxy_attrs_for_db_lookup()
     originals = {a: getattr(_proxy_server_mod, a, None) for a in attrs}
@@ -4531,14 +4495,13 @@ async def test_auth_path_caches_team_object_under_canonical_team_id_key():
     the write site to the raw ``valid_token.team_id`` (or ``None``) makes the
     canonical-key read miss and fails this test.
     """
-    from fastapi import Request
-    from starlette.datastructures import URL
-
     import litellm.proxy.proxy_server as _proxy_server_mod
+    from fastapi import Request
     from litellm.proxy._types import LiteLLM_TeamTableCachedObj
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
     from litellm.proxy.common_utils.user_api_key_cache import UserApiKeyCache
     from litellm.proxy.proxy_server import hash_token
+    from starlette.datastructures import URL
 
     team_id = "team-lit-4000"
     api_key = "sk-lit-4000-team-key"
@@ -4623,13 +4586,12 @@ async def test_auth_does_not_rewrite_cached_key_object_back_into_cache():
     Only the DB-load paths (IdentityStore._resolve_key / get_key_object) may
     populate the cache.
     """
-    from fastapi import Request
-    from starlette.datastructures import URL
-
     import litellm.proxy.proxy_server as _proxy_server_mod
+    from fastapi import Request
     from litellm.proxy.auth.user_api_key_auth import _user_api_key_auth_builder
     from litellm.proxy.common_utils.user_api_key_cache import UserApiKeyCache
     from litellm.proxy.proxy_server import hash_token
+    from starlette.datastructures import URL
 
     api_key = "sk-lit-cached-key-no-rewrite"
     hashed_key = hash_token(api_key)
@@ -4910,17 +4872,16 @@ class TestCheckKeyModelBudgetWithFallback:
                 param="model",
                 code=status.HTTP_403_FORBIDDEN,
             ),
-        ):
-            with pytest.raises(litellm.BudgetExceededError) as exc_info:
-                await _check_key_model_budget_with_fallback(
-                    valid_token=valid_token,
-                    model_max_budget_limiter=limiter,
-                    model_name="gpt-4o",
-                    request_data=request_data,
-                    request=request,
-                    llm_model_list=None,
-                    llm_router=None,
-                )
+        ), pytest.raises(litellm.BudgetExceededError) as exc_info:
+            await _check_key_model_budget_with_fallback(
+                valid_token=valid_token,
+                model_max_budget_limiter=limiter,
+                model_name="gpt-4o",
+                request_data=request_data,
+                request=request,
+                llm_model_list=None,
+                llm_router=None,
+            )
 
         assert exc_info.value is original_error
         assert request_data["model"] == "gpt-4o"
@@ -4979,17 +4940,16 @@ class TestCheckKeyModelBudgetWithFallback:
         with patch(
             "litellm.proxy.auth.user_api_key_auth.can_key_call_model",
             return_value=True,
-        ):
-            with pytest.raises(litellm.BudgetExceededError) as exc_info:
-                await _check_key_model_budget_with_fallback(
-                    valid_token=valid_token,
-                    model_max_budget_limiter=limiter,
-                    model_name="gpt-4o",
-                    request_data=request_data,
-                    request=request,
-                    llm_model_list=None,
-                    llm_router=None,
-                )
+        ), pytest.raises(litellm.BudgetExceededError) as exc_info:
+            await _check_key_model_budget_with_fallback(
+                valid_token=valid_token,
+                model_max_budget_limiter=limiter,
+                model_name="gpt-4o",
+                request_data=request_data,
+                request=request,
+                llm_model_list=None,
+                llm_router=None,
+            )
 
         assert exc_info.value is original_error
         assert request_data["model"] == "gpt-4o"

@@ -1,7 +1,7 @@
 """Path allowlist for the gateway component.
 
 The gateway exposes the LLM data-plane surface: chat/completions, embeddings,
-audio, batches, files, fine-tuning, rerank, ocr, rag, video, search, image,
+audio, batches, files, fine-tuning, rerank, ocr, video, search, image,
 responses, vector stores, passthrough providers, realtime websockets, MCP
 tool-call endpoints, and operational endpoints (/health, /metrics).
 
@@ -60,8 +60,6 @@ GATEWAY_PATH_PREFIXES: tuple[str, ...] = (
     "/rerank",
     "/v1/ocr",
     "/ocr",
-    "/v1/rag/",
-    "/rag/",
     "/v1/video",
     "/v1/videos",
     "/video/",
