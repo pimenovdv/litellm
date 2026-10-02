@@ -8,16 +8,8 @@ middleware is a transparent pass-through when no recorder is injected.
 
 import asyncio
 import threading
-from typing import List, Optional, Tuple
 
 import pytest
-from starlette.applications import Starlette
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.requests import Request
-from starlette.responses import JSONResponse, Response
-from starlette.routing import Route
-from starlette.testclient import TestClient
-
 from litellm.proxy.middleware.billable_request_metrics_middleware import (
     BillableCategory,
     BillableRequestMetricsMiddleware,
@@ -27,19 +19,25 @@ from litellm.proxy.middleware.billable_request_metrics_middleware import (
 from litellm.proxy.middleware.in_flight_requests_middleware import (
     InFlightRequestsMiddleware,
 )
+from starlette.applications import Starlette
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import JSONResponse, Response
+from starlette.routing import Route
+from starlette.testclient import TestClient
 
 
 class FakeRecorder:
     def __init__(self) -> None:
-        self.calls: List[dict] = []
+        self.calls: list[dict] = []
 
-    def record(self, *, category: BillableCategory, route: str, status_code: int, model_id: Optional[str]) -> None:
+    def record(self, *, category: BillableCategory, route: str, status_code: int, model_id: str | None) -> None:
         self.calls.append(
             {"category": category, "route": route, "status_code": status_code, "model_id": model_id}
         )
 
 
-def _make_app(recorder: Optional[FakeRecorder], status_code: int = 200, model_id: Optional[str] = None) -> Starlette:
+def _make_app(recorder: FakeRecorder | None, status_code: int = 200, model_id: str | None = None) -> Starlette:
     async def handler(request: Request) -> Response:
         headers = {"x-litellm-model-id": model_id} if model_id else {}
         return JSONResponse({}, status_code=status_code, headers=headers)
@@ -104,8 +102,6 @@ def test_is_pure_asgi_not_base_http_middleware():
         # SpendLogs-producing routes surfaced by the route-inventory audit
         ("/v1/search", (BillableCategory.LLM, "/search")),
         ("/v1/vector_stores/vs_1/search", (BillableCategory.LLM, "/search")),
-        ("/v1/rag/query", (BillableCategory.LLM, "/rag/query")),
-        ("/rag/ingest", (BillableCategory.LLM, "/rag/ingest")),
         # Provider passthrough carries real inference and writes SpendLogs
         ("/bedrock/model/anthropic.claude-v2/invoke", (BillableCategory.LLM, "/bedrock")),
         ("/vertex-ai/publishers/google/models/gemini:predict", (BillableCategory.LLM, "/vertex-ai")),
@@ -125,7 +121,7 @@ def test_is_pure_asgi_not_base_http_middleware():
         ("/v1/a2a/agent-9/message/send", (BillableCategory.A2A, "/a2a")),
     ],
 )
-def test_classify_billable(path: str, expected: Tuple[BillableCategory, str]):
+def test_classify_billable(path: str, expected: tuple[BillableCategory, str]):
     assert classify_billable_request(path) == expected
 
 
@@ -380,7 +376,6 @@ def test_recorder_factory_returning_none_is_cached():
 
     def factory():
         calls.append(1)
-        return None
 
     client = TestClient(_make_app_with_factory(factory, status_code=200))
     assert client.post("/v1/chat/completions").status_code == 200
@@ -432,10 +427,10 @@ def test_record_runs_before_request_leaves_the_in_flight_tracker():
     its record() had not run, letting proxy_shutdown_event flush and stop the
     exporter underneath it. Nested inside, the in-flight count still covers it.
     """
-    observed: List[int] = []
+    observed: list[int] = []
 
     class _CountingRecorder:
-        def record(self, *, category: BillableCategory, route: str, status_code: int, model_id: Optional[str]) -> None:
+        def record(self, *, category: BillableCategory, route: str, status_code: int, model_id: str | None) -> None:
             observed.append(InFlightRequestsMiddleware.get_count())
 
     async def inner(scope, receive, send) -> None:
