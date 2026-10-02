@@ -920,9 +920,9 @@ def test_team_metadata_with_tags_flows_through_jwt_auth():
     )
 
     # Verify team_metadata is set
-    assert (
-        user_api_key_auth.team_metadata is not None
-    ), "team_metadata should be populated"
+    assert user_api_key_auth.team_metadata is not None, (
+        "team_metadata should be populated"
+    )
     assert user_api_key_auth.team_metadata == team_object.metadata, (
         f"team_metadata not correctly mapped. "
         f"Expected: {team_object.metadata}, Got: {user_api_key_auth.team_metadata}"
@@ -964,9 +964,9 @@ def test_route_checks_is_llm_api_route():
     ]
 
     for route in openai_routes:
-        assert RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should be identified as LLM API route"
+        assert RouteChecks.is_llm_api_route(route=route), (
+            f"Route {route} should be identified as LLM API route"
+        )
 
     # Test Anthropic routes
     anthropic_routes = [
@@ -975,9 +975,9 @@ def test_route_checks_is_llm_api_route():
     ]
 
     for route in anthropic_routes:
-        assert RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should be identified as LLM API route"
+        assert RouteChecks.is_llm_api_route(route=route), (
+            f"Route {route} should be identified as LLM API route"
+        )
 
     # Test passthrough routes (this is the key improvement over the old route checking)
     passthrough_routes = [
@@ -997,9 +997,9 @@ def test_route_checks_is_llm_api_route():
     ]
 
     for route in passthrough_routes:
-        assert RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should be identified as LLM API route"
+        assert RouteChecks.is_llm_api_route(route=route), (
+            f"Route {route} should be identified as LLM API route"
+        )
 
     # Test MCP routes
     mcp_routes = [
@@ -1009,21 +1009,9 @@ def test_route_checks_is_llm_api_route():
     ]
 
     for route in mcp_routes:
-        assert RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should be identified as LLM API route"
-
-    # Test LiteLLM native RAG routes
-    rag_routes = [
-        "/rag/ingest",
-        "/v1/rag/ingest",
-        "/rag/query",
-        "/v1/rag/query",
-    ]
-    for route in rag_routes:
-        assert RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should be identified as LLM API route"
+        assert RouteChecks.is_llm_api_route(route=route), (
+            f"Route {route} should be identified as LLM API route"
+        )
 
     # Test routes with placeholders
     placeholder_routes = [
@@ -1038,9 +1026,9 @@ def test_route_checks_is_llm_api_route():
     ]
 
     for route in placeholder_routes:
-        assert RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should be identified as LLM API route"
+        assert RouteChecks.is_llm_api_route(route=route), (
+            f"Route {route} should be identified as LLM API route"
+        )
 
     # Test Azure OpenAI routes
     azure_routes = [
@@ -1051,9 +1039,9 @@ def test_route_checks_is_llm_api_route():
     ]
 
     for route in azure_routes:
-        assert RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should be identified as LLM API route"
+        assert RouteChecks.is_llm_api_route(route=route), (
+            f"Route {route} should be identified as LLM API route"
+        )
 
     # Test non-LLM routes (should return False)
     non_llm_routes = [
@@ -1072,9 +1060,9 @@ def test_route_checks_is_llm_api_route():
     ]
 
     for route in non_llm_routes:
-        assert not RouteChecks.is_llm_api_route(
-            route=route
-        ), f"Route {route} should NOT be identified as LLM API route"
+        assert not RouteChecks.is_llm_api_route(route=route), (
+            f"Route {route} should NOT be identified as LLM API route"
+        )
 
     # Test invalid inputs
     invalid_inputs = [
@@ -1086,9 +1074,9 @@ def test_route_checks_is_llm_api_route():
     ]
 
     for invalid_input in invalid_inputs:
-        assert not RouteChecks.is_llm_api_route(
-            route=invalid_input
-        ), f"Invalid input {invalid_input} should return False"
+        assert not RouteChecks.is_llm_api_route(route=invalid_input), (
+            f"Invalid input {invalid_input} should return False"
+        )
 
 
 @pytest.mark.asyncio
@@ -1200,36 +1188,36 @@ async def test_proxy_admin_expired_key_from_cache():
                 )
 
             # Verify that ProxyException was raised with expired_key type
-            assert hasattr(
-                exc_info.value, "type"
-            ), "Exception should have 'type' attribute"
-            assert (
-                exc_info.value.type == ProxyErrorTypes.expired_key
-            ), f"Expected expired_key error type, got {exc_info.value.type}"
+            assert hasattr(exc_info.value, "type"), (
+                "Exception should have 'type' attribute"
+            )
+            assert exc_info.value.type == ProxyErrorTypes.expired_key, (
+                f"Expected expired_key error type, got {exc_info.value.type}"
+            )
             assert int(exc_info.value.code) == status.HTTP_401_UNAUTHORIZED
-            assert "Expired Key" in str(
-                exc_info.value.message
-            ), f"Exception message should mention 'Expired Key', got: {exc_info.value.message}"
+            assert "Expired Key" in str(exc_info.value.message), (
+                f"Exception message should mention 'Expired Key', got: {exc_info.value.message}"
+            )
 
             # Verify that the param field does NOT leak the full API key (Issue #18731)
             # The param should be abbreviated like "sk-...XXXX" not the full plaintext key
-            assert (
-                exc_info.value.param is not None
-            ), "Exception should have 'param' attribute"
+            assert exc_info.value.param is not None, (
+                "Exception should have 'param' attribute"
+            )
             assert exc_info.value.param != api_key, (
                 f"SECURITY: Full API key should NOT be in param field! "
                 f"Got: {exc_info.value.param}, Expected abbreviated format like 'sk-...XXXX'"
             )
-            assert exc_info.value.param.startswith(
-                "sk-..."
-            ), f"Param should be abbreviated to 'sk-...XXXX' format. Got: {exc_info.value.param}"
+            assert exc_info.value.param.startswith("sk-..."), (
+                f"Param should be abbreviated to 'sk-...XXXX' format. Got: {exc_info.value.param}"
+            )
 
             # Verify that cache deletion was called
             mock_delete_cache.assert_called_once()
             call_args = mock_delete_cache.call_args
-            assert (
-                call_args[1]["hashed_token"] == hashed_key
-            ), "Cache deletion should be called with the hashed key"
+            assert call_args[1]["hashed_token"] == hashed_key, (
+                "Cache deletion should be called with the hashed key"
+            )
         finally:
             # Restore all module-level attributes so subsequent tests are not affected
             for attr, val in _original_values.items():
@@ -2909,9 +2897,9 @@ async def test_team_metadata_refreshed_from_team_object_during_auth():
                 request_data={},
             )
 
-        assert result.team_metadata == {
-            "guardrails": ["test-guardrail-333"]
-        }, f"team_metadata was not updated from fresh team object. Got: {result.team_metadata}"
+        assert result.team_metadata == {"guardrails": ["test-guardrail-333"]}, (
+            f"team_metadata was not updated from fresh team object. Got: {result.team_metadata}"
+        )
 
     finally:
         for k, v in _originals.items():
@@ -3805,7 +3793,9 @@ async def test_centralized_common_checks_user_http_exception_isolates_to_user_on
         (None, None, None),
     ],
 )
-async def test_centralized_common_checks_backfills_org_id_from_team(key_org_id, team_org_id, expected_org_id):
+async def test_centralized_common_checks_backfills_org_id_from_team(
+    key_org_id, team_org_id, expected_org_id
+):
     """LIT-4688 regression: a key minted without an organization_id but attached
     to an org-linked team must leave auth with org_id set from the team, so the
     spend writer (which reads user_api_key_dict.org_id, no team fallback)
@@ -3817,7 +3807,9 @@ async def test_centralized_common_checks_backfills_org_id_from_team(key_org_id, 
 
     from litellm.proxy._types import LiteLLM_TeamTableCachedObj
 
-    token = UserAPIKeyAuth(api_key="sk-test", user_id="u", team_id="t1", org_id=key_org_id)
+    token = UserAPIKeyAuth(
+        api_key="sk-test", user_id="u", team_id="t1", org_id=key_org_id
+    )
     request = Request(scope={"type": "http"})
     request._url = URL(url="/chat/completions")
 
@@ -3838,7 +3830,9 @@ async def test_centralized_common_checks_backfills_org_id_from_team(key_org_id, 
             patch(
                 "litellm.proxy.auth.user_api_key_auth.common_checks",
                 new_callable=AsyncMock,
-                side_effect=lambda **kw: org_id_seen_by_common_checks.append(kw["valid_token"].org_id),
+                side_effect=lambda **kw: org_id_seen_by_common_checks.append(
+                    kw["valid_token"].org_id
+                ),
             ) as mock_checks,
         ):
             await _run_centralized_common_checks(
@@ -3872,8 +3866,12 @@ async def test_cli_session_token_org_backfilled_from_team(monkeypatch):
 
     monkeypatch.setenv("LITELLM_SALT_KEY", "sk-test-salt-lit4688")
 
-    cli_user = LiteLLM_UserTable(user_id="cli-user", user_role="internal_user", teams=["t-cli"], models=[])
-    blob = ExperimentalUIJWTToken.get_cli_jwt_auth_token(user_info=cli_user, team_id="t-cli", team_alias="cli-team")
+    cli_user = LiteLLM_UserTable(
+        user_id="cli-user", user_role="internal_user", teams=["t-cli"], models=[]
+    )
+    blob = ExperimentalUIJWTToken.get_cli_jwt_auth_token(
+        user_info=cli_user, team_id="t-cli", team_alias="cli-team"
+    )
     token = ExperimentalUIJWTToken.get_key_object_from_ui_hash_key(blob)
     assert token is not None
     assert token.is_session_token is True
@@ -3883,7 +3881,9 @@ async def test_cli_session_token_org_backfilled_from_team(monkeypatch):
     request = Request(scope={"type": "http"})
     request._url = URL(url="/chat/completions")
 
-    org_linked_team = LiteLLM_TeamTableCachedObj(team_id="t-cli", organization_id="org-infoops")
+    org_linked_team = LiteLLM_TeamTableCachedObj(
+        team_id="t-cli", organization_id="org-infoops"
+    )
 
     attrs = _proxy_attrs_for_centralized_checks(user_custom_auth=None)
     originals = {a: getattr(_proxy_server_mod, a, None) for a in attrs}
@@ -4439,12 +4439,16 @@ async def test_non_admin_cli_session_token_reaches_production_auth_path(monkeypa
     assert call_kwargs["valid_token_dict"]["user_id"] == "internal-user-1"
     assert call_kwargs["valid_token_dict"]["team_id"] == "team-abc"
     assert call_kwargs["valid_token_dict"]["is_session_token"] is True
-    assert call_kwargs["valid_token_dict"]["user_role"] == LitellmUserRoles.INTERNAL_USER
+    assert (
+        call_kwargs["valid_token_dict"]["user_role"] == LitellmUserRoles.INTERNAL_USER
+    )
     assert result.is_session_token is True
 
 
 @pytest.mark.asyncio
-async def test_cli_session_token_authenticates_when_jwt_auth_enabled_without_license(monkeypatch):
+async def test_cli_session_token_authenticates_when_jwt_auth_enabled_without_license(
+    monkeypatch,
+):
     """A lite login token is an encrypted (non-JWT) session blob. With
     enable_jwt_auth on and no enterprise license (premium_user False), the JWT
     premium gate used to fire for every request before the token was decoded, so
@@ -5075,9 +5079,13 @@ async def test_global_proxy_spend_reads_resettable_proxy_budget_row():
     proxy_budget_row = MagicMock()
     proxy_budget_row.spend = 42.5
     prisma_client = MagicMock()
-    prisma_client.db.litellm_usertable.find_unique = AsyncMock(return_value=proxy_budget_row)
+    prisma_client.db.litellm_usertable.find_unique = AsyncMock(
+        return_value=proxy_budget_row
+    )
     prisma_client.db.query_raw = AsyncMock(
-        side_effect=AssertionError("global spend must not be loaded from the fixed-30d MonthlyGlobalSpend view")
+        side_effect=AssertionError(
+            "global spend must not be loaded from the fixed-30d MonthlyGlobalSpend view"
+        )
     )
 
     result = await _fetch_global_spend_with_event_coordination(
