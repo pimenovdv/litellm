@@ -516,7 +516,6 @@ class LiteLLMRoutes(enum.Enum):
         + passthrough_routes_wildcard
         + apply_guardrail_routes
         + mcp_inference_routes
-        + litellm_native_routes
         + agent_routes
     )
     info_routes = [
