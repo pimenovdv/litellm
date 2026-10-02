@@ -1,4 +1,5 @@
 import re
+from typing import List, Optional
 
 from fastapi import HTTPException, Request, status
 
@@ -66,7 +67,7 @@ class RouteChecks:
     def should_call_route(
         route: str,
         valid_token: UserAPIKeyAuth,
-        request: Request | None = None,
+        request: Optional[Request] = None,
     ):
         """
         Check if management route is disabled and raise exception
@@ -88,7 +89,7 @@ class RouteChecks:
     def is_virtual_key_allowed_to_call_route(
         route: str,
         valid_token: UserAPIKeyAuth,
-        request: Request | None = None,
+        request: Optional[Request] = None,
     ) -> bool:
         """
         Raises Exception if Virtual Key is not allowed to call the route
@@ -200,7 +201,7 @@ class RouteChecks:
 
     @staticmethod
     def _raise_admin_only_route_exception(
-        user_obj: LiteLLM_UserTable | None,
+        user_obj: Optional[LiteLLM_UserTable],
         route: str,
     ) -> None:
         """
@@ -226,8 +227,8 @@ class RouteChecks:
 
     @staticmethod
     def non_proxy_admin_allowed_routes_check(
-        user_obj: LiteLLM_UserTable | None,
-        _user_role: LitellmUserRoles | None,
+        user_obj: Optional[LiteLLM_UserTable],
+        _user_role: Optional[LitellmUserRoles],
         route: str,
         request: Request,
         valid_token: UserAPIKeyAuth,
@@ -262,7 +263,9 @@ class RouteChecks:
                 if user_id and user_id != valid_token.user_id:
                     raise HTTPException(
                         status_code=status.HTTP_403_FORBIDDEN,
-                        detail=f"key not allowed to access this user's info. user_id={user_id}, key's user_id={valid_token.user_id}",
+                        detail="key not allowed to access this user's info. user_id={}, key's user_id={}".format(
+                            user_id, valid_token.user_id
+                        ),
                     )
             elif route == "/v2/user/info":
                 # handled by the endpoint itself (full RBAC in handler)
@@ -287,14 +290,20 @@ class RouteChecks:
             )
         elif _user_role == LitellmUserRoles.INTERNAL_USER.value and RouteChecks.check_route_access(
             route=route, allowed_routes=LiteLLMRoutes.internal_user_routes.value
-        ) or _user_is_org_admin(request_data=request_data, user_object=user_obj) and RouteChecks.check_route_access(
+        ):
+            pass
+        elif _user_is_org_admin(request_data=request_data, user_object=user_obj) and RouteChecks.check_route_access(
             route=route, allowed_routes=LiteLLMRoutes.org_admin_allowed_routes.value
-        ) or _user_role == LitellmUserRoles.INTERNAL_USER_VIEW_ONLY.value and RouteChecks.check_route_access(
+        ):
+            pass
+        elif _user_role == LitellmUserRoles.INTERNAL_USER_VIEW_ONLY.value and RouteChecks.check_route_access(
             route=route,
             allowed_routes=LiteLLMRoutes.internal_user_view_only_routes.value,
-        ) or RouteChecks.check_route_access(
-            route=route, allowed_routes=LiteLLMRoutes.self_managed_routes.value
         ):
+            pass
+        elif RouteChecks.check_route_access(
+            route=route, allowed_routes=LiteLLMRoutes.self_managed_routes.value
+        ):  # routes that manage their own allowed/disallowed logic
             pass
         elif route.startswith("/v1/mcp/") or route.startswith("/mcp-rest/"):
             pass  # authN/authZ handled by api itself
@@ -332,6 +341,7 @@ class RouteChecks:
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail=f"user not allowed to access this route. Route={route} is an admin only route",
                 )
+        pass
 
     @staticmethod
     def is_llm_api_route(route: str) -> bool:
@@ -397,7 +407,7 @@ class RouteChecks:
         return False
 
     @staticmethod
-    def _is_get_mcp_server_discovery_route(route: str, request: Request | None) -> bool:
+    def _is_get_mcp_server_discovery_route(route: str, request: Optional[Request]) -> bool:
         """
         Returns True if `request` is a GET against one of the two read-only
         MCP-server discovery paths:
@@ -548,7 +558,7 @@ class RouteChecks:
         return False
 
     @staticmethod
-    def check_route_access(route: str, allowed_routes: list[str]) -> bool:
+    def check_route_access(route: str, allowed_routes: List[str]) -> bool:
         """
         Check if a route has access by checking both exact matches and patterns
 
@@ -588,7 +598,7 @@ class RouteChecks:
         return False
 
     @staticmethod
-    def _get_request_method(request: Request | None) -> str | None:
+    def _get_request_method(request: Optional[Request]) -> Optional[str]:
         if request is None:
             return None
 
@@ -602,7 +612,7 @@ class RouteChecks:
         return method.upper()
 
     @staticmethod
-    def is_auth_enforced_pass_through_route(route: str, method: str | None = None) -> bool:
+    def is_auth_enforced_pass_through_route(route: str, method: Optional[str] = None) -> bool:
         """
         True for config/DB pass-through endpoints registered with auth=true.
 
@@ -741,7 +751,7 @@ class RouteChecks:
         route: str,
         _user_role: str,
         request_data: dict,
-        request: Request | None = None,
+        request: Optional[Request] = None,
     ) -> None:
         """
         Check access for PROXY_ADMIN_VIEW_ONLY role.
@@ -803,7 +813,7 @@ class RouteChecks:
         # Allow `/user/update` for self-service email / password change.
         if route == "/user/update":
             if request_data is not None and isinstance(request_data, dict):
-                for param in request_data:
+                for param in request_data.keys():
                     if param not in ["user_email", "password"]:
                         raise HTTPException(
                             status_code=status.HTTP_403_FORBIDDEN,
