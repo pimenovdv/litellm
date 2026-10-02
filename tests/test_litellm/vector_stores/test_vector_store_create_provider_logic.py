@@ -1,6 +1,5 @@
 import os
 import sys
-from unittest.mock import Mock, patch
 
 import pytest
 
@@ -9,8 +8,6 @@ sys.path.insert(
 )  # Adds the parent directory to the system path
 
 import litellm
-from litellm.llms.openai.vector_stores.transformation import OpenAIVectorStoreConfig
-from litellm.llms.ragflow.vector_stores.transformation import RAGFlowVectorStoreConfig
 from litellm.utils import ProviderConfigManager
 
 
@@ -57,8 +54,6 @@ def test_vector_store_create_with_simple_provider_name():
     ), f"Should return OpenAIVectorStoreConfig for OpenAI provider, got {type(vector_store_provider_config).__name__}"
 
     print("✅ Test passed: Simple provider name 'openai' handled correctly")
-
-
 
 
 def test_vector_store_create_with_ragflow_provider():

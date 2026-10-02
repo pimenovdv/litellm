@@ -1013,7 +1013,7 @@ def test_route_checks_is_llm_api_route():
             route=route
         ), f"Route {route} should be identified as LLM API route"
 
-    # Test LiteLLM native RAG routes
+
     # Test routes with placeholders
     placeholder_routes = [
         "/v1/threads/thread_49EIN5QF32s4mH20M7GFKdlZ",

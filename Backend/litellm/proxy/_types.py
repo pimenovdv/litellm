@@ -443,7 +443,6 @@ class LiteLLMRoutes(enum.Enum):
     #########################################################
     passthrough_routes_wildcard = [f"{route}/*" for route in mapped_pass_through_routes]
 
-
     anthropic_routes = [
         "/v1/messages",
         "/v1/messages/count_tokens",
