@@ -54,10 +54,7 @@ def test_routes_on_litellm_proxy():
 
     _all_routes = []
     for route in app.routes:
-
-        _path_as_str = getattr(route, "path", "")
-        if not _path_as_str and hasattr(route, "path"):
-            _path_as_str = str(route.path)
+        _path_as_str = str(route.path)
         if ":path" in _path_as_str:
             # remove the :path
             _path_as_str = _path_as_str.replace(":path", "")
@@ -78,11 +75,10 @@ def test_routes_on_litellm_proxy():
                 "/"
             )  # Remove the trailing * and any trailing /
             # Check if base path exists (e.g., /containers or /v1/containers)
-            assert (
-                base_path in _all_routes
-            ), f"Wildcard pattern {route} requires base path {base_path} to exist"
+            assert base_path in _all_routes, (
+                f"Wildcard pattern {route} requires base path {base_path} to exist"
+            )
         else:
-            if "{" in route: continue
             assert route in _all_routes
 
 
@@ -112,10 +108,6 @@ def test_routes_on_litellm_proxy():
         ("/bedrock/model/cohere.command-r-v1:0/converse", True),
         ("/vertex-ai/model/text-embedding-004/embeddings", True),
         # LiteLLM native RAG routes
-        ("/rag/ingest", True),
-        ("/v1/rag/ingest", True),
-        ("/rag/query", True),
-        ("/v1/rag/query", True),
     ],
 )
 def test_is_llm_api_route(route: str, expected: bool):
@@ -226,9 +218,9 @@ def test_get_request_route_not_bypassed_by_malformed_host(host_header: str):
             path=protected_path, host_header=host_header
         )
         result = get_request_route(request)
-        assert (
-            result == protected_path
-        ), f"Host: {host_header!r} caused route {protected_path!r} to resolve as {result!r}"
+        assert result == protected_path, (
+            f"Host: {host_header!r} caused route {protected_path!r} to resolve as {result!r}"
+        )
 
 
 # ---------------------------------------------------------------------------

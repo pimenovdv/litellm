@@ -33,13 +33,29 @@ class FakeRecorder:
     def __init__(self) -> None:
         self.calls: List[dict] = []
 
-    def record(self, *, category: BillableCategory, route: str, status_code: int, model_id: Optional[str]) -> None:
+    def record(
+        self,
+        *,
+        category: BillableCategory,
+        route: str,
+        status_code: int,
+        model_id: Optional[str],
+    ) -> None:
         self.calls.append(
-            {"category": category, "route": route, "status_code": status_code, "model_id": model_id}
+            {
+                "category": category,
+                "route": route,
+                "status_code": status_code,
+                "model_id": model_id,
+            }
         )
 
 
-def _make_app(recorder: Optional[FakeRecorder], status_code: int = 200, model_id: Optional[str] = None) -> Starlette:
+def _make_app(
+    recorder: Optional[FakeRecorder],
+    status_code: int = 200,
+    model_id: Optional[str] = None,
+) -> Starlette:
     async def handler(request: Request) -> Response:
         headers = {"x-litellm-model-id": model_id} if model_id else {}
         return JSONResponse({}, status_code=status_code, headers=headers)
@@ -79,8 +95,14 @@ def test_is_pure_asgi_not_base_http_middleware():
     [
         ("/v1/chat/completions", (BillableCategory.LLM, "/chat/completions")),
         ("/chat/completions", (BillableCategory.LLM, "/chat/completions")),
-        ("/openai/deployments/gpt-4o/chat/completions", (BillableCategory.LLM, "/chat/completions")),
-        ("/engines/gpt-4o/chat/completions", (BillableCategory.LLM, "/chat/completions")),
+        (
+            "/openai/deployments/gpt-4o/chat/completions",
+            (BillableCategory.LLM, "/chat/completions"),
+        ),
+        (
+            "/engines/gpt-4o/chat/completions",
+            (BillableCategory.LLM, "/chat/completions"),
+        ),
         ("/v1/completions", (BillableCategory.LLM, "/completions")),
         ("/completions", (BillableCategory.LLM, "/completions")),
         ("/v1/embeddings", (BillableCategory.LLM, "/embeddings")),
@@ -91,7 +113,10 @@ def test_is_pure_asgi_not_base_http_middleware():
         # endpoints that must bill and previously classified as None.
         ("/v1/images/edits", (BillableCategory.LLM, "/images/edits")),
         ("/images/edits", (BillableCategory.LLM, "/images/edits")),
-        ("/openai/deployments/dall-e/images/edits", (BillableCategory.LLM, "/images/edits")),
+        (
+            "/openai/deployments/dall-e/images/edits",
+            (BillableCategory.LLM, "/images/edits"),
+        ),
         ("/v1/images/variations", (BillableCategory.LLM, "/images/variations")),
         ("/v1/messages", (BillableCategory.LLM, "/v1/messages")),
         ("/interactions", (BillableCategory.LLM, "/interactions")),
@@ -99,14 +124,26 @@ def test_is_pure_asgi_not_base_http_middleware():
         ("/v1/videos", (BillableCategory.LLM, "/videos")),
         ("/v1/videos/video_123/remix", (BillableCategory.LLM, "/remix")),
         ("/v1/ocr", (BillableCategory.LLM, "/ocr")),
-        ("/v1beta/models/gemini-2.5-pro:generateContent", (BillableCategory.LLM, ":generateContent")),
-        ("/v1beta/models/gemini-2.5-pro:streamGenerateContent", (BillableCategory.LLM, ":streamGenerateContent")),
+        (
+            "/v1beta/models/gemini-2.5-pro:generateContent",
+            (BillableCategory.LLM, ":generateContent"),
+        ),
+        (
+            "/v1beta/models/gemini-2.5-pro:streamGenerateContent",
+            (BillableCategory.LLM, ":streamGenerateContent"),
+        ),
         # SpendLogs-producing routes surfaced by the route-inventory audit
         ("/v1/search", (BillableCategory.LLM, "/search")),
         ("/v1/vector_stores/vs_1/search", (BillableCategory.LLM, "/search")),
         # Provider passthrough carries real inference and writes SpendLogs
-        ("/bedrock/model/anthropic.claude-v2/invoke", (BillableCategory.LLM, "/bedrock")),
-        ("/vertex-ai/publishers/google/models/gemini:predict", (BillableCategory.LLM, "/vertex-ai")),
+        (
+            "/bedrock/model/anthropic.claude-v2/invoke",
+            (BillableCategory.LLM, "/bedrock"),
+        ),
+        (
+            "/vertex-ai/publishers/google/models/gemini:predict",
+            (BillableCategory.LLM, "/vertex-ai"),
+        ),
         ("/cohere/v2/chat", (BillableCategory.LLM, "/cohere")),
         # Passthrough inference bills under its provider prefix
         ("/anthropic/v1/messages", (BillableCategory.LLM, "/anthropic")),
@@ -214,7 +251,10 @@ def test_classify_get_reads_are_not_billable(path: str):
 
 
 def test_classify_mcp_not_method_gated():
-    assert classify_billable_request("/mcp/tools/list", "GET") == (BillableCategory.MCP, "/mcp")
+    assert classify_billable_request("/mcp/tools/list", "GET") == (
+        BillableCategory.MCP,
+        "/mcp",
+    )
 
 
 def test_chat_completions_not_misclassified_as_plain_completions():
@@ -227,7 +267,10 @@ def test_chat_completions_not_misclassified_as_plain_completions():
 
 
 def test_extract_model_id_present():
-    headers = [(b"content-type", b"application/json"), (b"x-litellm-model-id", b"deploy-123")]
+    headers = [
+        (b"content-type", b"application/json"),
+        (b"x-litellm-model-id", b"deploy-123"),
+    ]
     assert _extract_model_id(headers) == "deploy-123"
 
 
@@ -244,22 +287,35 @@ def test_extract_model_id_absent():
 
 def test_records_once_on_2xx_llm_with_model_id():
     recorder = FakeRecorder()
-    TestClient(_make_app(recorder, status_code=200, model_id="deploy-7")).post("/v1/chat/completions")
+    TestClient(_make_app(recorder, status_code=200, model_id="deploy-7")).post(
+        "/v1/chat/completions"
+    )
     assert recorder.calls == [
-        {"category": BillableCategory.LLM, "route": "/chat/completions", "status_code": 200, "model_id": "deploy-7"}
+        {
+            "category": BillableCategory.LLM,
+            "route": "/chat/completions",
+            "status_code": 200,
+            "model_id": "deploy-7",
+        }
     ]
 
 
 def test_records_mcp_category():
     recorder = FakeRecorder()
     TestClient(_make_app(recorder)).post("/github/mcp")
-    assert len(recorder.calls) == 1 and recorder.calls[0]["category"] == BillableCategory.MCP
+    assert (
+        len(recorder.calls) == 1
+        and recorder.calls[0]["category"] == BillableCategory.MCP
+    )
 
 
 def test_records_a2a_category():
     recorder = FakeRecorder()
     TestClient(_make_app(recorder)).post("/a2a/agent-1/message/send")
-    assert len(recorder.calls) == 1 and recorder.calls[0]["category"] == BillableCategory.A2A
+    assert (
+        len(recorder.calls) == 1
+        and recorder.calls[0]["category"] == BillableCategory.A2A
+    )
 
 
 def test_does_not_record_mcp_management_read():
@@ -433,14 +489,23 @@ def test_record_runs_before_request_leaves_the_in_flight_tracker():
     observed: List[int] = []
 
     class _CountingRecorder:
-        def record(self, *, category: BillableCategory, route: str, status_code: int, model_id: Optional[str]) -> None:
+        def record(
+            self,
+            *,
+            category: BillableCategory,
+            route: str,
+            status_code: int,
+            model_id: Optional[str],
+        ) -> None:
             observed.append(InFlightRequestsMiddleware.get_count())
 
     async def inner(scope, receive, send) -> None:
         await send({"type": "http.response.start", "status": 200, "headers": []})
         await send({"type": "http.response.body", "body": b"{}"})
 
-    stack = InFlightRequestsMiddleware(BillableRequestMetricsMiddleware(inner, recorder=_CountingRecorder()))
+    stack = InFlightRequestsMiddleware(
+        BillableRequestMetricsMiddleware(inner, recorder=_CountingRecorder())
+    )
     assert TestClient(stack).post("/v1/chat/completions").status_code == 200
 
     assert observed == [1]
@@ -453,4 +518,6 @@ def test_billable_middleware_is_registered_inside_the_in_flight_tracker():
     from litellm.proxy.proxy_server import app as proxy_app
 
     classes = [middleware.cls for middleware in proxy_app.user_middleware]
-    assert classes.index(InFlightRequestsMiddleware) < classes.index(BillableRequestMetricsMiddleware)
+    assert classes.index(InFlightRequestsMiddleware) < classes.index(
+        BillableRequestMetricsMiddleware
+    )

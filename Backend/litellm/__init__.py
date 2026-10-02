@@ -1230,5 +1230,3 @@ from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
 
 # Cleaned up RAG routes and endpoints
-
-from litellm.router import Router
