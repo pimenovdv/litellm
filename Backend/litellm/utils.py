@@ -8428,6 +8428,10 @@ class ProviderConfigManager:
             )
 
             return AzureOpenAIVectorStoreConfig()
+        elif litellm.LlmProviders.VERTEX_AI == provider:
+            if api_type == "rag_api" or api_type is None:  # default to rag_api
+                pass
+            elif api_type == "search_api": pass
         elif litellm.LlmProviders.BEDROCK == provider:
             from litellm.llms.bedrock.vector_stores.transformation import (
                 BedrockVectorStoreConfig,
