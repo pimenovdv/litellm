@@ -4,22 +4,18 @@ import sys
 from dotenv import load_dotenv
 
 load_dotenv()
-import io
-import os
 
 # this file is to test litellm/proxy
 
 sys.path.insert(
     0, os.path.abspath("../..")
 )  # Adds the parent directory to the system path
-import asyncio
 import logging
 
 import pytest
 from fastapi import Request
-from starlette.datastructures import URL, Headers, QueryParams
+from starlette.datastructures import URL, Headers
 
-import litellm
 from litellm.proxy._types import LiteLLMRoutes
 from litellm.proxy.auth.auth_utils import get_request_route
 from litellm.proxy.auth.route_checks import RouteChecks
