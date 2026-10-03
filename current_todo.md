@@ -1,4 +1,11 @@
-- [x] Очистить списки зависимостей `Backend/pyproject.toml` от неиспользуемых библиотек (sentry, datadog, guardrails, telemetry, prometheus, posthog).
-- [ ] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).
-- [ ] Очистить списки зависимостей `frontend/litellm-dashboard/package.json` от неиспользуемых библиотек (sentry, datadog, aws, azure и т.д.).
-- [ ] Очистить `uv.lock` и другие неиспользуемые списки зависимостей.
+- [ ] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (langchain-mcp-adapters и прочие).
+  - [x] 1. Удалить зависимости от `langchain-mcp-adapters` и других неиспользуемых мелких библиотек (кроме самого `mcp`, `boto3`, `azure`, `vertex`) из `Backend/pyproject.toml`.
+  - [x] 2. Проверить код на наличие `langchain_mcp_adapters`.
+  - [x] 3. Запустить синтаксическую проверку и точечные тесты, обновить `current_todo.md`.
+  - [ ] 4. Удалить остаточные импорты и код `prometheus_client` из `integrations/prometheus_services.py`, `proxy/middleware/in_flight_requests_middleware.py`, `proxy/prometheus_cleanup.py`.
+  - [ ] 5. Удалить остаточные импорты и код `ddtrace` из `litellm_core_utils/dd_tracing.py`, `proxy/common_request_processing.py`, `proxy/dd_span_tagger.py`, `proxy/proxy_server.py`.
+  - [ ] 6. Удалить остаточные импорты `opentelemetry` из файлов `caching/`.
+  - [ ] 7. Удалить остаточные импорты `opentelemetry` из `proxy/hooks/` и `router_utils/`.
+  - [ ] 8. Удалить остаточные импорты `opentelemetry` из остальных файлов `Backend/litellm` (e.g. `_service_logger.py`, `proxy_server.py`, `router.py`, и др.).
+- [x] Очистить списки зависимостей `frontend/litellm-dashboard/package.json` от неиспользуемых библиотек (sentry, datadog, aws, azure и т.д.).
+- [x] Очистить `uv.lock` и другие неиспользуемые списки зависимостей.
