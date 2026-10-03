@@ -1,5 +1,5 @@
 - [ ] Очистить `ddtrace`, `opentelemetry` и `prometheus_client` из кода (файлы Backend).
-  - [ ] 1. Удалить код `prometheus_client` из `Backend/litellm/proxy/prometheus_cleanup.py` и `Backend/litellm/proxy/middleware/in_flight_requests_middleware.py`.
+  - [x] 1. Удалить код `prometheus_client` из `Backend/litellm/proxy/prometheus_cleanup.py` и `Backend/litellm/proxy/middleware/in_flight_requests_middleware.py`.
   - [ ] 2. Удалить код `ddtrace` из `Backend/litellm/litellm_core_utils/dd_tracing.py`, `Backend/litellm/proxy/dd_span_tagger.py`, `Backend/litellm/proxy/common_request_processing.py` и `Backend/litellm/proxy/proxy_server.py`.
   - [ ] 3. Удалить импорты `opentelemetry` из файлов в `Backend/litellm/caching/`, `Backend/litellm/router_utils/` и `Backend/litellm/proxy/hooks/`.
   - [ ] 4. Удалить остаточные импорты `opentelemetry` из `Backend/litellm/router.py`, `Backend/litellm/proxy/proxy_server.py`, `Backend/litellm/litellm_core_utils/` и других.
