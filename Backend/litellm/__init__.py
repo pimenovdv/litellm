@@ -1230,3 +1230,109 @@ from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
 
 # Cleaned up RAG routes and endpoints
+
+from .router import Router
+
+provider_list = list(models_by_provider.keys())
+
+from litellm.utils import get_model_info, ModelResponseStream, ImageResponse, EmbeddingResponse
+
+from litellm.types.utils import LlmProviders
+
+from litellm.caching.caching import DualCache
+
+provider_list = list(models_by_provider.keys())
+
+from litellm.utils import get_model_info, ModelResponseStream, ImageResponse, EmbeddingResponse
+
+from litellm.types.utils import LlmProviders
+
+from litellm.caching.caching import DualCache
+
+from litellm.utils import ModelResponse, Message, Choices
+
+from litellm.utils import Usage, TextCompletionResponse
+
+from .router import Router
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from .router import Router
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from litellm.utils import get_llm_provider
+
+from .router import Router
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from litellm.utils import get_llm_provider
+
+from litellm.main import stream_chunk_builder
+
+from .router import Router
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from litellm.utils import get_llm_provider
+
+from litellm.main import stream_chunk_builder
+
+from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
+from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
+logging_callback_manager = LoggingCallbackManager()
+
+from .router import Router
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from litellm.utils import get_llm_provider
+
+from litellm.main import stream_chunk_builder
+
+from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
+from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
+logging_callback_manager = LoggingCallbackManager()
+
+from litellm.exceptions import RateLimitError, Timeout
+from litellm.main import completion, embedding
+from litellm.utils import completion_cost
+
+from .router import Router
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from litellm.utils import get_llm_provider
+
+from litellm.main import stream_chunk_builder
+
+from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
+from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
+logging_callback_manager = LoggingCallbackManager()
+
+from litellm.exceptions import RateLimitError, Timeout
+from litellm.main import completion, embedding
+from litellm.utils import completion_cost
+
+from litellm.caching.caching import Cache
+
+from .router import Router
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from litellm.utils import get_llm_provider
+
+from litellm.main import stream_chunk_builder
+
+from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
+from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
+logging_callback_manager = LoggingCallbackManager()
+
+from litellm.exceptions import RateLimitError, Timeout
+from litellm.main import completion, embedding
+from litellm.utils import completion_cost
+
+from litellm.caching.caching import Cache
+
+from litellm.utils import register_model

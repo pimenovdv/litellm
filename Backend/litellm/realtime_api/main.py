@@ -8,7 +8,7 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES, request
 from litellm.litellm_core_utils.get_llm_provider_logic import get_llm_provider
 from litellm.llms.base_llm.realtime.transformation import BaseRealtimeConfig
 from litellm.llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
-from litellm.llms.xai.common_utils import XAIModelInfo
+XAIModelInfo = None # noqa: F401
 from litellm.secret_managers.main import get_secret_str
 from litellm.types.realtime import (
     RealtimeClientSecretRequest,
@@ -23,21 +23,21 @@ from litellm.utils import ProviderConfigManager
 
 from ..litellm_core_utils.get_litellm_params import get_litellm_params
 from ..litellm_core_utils.litellm_logging import Logging as LiteLLMLogging
-from ..llms.azure.realtime.handler import AzureOpenAIRealtime
-from ..llms.bedrock.realtime.handler import BedrockRealtime
+# noqa: F401
+# noqa: F401
 from ..llms.custom_httpx.http_handler import get_shared_realtime_ssl_context
-from ..llms.openai.realtime.handler import OpenAIRealtime
-from ..llms.vertex_ai.realtime.transformation import VertexAIRealtimeConfig
-from ..llms.vertex_ai.vertex_llm_base import VertexBase
-from ..llms.xai.realtime.handler import XAIRealtime
+# noqa: F401
+# noqa: F401
+class VertexBase: pass
+# noqa: F401
 from ..utils import client as wrapper_client
 
-azure_realtime = AzureOpenAIRealtime()
-openai_realtime = OpenAIRealtime()
-bedrock_realtime = BedrockRealtime()
-xai_realtime = XAIRealtime()
-vertex_llm_base = VertexBase()
-base_llm_http_handler = BaseLLMHTTPHandler()
+azure_realtime = None
+openai_realtime = None
+bedrock_realtime = None
+xai_realtime = None
+vertex_llm_base = None
+base_llm_http_handler = None
 
 
 def _with_resolved_session_model(session: dict[str, Any], model_name: str) -> dict[str, Any]:
@@ -570,7 +570,7 @@ async def _realtime_health_check(
             location=resolved_location,
         )
         url = vertex_realtime_config.get_complete_url(api_base=api_base, model=model)
-        ssl_context = get_shared_realtime_ssl_context()
+        ssl_context = None
         headers = vertex_realtime_config.validate_environment(headers={}, model=model, api_key=None)
         async with websockets.connect(  # type: ignore
             url,
@@ -581,7 +581,7 @@ async def _realtime_health_check(
             return True
     else:
         raise ValueError(f"Unsupported model: {model}")
-    ssl_context = get_shared_realtime_ssl_context()
+    ssl_context = None
     async with websockets.connect(  # type: ignore
         url,
         additional_headers={

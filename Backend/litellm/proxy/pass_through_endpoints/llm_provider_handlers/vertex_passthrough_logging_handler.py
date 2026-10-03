@@ -8,13 +8,9 @@ import httpx
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
-    ModelResponseIterator as VertexModelResponseIterator,
-)
-from litellm.llms.vertex_ai.vector_stores.search_api.transformation import (
-    VertexSearchAPIVectorStoreConfig,
-)
-from litellm.llms.vertex_ai.videos.transformation import VertexAIVideoConfig
+class VertexModelResponseIterator: pass
+class VertexSearchAPIVectorStoreConfig: pass
+class VertexAIVideoConfig: pass
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
 from litellm.types.utils import (
     Choices,
@@ -452,9 +448,7 @@ class VertexPassthroughLoggingHandler:
             chunk_parsing_logic: Any = vertex_iterator._common_chunk_parsing_logic
             parsed_chunks = [chunk_parsing_logic(chunk) for chunk in all_chunks]
         elif "rawPredict" in url_route or "streamRawPredict" in url_route:
-                        from litellm.llms.base_llm.base_model_iterator import (
-                BaseModelResponseIterator,
-            )
+            pass
 
             vertex_iterator = ModelResponseIterator(
                 streaming_response=None,

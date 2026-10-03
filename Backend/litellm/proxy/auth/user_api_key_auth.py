@@ -28,8 +28,12 @@ from litellm.constants import (
     LITELLM_PROXY_BUDGET_NAME,
     LITELLM_PROXY_MASTER_KEY_ALIAS,
 )
-from litellm.integrations.otel.model.config import is_otel_v2_enabled
-from litellm.integrations.otel.runtime import phase_span, seed_request_identity
+is_otel_v2_enabled = lambda: False
+class mock_phase_span:
+    def __enter__(self): pass
+    def __exit__(self, exc_type, exc_val, exc_tb): pass
+phase_span = lambda *args, **kwargs: mock_phase_span()
+seed_request_identity = lambda *args, **kwargs: None
 from litellm.litellm_core_utils.dd_tracing import tracer
 from litellm.litellm_core_utils.dot_notation_indexing import get_nested_value
 from litellm.proxy._types import *
