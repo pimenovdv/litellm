@@ -413,9 +413,9 @@ suppress_debug_info: bool = False
 dynamodb_table_name: Optional[str] = None
 s3_callback_params: Optional[Dict] = None
 s3_audit_callback_params: Optional[Dict] = None
-datadog_llm_observability_params: Optional[Union[DatadogLLMObsInitParams, Dict]] = None
-datadog_params: Optional[Union[DatadogInitParams, Dict]] = None
-newrelic_params: Optional[Union[NewRelicInitParams, Dict]] = None
+datadog_llm_observability_params: Optional[Dict] = None
+datadog_params: Optional[Dict] = None
+newrelic_params: Optional[Dict] = None
 aws_sqs_callback_params: Optional[Dict] = None
 generic_logger_headers: Optional[Dict] = None
 default_key_generate_params: Optional[Dict] = None
@@ -1233,3 +1233,6 @@ from .router import Router
 
 provider_list = []
 from litellm.types.utils import EmbeddingResponse, ImageResponse, Message, ModelResponse, ModelResponseStream
+
+from litellm.types.utils import TextCompletionResponse
+from litellm.caching.caching import DualCache
