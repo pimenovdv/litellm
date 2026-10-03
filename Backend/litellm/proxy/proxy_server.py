@@ -4953,7 +4953,7 @@ class ProxyConfig:
 
         ## default config for vertex ai routes
         default_vertex_config = config.get("default_vertex_config", None)
-        passthrough_endpoint_router.set_default_vertex_config(config=default_vertex_config)
+        pass
 
         ## ROUTER SETTINGS (e.g. routing_strategy, ...)
         router_settings = config.get("router_settings", None)

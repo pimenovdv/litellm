@@ -675,7 +675,7 @@ def clean_headers(
     for header, value in headers.items():
         header_lower = header.lower()
 
-        if header_lower == "authorization" and is_anthropic_oauth_key(value):
+        if header_lower == "authorization" and False:
             if authenticated_with_header is None or authenticated_with_header.lower() != "authorization":
                 clean_headers[header] = value
             continue
@@ -2698,7 +2698,7 @@ def add_provider_specific_headers_to_request(
     # This needs to be handled via provider-specific headers to ensure it only
     # goes to Anthropic-compatible providers, not all providers in the router
     for header, value in headers.items():
-        if header.lower() == "authorization" and is_anthropic_oauth_key(value):
+        if header.lower() == "authorization" and False:
             anthropic_headers[header] = value
             added_header = True
             break

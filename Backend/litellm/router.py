@@ -1195,62 +1195,10 @@ class Router:
                 return None
 
     def initialize_assistants_endpoint(self):
-        ## INITIALIZE PASS THROUGH ASSISTANTS ENDPOINT ##
-        self.acreate_assistants = self.factory_function(litellm.acreate_assistants)
-        self.adelete_assistant = self.factory_function(litellm.adelete_assistant)
-        self.aget_assistants = self.factory_function(litellm.aget_assistants)
-        self.acreate_thread = self.factory_function(litellm.acreate_thread)
-        self.aget_thread = self.factory_function(litellm.aget_thread)
-        self.a_add_message = self.factory_function(litellm.a_add_message)
-        self.aget_messages = self.factory_function(litellm.aget_messages)
-        self.arun_thread = self.factory_function(litellm.arun_thread)
+        pass
 
     def _initialize_core_endpoints(self):
-        """Helper to initialize core router endpoints."""
-        self.amoderation = self.factory_function(litellm.amoderation, call_type="moderation")
-        self.agenerate_content = self.factory_function(litellm.agenerate_content, call_type="agenerate_content")
-        self.aadapter_generate_content = self.factory_function(
-            litellm.aadapter_generate_content, call_type="aadapter_generate_content"
-        )
-        self.aresponses = self.factory_function(litellm.aresponses, call_type="aresponses")
-        self.afile_delete = self.factory_function(litellm.afile_delete, call_type="afile_delete")
-        self.afile_content = self.factory_function(litellm.afile_content, call_type="afile_content")
-        self.responses = self.factory_function(litellm.responses, call_type="responses")
-        self.aget_responses = self.factory_function(litellm.aget_responses, call_type="aget_responses")
-        self.acancel_responses = self.factory_function(litellm.acancel_responses, call_type="acancel_responses")
-        self.acompact_responses = self.factory_function(litellm.acompact_responses, call_type="acompact_responses")
-        self.adelete_responses = self.factory_function(litellm.adelete_responses, call_type="adelete_responses")
-        self.alist_input_items = self.factory_function(litellm.alist_input_items, call_type="alist_input_items")
-        self._arealtime = self.factory_function(litellm._arealtime, call_type="_arealtime")
-        self.acreate_realtime_client_secret = self.factory_function(
-            litellm.acreate_realtime_client_secret, call_type="acreate_realtime_client_secret"
-        )
-        self.arealtime_calls = self.factory_function(litellm.arealtime_calls, call_type="arealtime_calls")
-        self.acreate_realtime_transcription_session = self.factory_function(
-            litellm.acreate_realtime_transcription_session, call_type="acreate_realtime_transcription_session"
-        )
-        self._aresponses_websocket = self.factory_function(
-            litellm._aresponses_websocket, call_type="_aresponses_websocket"
-        )
-        self.acreate_fine_tuning_job = self.factory_function(
-            litellm.acreate_fine_tuning_job, call_type="acreate_fine_tuning_job"
-        )
-        self.acancel_fine_tuning_job = self.factory_function(
-            litellm.acancel_fine_tuning_job, call_type="acancel_fine_tuning_job"
-        )
-        self.alist_fine_tuning_jobs = self.factory_function(
-            litellm.alist_fine_tuning_jobs, call_type="alist_fine_tuning_jobs"
-        )
-        self.aretrieve_fine_tuning_job = self.factory_function(
-            litellm.aretrieve_fine_tuning_job, call_type="aretrieve_fine_tuning_job"
-        )
-        self.afile_list = self.factory_function(litellm.afile_list, call_type="alist_files")
-        self.aimage_edit = self.factory_function(litellm.aimage_edit, call_type="aimage_edit")
-        self.allm_passthrough_route = self.factory_function(
-            litellm.allm_passthrough_route, call_type="allm_passthrough_route"
-        )
-        # Note: acancel_batch is defined as a method on the Router class (not using factory_function)
-        # to properly handle model-to-provider mapping like acreate_batch and aretrieve_batch
+        pass
 
     def _initialize_vector_store_endpoints(self):
         """Initialize vector store endpoints."""
@@ -1438,11 +1386,7 @@ class Router:
             setattr(self, name, self.factory_function(func, call_type=name))  # type: ignore[arg-type]
 
     def _initialize_skills_endpoints(self):
-        """Initialize Anthropic Skills API endpoints."""
-        self.acreate_skill = self.factory_function(litellm.acreate_skill, call_type="acreate_skill")
-        self.alist_skills = self.factory_function(litellm.alist_skills, call_type="alist_skills")
-        self.aget_skill = self.factory_function(litellm.aget_skill, call_type="aget_skill")
-        self.adelete_skill = self.factory_function(litellm.adelete_skill, call_type="adelete_skill")
+        pass
 
     def _initialize_interactions_endpoints(self):
         """Initialize Google Interactions API endpoints."""
