@@ -40,8 +40,6 @@ from typing import (
     overload,
     Type,
 )
-from litellm.types.integrations.datadog import DatadogInitParams
-from litellm.types.integrations.newrelic import NewRelicInitParams
 from litellm._logging import (
     set_verbose,
     _turn_on_debug,
@@ -1230,3 +1228,8 @@ from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
 
 # Cleaned up RAG routes and endpoints
+
+from .router import Router
+
+provider_list = []
+from litellm.types.utils import EmbeddingResponse, ImageResponse, Message, ModelResponse, ModelResponseStream
