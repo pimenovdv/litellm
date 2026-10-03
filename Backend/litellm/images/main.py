@@ -41,8 +41,8 @@ llm_http_handler: BaseLLMHTTPHandler = BaseLLMHTTPHandler()
 from openai.types.audio.transcription_create_params import FileTypes  # type: ignore
 
 # BFL handlers
-from litellm.llms.black_forest_labs.image_edit.handler import bfl_image_edit
-from litellm.llms.black_forest_labs.image_generation.handler import bfl_image_generation
+bfl_image_edit = None
+bfl_image_generation = None
 from litellm.main import (
     azure_chat_completions,
     base_llm_aiohttp_handler,

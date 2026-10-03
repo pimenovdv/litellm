@@ -1230,3 +1230,97 @@ from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
 
 # Cleaned up RAG routes and endpoints
+
+from .router import Router
+
+from litellm.utils import get_model_info, ModelResponseStream, ImageResponse, EmbeddingResponse
+
+from litellm.types.utils import LlmProviders
+
+from litellm.caching.caching import DualCache, Cache
+
+from litellm.utils import ModelResponse, Message, Choices
+
+from litellm.utils import Usage, TextCompletionResponse
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from litellm.utils import get_llm_provider
+
+from litellm.utils import register_model
+
+from litellm.exceptions import RateLimitError, Timeout
+from litellm.main import completion, embedding, stream_chunk_builder, Chat
+from litellm.main import amoderation, moderation, aembedding, acompletion, text_completion, atext_completion
+from litellm.images.main import image_generation, aimage_generation
+from litellm.utils import completion_cost
+provider_list = list(models_by_provider.keys())
+from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
+from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
+logging_callback_manager = LoggingCallbackManager()
+from litellm.exceptions import BudgetExceededError
+class JSONProviderRegistry:
+    @classmethod
+    def exists(cls, *args, **kwargs):
+        return False
+class LiteLLMProxyChatConfig:
+    @classmethod
+    def _should_use_litellm_proxy_by_default(cls, *args, **kwargs):
+        return False
+    @classmethod
+    def litellm_proxy_get_custom_llm_provider_info(cls, *args, **kwargs):
+        return None
+    def _get_openai_compatible_provider_info(self, *args, **kwargs):
+        return None, None
+
+custom_provider_map = []
+
+from litellm.utils import _get_model_info_helper
+global_disable_no_log_param = False
+
+from litellm.utils import get_model_info, ModelResponseStream, ImageResponse, EmbeddingResponse
+
+from litellm.types.utils import LlmProviders
+
+from litellm.caching.caching import DualCache, Cache
+
+from litellm.utils import ModelResponse, Message, Choices
+
+from litellm.utils import Usage, TextCompletionResponse
+
+from litellm.types.llms.openai import CreateFileRequest
+
+from litellm.utils import get_llm_provider
+
+from litellm.utils import register_model
+
+from litellm.exceptions import RateLimitError, Timeout
+from litellm.main import completion, embedding, stream_chunk_builder, Chat
+from litellm.main import amoderation, moderation, aembedding, acompletion, text_completion, atext_completion
+from litellm.images.main import image_generation, aimage_generation
+from litellm.utils import completion_cost
+provider_list = list(models_by_provider.keys())
+from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
+from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
+logging_callback_manager = LoggingCallbackManager()
+from litellm.exceptions import BudgetExceededError
+class JSONProviderRegistry:
+    @classmethod
+    def exists(cls, *args, **kwargs):
+        return False
+class LiteLLMProxyChatConfig:
+    @classmethod
+    def _should_use_litellm_proxy_by_default(cls, *args, **kwargs):
+        return False
+    @classmethod
+    def litellm_proxy_get_custom_llm_provider_info(cls, *args, **kwargs):
+        return None
+    def _get_openai_compatible_provider_info(self, *args, **kwargs):
+        return None, None
+
+custom_provider_map = []
+
+from litellm.utils import _get_model_info_helper
+global_disable_no_log_param = False
+
+from litellm.utils import in_memory_llm_clients_cache

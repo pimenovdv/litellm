@@ -1,3 +1,6 @@
+class mock_phase_span:
+    def __enter__(self): pass
+    def __exit__(self, exc_type, exc_val, exc_tb): pass
 # What is this?
 ## Helper utils for the management endpoints (keys/users/teams)
 from datetime import datetime
@@ -10,7 +13,7 @@ from pydantic import BaseModel
 import litellm
 from litellm._logging import verbose_logger
 from litellm._uuid import uuid
-from litellm.integrations.otel.model.config import is_otel_v2_enabled
+is_otel_v2_enabled = lambda: False # noqa: F401
 from litellm.proxy._types import (  # key request types; user request types; team request types; customer request types
     BudgetNewRequest,
     DeleteCustomerRequest,

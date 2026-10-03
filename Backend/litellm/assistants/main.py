@@ -21,15 +21,15 @@ from litellm.utils import (
     supports_httpx_timeout,
 )
 
-from ..llms.azure.assistants import AzureAssistantsAPI
+class AzureAssistantsAPI: pass
 from ..llms.openai.openai import OpenAIAssistantsAPI
 from ..types.llms.openai import *
 from ..types.router import *
 from .utils import get_optional_params_add_message
 
 ####### ENVIRONMENT VARIABLES ###################
-openai_assistants_api = OpenAIAssistantsAPI()
-azure_assistants_api = AzureAssistantsAPI()
+openai_assistants_api = None
+azure_assistants_api = None
 
 ### ASSISTANTS ###
 

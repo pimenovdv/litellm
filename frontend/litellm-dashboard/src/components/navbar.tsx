@@ -19,6 +19,13 @@ import UserDropdown from "./Navbar/UserDropdown/UserDropdown";
 import ViewSwitcher from "./Navbar/ViewSwitcher";
 import WorkerDropdown from "./Navbar/WorkerDropdown/WorkerDropdown";
 
+
+/**
+ * Navbar Component
+ *
+ * Renders the top navigation bar for the application, including user profile controls and links.
+ * @returns {JSX.Element} The rendered navigation bar.
+ */
 interface NavbarProps {
   accessToken: string | null;
   isPublicPage: boolean;
