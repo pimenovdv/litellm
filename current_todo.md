@@ -1,4 +1,4 @@
-- [x] Очистить списки зависимостей `Backend/pyproject.toml` от неиспользуемых библиотек (sentry, datadog, guardrails, telemetry, prometheus, posthog).
-- [ ] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).
-- [ ] Очистить списки зависимостей `frontend/litellm-dashboard/package.json` от неиспользуемых библиотек (sentry, datadog, aws, azure и т.д.).
-- [ ] Очистить `uv.lock` и другие неиспользуемые списки зависимостей.
+- [ ] Добавить docstrings для основных файлов ядра (Backend/litellm/__init__.py, Backend/litellm/main.py).
+- [ ] Добавить docstrings для роутера (Backend/litellm/router.py).
+- [ ] Добавить docstrings для утилит (Backend/litellm/utils.py).
+- [ ] Добавить docstrings для клиента (Backend/litellm/client.py).
