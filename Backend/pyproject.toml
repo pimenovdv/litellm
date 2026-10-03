@@ -37,6 +37,7 @@ Documentation = "https://docs.litellm.ai"
 # consumers can coexist with other packages and pick up security patches without
 # forking. Reproducibility for our Docker/CI comes from `uv.lock` (images install
 # via `uv sync --frozen`). A few deps stay exact-pinned: litellm's own
+# sub-packages, and grpcio is
 # supply-chain-pinned to a vetted, aged release.
 [project.optional-dependencies]
 proxy = [
