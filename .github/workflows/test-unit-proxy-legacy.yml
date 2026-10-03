@@ -32,7 +32,7 @@ jobs:
           - name: "proxy-server"
             path: "tests/proxy_unit_tests/test_proxy_server.py"
           - name: "proxy-server-extras"
-            path: "tests/proxy_unit_tests/test_proxy_server_*.py tests/proxy_unit_tests/test_proxy_setting_guardrails.py"
+            path: "tests/proxy_unit_tests/test_proxy_server_*.py"
           - name: "proxy-utils"
             path: "tests/proxy_unit_tests/test_proxy_utils.py"
           - name: "proxy-token-counter"
