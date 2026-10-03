@@ -10,7 +10,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-09-30T15:56:31.629503677Z"
+exclude-newer = "2026-09-30T17:01:16.632491509Z"
 exclude-newer-span = "P3D"
 
 [manifest]
