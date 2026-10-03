@@ -9,7 +9,6 @@ from litellm._logging import verbose_logger
 from litellm.types.llms.openai import AllMessageValues, OpenAIChatCompletionFinishReason
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     from litellm.types.utils import ModelResponseStream
 

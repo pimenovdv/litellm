@@ -61,7 +61,6 @@ from litellm.types.videos.main import VideoObject
 from .types_utils.utils import get_instance_fn, validate_custom_validate_return_type
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     Span = Union[_Span, Any]
 else:
@@ -3352,7 +3351,6 @@ class SpendLogsPayload(TypedDict):
 
 
 class SpanAttributes(str, enum.Enum):
-    # Note: We've taken this from opentelemetry-semantic-conventions-ai
     # I chose to not add a new dependency to litellm for this
 
     # Semantic Conventions for LLM requests, this needs to be removed after

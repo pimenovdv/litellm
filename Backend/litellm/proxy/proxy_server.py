@@ -126,7 +126,6 @@ from litellm.utils import (
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
-    from opentelemetry.trace import Span as _Span
 
     OpenTelemetry = Any
 

@@ -35,7 +35,6 @@ from litellm.types.utils import StandardLoggingPayload
 from litellm.utils import get_utc_datetime
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     Span = Union[_Span, Any]
 else:

@@ -8,7 +8,6 @@ from litellm.router_utils.cooldown_handlers import (
 from litellm.types.router import RouterRateLimitError
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     from litellm.router import Router as _Router
 

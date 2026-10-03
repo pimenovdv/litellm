@@ -26,7 +26,6 @@ from .router_callbacks.track_deployment_metrics import (
 )
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     from litellm.router import Router as _Router
 
