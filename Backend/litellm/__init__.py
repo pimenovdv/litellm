@@ -1231,23 +1231,11 @@ from litellm.secret_managers.main import get_secret, get_secret_str
 
 # Cleaned up RAG routes and endpoints
 
-from .router import Router
-
-provider_list = list(models_by_provider.keys())
-
 from litellm.utils import get_model_info, ModelResponseStream, ImageResponse, EmbeddingResponse
 
 from litellm.types.utils import LlmProviders
 
-from litellm.caching.caching import DualCache
-
-provider_list = list(models_by_provider.keys())
-
-from litellm.utils import get_model_info, ModelResponseStream, ImageResponse, EmbeddingResponse
-
-from litellm.types.utils import LlmProviders
-
-from litellm.caching.caching import DualCache
+from litellm.caching.caching import DualCache, Cache
 
 from litellm.utils import ModelResponse, Message, Choices
 
@@ -1257,82 +1245,24 @@ from .router import Router
 
 from litellm.types.llms.openai import CreateFileRequest
 
-from .router import Router
-
-from litellm.types.llms.openai import CreateFileRequest
-
 from litellm.utils import get_llm_provider
-
-from .router import Router
-
-from litellm.types.llms.openai import CreateFileRequest
-
-from litellm.utils import get_llm_provider
-
-from litellm.main import stream_chunk_builder
-
-from .router import Router
-
-from litellm.types.llms.openai import CreateFileRequest
-
-from litellm.utils import get_llm_provider
-
-from litellm.main import stream_chunk_builder
-
-from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
-from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
-logging_callback_manager = LoggingCallbackManager()
-
-from .router import Router
-
-from litellm.types.llms.openai import CreateFileRequest
-
-from litellm.utils import get_llm_provider
-
-from litellm.main import stream_chunk_builder
-
-from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
-from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
-logging_callback_manager = LoggingCallbackManager()
-
-from litellm.exceptions import RateLimitError, Timeout
-from litellm.main import completion, embedding
-from litellm.utils import completion_cost
-
-from .router import Router
-
-from litellm.types.llms.openai import CreateFileRequest
-
-from litellm.utils import get_llm_provider
-
-from litellm.main import stream_chunk_builder
-
-from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
-from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
-logging_callback_manager = LoggingCallbackManager()
-
-from litellm.exceptions import RateLimitError, Timeout
-from litellm.main import completion, embedding
-from litellm.utils import completion_cost
-
-from litellm.caching.caching import Cache
-
-from .router import Router
-
-from litellm.types.llms.openai import CreateFileRequest
-
-from litellm.utils import get_llm_provider
-
-from litellm.main import stream_chunk_builder
-
-from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
-from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
-logging_callback_manager = LoggingCallbackManager()
-
-from litellm.exceptions import RateLimitError, Timeout
-from litellm.main import completion, embedding
-from litellm.utils import completion_cost
-
-from litellm.caching.caching import Cache
 
 from litellm.utils import register_model
+
+from litellm.exceptions import RateLimitError, Timeout
+from litellm.main import completion, embedding, stream_chunk_builder, Chat, amoderation, moderation, aembedding, acompletion, text_completion, atext_completion
+from litellm.images.main import image_generation, aimage_generation
+from litellm.utils import completion_cost
+provider_list = list(models_by_provider.keys())
+from litellm.litellm_core_utils.custom_logger_registry import CustomLoggerRegistry
+from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
+logging_callback_manager = LoggingCallbackManager()
+class LiteLLMProxyChatConfig:
+    @classmethod
+    def _should_use_litellm_proxy_by_default(cls, *args, **kwargs):
+        return False
+    @classmethod
+    def litellm_proxy_get_custom_llm_provider_info(cls, *args, **kwargs):
+        return None
+    def _get_openai_compatible_provider_info(self, *args, **kwargs):
+        return None, None
