@@ -40,6 +40,8 @@ from typing import (
     overload,
     Type,
 )
+from litellm.types.integrations.datadog import DatadogInitParams
+from litellm.types.integrations.newrelic import NewRelicInitParams
 from litellm._logging import (
     set_verbose,
     _turn_on_debug,
@@ -413,9 +415,9 @@ suppress_debug_info: bool = False
 dynamodb_table_name: Optional[str] = None
 s3_callback_params: Optional[Dict] = None
 s3_audit_callback_params: Optional[Dict] = None
-datadog_llm_observability_params: Optional[Dict] = None
-datadog_params: Optional[Dict] = None
-newrelic_params: Optional[Dict] = None
+datadog_llm_observability_params: Optional[Union[DatadogLLMObsInitParams, Dict]] = None
+datadog_params: Optional[Union[DatadogInitParams, Dict]] = None
+newrelic_params: Optional[Union[NewRelicInitParams, Dict]] = None
 aws_sqs_callback_params: Optional[Dict] = None
 generic_logger_headers: Optional[Dict] = None
 default_key_generate_params: Optional[Dict] = None
@@ -1228,11 +1230,3 @@ from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
 
 # Cleaned up RAG routes and endpoints
-
-from .router import Router
-
-provider_list = []
-from litellm.types.utils import EmbeddingResponse, ImageResponse, Message, ModelResponse, ModelResponseStream
-
-from litellm.types.utils import TextCompletionResponse
-from litellm.caching.caching import DualCache
