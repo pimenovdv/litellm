@@ -13,7 +13,6 @@ from litellm.caching.in_memory_cache import InMemoryCache
 from litellm.types.llms.openai import AllMessageValues, ChatCompletionToolParam
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     from litellm.router import Router
 

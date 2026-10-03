@@ -27,7 +27,6 @@ from litellm.proxy._types import UserAPIKeyAuth
 from litellm.types.utils import SpecialEnums
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     from litellm.proxy.utils import InternalUsageCache as _InternalUsageCache
     from litellm.proxy.utils import PrismaClient as _PrismaClient

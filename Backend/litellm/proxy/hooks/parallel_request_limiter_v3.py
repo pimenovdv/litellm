@@ -54,7 +54,6 @@ from litellm.types.utils import (
 )
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     from litellm.proxy.utils import InternalUsageCache as _InternalUsageCache
     from litellm.types.caching import RedisPipelineIncrementOperation

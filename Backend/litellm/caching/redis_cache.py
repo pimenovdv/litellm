@@ -39,7 +39,6 @@ from litellm.types.services import ServiceTypes
 from .base_cache import BaseCache
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
     from redis.asyncio import Redis, RedisCluster
     from redis.asyncio.client import Pipeline
     from redis.asyncio.cluster import ClusterPipeline

@@ -106,7 +106,6 @@ from .auth_checks_organization import (
 from .auth_utils import get_model_from_request, get_request_route_template
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     Span = Union[_Span, Any]
 else:
