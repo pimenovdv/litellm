@@ -10,7 +10,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-09-30T17:01:16.632491509Z"
+exclude-newer = "2026-09-30T22:15:07.604568101Z"
 exclude-newer-span = "P3D"
 
 [manifest]
@@ -3665,6 +3665,9 @@ extra-proxy = [
     { name = "redisvl" },
     { name = "resend" },
 ]
+google = [
+    { name = "google-genai" },
+]
 grpc = [
     { name = "grpcio" },
 ]
@@ -3832,6 +3835,7 @@ requires-dist = [
     { name = "fastapi", marker = "extra == 'proxy'", specifier = ">=0.136.3,<1.0" },
     { name = "fastapi-sso", marker = "extra == 'proxy'", specifier = ">=0.19.0,<1.0" },
     { name = "fastuuid", specifier = ">=0.14.0,<1.0" },
+    { name = "google-genai", marker = "extra == 'google'", specifier = ">=1.37.0,<2.0" },
     { name = "google-genai", marker = "extra == 'proxy-runtime'", specifier = ">=1.37.0,<2.0" },
     { name = "granian", marker = "extra == 'proxy'", specifier = ">=2.7.4,<3.0" },
     { name = "grpcio", marker = "extra == 'grpc'", specifier = "==1.78.0" },
@@ -3888,7 +3892,7 @@ requires-dist = [
     { name = "uvloop", marker = "sys_platform != 'win32' and extra == 'proxy'", specifier = ">=0.21.0,<1.0" },
     { name = "websockets", marker = "extra == 'proxy'", specifier = ">=15.0.1,<16.0" },
 ]
-provides-extras = ["proxy", "cli", "extra-proxy", "utils", "caching", "saml", "semantic-router", "mlflow", "grpc", "stt-nvidia-riva", "bedrock-realtime", "proxy-runtime"]
+provides-extras = ["google", "proxy", "cli", "extra-proxy", "utils", "caching", "saml", "semantic-router", "mlflow", "grpc", "stt-nvidia-riva", "bedrock-realtime", "proxy-runtime"]
 
 [package.metadata.requires-dev]
 ci = [
