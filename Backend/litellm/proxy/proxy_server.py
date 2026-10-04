@@ -8462,7 +8462,7 @@ class ProxyStartupEvent:
         DD tracer is used to trace Python applications.
         Doc: https://docs.datadoghq.com/tracing/trace_collection/automatic_instrumentation/dd_libraries/python/
         """
-
+        pass
 
     @classmethod
     def _init_pyroscope(cls):
