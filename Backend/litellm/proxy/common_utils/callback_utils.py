@@ -90,6 +90,7 @@ def initialize_callbacks_on_proxy(
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 imported_list.append(callback)
             elif isinstance(callback, str) and callback == "presidio":
+                from litellm.litellm_core_utils.pii_masking.presidio_pii_masking import (
                                     _OPTIONAL_PresidioPIIMasking,
                 )
 
@@ -154,6 +155,7 @@ def initialize_callbacks_on_proxy(
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
             elif isinstance(callback, str) and callback == "lakera_prompt_injection":
+                from litellm.integrations.lakera import (
                                     lakeraAI_Moderation,
                 )
 
@@ -165,6 +167,7 @@ def initialize_callbacks_on_proxy(
                 lakera_moderations_object = lakeraAI_Moderation(**init_params)
                 imported_list.append(lakera_moderations_object)
             elif isinstance(callback, str) and callback == "aporia_prompt_injection":
+                from litellm.integrations.aporia import (
                                     AporiaGuardrail,
                 )
 
