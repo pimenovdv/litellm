@@ -7,14 +7,12 @@ markdown report with provider-specific breakdowns and test statistics.
 """
 
 import os
-import sys
 import subprocess
+import sys
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from datetime import datetime
-from pathlib import Path
-import json
-from typing import Dict, List, Tuple, Optional
+
 
 # ANSI color codes for terminal output
 class Colors:
