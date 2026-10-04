@@ -27,6 +27,7 @@ from .in_memory_cache import InMemoryCache
 from .redis_cache import RedisCache
 
 if TYPE_CHECKING:
+
     Span = Any
 else:
     Span = Any

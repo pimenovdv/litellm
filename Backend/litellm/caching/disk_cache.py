@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 from .base_cache import BaseCache
 
 if TYPE_CHECKING:
+
     Span = Any
 else:
     Span = Any

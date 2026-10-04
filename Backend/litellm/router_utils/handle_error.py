@@ -8,6 +8,7 @@ from litellm.router_utils.cooldown_handlers import (
 from litellm.types.router import RouterRateLimitError
 
 if TYPE_CHECKING:
+
     from litellm.router import Router as _Router
 
     LitellmRouter = _Router

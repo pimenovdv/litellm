@@ -5,7 +5,8 @@ This hook uses the DBSpendUpdateWriter to batch-write response IDs to the databa
 instead of writing immediately on each request.
 """
 
-from typing import TYPE_CHECKING, Any, AsyncGenerator, Optional, Tuple, Union, cast
+from collections.abc import AsyncGenerator
+from typing import TYPE_CHECKING, Any, cast
 
 from fastapi import HTTPException
 
@@ -37,7 +38,7 @@ class ResponsesIDSecurity(CustomLogger):
         cache: "DualCache",
         data: dict,
         call_type: CallTypesLiteral,
-    ) -> Optional[Union[Exception, str, dict]]:
+    ) -> Exception | str | dict | None:
         # MAP all the responses api response ids to the encrypted response ids
         responses_api_call_types = {
             "aresponses",
@@ -67,8 +68,8 @@ class ResponsesIDSecurity(CustomLogger):
 
     def check_user_access_to_response_id(
         self,
-        response_id_user_id: Optional[str],
-        response_id_team_id: Optional[str],
+        response_id_user_id: str | None,
+        response_id_team_id: str | None,
         user_api_key_dict: "UserAPIKeyAuth",
     ) -> bool:
         from litellm.proxy.proxy_server import general_settings
@@ -118,7 +119,7 @@ class ResponsesIDSecurity(CustomLogger):
             return True
         return False
 
-    def _decrypt_response_id(self, response_id: str) -> Tuple[str, Optional[str], Optional[str]]:
+    def _decrypt_response_id(self, response_id: str) -> tuple[str, str | None, str | None]:
         """
         Returns:
          - original_response_id: the original response id
@@ -158,7 +159,7 @@ class ResponsesIDSecurity(CustomLogger):
                 return response_id, None, None
         return response_id, None, None
 
-    def _get_signing_key(self) -> Optional[str]:
+    def _get_signing_key(self) -> str | None:
         """Get the signing key for encryption/decryption."""
         import os
 
@@ -173,7 +174,7 @@ class ResponsesIDSecurity(CustomLogger):
         self,
         response: BaseLiteLLMOpenAIResponseObject,
         user_api_key_dict: "UserAPIKeyAuth",
-        request_cache: Optional[dict[str, str]] = None,
+        request_cache: dict[str, str] | None = None,
     ) -> BaseLiteLLMOpenAIResponseObject:
         # encrypt the response id using the symmetric key
         # encrypt the response id, and encode the user id and response id in base64
@@ -195,7 +196,7 @@ class ResponsesIDSecurity(CustomLogger):
         if response_id and isinstance(response_id, str) and response_id.startswith("resp_"):
             # Check request-scoped cache first (for streaming consistency)
             if request_cache is not None and response_id in request_cache:
-                setattr(response, "id", request_cache[response_id])
+                response.id = request_cache[response_id]
             else:
                 encrypted_response_id = SpecialEnums.LITELLM_MANAGED_RESPONSE_API_RESPONSE_ID_COMPLETE_STR.value.format(
                     response_id,
@@ -207,12 +208,12 @@ class ResponsesIDSecurity(CustomLogger):
                 encrypted_id = f"resp_{encoded_user_id_and_response_id}"
                 if request_cache is not None:
                     request_cache[response_id] = encrypted_id
-                setattr(response, "id", encrypted_id)
+                response.id = encrypted_id
 
         elif response_obj and isinstance(response_obj, ResponsesAPIResponse):
             # Check request-scoped cache first (for streaming consistency)
             if request_cache is not None and response_obj.id in request_cache:
-                setattr(response_obj, "id", request_cache[response_obj.id])
+                response_obj.id = request_cache[response_obj.id]
             else:
                 encrypted_response_id = SpecialEnums.LITELLM_MANAGED_RESPONSE_API_RESPONSE_ID_COMPLETE_STR.value.format(
                     response_obj.id,
@@ -223,8 +224,8 @@ class ResponsesIDSecurity(CustomLogger):
                 encrypted_id = f"resp_{encoded_user_id_and_response_id}"
                 if request_cache is not None:
                     request_cache[response_obj.id] = encrypted_id
-                setattr(response_obj, "id", encrypted_id)
-            setattr(response, "response", response_obj)
+                response_obj.id = encrypted_id
+            response.response = response_obj
         return response
 
     async def async_post_call_success_hook(

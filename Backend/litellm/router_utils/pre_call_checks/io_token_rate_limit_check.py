@@ -23,6 +23,7 @@ from litellm.types.router import RouterCacheEnum, RouterErrors
 from litellm.utils import get_utc_datetime, token_counter
 
 if TYPE_CHECKING:
+
     Span = Any
 else:
     Span = Any

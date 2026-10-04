@@ -13,6 +13,7 @@ from litellm.caching.in_memory_cache import InMemoryCache
 from litellm.types.llms.openai import AllMessageValues, ChatCompletionToolParam
 
 if TYPE_CHECKING:
+
     from litellm.router import Router
 
     litellm_router = Router
