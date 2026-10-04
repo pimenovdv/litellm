@@ -219,8 +219,8 @@ healthcheck = [
 ]
 
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["maturin==1.9.4"]
+build-backend = "maturin"
 
 [tool.maturin]
 manifest-path = "litellm-rust/crates/python-bridge/Cargo.toml"
@@ -257,11 +257,11 @@ required-version = ">=0.10.9"
 exclude-newer = "3 days"
 
 [tool.uv.sources]
-# litellm-proxy-extras = { workspace = true }
-# litellm-enterprise = { workspace = true }
+litellm-proxy-extras = { workspace = true }
+litellm-enterprise = { workspace = true }
 
 [tool.uv.workspace]
-# members = ["enterprise", "litellm-proxy-extras"]
+members = ["enterprise", "litellm-proxy-extras"]
 
 [tool.isort]
 profile = "black"
