@@ -8485,16 +8485,9 @@ class ProxyStartupEvent:
         )
 
         if _should_use_dd_tracer():
-            import ddtrace
-
-            ddtrace.patch_all(logging=True, openai=False)
-
+            pass
         if _should_use_dd_profiler():
-            from ddtrace.profiling import Profiler
-
-            prof = Profiler()
-            prof.start()
-            verbose_proxy_logger.debug("Datadog Profiler started......")
+            pass
 
     @classmethod
     def _init_pyroscope(cls):
