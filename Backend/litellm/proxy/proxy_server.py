@@ -8486,6 +8486,7 @@ class ProxyStartupEvent:
 
         if _should_use_dd_tracer():
             pass
+
         if _should_use_dd_profiler():
             pass
 
