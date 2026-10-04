@@ -1,5 +1,4 @@
 name: "Unit Tests: Proxy DB Operations"
-
 on:
   pull_request:
     branches:
@@ -7,14 +6,11 @@ on:
       - litellm_internal_staging
       - litellm_oss_staging
       - "litellm_**"
-
 permissions:
   contents: read
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 # Semantic matrix: each shard groups tests by concern (auth, server, logging, …)
 # rather than alphabetical letter ranges. Adding a new test file means adding it
 # to whichever group it belongs to, not reshuffling slices.
@@ -73,7 +69,6 @@ jobs:
               sys.exit(1)
           print(f"OK: all {len(actual)} files assigned to a shard.")
           PY
-
   proxy-db:
     needs: assert-shard-coverage
     # Display only the semantic shard name in the checks UI instead of GHA's
@@ -94,7 +89,6 @@ jobs:
             workers: 0
             dist: loadscope
             timeout: 20
-
           # ---- auth: split into 2 shards ----
           - test-group: auth-checks
             test-path: >-
@@ -114,14 +108,12 @@ jobs:
             workers: 4
             dist: loadscope
             timeout: 15
-
           # ---- test_proxy_utils.py, single shard, worksteal distribution ----
           - test-group: proxy-utils
             test-path: "tests/proxy_unit_tests/test_proxy_utils.py"
             workers: 4
             dist: worksteal
             timeout: 15
-
           # ---- proxy server: split into 2 shards ----
           - test-group: proxy-server-core
             test-path: >-
@@ -147,7 +139,6 @@ jobs:
             workers: 4
             dist: loadscope
             timeout: 15
-
           # ---- logging: split into 2 shards ----
           - test-group: custom-logging
             test-path: >-
@@ -165,7 +156,6 @@ jobs:
             workers: 4
             dist: loadscope
             timeout: 15
-
           - test-group: db-and-spend
             test-path: >-
               tests/proxy_unit_tests/test_prisma_client_backoff_retry.py
@@ -178,11 +168,9 @@ jobs:
             workers: 4
             dist: loadscope
             timeout: 15
-
           # ---- guardrails + budget + hooks: split into 2 ----
           - test-group: guardrails-hooks
             test-path: >-
-
               tests/proxy_unit_tests/test_banned_keyword_list.py
               tests/proxy_unit_tests/test_unit_test_proxy_hooks.py
             workers: 4
@@ -196,7 +184,6 @@ jobs:
             workers: 4
             dist: loadscope
             timeout: 15
-
           - test-group: endpoints-and-responses
             test-path: >-
               tests/proxy_unit_tests/test_blog_posts_endpoint.py
