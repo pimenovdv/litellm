@@ -1,7 +1,3 @@
-
-from litellm.proxy._types import UserAPIKeyAuth
-
-
 class DDSpanTagger:
     @staticmethod
     def tag_call_id(litellm_call_id: str | None) -> None:
@@ -9,7 +5,7 @@ class DDSpanTagger:
 
     @staticmethod
     def tag_request(
-        user_api_key_dict: UserAPIKeyAuth,
+        user_api_key_dict,
         requested_model: str | None,
     ) -> None:
         pass

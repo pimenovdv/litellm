@@ -9,11 +9,10 @@ Has 4 methods:
 """
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-
-    Span = Union[_Span, Any]
+    Span = Any
 else:
     Span = Any
 
@@ -22,8 +21,8 @@ class BaseCache(ABC):
     def __init__(self, default_ttl: int = 60):
         self.default_ttl = default_ttl
 
-    def get_ttl(self, **kwargs) -> Optional[int]:
-        kwargs_ttl: Optional[int] = kwargs.get("ttl")
+    def get_ttl(self, **kwargs) -> int | None:
+        kwargs_ttl: int | None = kwargs.get("ttl")
         if kwargs_ttl is not None:
             try:
                 return int(kwargs_ttl)

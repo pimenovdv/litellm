@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from typing import Any
+from typing import Any, Optional
 
 
 class NullSpan:
@@ -12,9 +12,11 @@ class NullSpan:
     def finish(self):
         pass
 
+
 @contextmanager
 def null_tracer(name, **kwargs):
     yield NullSpan()
+
 
 class NullTracer:
     def trace(self, name, **kwargs):
@@ -23,14 +25,19 @@ class NullTracer:
     def wrap(self, name=None, **kwargs):
         if callable(name):
             return name
+
         def decorator(f):
             return f
+
         return decorator
+
 
 tracer = NullTracer()
 
-def get_active_span() -> Any | None:
+
+def get_active_span() -> Optional[Any]:
     return None
+
 
 def set_active_span_tag(tag_key: str, tag_value: str) -> bool:
     return False
