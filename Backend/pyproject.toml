@@ -58,8 +58,7 @@ proxy = [
     "cryptography>=48.0.1,<49.0",
     "pynacl>=1.6.2,<2.0",
     "websockets>=15.0.1,<16.0",
-                "mcp>=1.28.1,<2.0",
-    "litellm-proxy-extras==0.4.81",
+
     "litellm-enterprise==0.1.52",
     "RestrictedPython>=8.1,<9.0",
     "rich>=13.9.4,<14.0",
@@ -119,7 +118,6 @@ bedrock-realtime = [
     # experimental AWS SDK (with its smithy-* deps, pulled transitively)
     # provides the bidirectional stream; imported lazily in the realtime
     # handler so litellm core stays usable without it.
-    "aws-sdk-bedrock-runtime>=0.7.0,<0.8.0; python_version >= '3.12'",
 ]
 proxy-runtime = [
     # Historically bundled in the proxy Docker images via requirements.txt.
@@ -175,7 +173,6 @@ e2e-dev = [
     "playwright==1.61.0",
     "websockets>=15.0.1,<16.0",
     "locust==2.45.0",
-    "mcp>=1.28.1,<2.0",
 ]
 proxy-dev = [
     "prisma==0.11.0",
@@ -207,7 +204,6 @@ ci = [
         "blockbuster==1.5.26",
     "beautifulsoup4==4.14.3",
     "pylint==4.0.5",
-    "langchain-mcp-adapters==0.2.1",
     "langchain-openai==1.1.14",
     "langgraph>=1.2.4,<1.3.0",
     "langgraph-prebuilt>=1.1.0,<1.3.0",
@@ -257,11 +253,11 @@ required-version = ">=0.10.9"
 exclude-newer = "3 days"
 
 [tool.uv.sources]
-litellm-proxy-extras = { workspace = true }
+
 litellm-enterprise = { workspace = true }
 
 [tool.uv.workspace]
-members = ["enterprise", "litellm-proxy-extras"]
+members = ["enterprise"]
 
 [tool.isort]
 profile = "black"
