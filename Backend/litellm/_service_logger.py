@@ -243,6 +243,7 @@ class ServiceLogging(CustomLogger):
             pass
 
         if not hasattr(self, "dd_logger"):
+            if 'DataDogLogger' not in globals() and 'DataDogLogger' not in locals(): return
             self.dd_logger: DataDogLogger = DataDogLogger()
 
         return
