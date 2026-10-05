@@ -1,14 +1,14 @@
 import asyncio
-import aiohttp
 import json
+
+import aiohttp
+
 
 # Asynchronously fetch data from a given URL
 async def fetch_data(url):
     try:
         # Create an asynchronous session
-        async with aiohttp.ClientSession() as session:
-            # Send a GET request to the URL
-            async with session.get(url) as resp:
+        async with aiohttp.ClientSession() as session, session.get(url) as resp:
                 # Raise an error if the response status is not OK
                 resp.raise_for_status()
                 # Parse the response JSON
@@ -16,7 +16,7 @@ async def fetch_data(url):
                 print("Fetch the data from URL.")
                 # Return the 'data' field from the JSON response
                 return resp_json['data']
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         # Print an error message if fetching data fails
         print("Error fetching data from URL:", e)
         return None
@@ -39,7 +39,7 @@ def write_to_file(file_path, data):
             # Dump the data as JSON into the file
             json.dump(data, file, indent=4)
         print("Values updated successfully.")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         # Print an error message if writing to file fails
         print("Error updating JSON file:", e)
 
