@@ -40,6 +40,9 @@ Documentation = "https://docs.litellm.ai"
 # sub-packages and the opentelemetry trio move in lockstep, and grpcio is
 # supply-chain-pinned to a vetted, aged release.
 [project.optional-dependencies]
+google = [
+    "google-genai>=1.37.0,<2.0",
+]
 proxy = [
     "gunicorn>=23.0.0,<24.0",
     "uvicorn>=0.33.0,<1.0",
