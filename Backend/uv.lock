@@ -17,7 +17,6 @@ exclude-newer-span = "P3D"
 members = [
     "litellm",
     "litellm-enterprise",
-    "litellm-proxy-extras",
 ]
 constraints = [
     { name = "aiohttp", specifier = ">=3.14.1,<4.0" },
@@ -3742,7 +3741,7 @@ requires-dist = [
     { name = "jinja2", specifier = ">=3.1.6,<4.0" },
     { name = "jsonschema", specifier = ">=4.0.0,<5.0" },
     { name = "litellm-enterprise", marker = "extra == 'proxy'", editable = "enterprise" },
-    { name = "litellm-proxy-extras", marker = "extra == 'proxy'", editable = "litellm-proxy-extras" },
+    { name = "litellm-proxy-extras", marker = "extra == 'proxy'", directory = "../litellm-proxy-extras" },
     { name = "llm-sandbox", marker = "extra == 'proxy-runtime'", specifier = ">=0.3.39,<1.0" },
     { name = "mangum", marker = "extra == 'proxy-runtime'", specifier = ">=0.17.0,<1.0" },
     { name = "mcp", marker = "extra == 'proxy'", specifier = ">=1.28.1,<2.0" },
@@ -3865,7 +3864,7 @@ source = { editable = "enterprise" }
 [[package]]
 name = "litellm-proxy-extras"
 version = "0.4.81"
-source = { editable = "litellm-proxy-extras" }
+source = { directory = "../litellm-proxy-extras" }
 
 [[package]]
 name = "llm-sandbox"
