@@ -564,6 +564,7 @@ _TYPES_IMPORT_MAP = {
         "LoggingCallbackManager",
     ),
     "DatadogLLMObsInitParams": (
+        "litellm.types.integrations.datadog_llm_obs",
         "DatadogLLMObsInitParams",
     ),
 }

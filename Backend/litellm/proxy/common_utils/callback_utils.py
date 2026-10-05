@@ -90,8 +90,6 @@ def initialize_callbacks_on_proxy(
                 callback = LoggingCallbackManager._add_custom_callback_generic_api_str(callback)
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 imported_list.append(callback)
-
-                presidio_logging_only: bool | None = litellm_settings.get("presidio_logging_only", None)
                 if presidio_logging_only is not None:
                     presidio_logging_only = bool(presidio_logging_only)  # validate boolean given
 
@@ -105,15 +103,6 @@ def initialize_callbacks_on_proxy(
                 }
                 pii_masking_object = _OPTIONAL_PresidioPIIMasking(**params)
                 imported_list.append(pii_masking_object)
-            elif isinstance(callback, str) and callback == "llamaguard_moderations":
-                try:
-                    from litellm_enterprise.enterprise_callbacks.llama_guard import (
-                        _ENTERPRISE_LlamaGuard,
-                    )
-                except ImportError:
-                    raise Exception(
-                        "MissingTrying to use Llama Guard" + CommonProxyErrors.missing_enterprise_package.value
-                    )
 
                 if premium_user is not True:
                     raise Exception("Trying to use Llama Guard" + CommonProxyErrors.not_premium_user.value)
@@ -135,41 +124,18 @@ def initialize_callbacks_on_proxy(
 
                 _secret_detection_object = _ENTERPRISE_SecretDetection()
                 imported_list.append(_secret_detection_object)
-            elif isinstance(callback, str) and callback == "openai_moderations":
-                try:
-                    from enterprise.enterprise_hooks.openai_moderation import (
-                        _ENTERPRISE_OpenAI_Moderation,
-                    )
-                except ImportError:
-                    raise Exception(
-                        "Trying to use OpenAI Moderations Check,"
-                        + CommonProxyErrors.missing_enterprise_package_docker.value
-                    )
 
                 if premium_user is not True:
                     raise Exception("Trying to use OpenAI Moderations Check" + CommonProxyErrors.not_premium_user.value)
 
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
-            elif isinstance(callback, str) and callback == "lakera_prompt_injection":
                 if "lakera_prompt_injection" in callback_specific_params and isinstance(
                     callback_specific_params["lakera_prompt_injection"], dict
                 ):
                     init_params = callback_specific_params["lakera_prompt_injection"]
                 lakera_moderations_object = lakeraAI_Moderation(**init_params)
                 imported_list.append(lakera_moderations_object)
-                aporia_guardrail_object = AporiaGuardrail()
-                imported_list.append(aporia_guardrail_object)
-            elif isinstance(callback, str) and callback == "google_text_moderation":
-                try:
-                    from enterprise.enterprise_hooks.google_text_moderation import (
-                        _ENTERPRISE_GoogleTextModeration,
-                    )
-                except ImportError:
-                    raise Exception(
-                        "Trying to use Google Text Moderation,"
-                        + CommonProxyErrors.missing_enterprise_package_docker.value
-                    )
 
                 if premium_user is not True:
                     raise Exception("Trying to use Google Text Moderation" + CommonProxyErrors.not_premium_user.value)
@@ -204,15 +170,6 @@ def initialize_callbacks_on_proxy(
 
                 blocked_user_list = _ENTERPRISE_BlockedUserList(prisma_client=prisma_client)
                 imported_list.append(blocked_user_list)
-            elif isinstance(callback, str) and callback == "banned_keywords":
-                try:
-                    from enterprise.enterprise_hooks.banned_keywords import (
-                        _ENTERPRISE_BannedKeywords,
-                    )
-                except ImportError:
-                    raise Exception(
-                        "Trying to use Banned Keywords" + CommonProxyErrors.missing_enterprise_package_docker.value
-                    )
 
                 if premium_user is not True:
                     raise Exception("Trying to use ENTERPRISE BannedKeyword" + CommonProxyErrors.not_premium_user.value)

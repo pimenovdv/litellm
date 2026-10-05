@@ -6,7 +6,9 @@ import litellm
 from litellm._logging import verbose_logger
 
 from .integrations.custom_logger import CustomLogger
+from .integrations.datadog.datadog import DataDogLogger
 from .integrations.opentelemetry import OpenTelemetry
+from .integrations.prometheus_services import PrometheusServicesLogger
 from .types.services import ServiceLoggerPayload, ServiceTypes
 
 if TYPE_CHECKING:
@@ -49,6 +51,8 @@ class ServiceLogging(CustomLogger):
         self.mock_testing_async_success_hook = 0
         self.mock_testing_sync_failure_hook = 0
         self.mock_testing_async_failure_hook = 0
+        if "prometheus_system" in litellm.service_callback:
+            self.prometheusServicesLogger = PrometheusServicesLogger()
 
     def _resolve_otel_service_logger(self, callback: Any) -> Optional[Any]:
         """Resolve the OTel logger (legacy or V2) to emit a service span on.
@@ -176,6 +180,128 @@ class ServiceLogging(CustomLogger):
         # span, so a single DB call shows up as duplicate ``postgres ...`` spans.
         emitted_otel_logger_ids: set = set()
         for callback in litellm.service_callback:
+            if callback == "prometheus_system":
+                await self.init_prometheus_services_logger_if_none()
+                await self.prometheusServicesLogger.async_service_success_hook(payload=payload)
+            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+                await self.init_datadog_logger_if_none()
+                await self.dd_logger.async_service_success_hook(
+                    payload=payload,
+                    parent_otel_span=parent_otel_span,
+                    start_time=start_time,
+                    end_time=end_time,
+                    event_metadata=event_metadata,
+                )
+            else:
+                _otel_logger_to_use = self._resolve_otel_service_logger(callback)
+                # No ``parent_otel_span is not None`` gate: a background service
+                # call (no request on the stack) has no parent, and dropping it
+                # here is what hid those calls from traces entirely. The OTel
+                # logger decides what to do with a missing parent — legacy V1
+                # no-ops, V2 emits a root span (and skips metrics-only pings).
+                if _otel_logger_to_use is not None and id(_otel_logger_to_use) not in emitted_otel_logger_ids:
+                    emitted_otel_logger_ids.add(id(_otel_logger_to_use))
+                    await _otel_logger_to_use.async_service_success_hook(
+                        payload=payload,
+                        parent_otel_span=parent_otel_span,
+                        start_time=start_time,
+                        end_time=end_time,
+                        event_metadata=event_metadata,
+                    )
+
+    async def init_prometheus_services_logger_if_none(self):
+        """
+        initializes prometheusServicesLogger if it is None or no attribute exists on ServiceLogging Object
+
+        """
+        if not hasattr(self, "prometheusServicesLogger"):
+            self.prometheusServicesLogger = PrometheusServicesLogger()
+        elif self.prometheusServicesLogger is None:
+            self.prometheusServicesLogger = self.prometheusServicesLogger()
+        return
+
+    async def init_datadog_logger_if_none(self):
+        """
+        initializes dd_logger if it is None or no attribute exists on ServiceLogging Object
+
+        """
+        from litellm.integrations.datadog.datadog import DataDogLogger
+
+        if not hasattr(self, "dd_logger"):
+            self.dd_logger: DataDogLogger = DataDogLogger()
+
+        return
+
+    async def init_otel_logger_if_none(self):
+        """
+        initializes otel_logger if it is None or no attribute exists on ServiceLogging Object
+
+        """
+        from litellm.proxy.proxy_server import open_telemetry_logger
+
+        if not hasattr(self, "otel_logger"):
+            if open_telemetry_logger is not None and isinstance(open_telemetry_logger, OpenTelemetry):
+                self.otel_logger: OpenTelemetry = open_telemetry_logger
+            else:
+                verbose_logger.warning(
+                    "ServiceLogger: open_telemetry_logger is None or not an instance of OpenTelemetry"
+                )
+        return
+
+    async def async_service_failure_hook(
+        self,
+        service: ServiceTypes,
+        duration: float,
+        error: Union[str, Exception],
+        call_type: str,
+        parent_otel_span: Optional[Span] = None,
+        start_time: Optional[Union[datetime, float]] = None,
+        end_time: Optional[Union[float, datetime]] = None,
+        event_metadata: Optional[dict] = None,
+    ):
+        """
+        - For counting if the redis, postgres call is unsuccessful
+        """
+        if self.mock_testing:
+            self.mock_testing_async_failure_hook += 1
+
+        error_message = ""
+        if isinstance(error, Exception):
+            error_message = str(error)
+        elif isinstance(error, str):
+            error_message = error
+
+        payload = ServiceLoggerPayload(
+            is_error=True,
+            error=error_message,
+            service=service,
+            duration=duration,
+            call_type=call_type,
+            event_metadata=event_metadata,
+        )
+
+        # Dedupe OTel loggers per event — see ``async_service_success_hook`` for why
+        # the same logger can be referenced twice in ``service_callback``.
+        emitted_otel_logger_ids: set = set()
+        for callback in litellm.service_callback:
+            if callback == "prometheus_system":
+                await self.init_prometheus_services_logger_if_none()
+                await self.prometheusServicesLogger.async_service_failure_hook(
+                    payload=payload,
+                    error=error,
+                )
+            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+                await self.init_datadog_logger_if_none()
+                await self.dd_logger.async_service_failure_hook(
+                    payload=payload,
+                    error=error_message,
+                    parent_otel_span=parent_otel_span,
+                    start_time=start_time,
+                    end_time=end_time,
+                    event_metadata=event_metadata,
+                )
+            else:
+                _otel_logger_to_use = self._resolve_otel_service_logger(callback)
 
                 if not isinstance(error, str):
                     error = str(error)

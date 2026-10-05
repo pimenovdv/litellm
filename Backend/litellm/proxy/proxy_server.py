@@ -214,7 +214,6 @@ from functools import lru_cache
 
 import litellm
 import litellm._redis
-from litellm import Router
 from litellm._logging import verbose_proxy_logger, verbose_router_logger
 from litellm.caching.caching import DualCache, RedisCache
 from litellm.caching.redis_cluster_cache import RedisClusterCache
@@ -231,6 +230,7 @@ from litellm.constants import (
     GLOBAL_PROXY_SPEND_CACHE_KEY,
     LITELLM_PROXY_ADMIN_NAME,
     LITELLM_PROXY_BUDGET_NAME,
+    PROMETHEUS_FALLBACK_STATS_SEND_TIME_HOURS,
     PROXY_BATCH_POLLING_ENABLED,
     PROXY_BATCH_POLLING_INTERVAL,
     PROXY_BATCH_WRITE_AT,
@@ -461,6 +461,7 @@ from litellm.proxy.plugin_routes import (
 from litellm.proxy.plugin_routes import (
     router as plugin_router,
 )
+from litellm.router import Router
 
 try:
     from litellm.proxy.enterprise_billing.billing_metrics import (
@@ -478,6 +479,7 @@ except ImportError:
 from litellm.proxy.middleware.in_flight_requests_middleware import (
     InFlightRequestsMiddleware,
 )
+from litellm.proxy.middleware.prometheus_auth_middleware import PrometheusAuthMiddleware
 from litellm.proxy.middleware.request_size_limit_middleware import (
     RequestSizeLimitMiddleware,
 )
@@ -1807,6 +1809,7 @@ app.add_middleware(
     expose_headers=LITELLM_UI_ALLOW_HEADERS,
 )
 
+app.add_middleware(PrometheusAuthMiddleware)
 # Added before InFlightRequestsMiddleware so it nests *inside* it: Starlette
 # makes the last-added middleware outermost. The billable count is recorded
 # after the inner app returns, so if this sat outside the in-flight tracker a
@@ -4540,6 +4543,14 @@ class ProxyConfig:
                         # these are litellm callbacks - "langfuse", "sentry", "wandb"
                         else:
                             litellm.logging_callback_manager.add_litellm_success_callback(callback)
+                            if "prometheus" in callback:
+                                from litellm.integrations.prometheus import (
+                                    PrometheusLogger,
+                                )
+
+                                if PrometheusLogger is not None:
+                                    verbose_proxy_logger.debug("mounting metrics endpoint")
+                                    PrometheusLogger._mount_metrics_endpoint()
                     print(  # noqa: T201
                         f"{blue_color_code} Initialized Success Callbacks - {litellm.success_callback} {reset_color_code}"
                     )
@@ -8228,6 +8239,12 @@ class ProxyStartupEvent:
         await MavvrikFocusLogger.init_mavvrik_focus_background_job(scheduler=scheduler)
 
         ########################################################
+        # Prometheus Background Job
+        ########################################################
+        if litellm.prometheus_initialize_budget_metrics is True:
+            from litellm.integrations.prometheus import PrometheusLogger
+
+            PrometheusLogger.initialize_budget_metrics_cron_job(scheduler=scheduler)
         ########################################################
         # Key Rotation Background Job
         ########################################################
@@ -8371,6 +8388,20 @@ class ProxyStartupEvent:
                 id="monthly_spend_report_job",
                 replace_existing=True,
             )
+
+            if os.getenv("PROMETHEUS_URL"):
+                from zoneinfo import ZoneInfo
+
+                scheduler.add_job(
+                    proxy_logging_obj.slack_alerting_instance.send_fallback_stats_from_prometheus,
+                    "cron",
+                    hour=PROMETHEUS_FALLBACK_STATS_SEND_TIME_HOURS,
+                    minute=0,
+                    timezone=ZoneInfo("America/Los_Angeles"),
+                    id="prometheus_fallback_stats_job",
+                    replace_existing=True,
+                )
+                await proxy_logging_obj.slack_alerting_instance.send_fallback_stats_from_prometheus()
 
     @classmethod
     async def _setup_prisma_client(
