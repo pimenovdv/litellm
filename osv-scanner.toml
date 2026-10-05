@@ -7,3 +7,13 @@ reason = "diskcache has no fixed release published; remove this entry once one e
 id = "GHSA-3cv6-jpf6-8222"
 ignoreUntil = 2027-09-09
 reason = "litellm is the package itself"
+
+[[IgnoredVulns]]
+id = "GHSA-vfj7-8cjw-p6xm"
+ignoreUntil = 2027-09-09
+reason = "braces has no fixed release published; remove this entry once one exists"
+
+[[IgnoredVulns]]
+id = "GHSA-h7x2-h6g9-p789"
+ignoreUntil = 2027-09-09
+reason = "mlflow vulnerability has no fix version"
