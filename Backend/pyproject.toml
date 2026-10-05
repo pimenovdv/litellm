@@ -40,9 +40,6 @@ Documentation = "https://docs.litellm.ai"
 # sub-packages and the opentelemetry trio move in lockstep, and grpcio is
 # supply-chain-pinned to a vetted, aged release.
 [project.optional-dependencies]
-google = [
-    "google-genai>=1.37.0,<2.0",
-]
 proxy = [
     "gunicorn>=23.0.0,<24.0",
     "uvicorn>=0.33.0,<1.0",
@@ -62,6 +59,7 @@ proxy = [
     "pynacl>=1.6.2,<2.0",
     "websockets>=15.0.1,<16.0",
                 "mcp>=1.28.1,<2.0",
+
     "litellm-enterprise==0.1.52",
     "RestrictedPython>=8.1,<9.0",
     "rich>=13.9.4,<14.0",
@@ -234,6 +232,27 @@ healthcheck = [
     "pyyaml==6.0.3",
 ]
 
+[build-system]
+requires = ["maturin==1.9.4"]
+build-backend = "maturin"
+
+[tool.maturin]
+manifest-path = "litellm-rust/crates/python-bridge/Cargo.toml"
+module-name = "litellm.rust_bridge._native"
+python-source = "."
+bindings = "pyo3"
+include = ["litellm/proxy/_experimental/out/**"]
+exclude = [
+    "litellm/proxy/enterprise",
+    "litellm/proxy/enterprise/**",
+    "**/__pycache__",
+    "**/__pycache__/**",
+    "**/.pytest_cache",
+    "**/.pytest_cache/**",
+    "**/.ruff_cache",
+    "**/.ruff_cache/**",
+]
+
 [tool.uv]
 constraint-dependencies = [
     "tornado>=6.5.6",
@@ -252,6 +271,7 @@ required-version = ">=0.10.8"
 exclude-newer = "3 days"
 
 [tool.uv.sources]
+
 litellm-enterprise = { workspace = true }
 
 [tool.uv.workspace]
