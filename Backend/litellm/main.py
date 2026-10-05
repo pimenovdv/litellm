@@ -125,6 +125,15 @@ try:
 except ImportError:
     class VertexAIModelRoute:
         AGENT_ENGINE = 'agent_engine'
+        PARTNER_MODELS = 'partner_models'
+        GEMINI = 'gemini'
+        GEMMA = 'gemma'
+        MODEL_GARDEN = 'model_garden'
+try:
+    from litellm.llms.vertex_ai.vertex_ai_non_gemini.vertex_ai_non_gemini import get_vertex_ai_model_route
+except ImportError:
+    def get_vertex_ai_model_route(*args, **kwargs):
+        return VertexAIModelRoute.AGENT_ENGINE
 from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
 from litellm.types.completion import (
@@ -8051,6 +8060,7 @@ def speech(
                 from litellm.llms.elevenlabs.speech.transformation import ElevenLabsTextToSpeechConfig
             except ImportError:
                 raise litellm.exceptions.AuthenticationError('ElevenLabs dependencies missing')
+
             text_to_speech_provider_config = ElevenLabsTextToSpeechConfig()
 
         elevenlabs_config = cast(ElevenLabsTextToSpeechConfig, text_to_speech_provider_config)
@@ -8199,6 +8209,7 @@ def speech(
                 from litellm.llms.minimax.speech.transformation import MinimaxTextToSpeechConfig
             except ImportError:
                 raise litellm.exceptions.AuthenticationError('Minimax dependencies missing')
+
             text_to_speech_provider_config = MinimaxTextToSpeechConfig()
 
         minimax_config = cast(MinimaxTextToSpeechConfig, text_to_speech_provider_config)
@@ -8238,6 +8249,7 @@ def speech(
                 from litellm.llms.aws_polly.speech.transformation import AWSPollyTextToSpeechConfig
             except ImportError:
                 raise litellm.exceptions.AuthenticationError('AWS Polly dependencies missing')
+
             text_to_speech_provider_config = AWSPollyTextToSpeechConfig()
 
         # Cast to specific AWS Polly config type to access dispatch method

@@ -12,7 +12,10 @@ import threading
 import os
 
 # Load .env before any other litellm imports so env vars (e.g. LITELLM_UI_SESSION_DURATION) are available
-import dotenv as _dotenv
+try:
+    import dotenv as _dotenv
+except ImportError:
+    _dotenv = None
 
 
 def _dev_env_hot_reload_enabled() -> bool:
@@ -24,7 +27,8 @@ def _dev_env_hot_reload_enabled() -> bool:
 
 
 if os.getenv("LITELLM_MODE", "DEV") == "DEV":
-    _dotenv.load_dotenv(override=_dev_env_hot_reload_enabled())
+    if _dotenv:
+        _dotenv.load_dotenv(override=_dev_env_hot_reload_enabled())
 
 from typing import (
     Callable,

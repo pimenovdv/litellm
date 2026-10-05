@@ -9,7 +9,7 @@ from .integrations.custom_logger import CustomLogger
 try:
     from .integrations.datadog.datadog import DataDogLogger
 except ImportError:
-    class DataDogLogger: pass
+    DataDogLogger = type('DataDogLogger', (), {})
 
 try:
     from .integrations.opentelemetry import OpenTelemetry
@@ -195,7 +195,7 @@ class ServiceLogging(CustomLogger):
             if callback == "prometheus_system":
                 await self.init_prometheus_services_logger_if_none()
                 await self.prometheusServicesLogger.async_service_success_hook(payload=payload)
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            elif callback == "datadog" or (type(callback).__name__ == "DataDogLogger"):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_success_hook(
                     payload=payload,
@@ -306,7 +306,7 @@ class ServiceLogging(CustomLogger):
                     payload=payload,
                     error=error,
                 )
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            elif callback == "datadog" or (type(callback).__name__ == "DataDogLogger"):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_failure_hook(
                     payload=payload,

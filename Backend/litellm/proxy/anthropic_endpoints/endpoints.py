@@ -8,9 +8,6 @@ from fastapi.responses import JSONResponse
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.anthropic_interface.exceptions import AnthropicExceptionMapping
-from litellm.integrations.custom_guardrail import ModifyResponseException
-    AnthropicContextManagementError,
-)
 from litellm.llms.base_llm.guardrail_translation.utils import (
     blocked_response_usage as _blocked_response_usage,
 )

@@ -1,8 +1,17 @@
+import base64
 import json
+from collections.abc import Sequence
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, List, Optional, Sequence, Union, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import httpx
+from litellm.llms.anthropic.batches.handler import AnthropicBatchesConfig
+from litellm.llms.anthropic.chat.handler import (
+    AnthropicConfig,
+)
+from litellm.llms.anthropic.chat.handler import (
+    ModelResponseIterator as AnthropicModelResponseIterator,
+)
 
 import litellm
 from litellm._logging import verbose_proxy_logger
@@ -11,8 +20,6 @@ from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLogging
 from litellm.litellm_core_utils.litellm_logging import use_custom_pricing_for_model
 from litellm.litellm_core_utils.prompt_templates.common_utils import (
     get_content_from_model_response,
-)
-    ModelResponseIterator as AnthropicModelResponseIterator,
 )
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
 from litellm.proxy.auth.auth_utils import get_end_user_id_from_request_body
@@ -24,6 +31,7 @@ from litellm.types.utils import (
     LiteLLMBatch,
     Message,
     ModelResponse,
+    SpecialEnums,
     TextCompletionResponse,
 )
 
@@ -47,7 +55,7 @@ class AnthropicPassthroughLoggingHandler:
         start_time: datetime,
         end_time: datetime,
         cache_hit: bool,
-        request_body: Optional[dict] = None,
+        request_body: dict | None = None,
         **kwargs,
     ) -> PassThroughEndpointLoggingTypedDict:
         """
@@ -70,7 +78,7 @@ class AnthropicPassthroughLoggingHandler:
             )
 
         model = response_body.get("model", "")
-        anthropic_config = get_anthropic_config(url_route)
+        anthropic_config = AnthropicConfig
         litellm_model_response: ModelResponse = anthropic_config().transform_response(
             raw_response=httpx_response,
             model_response=litellm.ModelResponse(),
@@ -102,7 +110,7 @@ class AnthropicPassthroughLoggingHandler:
     @staticmethod
     def _get_user_from_metadata(
         passthrough_logging_payload: PassthroughStandardLoggingPayload,
-    ) -> Optional[str]:
+    ) -> str | None:
         request_body = passthrough_logging_payload.get("request_body")
         if request_body:
             return get_end_user_id_from_request_body(request_body)
@@ -123,8 +131,8 @@ class AnthropicPassthroughLoggingHandler:
 
     @staticmethod
     def _extract_model_from_anthropic_chunks(
-        all_chunks: Sequence[Union[str, bytes]],
-    ) -> Optional[str]:
+        all_chunks: Sequence[str | bytes],
+    ) -> str | None:
         for raw in all_chunks:
             text = raw.decode("utf-8") if isinstance(raw, bytes) else raw
             for line in text.splitlines():
@@ -144,7 +152,7 @@ class AnthropicPassthroughLoggingHandler:
 
     @staticmethod
     def _stream_was_interrupted(
-        all_chunks: Sequence[Union[str, bytes]],
+        all_chunks: Sequence[str | bytes],
     ) -> bool:
         """
         Anthropic ends a stream with ``content_block_stop`` -> ``message_delta``
@@ -177,8 +185,8 @@ class AnthropicPassthroughLoggingHandler:
 
     @staticmethod
     def _recover_interrupted_stream_output_tokens(
-        response: Union[ModelResponse, TextCompletionResponse],
-        all_chunks: Sequence[Union[str, bytes]],
+        response: ModelResponse | TextCompletionResponse,
+        all_chunks: Sequence[str | bytes],
         model: str,
     ) -> None:
         """
@@ -219,7 +227,7 @@ class AnthropicPassthroughLoggingHandler:
 
     @staticmethod
     def _create_anthropic_response_logging_payload(
-        litellm_model_response: Union[ModelResponse, TextCompletionResponse],
+        litellm_model_response: ModelResponse | TextCompletionResponse,
         model: str,
         kwargs: dict,
         start_time: datetime,
@@ -265,7 +273,7 @@ class AnthropicPassthroughLoggingHandler:
             # the pass-through success path reads spend from
             # model_call_details["response_cost"], not from kwargs
             logging_obj.model_call_details["response_cost"] = response_cost
-            passthrough_logging_payload: Optional[PassthroughStandardLoggingPayload] = (  # type: ignore
+            passthrough_logging_payload: PassthroughStandardLoggingPayload | None = (  # type: ignore
                 kwargs.get("passthrough_logging_payload")
             )
             if passthrough_logging_payload:
@@ -301,7 +309,7 @@ class AnthropicPassthroughLoggingHandler:
         request_body: dict,
         endpoint_type: EndpointType,
         start_time: datetime,
-        all_chunks: List[str],
+        all_chunks: list[str],
         end_time: datetime,
     ) -> PassThroughEndpointLoggingTypedDict:
         """
@@ -388,7 +396,7 @@ class AnthropicPassthroughLoggingHandler:
         }
 
     @staticmethod
-    def _split_sse_chunk_into_events(chunk: Union[str, bytes]) -> List[str]:
+    def _split_sse_chunk_into_events(chunk: str | bytes) -> list[str]:
         """
         Split a chunk that may contain multiple SSE events into individual events.
 
@@ -413,10 +421,10 @@ class AnthropicPassthroughLoggingHandler:
 
     @staticmethod
     def _build_complete_streaming_response(
-        all_chunks: Sequence[Union[str, bytes]],
+        all_chunks: Sequence[str | bytes],
         litellm_logging_obj: LiteLLMLoggingObj,
         model: str,
-    ) -> Optional[Union[ModelResponse, TextCompletionResponse]]:
+    ) -> ModelResponse | TextCompletionResponse | None:
         """
         Builds complete response from raw Anthropic chunks.
 
@@ -461,8 +469,8 @@ class AnthropicPassthroughLoggingHandler:
 
     @staticmethod
     def _collapse_pure_text_chunks(
-        all_chunks: Sequence[Union[str, bytes]],
-    ) -> Optional[List[str]]:
+        all_chunks: Sequence[str | bytes],
+    ) -> list[str] | None:
         """
         Return a new chunk list with the contiguous run of text-only
         ``content_block_delta`` events replaced by a single equivalent event,
@@ -474,7 +482,7 @@ class AnthropicPassthroughLoggingHandler:
         ``message_delta`` / ``message_stop`` / ``ping`` events are accepted.
         Any other content-block type or delta type returns ``None``.
         """
-        normalized: List[str] = []
+        normalized: list[str] = []
         for raw in all_chunks:
             line = raw.decode("utf-8") if isinstance(raw, bytes) else raw
             for ev in line.split("\n\n"):
@@ -483,9 +491,9 @@ class AnthropicPassthroughLoggingHandler:
                     normalized.append(ev)
 
         text_block_indexes: set = set()
-        out: List[str] = []
-        pending_text: List[str] = []
-        pending_index: Optional[int] = None
+        out: list[str] = []
+        pending_text: list[str] = []
+        pending_index: int | None = None
         saw_any_text_delta = False
 
         def flush() -> None:
@@ -569,10 +577,10 @@ class AnthropicPassthroughLoggingHandler:
 
     @staticmethod
     def _build_complete_streaming_response_legacy(
-        all_chunks: Sequence[Union[str, bytes]],
+        all_chunks: Sequence[str | bytes],
         litellm_logging_obj: LiteLLMLoggingObj,
         model: str,
-    ) -> Optional[Union[ModelResponse, TextCompletionResponse]]:
+    ) -> ModelResponse | TextCompletionResponse | None:
         """
         Original reconstruction: convert every SSE event to a generic chunk
         and assemble via stream_chunk_builder. Kept verbatim as the fallback
@@ -628,7 +636,7 @@ class AnthropicPassthroughLoggingHandler:
         return complete_streaming_response
 
     @staticmethod
-    def _extract_sse_data(event_str: str) -> Optional[dict]:
+    def _extract_sse_data(event_str: str) -> dict | None:
         """Parse the JSON object from the ``data:`` line of an Anthropic SSE event."""
         for line in event_str.splitlines():
             stripped = line.strip()
@@ -644,9 +652,9 @@ class AnthropicPassthroughLoggingHandler:
 
     @staticmethod
     def _build_usage_only_response_from_chunks(
-        all_chunks: Sequence[Union[str, bytes]],
+        all_chunks: Sequence[str | bytes],
         model: str,
-    ) -> Optional[ModelResponse]:
+    ) -> ModelResponse | None:
         """
         Build a usage-bearing ModelResponse from Anthropic SSE token-usage events, for
         cost tracking when stream_chunk_builder cannot reassemble the stream.
@@ -659,13 +667,13 @@ class AnthropicPassthroughLoggingHandler:
         input_tokens = 0
         cache_read = 0
         cache_creation = 0
-        cache_creation_5m: Optional[int] = None
-        cache_creation_1h: Optional[int] = None
+        cache_creation_5m: int | None = None
+        cache_creation_1h: int | None = None
         output_tokens = 0
-        web_search_requests: Optional[int] = None
-        tool_search_requests: Optional[int] = None
-        inference_geo: Optional[str] = None
-        stop_reason: Optional[str] = None
+        web_search_requests: int | None = None
+        tool_search_requests: int | None = None
+        inference_geo: str | None = None
+        stop_reason: str | None = None
         found_usage = False
         resolved_model = model
         for _chunk_str in all_chunks:
@@ -761,17 +769,15 @@ class AnthropicPassthroughLoggingHandler:
         start_time: datetime,
         end_time: datetime,
         cache_hit: bool,
-        request_body: Optional[dict] = None,
+        request_body: dict | None = None,
         **kwargs,
     ) -> PassThroughEndpointLoggingTypedDict:
         """
         Handle Anthropic batch creation passthrough logging.
         Creates a managed object for cost tracking when batch job is successfully created.
         """
-        import base64
 
         from litellm._uuid import uuid
-                from litellm.types.utils import Choices, SpecialEnums
 
         try:
             _json_response = httpx_response.json()
@@ -930,7 +936,7 @@ class AnthropicPassthroughLoggingHandler:
                     index=0,
                     message={
                         "role": "assistant",
-                        "content": f"Error creating batch job: {str(e)}",
+                        "content": f"Error creating batch job: {e!s}",
                         "tool_calls": None,
                         "function_call": None,
                         "provider_specific_fields": {
