@@ -1,17 +1,18 @@
 import json
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 from .base_cache import BaseCache
 
 if TYPE_CHECKING:
+    from opentelemetry.trace import Span as _Span
 
-    Span = Any
+    Span = Union[_Span, Any]
 else:
     Span = Any
 
 
 class DiskCache(BaseCache):
-    def __init__(self, disk_cache_dir: str | None = None):
+    def __init__(self, disk_cache_dir: Optional[str] = None):
         try:
             import diskcache as dc
         except ModuleNotFoundError as e:

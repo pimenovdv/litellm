@@ -8,7 +8,7 @@ Router cooldown handlers
 
 import asyncio
 import math
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, List, Optional, Union
 
 import litellm
 from litellm._logging import verbose_router_logger
@@ -26,11 +26,12 @@ from .router_callbacks.track_deployment_metrics import (
 )
 
 if TYPE_CHECKING:
+    from opentelemetry.trace import Span as _Span
 
     from litellm.router import Router as _Router
 
     LitellmRouter = _Router
-    Span = Any
+    Span = Union[_Span, Any]
 else:
     LitellmRouter = Any
     Span = Any
@@ -60,8 +61,8 @@ def is_advisor_orchestration_failure(exception: BaseException | None) -> bool:
 def _is_cooldown_required(
     litellm_router_instance: LitellmRouter,
     model_id: str,
-    exception_status: str | int,
-    exception_str: str | None = None,
+    exception_status: Union[str, int],
+    exception_str: Optional[str] = None,
 ) -> bool:
     """
     A function to determine if a cooldown is required based on the exception status.
@@ -94,7 +95,10 @@ def _is_cooldown_required(
                 # Cool down 401 Auth Errors
                 return True
 
-            elif exception_status == 408 or exception_status == 404:
+            elif exception_status == 408:
+                return True
+
+            elif exception_status == 404:
                 return True
 
             else:
@@ -112,10 +116,10 @@ def _is_cooldown_required(
 
 def _should_run_cooldown_logic(
     litellm_router_instance: LitellmRouter,
-    deployment: str | None,
-    exception_status: str | int,
+    deployment: Optional[str],
+    exception_status: Union[str, int],
     original_exception: Any,
-    time_to_cooldown: float | None = None,
+    time_to_cooldown: Optional[float] = None,
 ) -> bool:
     """
     Helper that decides if cooldown logic should be run
@@ -168,7 +172,7 @@ def _should_run_cooldown_logic(
 def _should_cooldown_deployment(
     litellm_router_instance: LitellmRouter,
     deployment: str,
-    exception_status: str | int,
+    exception_status: Union[str, int],
     original_exception: Any,
 ) -> bool:
     """
@@ -248,9 +252,9 @@ def _should_cooldown_deployment(
 def _set_cooldown_deployments(
     litellm_router_instance: LitellmRouter,
     original_exception: Any,
-    exception_status: str | int,
-    deployment: str | None = None,
-    time_to_cooldown: float | None = None,
+    exception_status: Union[str, int],
+    deployment: Optional[str] = None,
+    time_to_cooldown: Optional[float] = None,
 ) -> bool:
     """
     Add a model to the list of models being cooled down for that minute, if it exceeds the allowed fails / minute
@@ -310,8 +314,8 @@ def _set_cooldown_deployments(
 
 async def _async_get_cooldown_deployments(
     litellm_router_instance: LitellmRouter,
-    parent_otel_span: Span | None,
-) -> list[str]:
+    parent_otel_span: Optional[Span],
+) -> List[str]:
     """
     Async implementation of '_get_cooldown_deployments'
     """
@@ -336,8 +340,8 @@ async def _async_get_cooldown_deployments(
 
 async def _async_get_cooldown_deployments_with_debug_info(
     litellm_router_instance: LitellmRouter,
-    parent_otel_span: Span | None,
-) -> list[tuple]:
+    parent_otel_span: Optional[Span],
+) -> List[tuple]:
     """
     Async implementation of '_get_cooldown_deployments'
     """
@@ -350,7 +354,7 @@ async def _async_get_cooldown_deployments_with_debug_info(
     return cooldown_models
 
 
-def _get_cooldown_deployments(litellm_router_instance: LitellmRouter, parent_otel_span: Span | None) -> list[str]:
+def _get_cooldown_deployments(litellm_router_instance: LitellmRouter, parent_otel_span: Optional[Span]) -> List[str]:
     """
     Get the list of models being cooled down for this minute
     """
@@ -425,7 +429,7 @@ def _is_allowed_fails_set_on_router(
     return False
 
 
-def cast_exception_status_to_int(exception_status: str | int) -> int:
+def cast_exception_status_to_int(exception_status: Union[str, int]) -> int:
     if isinstance(exception_status, str):
         try:
             exception_status = int(exception_status)

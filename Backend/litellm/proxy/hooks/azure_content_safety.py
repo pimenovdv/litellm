@@ -1,4 +1,5 @@
 import traceback
+from typing import Optional
 
 from fastapi import HTTPException
 
@@ -74,7 +75,7 @@ class _PROXY_AzureContentSafety(
 
         return result
 
-    async def test_violation(self, content: str, source: str | None = None):
+    async def test_violation(self, content: str, source: Optional[str] = None):
         verbose_proxy_logger.debug("Testing Azure Content-Safety for: %s", content)
 
         # Construct a request
@@ -123,7 +124,9 @@ class _PROXY_AzureContentSafety(
             raise e
         except Exception as e:
             verbose_proxy_logger.error(
-                f"litellm.proxy.hooks.azure_content_safety.py::async_pre_call_hook(): Exception occured - {e!s}"
+                "litellm.proxy.hooks.azure_content_safety.py::async_pre_call_hook(): Exception occured - {}".format(
+                    str(e)
+                )
             )
             verbose_proxy_logger.debug(traceback.format_exc())
 

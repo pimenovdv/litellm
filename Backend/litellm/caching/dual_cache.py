@@ -13,7 +13,7 @@ import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
 if TYPE_CHECKING:
     from litellm.types.caching import RedisPipelineIncrementOperation
@@ -27,8 +27,9 @@ from .in_memory_cache import InMemoryCache
 from .redis_cache import RedisCache
 
 if TYPE_CHECKING:
+    from opentelemetry.trace import Span as _Span
 
-    Span = Any
+    Span = Union[_Span, Any]
 else:
     Span = Any
 
@@ -56,11 +57,11 @@ class DualCache(BaseCache):
 
     def __init__(
         self,
-        in_memory_cache: InMemoryCache | None = None,
-        redis_cache: RedisCache | None = None,
-        default_in_memory_ttl: float | None = None,
-        default_redis_ttl: float | None = None,
-        default_redis_batch_cache_expiry: float | None = None,
+        in_memory_cache: Optional[InMemoryCache] = None,
+        redis_cache: Optional[RedisCache] = None,
+        default_in_memory_ttl: Optional[float] = None,
+        default_redis_ttl: Optional[float] = None,
+        default_redis_batch_cache_expiry: Optional[float] = None,
         default_max_redis_batch_cache_size: int = DEFAULT_MAX_REDIS_BATCH_CACHE_SIZE,
     ) -> None:
         super().__init__()
@@ -76,7 +77,7 @@ class DualCache(BaseCache):
         self.default_in_memory_ttl = default_in_memory_ttl or litellm.default_in_memory_ttl
         self.default_redis_ttl = default_redis_ttl or litellm.default_redis_ttl
 
-    def update_cache_ttl(self, default_in_memory_ttl: float | None, default_redis_ttl: float | None):
+    def update_cache_ttl(self, default_in_memory_ttl: Optional[float], default_redis_ttl: Optional[float]):
         if default_in_memory_ttl is not None:
             self.default_in_memory_ttl = default_in_memory_ttl
 
@@ -85,9 +86,9 @@ class DualCache(BaseCache):
 
     def attach_redis_cache(
         self,
-        redis_cache: RedisCache | None = None,
+        redis_cache: Optional[RedisCache] = None,
         *,
-        default_redis_ttl: float | None = None,
+        default_redis_ttl: Optional[float] = None,
     ) -> None:
         """
         Attach a Redis backend if this DualCache does not already have one.
@@ -146,13 +147,13 @@ class DualCache(BaseCache):
 
             return result
         except Exception as e:
-            verbose_logger.error(f"LiteLLM Cache: Excepton async add_cache: {e!s}")
+            verbose_logger.error(f"LiteLLM Cache: Excepton async add_cache: {str(e)}")
             raise e
 
     def get_cache(
         self,
         key,
-        parent_otel_span: Span | None = None,
+        parent_otel_span: Optional[Span] = None,
         local_only: bool = False,
         **kwargs,
     ):
@@ -183,7 +184,7 @@ class DualCache(BaseCache):
     def batch_get_cache(
         self,
         keys: list,
-        parent_otel_span: Span | None = None,
+        parent_otel_span: Optional[Span] = None,
         local_only: bool = False,
         **kwargs,
     ):
@@ -216,7 +217,7 @@ class DualCache(BaseCache):
     async def async_get_cache(
         self,
         key,
-        parent_otel_span: Span | None = None,
+        parent_otel_span: Optional[Span] = None,
         local_only: bool = False,
         **kwargs,
     ):
@@ -249,15 +250,15 @@ class DualCache(BaseCache):
     def _reserve_redis_batch_keys(
         self,
         current_time: float,
-        keys: list[str],
-        result: list[Any],
-    ) -> tuple[list[str], dict[str, float | None]]:
+        keys: List[str],
+        result: List[Any],
+    ) -> Tuple[List[str], Dict[str, Optional[float]]]:
         """
         Atomically choose keys to fetch from Redis and reserve their access time.
         This prevents check-then-act races under concurrent async callers.
         """
-        sublist_keys: list[str] = []
-        previous_access_times: dict[str, float | None] = {}
+        sublist_keys: List[str] = []
+        previous_access_times: Dict[str, Optional[float]] = {}
 
         with self._last_redis_batch_access_time_lock:
             for key, value in zip(keys, result):
@@ -274,7 +275,7 @@ class DualCache(BaseCache):
 
         return sublist_keys, previous_access_times
 
-    def _rollback_redis_batch_key_reservations(self, previous_access_times: dict[str, float | None]) -> None:
+    def _rollback_redis_batch_key_reservations(self, previous_access_times: Dict[str, Optional[float]]) -> None:
         with self._last_redis_batch_access_time_lock:
             for key, previous_time in previous_access_times.items():
                 if previous_time is None:
@@ -285,7 +286,7 @@ class DualCache(BaseCache):
     async def async_batch_get_cache(
         self,
         keys: list,
-        parent_otel_span: Span | None = None,
+        parent_otel_span: Optional[Span] = None,
         local_only: bool = False,
         **kwargs,
     ):
@@ -346,7 +347,7 @@ class DualCache(BaseCache):
             if self.redis_cache is not None and local_only is False:
                 await self.redis_cache.async_set_cache(key, value, **kwargs)
         except Exception as e:
-            verbose_logger.exception(f"LiteLLM Cache: Excepton async add_cache: {e!s}")
+            verbose_logger.exception(f"LiteLLM Cache: Excepton async add_cache: {str(e)}")
 
     # async_batch_set_cache
     async def async_set_cache_pipeline(self, cache_list: list, local_only: bool = False, **kwargs):
@@ -365,17 +366,17 @@ class DualCache(BaseCache):
                     cache_list=cache_list, ttl=kwargs.pop("ttl", None), **kwargs
                 )
         except Exception as e:
-            verbose_logger.exception(f"LiteLLM Cache: Excepton async add_cache: {e!s}")
+            verbose_logger.exception(f"LiteLLM Cache: Excepton async add_cache: {str(e)}")
 
     async def async_increment_cache(
         self,
         key,
         value: float,
-        parent_otel_span: Span | None = None,
+        parent_otel_span: Optional[Span] = None,
         local_only: bool = False,
         refresh_ttl: bool = False,
         **kwargs,
-    ) -> float | None:
+    ) -> Optional[float]:
         """
         Key - the key in cache
 
@@ -387,7 +388,7 @@ class DualCache(BaseCache):
         Returns - the incremented value, or None if no cache backend is
         available (in_memory_cache is None and Redis failed/is absent).
         """
-        result: float | None = None
+        result: Optional[float] = None
         try:
             if self.in_memory_cache is not None:
                 result = await self.in_memory_cache.async_increment(key, value, **kwargs)
@@ -411,12 +412,12 @@ class DualCache(BaseCache):
 
     async def async_increment_cache_pipeline(
         self,
-        increment_list: list["RedisPipelineIncrementOperation"],
+        increment_list: List["RedisPipelineIncrementOperation"],
         local_only: bool = False,
-        parent_otel_span: Span | None = None,
+        parent_otel_span: Optional[Span] = None,
         **kwargs,
-    ) -> list[float] | None:
-        result: list[float] | None = None
+    ) -> Optional[List[float]]:
+        result: Optional[List[float]] = None
         try:
             if self.in_memory_cache is not None:
                 result = await self.in_memory_cache.async_increment_pipeline(
@@ -438,7 +439,7 @@ class DualCache(BaseCache):
             )
             return result
 
-    async def async_set_cache_sadd(self, key, value: list, local_only: bool = False, **kwargs) -> None:
+    async def async_set_cache_sadd(self, key, value: List, local_only: bool = False, **kwargs) -> None:
         """
         Add value to a set
 
@@ -455,7 +456,7 @@ class DualCache(BaseCache):
             if self.redis_cache is not None and local_only is False:
                 _ = await self.redis_cache.async_set_cache_sadd(key, value, ttl=kwargs.get("ttl", None))
 
-            return
+            return None
         except Exception as e:
             raise e  # don't log, if exception is raised
 
@@ -483,7 +484,7 @@ class DualCache(BaseCache):
         if self.redis_cache is not None:
             await self.redis_cache.async_delete_cache(key)
 
-    async def async_get_ttl(self, key: str) -> int | None:
+    async def async_get_ttl(self, key: str) -> Optional[int]:
         """
         Get the remaining TTL of a key in in-memory cache or redis
         """

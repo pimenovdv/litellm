@@ -1,7 +1,7 @@
 import asyncio
 import json
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 import litellm
 from litellm._logging import verbose_proxy_logger
@@ -30,7 +30,7 @@ class KeyManagementEventHooks:
         data: GenerateKeyRequest,
         response: GenerateKeyResponse,
         user_api_key_dict: UserAPIKeyAuth,
-        litellm_changed_by: str | None = None,
+        litellm_changed_by: Optional[str] = None,
     ):
         """
         Hook that runs after a successful /key/generate request
@@ -92,7 +92,7 @@ class KeyManagementEventHooks:
         existing_key_row: Any,
         response: Any,
         user_api_key_dict: UserAPIKeyAuth,
-        litellm_changed_by: str | None = None,
+        litellm_changed_by: Optional[str] = None,
     ):
         """
         Post /key/update processing hook
@@ -135,11 +135,11 @@ class KeyManagementEventHooks:
 
     @staticmethod
     async def async_key_rotated_hook(
-        data: RegenerateKeyRequest | None,
+        data: Optional[RegenerateKeyRequest],
         existing_key_row: LiteLLM_VerificationToken,
         response: GenerateKeyResponse,
         user_api_key_dict: UserAPIKeyAuth,
-        litellm_changed_by: str | None = None,
+        litellm_changed_by: Optional[str] = None,
     ):
         from litellm.proxy.management_helpers.audit_logs import (
             create_audit_log_for_update,
@@ -204,10 +204,10 @@ class KeyManagementEventHooks:
     @staticmethod
     async def async_key_deleted_hook(
         data: KeyRequest,
-        keys_being_deleted: list[LiteLLM_VerificationToken],
+        keys_being_deleted: List[LiteLLM_VerificationToken],
         response: dict,
         user_api_key_dict: UserAPIKeyAuth,
-        litellm_changed_by: str | None = None,
+        litellm_changed_by: Optional[str] = None,
     ):
         """
         Post /key/delete processing hook
@@ -251,9 +251,10 @@ class KeyManagementEventHooks:
                 )
         # delete the keys from the secret manager
         await KeyManagementEventHooks._delete_virtual_keys_from_secret_manager(keys_being_deleted=keys_being_deleted)
+        pass
 
     @staticmethod
-    async def _store_virtual_key_in_secret_manager(secret_name: str, secret_token: str, team_id: str | None = None):
+    async def _store_virtual_key_in_secret_manager(secret_name: str, secret_token: str, team_id: Optional[str] = None):
         """
         Store a virtual key in the secret manager
 
@@ -289,7 +290,7 @@ class KeyManagementEventHooks:
         current_secret_name: str,
         new_secret_name: str,
         new_secret_value: str,
-        team_id: str | None = None,
+        team_id: Optional[str] = None,
     ):
         """
         Update a virtual key in the secret manager
@@ -325,7 +326,7 @@ class KeyManagementEventHooks:
 
     @staticmethod
     async def _delete_virtual_keys_from_secret_manager(
-        keys_being_deleted: list[LiteLLM_VerificationToken],
+        keys_being_deleted: List[LiteLLM_VerificationToken],
     ):
         """
         Deletes virtual keys from the secret manager
@@ -340,7 +341,7 @@ class KeyManagementEventHooks:
                 )
 
                 if isinstance(litellm.secret_manager_client, BaseSecretManager):
-                    team_settings_cache: dict[str | None, dict | None] = {}
+                    team_settings_cache: Dict[Optional[str], Optional[dict]] = {}
                     for key in keys_being_deleted:
                         if key.key_alias is not None:
                             team_id = getattr(key, "team_id", None)
@@ -360,8 +361,8 @@ class KeyManagementEventHooks:
 
     @staticmethod
     async def _get_secret_manager_optional_params(
-        team_id: str | None,
-    ) -> dict | None:
+        team_id: Optional[str],
+    ) -> Optional[dict]:
         if team_id is None:
             return None
 
@@ -510,7 +511,7 @@ class KeyManagementEventHooks:
             )
 
     @staticmethod
-    async def _send_key_rotated_email(response: dict, existing_key_alias: str | None):
+    async def _send_key_rotated_email(response: dict, existing_key_alias: Optional[str]):
         """
         Send key rotated email if email sending is enabled.
 

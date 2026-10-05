@@ -1,17 +1,17 @@
 import hashlib
 import json
 from collections.abc import Mapping
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 if TYPE_CHECKING:
     from litellm.types.llms.openai import OpenAIFileObject
 
-from litellm._logging import verbose_logger
 from litellm.exceptions import BadRequestError
 from litellm.types.router import CredentialLiteLLMParams
+from litellm._logging import verbose_logger
 
 
-def _is_proxy_admin_request(request_kwargs: Mapping[str, object] | None) -> bool:
+def _is_proxy_admin_request(request_kwargs: Optional[Mapping[str, object]]) -> bool:
     if request_kwargs is None:
         return False
     metadata_value = request_kwargs.get("metadata")
@@ -31,7 +31,7 @@ def get_litellm_params_sensitive_credential_hash(litellm_params: dict) -> str:
 
 
 def add_model_file_id_mappings(
-    healthy_deployments: list[dict] | dict, responses: list["OpenAIFileObject"]
+    healthy_deployments: Union[List[Dict], Dict], responses: List["OpenAIFileObject"]
 ) -> dict:
     """
     Create a mapping of model id to file id
@@ -46,8 +46,8 @@ def add_model_file_id_mappings(
     `model_info.id`). Both shapes must be handled by extracting
     `model_info.id` from each deployment.
     """
-    model_file_id_mapping: dict[str, str] = {}
-    deployments_list: list[dict] = (
+    model_file_id_mapping: Dict[str, str] = {}
+    deployments_list: List[Dict] = (
         healthy_deployments if isinstance(healthy_deployments, list) else [healthy_deployments]
     )
     for deployment, response in zip(deployments_list, responses):
@@ -58,9 +58,9 @@ def add_model_file_id_mappings(
 
 
 def filter_team_based_models(
-    healthy_deployments: list[dict] | dict,
-    request_kwargs: dict | None = None,
-) -> list[dict] | dict:
+    healthy_deployments: Union[List[Dict], Dict],
+    request_kwargs: Optional[Dict] = None,
+) -> Union[List[Dict], Dict]:
     """
     If a model has a team_id
 
@@ -124,7 +124,7 @@ def filter_team_based_models(
     ]
 
 
-def _deployment_supports_web_search(deployment: dict) -> bool:
+def _deployment_supports_web_search(deployment: Dict) -> bool:
     """
     Check if a deployment supports web search.
 
@@ -145,9 +145,9 @@ def _deployment_supports_web_search(deployment: dict) -> bool:
 
 
 def filter_web_search_deployments(
-    healthy_deployments: list[dict] | dict,
-    request_kwargs: dict | None = None,
-) -> list[dict] | dict:
+    healthy_deployments: Union[List[Dict], Dict],
+    request_kwargs: Optional[Dict] = None,
+) -> Union[List[Dict], Dict]:
     """
     If the request is websearch, filter out deployments that don't support web search
     """

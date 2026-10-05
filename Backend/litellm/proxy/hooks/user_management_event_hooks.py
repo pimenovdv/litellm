@@ -4,6 +4,7 @@ Hooks that are triggered when a litellm user event occurs
 
 import asyncio
 from datetime import datetime, timezone
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -74,7 +75,8 @@ class UserManagementEventHooks:
                 )
             )
         except Exception as e:
-            verbose_proxy_logger.warning(f"Unable to create audit log for user on `/user/new` - {e!s}")
+            verbose_proxy_logger.warning("Unable to create audit log for user on `/user/new` - {}".format(str(e)))
+        pass
 
     @staticmethod
     async def async_send_user_invitation_email(
@@ -164,11 +166,11 @@ class UserManagementEventHooks:
     async def create_internal_user_audit_log(
         user_id: str,
         action: AUDIT_ACTIONS,
-        litellm_changed_by: str | None,
+        litellm_changed_by: Optional[str],
         user_api_key_dict: UserAPIKeyAuth,
-        litellm_proxy_admin_name: str | None,
-        before_value: str | None = None,
-        after_value: str | None = None,
+        litellm_proxy_admin_name: Optional[str],
+        before_value: Optional[str] = None,
+        after_value: Optional[str] = None,
     ):
         """
         Create an audit log for an internal user.

@@ -7,9 +7,8 @@ Handles search tool selection, load balancing, and fallback logic for search req
 import asyncio
 import random
 import traceback
-from collections.abc import Callable
 from functools import partial
-from typing import Any
+from typing import Any, Callable, Dict, Optional, Tuple
 
 from litellm._logging import verbose_router_logger
 
@@ -24,8 +23,8 @@ class SearchAPIRouter:
     @staticmethod
     def _resolve_search_provider_credentials(
         *,
-        tool_litellm_params: dict[str, Any],
-    ) -> tuple[str | None, str | None]:
+        tool_litellm_params: Dict[str, Any],
+    ) -> Tuple[Optional[str], Optional[str]]:
         """
         Resolve search provider credentials from tool configuration ONLY.
 
@@ -38,8 +37,8 @@ class SearchAPIRouter:
         Returns:
             Tuple of (api_key, api_base) from tool configuration
         """
-        resolved_api_key: str | None = tool_litellm_params.get("api_key")
-        resolved_api_base: str | None = tool_litellm_params.get("api_base")
+        resolved_api_key: Optional[str] = tool_litellm_params.get("api_key")
+        resolved_api_base: Optional[str] = tool_litellm_params.get("api_base")
 
         return resolved_api_key, resolved_api_base
 
@@ -77,7 +76,7 @@ class SearchAPIRouter:
             verbose_router_logger.info(f"Successfully updated router with {len(router_search_tools)} search tool(s)")
 
         except Exception as e:
-            verbose_router_logger.exception(f"Error updating router with search tools: {e!s}")
+            verbose_router_logger.exception(f"Error updating router with search tools: {str(e)}")
             raise e
 
     @staticmethod
@@ -226,6 +225,6 @@ class SearchAPIRouter:
 
         except Exception as e:
             verbose_router_logger.error(
-                f"Error in SearchAPIRouter.async_search_with_fallbacks_helper for {search_tool_name}: {e!s}"
+                f"Error in SearchAPIRouter.async_search_with_fallbacks_helper for {search_tool_name}: {str(e)}"
             )
             raise e
