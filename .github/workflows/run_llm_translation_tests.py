@@ -7,12 +7,14 @@ markdown report with provider-specific breakdowns and test statistics.
 """
 
 import os
-import subprocess
 import sys
+import subprocess
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from datetime import datetime
-
+from pathlib import Path
+import json
+from typing import Dict, List, Tuple, Optional
 
 # ANSI color codes for terminal output
 class Colors:
@@ -87,7 +89,7 @@ def format_duration(seconds: float) -> str:
         return f"{hours}h {minutes}m"
 
 
-def generate_markdown_report(junit_xml_path: str, output_path: str, tag: str | None = None, commit: str | None = None):
+def generate_markdown_report(junit_xml_path: str, output_path: str, tag: str = None, commit: str = None):
     """Generate a beautiful markdown report from JUnit XML"""
     try:
         tree = ET.parse(junit_xml_path)
@@ -184,7 +186,7 @@ def generate_markdown_report(junit_xml_path: str, output_path: str, tag: str | N
             f.write("| Field | Value |\n")
             f.write("|-------|-------|\n")
             f.write(f"| **Tag** | `{tag or 'N/A'}` |\n")
-            f.write(f"| **Date** | {datetime.now(tz=datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')} |\n")
+            f.write(f"| **Date** | {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')} |\n")
             f.write(f"| **Commit** | `{commit or 'N/A'}` |\n")
             f.write(f"| **Duration** | {format_duration(total_time)} |\n")
             f.write("\n")
@@ -309,8 +311,8 @@ def generate_markdown_report(junit_xml_path: str, output_path: str, tag: str | N
 def run_tests(test_path: str = "tests/llm_translation/",
               junit_xml: str = "test-results/junit.xml",
               report_path: str = "test-results/llm_translation_report.md",
-              tag: str | None = None,
-              commit: str | None = None) -> int:
+              tag: str = None,
+              commit: str = None) -> int:
     """Run the LLM translation tests and generate report"""
 
     # Create test results directory
@@ -336,7 +338,7 @@ def run_tests(test_path: str = "tests/llm_translation/",
         subprocess.run(["uv", "run", "--no-sync", "python", "-c", "import pytest_timeout"],
                       capture_output=True, check=True)
         cmd.extend(["--timeout=300"])
-    except Exception:
+    except:
         print_colored("Warning: pytest-timeout not installed, skipping timeout option", Colors.YELLOW)
 
     print_colored("Running pytest with command:", Colors.YELLOW)
@@ -344,7 +346,7 @@ def run_tests(test_path: str = "tests/llm_translation/",
     print()
 
     # Run the tests
-    result = subprocess.run(cmd, capture_output=False, check=False)
+    result = subprocess.run(cmd, capture_output=False)
 
     # Generate the report regardless of test outcome
     if os.path.exists(junit_xml):
@@ -411,20 +413,20 @@ if __name__ == "__main__":
     if not args.commit:
         try:
             result = subprocess.run(["git", "rev-parse", "HEAD"],
-                                    capture_output=True, text=True, check=False)
+                                    capture_output=True, text=True)
             if result.returncode == 0:
                 args.commit = result.stdout.strip()
-        except Exception as e:
-            print(f"Error: {e}")
+        except:
+            pass
 
     if not args.tag:
         try:
             result = subprocess.run(["git", "describe", "--tags", "--abbrev=0"],
-                                    capture_output=True, text=True, check=False)
+                                    capture_output=True, text=True)
             if result.returncode == 0:
                 args.tag = result.stdout.strip()
-        except Exception as e:
-            print(f"Error: {e}")
+        except:
+            pass
 
     exit_code = run_tests(
         test_path=args.test_path,
