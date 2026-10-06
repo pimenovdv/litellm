@@ -266,11 +266,13 @@ _PreRoutingStrategyT = TypeVar("_PreRoutingStrategyT")
 
 class RoutingArgs(enum.Enum):
     """RoutingArgs class."""
+
     ttl = 60  # 1min (RPM/TPM expire key)
 
 
 class Router:
     """Router class."""
+
     model_names: set = set()
     cache_responses: bool | None = False
     default_cache_time_seconds: int = 1 * 60 * 60  # 1 hour
@@ -321,7 +323,8 @@ class Router:
         plugins: list[RoutingPlugin] | None = None,
         retry_after: int = 0,  # min time to wait before retrying a failed request
         retry_policy: RetryPolicy | dict | None = None,  # set custom retries for different exceptions
-        model_group_retry_policy: dict[str, RetryPolicy] | None = None,  # set custom retry policies based on model group
+        model_group_retry_policy: dict[str, RetryPolicy]
+        | None = None,  # set custom retry policies based on model group
         allowed_fails: int | None = None,  # Number of times a deployment can failbefore being added to cooldown
         allowed_fails_policy: AllowedFailsPolicy | None = None,  # set custom allowed fails policy
         cooldown_time: float | None = None,  # (seconds) time to cooldown a deployment after failure
@@ -1062,9 +1065,7 @@ class Router:
                 )
             return self._override_selectors[strategy]
 
-    def _get_routing_context(
-        self, model: str, request_kwargs: dict | None = None
-    ) -> tuple[str | None, Any | None]:
+    def _get_routing_context(self, model: str, request_kwargs: dict | None = None) -> tuple[str | None, Any | None]:
         """
         Resolves the routing strategy and selector to use for the given model.
 
@@ -1687,9 +1688,7 @@ class Router:
 
     ### COMPLETION, EMBEDDING, IMG GENERATION FUNCTIONS
 
-    def completion(
-        self, model: str, messages: list[dict[str, str]], **kwargs
-    ) -> ModelResponse | CustomStreamWrapper:
+    def completion(self, model: str, messages: list[dict[str, str]], **kwargs) -> ModelResponse | CustomStreamWrapper:
         """
         Example usage:
         response = router.completion(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hey, how's it going?"}]
@@ -1706,9 +1705,7 @@ class Router:
         except Exception:
             raise
 
-    def _completion(
-        self, model: str, messages: list[dict[str, str]], **kwargs
-    ) -> ModelResponse | CustomStreamWrapper:
+    def _completion(self, model: str, messages: list[dict[str, str]], **kwargs) -> ModelResponse | CustomStreamWrapper:
         """_completion function."""
         model_name = None
         deployment = None
@@ -2036,6 +2033,7 @@ class Router:
 
         class FallbackStreamWrapper(CustomStreamWrapper):
             """FallbackStreamWrapper class."""
+
             def __init__(self, async_generator: AsyncGenerator):
                 """__init__ function."""
                 # Copy attributes from the original model_response
@@ -2604,6 +2602,7 @@ class Router:
 
         class SyncFallbackStreamWrapper(CustomStreamWrapper):
             """SyncFallbackStreamWrapper class."""
+
             def __init__(self, sync_generator: Generator):
                 """__init__ function."""
                 super().__init__(
@@ -3695,9 +3694,7 @@ class Router:
             verbose_router_logger.info(f"litellm.image_generation(model={model_name})\033[32m 200 OK\033[0m")
             return response
         except Exception as e:
-            verbose_router_logger.info(
-                f"litellm.image_generation(model={model_name})\033[31m Exception {e!s}\033[0m"
-            )
+            verbose_router_logger.info(f"litellm.image_generation(model={model_name})\033[31m Exception {e!s}\033[0m")
             if model_name is not None:
                 self.fail_calls[model_name] += 1
             raise
@@ -3784,9 +3781,7 @@ class Router:
             verbose_router_logger.info(f"litellm.aimage_generation(model={model_name})\033[32m 200 OK\033[0m")
             return response
         except Exception as e:
-            verbose_router_logger.info(
-                f"litellm.aimage_generation(model={model_name})\033[31m Exception {e!s}\033[0m"
-            )
+            verbose_router_logger.info(f"litellm.aimage_generation(model={model_name})\033[31m Exception {e!s}\033[0m")
             if model_name is not None:
                 self.fail_calls[model_name] += 1
             raise
@@ -5224,7 +5219,9 @@ class Router:
         try:
             parent_otel_span = _get_parent_otel_span_from_kwargs(kwargs)
             if model is not None:
-                filtered_model_list: list[DeploymentTypedDict] | list[dict] | dict | None = await self.async_get_healthy_deployments(
+                filtered_model_list: (
+                    list[DeploymentTypedDict] | list[dict] | dict | None
+                ) = await self.async_get_healthy_deployments(
                     model=model,
                     messages=[{"role": "user", "content": "retrieve-api-fake-text"}],
                     specific_deployment=kwargs.pop("specific_deployment", None),
@@ -7098,9 +7095,7 @@ class Router:
         except Exception:
             raise
 
-    async def async_deployment_callback_on_failure(
-        self, kwargs, completion_response: Any | None, start_time, end_time
-    ):
+    async def async_deployment_callback_on_failure(self, kwargs, completion_response: Any | None, start_time, end_time):
         """
         Update RPM usage for a deployment
         """
@@ -7452,9 +7447,7 @@ class Router:
         return hash_object.hexdigest()
 
     @staticmethod
-    def _inherit_builtin_cache_pricing(
-        model_info: dict, backend_model: str, custom_llm_provider: str | None
-    ) -> None:
+    def _inherit_builtin_cache_pricing(model_info: dict, backend_model: str, custom_llm_provider: str | None) -> None:
         """Fill missing cache pricing on a custom-priced deployment entry from
         the backend model's built-in cost map entry, so a deployment that
         only spells out ``input_cost_per_token``/``output_cost_per_token``
@@ -8887,7 +8880,12 @@ class Router:
             return None
         for model in model_list:
             is_match = False
-            if "model_name" in model and model["model_name"] == model_group or "model_name" in model and self.pattern_router.route(model_group) is not None:  # exact match
+            if (
+                "model_name" in model
+                and model["model_name"] == model_group
+                or "model_name" in model
+                and self.pattern_router.route(model_group) is not None
+            ):  # exact match
                 is_match = True
 
             if not is_match:
@@ -10167,7 +10165,9 @@ class Router:
                     if input_tokens > max_input_tokens:
                         invalid_model_indices.add(idx)
                         _context_window_error = True
-                        _potential_error_str += f"Model={_deployment_model}, Max Input Tokens={max_input_tokens}, Got={input_tokens}"
+                        _potential_error_str += (
+                            f"Model={_deployment_model}, Max Input Tokens={max_input_tokens}, Got={input_tokens}"
+                        )
                         continue
             except Exception as e:
                 verbose_router_logger.exception(f"An error occurs - {e!s}")

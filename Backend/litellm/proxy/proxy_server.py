@@ -903,9 +903,7 @@ async def proxy_startup_event(app: FastAPI):
                 raise
 
     ## CHECK PREMIUM USER
-    verbose_proxy_logger.debug(
-        f"litellm.proxy.proxy_server.py::startup() - CHECKING PREMIUM USER - {premium_user}"
-    )
+    verbose_proxy_logger.debug(f"litellm.proxy.proxy_server.py::startup() - CHECKING PREMIUM USER - {premium_user}")
     if premium_user is False:
         premium_user = _license_check.is_premium()
 
@@ -925,10 +923,14 @@ async def proxy_startup_event(app: FastAPI):
             ) = await proxy_config.load_config(router=llm_router, config_file_path=env_config_yaml)
     elif worker_config is not None:
         if (
-            isinstance(worker_config, str)
-            and os.path.isfile(worker_config)
-            and proxy_config.is_yaml(config_file_path=worker_config)
-        ) or os.environ.get("LITELLM_CONFIG_BUCKET_NAME") is not None and isinstance(worker_config, str):
+            (
+                isinstance(worker_config, str)
+                and os.path.isfile(worker_config)
+                and proxy_config.is_yaml(config_file_path=worker_config)
+            )
+            or os.environ.get("LITELLM_CONFIG_BUCKET_NAME") is not None
+            and isinstance(worker_config, str)
+        ):
             (
                 llm_router,
                 llm_model_list,
@@ -1385,6 +1387,7 @@ else:
 
 class UserAPIKeyCacheTTLEnum(enum.Enum):
     """UserAPIKeyCacheTTLEnum class."""
+
     in_memory_cache_ttl = 60  # 1 min ttl ## configure via `general_settings::user_api_key_cache_ttl: <your-value>`
 
 
@@ -1952,7 +1955,6 @@ if docs_url != "/" and root_redirect_url is not None:
     async def root_redirect():
         """root_redirect function."""
         return RedirectResponse(url=root_redirect_url)  # type: ignore[arg-type]
-
 
 
 user_api_base = None
@@ -5635,9 +5637,7 @@ class ProxyConfig:
             decrypted_variables[k] = decrypted_value
         return decrypted_variables
 
-    def _encrypt_env_variables_for_db(
-        self, environment_variables: dict, new_encryption_key: str | None = None
-    ) -> dict:
+    def _encrypt_env_variables_for_db(self, environment_variables: dict, new_encryption_key: str | None = None) -> dict:
         """
         Idempotently encrypt environment variables for a DB write.
 
@@ -6210,9 +6210,7 @@ class ProxyConfig:
             await self._init_non_llm_objects_in_db(prisma_client=prisma_client)
 
         except Exception as e:
-            verbose_proxy_logger.exception(
-                f"litellm.proxy.proxy_server.py::ProxyConfig:add_deployment - {e!s}"
-            )
+            verbose_proxy_logger.exception(f"litellm.proxy.proxy_server.py::ProxyConfig:add_deployment - {e!s}")
 
     async def _init_non_llm_objects_in_db(self, prisma_client: PrismaClient):
         """
@@ -6639,9 +6637,7 @@ class ProxyConfig:
                 prompt_spec = self._get_prompt_spec_for_db_prompt(db_prompt=prompt)
                 IN_MEMORY_PROMPT_REGISTRY.initialize_prompt(prompt=prompt_spec)
         except Exception as e:
-            verbose_proxy_logger.debug(
-                f"litellm.proxy.proxy_server.py::ProxyConfig:_init_prompts_in_db - {e!s}"
-            )
+            verbose_proxy_logger.debug(f"litellm.proxy.proxy_server.py::ProxyConfig:_init_prompts_in_db - {e!s}")
 
     async def _init_guardrails_in_db(self, prisma_client: PrismaClient):
         """_init_guardrails_in_db function."""
@@ -6669,9 +6665,7 @@ class ProxyConfig:
             # pod. Config-loaded entries are never touched.
             IN_MEMORY_GUARDRAIL_HANDLER.reconcile_db_guardrails(db_guardrail_ids=db_guardrail_ids)
         except Exception as e:
-            verbose_proxy_logger.exception(
-                f"litellm.proxy.proxy_server.py::ProxyConfig:_init_guardrails_in_db - {e!s}"
-            )
+            verbose_proxy_logger.exception(f"litellm.proxy.proxy_server.py::ProxyConfig:_init_guardrails_in_db - {e!s}")
 
     async def _init_policies_in_db(self, prisma_client: PrismaClient):
         """
@@ -6695,9 +6689,7 @@ class ProxyConfig:
 
             verbose_proxy_logger.debug("Successfully synced policies and attachments from DB")
         except Exception as e:
-            verbose_proxy_logger.exception(
-                f"litellm.proxy.proxy_server.py::ProxyConfig:_init_policies_in_db - {e!s}"
-            )
+            verbose_proxy_logger.exception(f"litellm.proxy.proxy_server.py::ProxyConfig:_init_policies_in_db - {e!s}")
 
     async def _init_tool_policy_in_db(self, prisma_client: PrismaClient):
         """
@@ -6805,9 +6797,7 @@ class ProxyConfig:
             db_agents = await AGENT_REGISTRY.get_all_agents_from_db(prisma_client=prisma_client)
             AGENT_REGISTRY.load_agents_from_db_and_config(db_agents=db_agents, agent_config=config_agents)
         except Exception as e:
-            verbose_proxy_logger.exception(
-                f"litellm.proxy.proxy_server.py::ProxyConfig:_init_agents_in_db - {e!s}"
-            )
+            verbose_proxy_logger.exception(f"litellm.proxy.proxy_server.py::ProxyConfig:_init_agents_in_db - {e!s}")
 
     async def _init_search_tools_in_db(self, prisma_client: PrismaClient):
         """
@@ -7570,9 +7560,7 @@ async def async_data_generator(
             client_disconnected = True
         raise
     except Exception as e:
-        verbose_proxy_logger.exception(
-            f"litellm.proxy.proxy_server.async_data_generator(): Exception occured - {e!s}"
-        )
+        verbose_proxy_logger.exception(f"litellm.proxy.proxy_server.async_data_generator(): Exception occured - {e!s}")
         await proxy_logging_obj.post_call_failure_hook(
             user_api_key_dict=user_api_key_dict,
             original_exception=e,
@@ -7674,6 +7662,7 @@ def giveup(e):
 
 class ProxyStartupEvent:
     """ProxyStartupEvent class."""
+
     @classmethod
     def _initialize_startup_logging(
         cls,
@@ -7698,9 +7687,7 @@ class ProxyStartupEvent:
         """
         from litellm.secret_managers.main import str_to_bool
 
-        _use_redis_transaction_buffer: bool | str | None = general_settings.get(
-            "use_redis_transaction_buffer", False
-        )
+        _use_redis_transaction_buffer: bool | str | None = general_settings.get("use_redis_transaction_buffer", False)
         if isinstance(_use_redis_transaction_buffer, str):
             _use_redis_transaction_buffer = str_to_bool(_use_redis_transaction_buffer)
 
@@ -9517,9 +9504,7 @@ async def moderations(
         await proxy_logging_obj.post_call_failure_hook(
             user_api_key_dict=user_api_key_dict, original_exception=e, request_data=data
         )
-        verbose_proxy_logger.exception(
-            f"litellm.proxy.proxy_server.moderations(): Exception occured - {e!s}"
-        )
+        verbose_proxy_logger.exception(f"litellm.proxy.proxy_server.moderations(): Exception occured - {e!s}")
         if isinstance(e, HTTPException):
             raise ProxyException(
                 message=getattr(e, "message", str(e)),
@@ -9808,9 +9793,7 @@ async def audio_transcriptions(
         await proxy_logging_obj.post_call_failure_hook(
             user_api_key_dict=user_api_key_dict, original_exception=e, request_data=data
         )
-        verbose_proxy_logger.exception(
-            f"litellm.proxy.proxy_server.audio_transcription(): Exception occured - {e!s}"
-        )
+        verbose_proxy_logger.exception(f"litellm.proxy.proxy_server.audio_transcription(): Exception occured - {e!s}")
         if isinstance(e, HTTPException):
             raise ProxyException(
                 message=getattr(e, "message", str(e.detail)),
@@ -10189,9 +10172,7 @@ async def create_assistant(
         await proxy_logging_obj.post_call_failure_hook(
             user_api_key_dict=user_api_key_dict, original_exception=e, request_data=data
         )
-        verbose_proxy_logger.error(
-            f"litellm.proxy.proxy_server.create_assistant(): Exception occured - {e!s}"
-        )
+        verbose_proxy_logger.error(f"litellm.proxy.proxy_server.create_assistant(): Exception occured - {e!s}")
         verbose_proxy_logger.debug(traceback.format_exc())
         if isinstance(e, HTTPException):
             raise ProxyException(
@@ -10280,9 +10261,7 @@ async def delete_assistant(
         await proxy_logging_obj.post_call_failure_hook(
             user_api_key_dict=user_api_key_dict, original_exception=e, request_data=data
         )
-        verbose_proxy_logger.error(
-            f"litellm.proxy.proxy_server.delete_assistant(): Exception occured - {e!s}"
-        )
+        verbose_proxy_logger.error(f"litellm.proxy.proxy_server.delete_assistant(): Exception occured - {e!s}")
         verbose_proxy_logger.debug(traceback.format_exc())
         if isinstance(e, HTTPException):
             raise ProxyException(
@@ -13329,9 +13308,7 @@ async def alerting_settings(
     if not _user_has_admin_view(user_api_key_dict):
         raise HTTPException(
             status_code=400,
-            detail={
-                "error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"
-            },
+            detail={"error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"},
         )
 
     ## get general settings from db
@@ -13822,9 +13799,7 @@ async def login_v3_exchange(request: Request):
     except ProxyException:
         raise
     except Exception as e:
-        verbose_proxy_logger.exception(
-            f"litellm.proxy.proxy_server.login_v3_exchange(): Exception occurred - {e!s}"
-        )
+        verbose_proxy_logger.exception(f"litellm.proxy.proxy_server.login_v3_exchange(): Exception occurred - {e!s}")
         raise ProxyException(
             message=str(e),
             type=ProxyErrorTypes.auth_error,
@@ -13995,7 +13970,15 @@ async def _generate_onboarding_ui_session_token(user_obj: Any) -> str:
 
     response = await generate_key_helper_fn(
         request_type="key",
-        user_role=user_obj.user_role, duration=LITELLM_UI_SESSION_DURATION, key_max_budget=litellm.max_ui_session_budget, models=[], aliases={}, config={}, spend=0, user_id=user_obj.user_id, team_id=UI_TEAM_ID,  # type: ignore
+        user_role=user_obj.user_role,
+        duration=LITELLM_UI_SESSION_DURATION,
+        key_max_budget=litellm.max_ui_session_budget,
+        models=[],
+        aliases={},
+        config={},
+        spend=0,
+        user_id=user_obj.user_id,
+        team_id=UI_TEAM_ID,  # type: ignore
     )
     key = response["token"]  # type: ignore
 
@@ -14366,9 +14349,7 @@ async def invitation_info(invitation_id: str, user_api_key_dict: UserAPIKeyAuth 
     if not _user_has_admin_view(user_api_key_dict):
         raise HTTPException(
             status_code=400,
-            detail={
-                "error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"
-            },
+            detail={"error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"},
         )
 
     response = await InvitationLinkRepository(prisma_client).table.find_unique(where={"id": invitation_id})
@@ -14480,9 +14461,7 @@ async def invitation_delete(
     if not is_proxy_admin and not is_other_admin:
         raise HTTPException(
             status_code=400,
-            detail={
-                "error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"
-            },
+            detail={"error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"},
         )
 
     # Org admins can only delete invitations they created
@@ -14762,9 +14741,7 @@ async def update_config_general_settings(
     except Exception:
         raise HTTPException(
             status_code=400,
-            detail={
-                "error": f"Invalid type of field value={type(data.field_value)} passed in."
-            },
+            detail={"error": f"Invalid type of field value={type(data.field_value)} passed in."},
         )
 
     ## get general settings from db
@@ -15027,6 +15004,7 @@ GeneralSettingsUILiteLLMValue = Union[float, bool, str, None]
 
 class GeneralSettingsUILiteLLMFieldSpec(TypedDict):
     """GeneralSettingsUILiteLLMFieldSpec class."""
+
     type: Literal["Float", "Dollar", "Boolean", "Select"]
     description: str
     options: NotRequired[tuple[str, ...]]
@@ -15177,9 +15155,7 @@ async def get_config_list(
     if not _user_has_admin_view(user_api_key_dict):
         raise HTTPException(
             status_code=400,
-            detail={
-                "error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"
-            },
+            detail={"error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"},
         )
 
     is_full_admin = user_api_key_dict.user_role == LitellmUserRoles.PROXY_ADMIN
@@ -15361,9 +15337,7 @@ async def delete_config_general_settings(
     if user_api_key_dict.user_role != LitellmUserRoles.PROXY_ADMIN:
         raise HTTPException(
             status_code=400,
-            detail={
-                "error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"
-            },
+            detail={"error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"},
         )
 
     if data.field_name in _GENERAL_SETTINGS_UI_LITELLM_FIELDS:
@@ -15439,9 +15413,7 @@ async def delete_callback(
     if user_api_key_dict.user_role != LitellmUserRoles.PROXY_ADMIN:
         raise HTTPException(
             status_code=400,
-            detail={
-                "error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"
-            },
+            detail={"error": f"{CommonProxyErrors.not_allowed_access.value}, your role={user_api_key_dict.user_role}"},
         )
 
     if store_model_in_db is not True:

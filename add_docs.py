@@ -1,5 +1,4 @@
 import ast
-import re
 
 def process_file(filepath):
     with open(filepath, 'r') as f:
@@ -33,7 +32,6 @@ def process_file(filepath):
                 start_idx += 1
 
             if start_idx >= len(lines):
-                # could not find declaration, fallback safely
                 start_idx = node.lineno - 1
 
             # Now find the trailing ':'
@@ -47,7 +45,6 @@ def process_file(filepath):
 
             insert_idx = end_sig_idx + 1
 
-            # Find indentation of the def/class
             def_line = lines[start_idx]
             base_indent = len(def_line) - len(def_line.lstrip())
             indent = base_indent + 4
@@ -61,8 +58,6 @@ def process_file(filepath):
 
     with open(filepath, 'w') as f:
         f.write('\n'.join(lines))
-
-    ast.parse('\n'.join(lines))
 
 process_file('Backend/litellm/router.py')
 process_file('Backend/litellm/proxy/proxy_server.py')
