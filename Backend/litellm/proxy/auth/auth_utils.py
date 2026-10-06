@@ -8,7 +8,9 @@ from typing import Any, Dict, FrozenSet, Iterator, List, Mapping, Optional, Tupl
 from fastapi import HTTPException, Request, status
 
 import litellm
-from litellm import Router, provider_list
+from litellm.router import Router
+from litellm.types.utils import LlmProviders
+provider_list = [e.value for e in LlmProviders]
 from litellm._logging import verbose_proxy_logger
 from litellm.constants import MINIMUM_CUSTOM_KEY_LENGTH, STANDARD_CUSTOMER_ID_HEADERS
 from litellm.litellm_core_utils.safe_json_loads import safe_json_loads

@@ -17,13 +17,16 @@ try:
 except ImportError:
     _dotenv = None
 
-
 def _dev_env_hot_reload_enabled() -> bool:
     """The proxy exports this flag when started with ``--reload``. A reloaded
     worker is a fresh process that inherits the reloader's environment, so an
-    edited ``.env`` value stays masked by the stale inherited one unless we
-    let the file win; overriding makes the edit take effect on reload."""
-    return os.getenv("LITELLM_DEV_ENV_HOT_RELOAD") == "True"
+    in-process .env reload normally has no effect. But when running inside docker
+    it lets developers change `.env` and have the reloaded process pick it up
+    without recreating the container.
+    """
+    import os
+
+    return os.getenv("LITELLM_HOT_RELOAD_DEV", "false").lower() == "true"
 
 
 if os.getenv("LITELLM_MODE", "DEV") == "DEV":
@@ -1234,3 +1237,54 @@ from .utils import client
 from litellm.secret_managers.main import get_secret, get_secret_str
 
 # Cleaned up RAG routes and endpoints
+def __getattr__(name):
+    if name == 'Router':
+        from .router import Router
+        return Router
+    if name == 'provider_list':
+        from litellm.types.utils import LlmProviders
+        return [e.value for e in LlmProviders]
+    if name == 'timeout':
+        from .timeout import timeout
+        return timeout
+    if name == 'get_llm_provider':
+        from .utils import get_llm_provider
+        return get_llm_provider
+    if name == 'remove_index_from_tool_calls':
+        from .utils import remove_index_from_tool_calls
+        return remove_index_from_tool_calls
+    if name == 'EmbeddingResponse':
+        from litellm.types.utils import EmbeddingResponse
+        return EmbeddingResponse
+    if name == 'ModelResponse':
+        from litellm.types.utils import ModelResponse
+        return ModelResponse
+    if name == 'TextCompletionResponse':
+        from litellm.types.utils import TextCompletionResponse
+        return TextCompletionResponse
+    if name == 'ImageResponse':
+        from litellm.types.utils import ImageResponse
+        return ImageResponse
+    if name == 'ModelResponseStream':
+        from litellm.types.utils import ModelResponseStream
+        return ModelResponseStream
+    if name == 'TextChoices':
+        from litellm.types.utils import TextChoices
+        return TextChoices
+    if name == 'Choices':
+        from litellm.types.utils import Choices
+        return Choices
+    if name == 'Message':
+        from litellm.types.utils import Message
+        return Message
+    if name == 'logging_callback_manager':
+        from litellm.litellm_core_utils.logging_callback_manager import LoggingCallbackManager
+        logging_callback_manager = LoggingCallbackManager()
+        return logging_callback_manager
+    if name == 'priority_reservation_settings':
+        from .utils import priority_reservation_settings
+        return priority_reservation_settings
+    if name == 'DualCache':
+        from litellm.caching.caching import DualCache
+        return DualCache
+    raise AttributeError(f'module {__name__!r} has no attribute {name!r}')

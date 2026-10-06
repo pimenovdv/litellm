@@ -120,20 +120,10 @@ from litellm.llms.cohere.common_utils import CohereModelInfo
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
 from litellm.llms.openai_like.json_loader import JSONProviderRegistry
-try:
-    from litellm.llms.vertex_ai.vertex_ai_non_gemini.vertex_ai_non_gemini import VertexAIModelRoute
-except ImportError:
-    class VertexAIModelRoute:
-        AGENT_ENGINE = 'agent_engine'
-        PARTNER_MODELS = 'partner_models'
-        GEMINI = 'gemini'
-        GEMMA = 'gemma'
-        MODEL_GARDEN = 'model_garden'
-try:
-    from litellm.llms.vertex_ai.vertex_ai_non_gemini.vertex_ai_non_gemini import get_vertex_ai_model_route
-except ImportError:
-    def get_vertex_ai_model_route(*args, **kwargs):
-        return VertexAIModelRoute.AGENT_ENGINE
+from litellm.llms.vertex_ai.common_utils import (
+    VertexAIModelRoute,
+    get_vertex_ai_model_route,
+)
 from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
 from litellm.types.completion import (
@@ -3559,11 +3549,10 @@ def _complete_vertex_ai(ctx: _CompletionDispatchContext) -> _CompletionDispatchR
         )
     elif model_route == VertexAIModelRoute.AGENT_ENGINE:
         # Vertex AI Agent Engine (Reasoning Engines)
+        from litellm.llms.vertex_ai_and_google_aistudio.vertex_agent_engine import (
+            VertexAgentEngineConfig,
+        )
 
-        try:
-            from litellm.llms.vertex_ai.agent_engine.transformation import VertexAgentEngineConfig
-        except ImportError:
-            raise litellm.exceptions.AuthenticationError('Vertex AI dependencies missing')
         vertex_agent_engine_config = VertexAgentEngineConfig()
 
         # Update litellm_params with vertex credentials
@@ -7709,11 +7698,10 @@ def transcription(
             ),
         )
     elif custom_llm_provider == "soniox":
+        from litellm.llms.soniox.audio_transcription.handler import (
+            SonioxAudioTranscriptionHandler,
+        )
 
-        try:
-            from litellm.llms.soniox.audio_transcription.handler import SonioxAudioTranscriptionHandler
-        except ImportError:
-            raise litellm.exceptions.AuthenticationError('Soniox dependencies missing')
         response = SonioxAudioTranscriptionHandler().audio_transcriptions(
             model=model,
             audio_file=file,
@@ -8054,13 +8042,11 @@ def speech(
                 litellm_params=litellm_params_dict,
             )
     elif custom_llm_provider == "elevenlabs":
+        from litellm.llms.elevenlabs.text_to_speech.transformation import (
+            ElevenLabsTextToSpeechConfig,
+        )
 
         if text_to_speech_provider_config is None:
-            try:
-                from litellm.llms.elevenlabs.speech.transformation import ElevenLabsTextToSpeechConfig
-            except ImportError:
-                raise litellm.exceptions.AuthenticationError('ElevenLabs dependencies missing')
-
             text_to_speech_provider_config = ElevenLabsTextToSpeechConfig()
 
         elevenlabs_config = cast(ElevenLabsTextToSpeechConfig, text_to_speech_provider_config)
@@ -8100,11 +8086,10 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "vertex_ai" or custom_llm_provider == "vertex_ai_beta":
+        from litellm.llms.vertex_ai_and_google_aistudio.text_to_speech.transformation import (
+            VertexAITextToSpeechConfig,
+        )
 
-        try:
-            from litellm.llms.vertex_ai.vertex_text_to_speech.transformation import VertexAITextToSpeechConfig
-        except ImportError:
-            raise litellm.exceptions.AuthenticationError('Vertex AI dependencies missing')
         generic_optional_params = GenericLiteLLMParams(**kwargs)
 
         # Handle Gemini models separately (they use speech_to_completion_bridge)
@@ -8202,14 +8187,12 @@ def speech(
             **kwargs,
         )
     elif custom_llm_provider == "minimax":
+        from litellm.llms.minimax.text_to_speech.transformation import (
+            MinimaxTextToSpeechConfig,
+        )
 
         # MiniMax Text-to-Speech
         if text_to_speech_provider_config is None:
-            try:
-                from litellm.llms.minimax.speech.transformation import MinimaxTextToSpeechConfig
-            except ImportError:
-                raise litellm.exceptions.AuthenticationError('Minimax dependencies missing')
-
             text_to_speech_provider_config = MinimaxTextToSpeechConfig()
 
         minimax_config = cast(MinimaxTextToSpeechConfig, text_to_speech_provider_config)
@@ -8242,14 +8225,12 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "aws_polly":
+        from litellm.llms.aws_polly.text_to_speech.transformation import (
+            AWSPollyTextToSpeechConfig,
+        )
 
         # AWS Polly Text-to-Speech
         if text_to_speech_provider_config is None:
-            try:
-                from litellm.llms.aws_polly.speech.transformation import AWSPollyTextToSpeechConfig
-            except ImportError:
-                raise litellm.exceptions.AuthenticationError('AWS Polly dependencies missing')
-
             text_to_speech_provider_config = AWSPollyTextToSpeechConfig()
 
         # Cast to specific AWS Polly config type to access dispatch method

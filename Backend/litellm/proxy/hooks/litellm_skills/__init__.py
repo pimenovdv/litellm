@@ -12,15 +12,24 @@ Usage:
 """
 
 # Re-export from the SDK location for convenience
-from litellm.llms.litellm_proxy.skills import (
-    LITELLM_CODE_EXECUTION_TOOL,
-    CodeExecutionHandler,
-    LiteLLMInternalTools,
-    SkillPromptInjectionHandler,
-    SkillsSandboxExecutor,
-    code_execution_handler,
-    get_litellm_code_execution_tool,
-)
+try:
+    from litellm.llms.litellm_proxy.skills import (
+        LITELLM_CODE_EXECUTION_TOOL,
+        CodeExecutionHandler,
+        LiteLLMInternalTools,
+        SkillPromptInjectionHandler,
+        SkillsSandboxExecutor,
+        code_execution_handler,
+        get_litellm_code_execution_tool,
+    )
+except ImportError:
+    LITELLM_CODE_EXECUTION_TOOL = None
+    CodeExecutionHandler = type('CodeExecutionHandler', (), {})
+    LiteLLMInternalTools = type('LiteLLMInternalTools', (), {})
+    SkillPromptInjectionHandler = type('SkillPromptInjectionHandler', (), {})
+    SkillsSandboxExecutor = type('SkillsSandboxExecutor', (), {})
+    code_execution_handler = None
+    get_litellm_code_execution_tool = None
 from litellm.proxy.hooks.litellm_skills.main import (
     SkillsInjectionHook,
     skills_injection_hook,
