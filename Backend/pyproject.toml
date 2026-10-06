@@ -322,3 +322,6 @@ pytest_add_cli_args = [
 [tool.coverage.run]
 source = ["litellm"]
 relative_files = true
+
+[tool.setuptools]
+packages = ["litellm"]
