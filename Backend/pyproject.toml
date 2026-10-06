@@ -261,7 +261,7 @@ litellm-proxy-extras = { path = "../litellm-proxy-extras" }
 litellm-enterprise = { workspace = true }
 
 [tool.uv.workspace]
-members = ["enterprise"]
+members = ["enterprise", "litellm-proxy-extras"]
 
 [tool.isort]
 profile = "black"
