@@ -16,7 +16,7 @@ async def fetch_data(url):
                 print("Fetch the data from URL.")
                 # Return the 'data' field from the JSON response
                 return resp_json['data']
-    except Exception as e:  # noqa: BLE001  # noqa: BLE001
+    except Exception as e:  # noqa: BLE001
         # Print an error message if fetching data fails
         print("Error fetching data from URL:", e)
         return None
@@ -39,7 +39,7 @@ def write_to_file(file_path, data):
             # Dump the data as JSON into the file
             json.dump(data, file, indent=4)
         print("Values updated successfully.")
-    except Exception as e:  # noqa: BLE001  # noqa: BLE001
+    except Exception as e:  # noqa: BLE001
         # Print an error message if writing to file fails
         print("Error updating JSON file:", e)
 

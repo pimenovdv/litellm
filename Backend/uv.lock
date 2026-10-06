@@ -10,7 +10,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-10-02T15:25:07.021885053Z"
+exclude-newer = "2026-10-03T14:16:19.646833686Z"
 exclude-newer-span = "P3D"
 
 [manifest]
@@ -3668,7 +3668,6 @@ proxy = [
     { name = "gunicorn" },
     { name = "inquirerpy" },
     { name = "litellm-enterprise" },
-    { name = "litellm-proxy-extras" },
     { name = "orjson" },
     { name = "polars" },
     { name = "pydantic-settings" },
@@ -3828,7 +3827,6 @@ requires-dist = [
     { name = "jinja2", specifier = ">=3.1.6,<4.0" },
     { name = "jsonschema", specifier = ">=4.0.0,<5.0" },
     { name = "litellm-enterprise", marker = "extra == 'proxy'", editable = "enterprise" },
-    { name = "litellm-proxy-extras", marker = "extra == 'proxy'", specifier = "==0.4.81" },
     { name = "llm-sandbox", marker = "extra == 'proxy-runtime'", specifier = ">=0.3.39,<1.0" },
     { name = "mangum", marker = "extra == 'proxy-runtime'", specifier = ">=0.17.0,<1.0" },
     { name = "mlflow", marker = "extra == 'mlflow'", specifier = ">=3.11.1,<4.0" },
@@ -3958,15 +3956,6 @@ proxy-dev = [
 name = "litellm-enterprise"
 version = "0.1.52"
 source = { editable = "enterprise" }
-
-[[package]]
-name = "litellm-proxy-extras"
-version = "0.4.81"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/7f/6b/f9aeb200c2fcd9e74feaa00746fd6dfd4f0f639ad21f566f6e6c49f6d8f3/litellm_proxy_extras-0.4.81.tar.gz", hash = "sha256:b25a324751cdb719c99996e026f62393496c64a5b9cf0dfed235c052fb5ea82a", size = 46850, upload-time = "2026-07-29T23:06:03.927Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/9e/6cdaee3b763cea1f1a879e89c7760861f7470ff0e91b1ff871a17cf61ed3/litellm_proxy_extras-0.4.81-py3-none-any.whl", hash = "sha256:43da81cef78e3124e400ba1eae5a01804d61e674a1330f5a10cea4e4821612b0", size = 132014, upload-time = "2026-07-29T23:06:02.889Z" },
-]
 
 [[package]]
 name = "llm-sandbox"
