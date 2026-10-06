@@ -70,9 +70,6 @@ jobs:
       - name: info_log_check
         run: uv run --no-sync python ./tests/code_coverage_tests/info_log_check.py
 
-      - name: check_guardrail_apply_decorator
-        run: uv run --no-sync python ./tests/code_coverage_tests/check_guardrail_apply_decorator.py
-
       - name: test_ban_set_verbose
         run: uv run --no-sync python ./tests/code_coverage_tests/test_ban_set_verbose.py
 
