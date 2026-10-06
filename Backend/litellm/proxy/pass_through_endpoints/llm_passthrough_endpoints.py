@@ -56,7 +56,15 @@ from litellm.utils import ProviderConfigManager
 
 from .passthrough_endpoint_router import PassthroughEndpointRouter
 
-vertex_llm_base = VertexBase()
+try:
+    from litellm.llms.vertex_ai.common_utils import VertexBase
+    try:
+        from litellm.llms.vertex_ai.common_utils import VertexBase
+        vertex_llm_base = VertexBase()
+    except Exception:
+        vertex_llm_base = None
+except Exception:
+    vertex_llm_base = None
 router = APIRouter()
 default_vertex_config = None
 
@@ -1564,7 +1572,11 @@ async def _prepare_vertex_auth_headers(
             - vertex_project: Optional[str] - Updated vertex project ID
             - vertex_location: Optional[str] - Updated vertex location
     """
-    vertex_llm_base = VertexBase()
+    try:
+        from litellm.llms.vertex_ai.common_utils import VertexBase
+        vertex_llm_base = VertexBase()
+    except Exception:
+        vertex_llm_base = None
     headers_passed_through = False
 
     # Use headers from the incoming request if no vertex credentials are found

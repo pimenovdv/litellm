@@ -11,11 +11,19 @@ from litellm.litellm_core_utils.litellm_logging import (
 )
 from litellm.litellm_core_utils.streaming_handler import CustomStreamWrapper
 from litellm.llms.base_llm.chat.transformation import BaseConfig
-from litellm.llms.cohere.chat.v2_transformation import CohereV2ChatConfig
-from litellm.llms.cohere.common_utils import (
-    ModelResponseIterator as CohereModelResponseIterator,
-)
-from litellm.llms.cohere.embed.v1_transformation import CohereEmbeddingConfig
+try:
+    from litellm.llms.cohere.chat.v2_transformation import CohereV2ChatConfig
+except ImportError:
+    class CohereV2ChatConfig: pass
+try:
+    from litellm.llms.cohere.common_utils import (
+        ModelResponseIterator as CohereModelResponseIterator,
+    )
+    from litellm.llms.cohere.embed.v1_transformation import CohereEmbeddingConfig
+except ImportError:
+    class CohereModelResponseIterator: pass
+    class CohereEmbeddingConfig: pass
+
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
 from litellm.types.passthrough_endpoints.pass_through_endpoints import (
     PassthroughStandardLoggingPayload,

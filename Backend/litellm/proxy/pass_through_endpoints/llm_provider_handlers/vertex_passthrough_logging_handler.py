@@ -8,13 +8,19 @@ import httpx
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
-from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
-    ModelResponseIterator as VertexModelResponseIterator,
-)
-from litellm.llms.vertex_ai.vector_stores.search_api.transformation import (
-    VertexSearchAPIVectorStoreConfig,
-)
-from litellm.llms.vertex_ai.videos.transformation import VertexAIVideoConfig
+try:
+    from litellm.llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import (
+        ModelResponseIterator as VertexModelResponseIterator,
+    )
+    from litellm.llms.vertex_ai.vector_stores.search_api.transformation import (
+        VertexSearchAPIVectorStoreConfig,
+    )
+    from litellm.llms.vertex_ai.videos.transformation import VertexAIVideoConfig
+except ImportError:
+    class VertexModelResponseIterator: pass
+    class VertexSearchAPIVectorStoreConfig: pass
+    class VertexAIVideoConfig: pass
+
 from litellm.proxy._types import PassThroughEndpointLoggingTypedDict
 from litellm.types.utils import (
     Choices,
@@ -26,7 +32,10 @@ from litellm.types.utils import (
     TextCompletionResponse,
 )
 
-vertex_search_api_config = VertexSearchAPIVectorStoreConfig()
+try:
+    vertex_search_api_config = VertexSearchAPIVectorStoreConfig()
+except Exception:
+    vertex_search_api_config = None
 if TYPE_CHECKING:
     from litellm.types.utils import LiteLLMBatch
 

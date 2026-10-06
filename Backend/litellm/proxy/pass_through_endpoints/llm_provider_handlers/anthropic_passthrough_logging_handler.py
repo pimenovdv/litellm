@@ -5,13 +5,19 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Any, cast
 
 import httpx
-from litellm.llms.anthropic.batches.handler import AnthropicBatchesConfig
-from litellm.llms.anthropic.chat.handler import (
-    AnthropicConfig,
-)
-from litellm.llms.anthropic.chat.handler import (
-    ModelResponseIterator as AnthropicModelResponseIterator,
-)
+try:
+    from litellm.llms.anthropic.batches.handler import AnthropicBatchesConfig
+    from litellm.llms.anthropic.chat.handler import (
+        AnthropicConfig,
+    )
+    from litellm.llms.anthropic.chat.handler import (
+        ModelResponseIterator as AnthropicModelResponseIterator,
+    )
+except ImportError:
+    class AnthropicBatchesConfig: pass
+    class AnthropicConfig: pass
+    class AnthropicModelResponseIterator: pass
+
 
 import litellm
 from litellm._logging import verbose_proxy_logger

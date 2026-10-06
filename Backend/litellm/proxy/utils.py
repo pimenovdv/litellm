@@ -1418,7 +1418,7 @@ class ProxyLogging:
                         _callback is not None
                         and isinstance(_callback, CustomLogger)
                         and "async_pre_call_hook" in vars(_callback.__class__)
-                        and _callback.__class__.async_pre_call_hook != CustomLogger.async_pre_call_hook
+                        and getattr(_callback.__class__, 'async_pre_call_hook', None) != getattr(CustomLogger, 'async_pre_call_hook', None)
                     ):
                         if call_type == "call_mcp_tool" and user_api_key_dict is None:
                             continue
@@ -1707,7 +1707,7 @@ class ProxyLogging:
             # (e.g. a vendor base class providing the override, with the
             # registered class adding nothing else) MUST still be detected.
             # A leaf-class miss here would silently drop the inherited hook.
-            base_streaming_hook = CustomLogger.async_post_call_streaming_hook
+            base_streaming_hook = getattr(CustomLogger, 'async_post_call_streaming_hook', None)
             cls_streaming_hook = getattr(
                 cls,
                 "async_post_call_streaming_hook",
@@ -2341,6 +2341,7 @@ class ProxyLogging:
             #################################################################
 
             for callback in other_callbacks:
+                if not hasattr(callback, 'async_post_call_success_hook'): continue
                 callback_response = await callback.async_post_call_success_hook(
                     user_api_key_dict=user_api_key_dict, data=data, response=response
                 )

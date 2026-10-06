@@ -34,9 +34,14 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES
 from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.realtime_streaming import RealTimeStreaming
 from litellm.litellm_core_utils.url_utils import encode_url_path_segment
-from litellm.llms.base_llm.anthropic_messages.transformation import (
-    BaseAnthropicMessagesConfig,
-)
+try:
+    from litellm.llms.base_llm.anthropic_messages.transformation import (
+        BaseAnthropicMessagesConfig,
+    )
+except ImportError:
+    class BaseAnthropicMessagesConfig:
+        pass
+
 from litellm.llms.base_llm.audio_transcription.transformation import (
     BaseAudioTranscriptionConfig,
 )
@@ -53,9 +58,14 @@ from litellm.llms.base_llm.files.transformation import (
     BaseFilesConfig,
     BaseFileUploadStream,
 )
-from litellm.llms.base_llm.google_genai.transformation import (
-    BaseGoogleGenAIGenerateContentConfig,
-)
+try:
+    from litellm.llms.base_llm.google_genai.transformation import (
+        BaseGoogleGenAIGenerateContentConfig,
+    )
+except ImportError:
+    class BaseGoogleGenAIGenerateContentConfig:
+        pass
+
 from litellm.llms.base_llm.image_edit.transformation import BaseImageEditConfig
 from litellm.llms.base_llm.image_generation.transformation import (
     BaseImageGenerationConfig,

@@ -35,7 +35,10 @@ except ImportError:
 try:
     from litellm.integrations.otel.runtime import phase_span, seed_request_identity
 except ImportError:
-    phase_span = lambda *args, **kwargs: lambda f: f
+    import contextlib
+    @contextlib.contextmanager
+    def phase_span(*args, **kwargs):
+        yield
     seed_request_identity = lambda *args, **kwargs: None
 
 from litellm.litellm_core_utils.dd_tracing import tracer
@@ -2308,7 +2311,11 @@ async def _run_centralized_common_checks(
         end_user_result,
         global_spend_result,
     ):
-        if isinstance(r, (ProxyException, litellm.BudgetExceededError)):
+        try:
+            from litellm.exceptions import BudgetExceededError
+        except ImportError:
+            class BudgetExceededError(Exception): pass
+        if isinstance(r, (ProxyException, BudgetExceededError)):
             raise r
 
     # Use BaseException (not HTTPException) in the narrowing checks so

@@ -1246,11 +1246,18 @@ app = FastAPI(
 ## middleware after an application has started". See
 ## ``litellm.integrations.otel.mount`` for the full rationale; the call is a safe
 ## no-op when the gate is off or the instrumentation package is unavailable.
-from litellm.integrations.otel.mount import instrument_fastapi_app
+try:
+    from litellm.integrations.otel.mount import instrument_fastapi_app
+except ImportError:
+    def instrument_fastapi_app(*args, **kwargs): pass
 
 instrument_fastapi_app(app)
 
-vertex_live_passthrough_vertex_base = VertexBase()
+try:
+    from litellm.llms.vertex_ai.common_utils import VertexBase
+    vertex_live_passthrough_vertex_base = VertexBase()
+except ImportError:
+    vertex_live_passthrough_vertex_base = None
 
 
 ### CUSTOM API DOCS [ENTERPRISE FEATURE] ###

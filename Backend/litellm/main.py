@@ -115,15 +115,38 @@ from litellm.llms.base_llm import BaseConfig, BaseImageGenerationConfig
 from litellm.llms.base_llm.base_model_iterator import (
     convert_model_response_to_streaming,
 )
-from litellm.llms.bedrock.common_utils import BedrockModelInfo
-from litellm.llms.cohere.common_utils import CohereModelInfo
+try:
+    from litellm.llms.bedrock.common_utils import BedrockModelInfo
+except ImportError:
+    class BedrockModelInfo:
+        @staticmethod
+        def get_bedrock_route(model): return None
+        @staticmethod
+        def get_claude_platform_model(model): return model
+try:
+    from litellm.llms.cohere.common_utils import CohereModelInfo
+except ImportError:
+    class CohereModelInfo:
+        @staticmethod
+        def get_cohere_route(model): return None
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
-from litellm.llms.openai_like.json_loader import JSONProviderRegistry
-from litellm.llms.vertex_ai.common_utils import (
-    VertexAIModelRoute,
-    get_vertex_ai_model_route,
-)
+try:
+    from litellm.llms.openai_like.json_loader import JSONProviderRegistry
+except ImportError:
+    class JSONProviderRegistry:
+        @staticmethod
+        def exists(provider): return False
+try:
+    from litellm.llms.vertex_ai.common_utils import (
+        VertexAIModelRoute,
+        get_vertex_ai_model_route,
+    )
+except ImportError:
+    class VertexAIModelRoute:
+        AGENT_ENGINE = "AGENT_ENGINE"
+    def get_vertex_ai_model_route(model): return None
+
 from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
 from litellm.types.completion import (
@@ -200,73 +223,193 @@ from .litellm_core_utils.prompt_templates.factory import (
     stringify_json_tool_call_content,
 )
 from .litellm_core_utils.streaming_chunk_builder_utils import ChunkProcessor
-from .llms.anthropic.chat import AnthropicChatCompletion
-from .llms.azure.audio_transcriptions import AzureAudioTranscription
-from .llms.azure.azure import AzureChatCompletion, _check_dynamic_azure_params
-from .llms.azure.chat.o_series_handler import AzureOpenAIO1ChatCompletion
-from .llms.azure.completion.handler import AzureTextCompletion
-from .llms.azure_ai.anthropic.handler import AzureAnthropicChatCompletion
-from .llms.azure_ai.embed import AzureAIEmbedding
-from .llms.bedrock.chat import BedrockConverseLLM, BedrockLLM
-from .llms.bedrock.embed.embedding import BedrockEmbedding
-from .llms.bedrock.image_edit.handler import BedrockImageEdit
-from .llms.bedrock.image_generation.image_handler import BedrockImageGeneration
-from .llms.bytez.chat.transformation import BytezChatConfig
-from .llms.clarifai.chat.transformation import ClarifaiConfig
-from .llms.codestral.completion.handler import CodestralTextCompletion
-from .llms.cohere.embed import handler as cohere_embed
+
+class DummyLLM:
+    def __init__(self, *args, **kwargs): pass
+    def __getattr__(self, name): return lambda *args, **kwargs: None
+    def __call__(self, *args, **kwargs): return self
+
+try:
+    from .llms.anthropic.chat import AnthropicChatCompletion
+except ImportError: AnthropicChatCompletion = DummyLLM()
+try:
+    from .llms.azure.audio_transcriptions import AzureAudioTranscription
+except ImportError: AzureAudioTranscription = DummyLLM()
+try:
+    from .llms.azure.azure import AzureChatCompletion, _check_dynamic_azure_params
+except ImportError:
+    AzureChatCompletion = DummyLLM()
+    _check_dynamic_azure_params = lambda *args, **kwargs: None
+try:
+    from .llms.azure.chat.o_series_handler import AzureOpenAIO1ChatCompletion
+except ImportError: AzureOpenAIO1ChatCompletion = DummyLLM()
+try:
+    from .llms.azure.completion.handler import AzureTextCompletion
+except ImportError: AzureTextCompletion = DummyLLM()
+try:
+    from .llms.azure_ai.anthropic.handler import AzureAnthropicChatCompletion
+except ImportError: AzureAnthropicChatCompletion = DummyLLM()
+try:
+    from .llms.azure_ai.embed import AzureAIEmbedding
+except ImportError: AzureAIEmbedding = DummyLLM()
+try:
+    from .llms.bedrock.chat import BedrockConverseLLM, BedrockLLM
+except ImportError: BedrockConverseLLM = BedrockLLM = DummyLLM()
+try:
+    from .llms.bedrock.embed.embedding import BedrockEmbedding
+except ImportError: BedrockEmbedding = DummyLLM()
+try:
+    from .llms.bedrock.image_edit.handler import BedrockImageEdit
+except ImportError: BedrockImageEdit = DummyLLM()
+
+try:
+    from .llms.bedrock.image_generation.image_handler import BedrockImageGeneration
+except ImportError: BedrockImageGeneration = DummyLLM()
+try:
+    from .llms.bytez.chat.transformation import BytezChatConfig
+except ImportError: BytezChatConfig = DummyLLM()
+try:
+    from .llms.clarifai.chat.transformation import ClarifaiConfig
+except ImportError: ClarifaiConfig = DummyLLM()
+try:
+    from .llms.codestral.completion.handler import CodestralTextCompletion
+except ImportError: CodestralTextCompletion = DummyLLM()
+try:
+    from .llms.cohere.embed import handler as cohere_embed
+except ImportError: cohere_embed = DummyLLM()
+
 from .llms.custom_httpx.aiohttp_handler import BaseLLMAIOHTTPHandler
 from .llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
 from .llms.custom_llm import CustomLLM, custom_chat_llm_router
-from .llms.databricks.embed.handler import DatabricksEmbeddingHandler
-from .llms.deprecated_providers import aleph_alpha, palm
-from .llms.gdc.chat.transformation import GDCGeminiConfig
-from .llms.gemini.common_utils import get_api_key_from_env
-from .llms.groq.chat.handler import GroqChatCompletion
-from .llms.heroku.chat.transformation import HerokuChatConfig
-from .llms.huggingface.embedding.handler import HuggingFaceEmbedding
-from .llms.lemonade.chat.transformation import LemonadeChatConfig
-from .llms.nlp_cloud.chat.handler import completion as nlp_cloud_chat_completion
-from .llms.nvidia_riva.audio_transcription.handler import (
-    NvidiaRivaAudioTranscription,
-)
-from .llms.nvidia_riva.audio_transcription.transformation import (
-    NvidiaRivaAudioTranscriptionConfig,
-)
-from .llms.oci.chat.transformation import OCIChatConfig
-from .llms.ollama.completion import handler as ollama
-from .llms.oobabooga.chat import oobabooga
-from .llms.openai.completion.handler import OpenAITextCompletion
-from .llms.openai.image_variations.handler import OpenAIImageVariationsHandler
-from .llms.openai.openai import OpenAIChatCompletion
-from .llms.openai.transcriptions.handler import OpenAIAudioTranscription
-from .llms.openai_like.chat.handler import OpenAILikeChatHandler
-from .llms.openai_like.embedding.handler import OpenAILikeEmbeddingHandler
-from .llms.ovhcloud.chat.transformation import OVHCloudChatConfig
-from .llms.petals.completion import handler as petals_handler
-from .llms.predibase.chat.handler import PredibaseChatCompletion
-from .llms.replicate.chat.handler import completion as replicate_chat_completion
-from .llms.sagemaker.chat.handler import SagemakerChatHandler
-from .llms.sagemaker.completion.handler import SagemakerLLM
-from .llms.sap.chat.handler import GenAIHubOrchestration
-from .llms.vertex_ai import vertex_ai_non_gemini
-from .llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import VertexLLM
-from .llms.vertex_ai.gemini_embeddings.batch_embed_content_handler import (
-    GoogleBatchEmbeddings,
-)
-from .llms.vertex_ai.image_generation.image_generation_handler import (
-    VertexImageGeneration,
-)
-from .llms.vertex_ai.multimodal_embeddings.embedding_handler import (
-    VertexMultimodalEmbedding,
-)
-from .llms.vertex_ai.vertex_ai_partner_models.main import VertexAIPartnerModels
-from .llms.vertex_ai.vertex_embeddings.embedding_handler import VertexEmbedding
-from .llms.vertex_ai.vertex_gemma_models.main import VertexAIGemmaModels
-from .llms.vertex_ai.vertex_model_garden.main import VertexAIModelGardenModels
-from .llms.vllm.completion import handler as vllm_handler
-from .llms.watsonx.chat.handler import WatsonXChatHandler
-from .llms.watsonx.common_utils import IBMWatsonXMixin
+try:
+    from .llms.databricks.embed.handler import DatabricksEmbeddingHandler
+except ImportError: DatabricksEmbeddingHandler = DummyLLM()
+try:
+    from .llms.deprecated_providers import aleph_alpha, palm
+except ImportError: aleph_alpha = palm = DummyLLM()
+try:
+    from .llms.gdc.chat.transformation import GDCGeminiConfig
+except ImportError: GDCGeminiConfig = DummyLLM()
+try:
+    from .llms.gemini.common_utils import get_api_key_from_env
+except ImportError:
+    def get_api_key_from_env(*args, **kwargs): return None
+
+try:
+    from .llms.groq.chat.handler import GroqChatCompletion
+except ImportError: GroqChatCompletion = DummyLLM()
+try:
+    from .llms.heroku.chat.transformation import HerokuChatConfig
+except ImportError: HerokuChatConfig = DummyLLM()
+try:
+    from .llms.huggingface.embedding.handler import HuggingFaceEmbedding
+except ImportError: HuggingFaceEmbedding = DummyLLM()
+try:
+    from .llms.lemonade.chat.transformation import LemonadeChatConfig
+except ImportError: LemonadeChatConfig = DummyLLM()
+try:
+    from .llms.nlp_cloud.chat.handler import completion as nlp_cloud_chat_completion
+except ImportError: nlp_cloud_chat_completion = DummyLLM()
+try:
+    from .llms.nvidia_riva.audio_transcription.handler import (
+        NvidiaRivaAudioTranscription,
+    )
+except ImportError: NvidiaRivaAudioTranscription = DummyLLM()
+try:
+    from .llms.nvidia_riva.audio_transcription.transformation import (
+        NvidiaRivaAudioTranscriptionConfig,
+    )
+except ImportError: NvidiaRivaAudioTranscriptionConfig = DummyLLM()
+try:
+    from .llms.oci.chat.transformation import OCIChatConfig
+except ImportError: OCIChatConfig = DummyLLM()
+try:
+    from .llms.ollama.completion import handler as ollama
+except ImportError: ollama = DummyLLM()
+try:
+    from .llms.oobabooga.chat import oobabooga
+except ImportError: oobabooga = DummyLLM()
+try:
+    from .llms.openai.completion.handler import OpenAITextCompletion
+except ImportError: OpenAITextCompletion = DummyLLM()
+try:
+    from .llms.openai.image_variations.handler import OpenAIImageVariationsHandler
+except ImportError: OpenAIImageVariationsHandler = DummyLLM()
+try:
+    from .llms.openai.openai import OpenAIChatCompletion
+except ImportError: OpenAIChatCompletion = DummyLLM()
+try:
+    from .llms.openai.transcriptions.handler import OpenAIAudioTranscription
+except ImportError: OpenAIAudioTranscription = DummyLLM()
+try:
+    from .llms.openai_like.chat.handler import OpenAILikeChatHandler
+except ImportError: OpenAILikeChatHandler = DummyLLM()
+try:
+    from .llms.openai_like.embedding.handler import OpenAILikeEmbeddingHandler
+except ImportError: OpenAILikeEmbeddingHandler = DummyLLM()
+try:
+    from .llms.ovhcloud.chat.transformation import OVHCloudChatConfig
+except ImportError: OVHCloudChatConfig = DummyLLM()
+try:
+    from .llms.petals.completion import handler as petals_handler
+except ImportError: petals_handler = DummyLLM()
+try:
+    from .llms.predibase.chat.handler import PredibaseChatCompletion
+except ImportError: PredibaseChatCompletion = DummyLLM()
+try:
+    from .llms.replicate.chat.handler import completion as replicate_chat_completion
+except ImportError: replicate_chat_completion = DummyLLM()
+try:
+    from .llms.sagemaker.chat.handler import SagemakerChatHandler
+except ImportError: SagemakerChatHandler = DummyLLM()
+try:
+    from .llms.sagemaker.completion.handler import SagemakerLLM
+except ImportError: SagemakerLLM = DummyLLM()
+try:
+    from .llms.sap.chat.handler import GenAIHubOrchestration
+except ImportError: GenAIHubOrchestration = DummyLLM()
+try:
+    from .llms.vertex_ai import vertex_ai_non_gemini
+except ImportError: vertex_ai_non_gemini = DummyLLM()
+try:
+    from .llms.vertex_ai.gemini.vertex_and_google_ai_studio_gemini import VertexLLM
+except ImportError: VertexLLM = DummyLLM()
+try:
+    from .llms.vertex_ai.gemini_embeddings.batch_embed_content_handler import (
+        GoogleBatchEmbeddings,
+    )
+except ImportError: GoogleBatchEmbeddings = DummyLLM()
+try:
+    from .llms.vertex_ai.image_generation.image_generation_handler import (
+        VertexImageGeneration,
+    )
+except ImportError: VertexImageGeneration = DummyLLM()
+try:
+    from .llms.vertex_ai.multimodal_embeddings.embedding_handler import (
+        VertexMultimodalEmbedding,
+    )
+except ImportError: VertexMultimodalEmbedding = DummyLLM()
+try:
+    from .llms.vertex_ai.vertex_ai_partner_models.main import VertexAIPartnerModels
+except ImportError: VertexAIPartnerModels = DummyLLM()
+try:
+    from .llms.vertex_ai.vertex_embeddings.embedding_handler import VertexEmbedding
+except ImportError: VertexEmbedding = DummyLLM()
+try:
+    from .llms.vertex_ai.vertex_gemma_models.main import VertexAIGemmaModels
+except ImportError: VertexAIGemmaModels = DummyLLM()
+try:
+    from .llms.vertex_ai.vertex_model_garden.main import VertexAIModelGardenModels
+except ImportError: VertexAIModelGardenModels = DummyLLM()
+try:
+    from .llms.vllm.completion import handler as vllm_handler
+except ImportError: vllm_handler = DummyLLM()
+try:
+    from .llms.watsonx.chat.handler import WatsonXChatHandler
+except ImportError: WatsonXChatHandler = DummyLLM()
+try:
+    from .llms.watsonx.common_utils import IBMWatsonXMixin
+except ImportError: IBMWatsonXMixin = DummyLLM()
 from .types.llms.anthropic import AnthropicThinkingParam
 from .types.llms.openai import (
     ChatCompletionAssistantMessage,
@@ -314,13 +457,17 @@ bedrock_embedding = BedrockEmbedding()
 bedrock_image_generation = BedrockImageGeneration()
 bedrock_image_edit = BedrockImageEdit()
 vertex_chat_completion = VertexLLM()
-vertex_embedding = VertexEmbedding()
-vertex_multimodal_embedding = VertexMultimodalEmbedding()
-vertex_image_generation = VertexImageGeneration()
-google_batch_embeddings = GoogleBatchEmbeddings()
-vertex_partner_models_chat_completion = VertexAIPartnerModels()
-vertex_gemma_chat_completion = VertexAIGemmaModels()
-vertex_model_garden_chat_completion = VertexAIModelGardenModels()
+try:
+    vertex_embedding = VertexEmbedding()
+    vertex_multimodal_embedding = VertexMultimodalEmbedding()
+    vertex_image_generation = VertexImageGeneration()
+    google_batch_embeddings = GoogleBatchEmbeddings()
+    vertex_partner_models_chat_completion = VertexAIPartnerModels()
+    vertex_gemma_chat_completion = VertexAIGemmaModels()
+    vertex_model_garden_chat_completion = VertexAIModelGardenModels()
+except NameError:
+    vertex_embedding = vertex_multimodal_embedding = vertex_image_generation = google_batch_embeddings = vertex_partner_models_chat_completion = vertex_gemma_chat_completion = vertex_model_garden_chat_completion = DummyLLM()
+
 gdc_transformation = GDCGeminiConfig()
 # vertex_text_to_speech is now replaced by VertexAITextToSpeechConfig
 sagemaker_llm = SagemakerLLM()

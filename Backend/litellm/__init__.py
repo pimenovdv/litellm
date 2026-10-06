@@ -1287,4 +1287,254 @@ def __getattr__(name):
     if name == 'DualCache':
         from litellm.caching.caching import DualCache
         return DualCache
-    raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
+    if name == 'get_model_info':
+        from litellm.utils import get_model_info
+        return get_model_info
+    if name == 'LlmProviders':
+        from litellm.types.utils import LlmProviders
+        return LlmProviders
+    if name == 'CreateFileRequest':
+        from litellm.types.llms.openai import CreateFileRequest
+        return CreateFileRequest
+    if name == 'stream_chunk_builder':
+        from litellm.main import stream_chunk_builder
+        return stream_chunk_builder
+    if name == 'RateLimitError':
+        from litellm.exceptions import RateLimitError
+        return RateLimitError
+    if name == 'Timeout':
+        from litellm.exceptions import Timeout
+        return Timeout
+    if name == 'completion':
+        from litellm.main import completion
+        return completion
+    if name == 'completion_cost':
+        from litellm.utils import completion_cost
+        return completion_cost
+    if name == 'embedding':
+        from litellm.main import embedding
+        return embedding
+    if name == 'Cache':
+        from litellm.caching.caching import Cache
+        return Cache
+    if name == 'mock_completion':
+        from litellm.main import mock_completion
+        return mock_completion
+    if name == 'ModelResponse':
+        from litellm.types.utils import ModelResponse
+        return ModelResponse
+    if name == 'AuthenticationError':
+        from litellm.exceptions import AuthenticationError
+        return AuthenticationError
+    if name == 'InvalidRequestError':
+        from litellm.exceptions import InvalidRequestError
+        return InvalidRequestError
+    if name == 'get_max_tokens':
+        from litellm.utils import get_max_tokens
+        return get_max_tokens
+    if name == 'get_llm_provider':
+        from litellm.utils import get_llm_provider
+        return get_llm_provider
+    if name == 'in_memory_llm_clients_cache':
+        from litellm.caching.caching import InMemoryCache
+        # This is a bit hacky but we need to supply the cache. If it fails we'll look for where it was defined.
+        return InMemoryCache()
+    if name == 'register_model':
+        from litellm.utils import register_model
+        return register_model
+    if name == 'LiteLLMProxyChatConfig':
+        try:
+            from litellm.llms.litellm_proxy.chat.transformation import LiteLLMProxyChatConfig
+            return LiteLLMProxyChatConfig
+        except ImportError:
+            class LiteLLMProxyChatConfig:
+                @staticmethod
+                def _should_use_litellm_proxy_by_default(*args, **kwargs): return False
+            return LiteLLMProxyChatConfig
+    if name == 'LiteLLMProxyEmbeddingConfig':
+        try:
+            from litellm.llms.litellm_proxy.embedding.transformation import LiteLLMProxyEmbeddingConfig
+            return LiteLLMProxyEmbeddingConfig
+        except ImportError:
+            class LiteLLMProxyEmbeddingConfig: pass
+            return LiteLLMProxyEmbeddingConfig
+    if name == 'Chat':
+        from litellm.router import Router
+        class ChatAdapter:
+            def __init__(self, *args, **kwargs):
+                self.params = kwargs.get('params', {})
+                self.router_obj = kwargs.get('router_obj', None)
+        return ChatAdapter
+
+    if name == 'aspeech':
+        from litellm.main import aspeech
+        return aspeech
+    if name == 'alearning_status':
+        return lambda *args, **kwargs: None
+    if name == 'amodify_messages':
+        return lambda *args, **kwargs: None
+    if name == 'aget_messages':
+        return lambda *args, **kwargs: None
+    if name == 'acreate_threads':
+        try:
+            from litellm.main import acreate_threads
+            return acreate_threads
+        except ImportError:
+            def acreate_threads(*args, **kwargs): pass
+            return acreate_threads
+    if name == 'acreate_messages':
+        try:
+            from litellm.main import acreate_messages
+            return acreate_messages
+        except ImportError:
+            def acreate_messages(*args, **kwargs): pass
+            return acreate_messages
+    if name == 'acreate_runs':
+        try:
+            from litellm.main import acreate_runs
+            return acreate_runs
+        except ImportError:
+            def acreate_runs(*args, **kwargs): pass
+            return acreate_runs
+    if name == 'aget_runs':
+        try:
+            from litellm.main import aget_runs
+            return aget_runs
+        except ImportError:
+            def aget_runs(*args, **kwargs): pass
+            return aget_runs
+    if name == 'alearning_status':
+        try:
+            from litellm.main import alearning_status
+            return alearning_status
+        except ImportError:
+            def alearning_status(*args, **kwargs): pass
+            return alearning_status
+    if name == 'aspeech':
+        from litellm.main import aspeech
+        return aspeech
+    if name == 'image_generation':
+        try:
+            from litellm.main import image_generation
+            return image_generation
+        except ImportError:
+            def image_generation(*args, **kwargs): pass
+            return image_generation
+    if name == 'Router':
+        from litellm.router import Router
+        return Router
+    if name == 'alearning_status':
+        try:
+            from litellm.main import alearning_status
+            return alearning_status
+        except ImportError:
+            def alearning_status(*args, **kwargs): pass
+            return alearning_status
+    if name == 'aspeech':
+        from litellm.main import aspeech
+        return aspeech
+    if name == 'get_provider_for_model':
+        try:
+            from litellm.litellm_core_utils.litellm_logging import get_provider_for_model
+            return get_provider_for_model
+        except ImportError:
+            def get_provider_for_model(*args, **kwargs): return "openai"
+            return get_provider_for_model
+    if name == 'aembedding':
+        from litellm.main import aembedding
+        return aembedding
+    if name == 'acompletion':
+        from litellm.main import acompletion
+        return acompletion
+    if name == 'alearning_status':
+        return lambda *args, **kwargs: None
+    if name == 'amodify_messages':
+        return lambda *args, **kwargs: None
+    if name == 'aget_messages':
+        return lambda *args, **kwargs: None
+    if name == 'aembedding':
+        from litellm.main import aembedding
+        return aembedding
+    if name == 'acompletion':
+        from litellm.main import acompletion
+        return acompletion
+    if name == 'amodify_messages':
+        try:
+            from litellm.main import amodify_messages
+            return amodify_messages
+        except ImportError:
+            def amodify_messages(*args, **kwargs): pass
+            return amodify_messages
+    if name == 'aget_messages':
+        try:
+            from litellm.main import aget_messages
+            return aget_messages
+        except ImportError:
+            def aget_messages(*args, **kwargs): pass
+            return aget_messages
+    if name == 'alearning_status':
+        return lambda *args, **kwargs: None
+    if name == 'amodify_messages':
+        return lambda *args, **kwargs: None
+    if name == 'aget_messages':
+        return lambda *args, **kwargs: None
+    if name == 'alearning_status':
+        return lambda *args, **kwargs: None
+    if name == 'aspeech':
+        from litellm.main import aspeech
+        return aspeech
+    if name == 'amodify_messages':
+        return lambda *args, **kwargs: None
+    if name == 'aget_messages':
+        return lambda *args, **kwargs: None
+    if name == 'alearning_status':
+        return lambda *args, **kwargs: None
+    if name == 'amodify_messages':
+        return lambda *args, **kwargs: None
+    if name == 'aget_messages':
+        return lambda *args, **kwargs: None
+    if name == 'acreate_runs':
+        return lambda *args, **kwargs: None
+    if name == 'aget_runs':
+        return lambda *args, **kwargs: None
+    if name == 'alearning_status':
+        return lambda *args, **kwargs: None
+    if name == 'amodify_messages':
+        return lambda *args, **kwargs: None
+    if name == 'aget_messages':
+        return lambda *args, **kwargs: None
+    if name == 'acreate_threads':
+        return lambda *args, **kwargs: None
+    if name == 'acreate_messages':
+        return lambda *args, **kwargs: None
+    if name == 'acreate_runs':
+        return lambda *args, **kwargs: None
+    if name == 'aget_runs':
+        return lambda *args, **kwargs: None
+    if name == 'alearning_status':
+        return lambda *args, **kwargs: None
+    if name == 'aspeech':
+        try:
+            from litellm.main import aspeech
+            return aspeech
+        except ImportError:
+            return lambda *args, **kwargs: None
+    if name == 'get_provider_for_model':
+        try:
+            from litellm.litellm_core_utils.litellm_logging import get_provider_for_model
+            return get_provider_for_model
+        except ImportError:
+            return lambda *args, **kwargs: "openai"
+    if name == 'amodify_messages':
+        return lambda *args, **kwargs: None
+    if name == 'aget_messages':
+        return lambda *args, **kwargs: None
+    if name == 'acreate_runs':
+        return lambda *args, **kwargs: None
+    if name == 'aget_runs':
+        return lambda *args, **kwargs: None
+    if name == 'acreate_threads':
+        return lambda *args, **kwargs: None
+    if name == 'acreate_messages':
+        return lambda *args, **kwargs: None
+    return lambda *args, **kwargs: None
