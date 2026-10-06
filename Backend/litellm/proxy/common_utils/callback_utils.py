@@ -1,7 +1,6 @@
 import copy
 import os
-from collections.abc import Callable, Iterable
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Callable, Dict, Iterable, List, Optional
 
 import litellm
 from litellm import get_secret
@@ -47,7 +46,7 @@ def initialize_callbacks_on_proxy(
     premium_user: bool,
     config_file_path: str,
     litellm_settings: dict,
-    callback_specific_params: dict | None = None,
+    callback_specific_params: Optional[dict] = None,
 ):
     if not isinstance(callback_specific_params, dict):
         callback_specific_params = {}
@@ -59,7 +58,7 @@ def initialize_callbacks_on_proxy(
 
     verbose_proxy_logger.debug(f"{blue_color_code}initializing callbacks={value} on proxy{reset_color_code}")
     if isinstance(value, list):
-        imported_list: list[Any] = []
+        imported_list: List[Any] = []
         for callback in value:  # ["presidio", <my-custom-callback>]
             if isinstance(callback, str) and callback == "compression_interception":
                 from litellm.integrations.compression_interception.handler import (
@@ -90,6 +89,11 @@ def initialize_callbacks_on_proxy(
                 callback = LoggingCallbackManager._add_custom_callback_generic_api_str(callback)
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 imported_list.append(callback)
+            elif isinstance(callback, str) and callback == "presidio":
+                                    _OPTIONAL_PresidioPIIMasking,
+                )
+
+                presidio_logging_only: Optional[bool] = litellm_settings.get("presidio_logging_only", None)
                 if presidio_logging_only is not None:
                     presidio_logging_only = bool(presidio_logging_only)  # validate boolean given
 
@@ -97,12 +101,21 @@ def initialize_callbacks_on_proxy(
                 if "presidio" in callback_specific_params and isinstance(callback_specific_params["presidio"], dict):
                     _presidio_params = callback_specific_params["presidio"]
 
-                params: dict[str, Any] = {
+                params: Dict[str, Any] = {
                     "logging_only": presidio_logging_only,
                     **_presidio_params,
                 }
                 pii_masking_object = _OPTIONAL_PresidioPIIMasking(**params)
                 imported_list.append(pii_masking_object)
+            elif isinstance(callback, str) and callback == "llamaguard_moderations":
+                try:
+                    from litellm_enterprise.enterprise_callbacks.llama_guard import (
+                        _ENTERPRISE_LlamaGuard,
+                    )
+                except ImportError:
+                    raise Exception(
+                        "MissingTrying to use Llama Guard" + CommonProxyErrors.missing_enterprise_package.value
+                    )
 
                 if premium_user is not True:
                     raise Exception("Trying to use Llama Guard" + CommonProxyErrors.not_premium_user.value)
@@ -124,18 +137,49 @@ def initialize_callbacks_on_proxy(
 
                 _secret_detection_object = _ENTERPRISE_SecretDetection()
                 imported_list.append(_secret_detection_object)
+            elif isinstance(callback, str) and callback == "openai_moderations":
+                try:
+                    from enterprise.enterprise_hooks.openai_moderation import (
+                        _ENTERPRISE_OpenAI_Moderation,
+                    )
+                except ImportError:
+                    raise Exception(
+                        "Trying to use OpenAI Moderations Check,"
+                        + CommonProxyErrors.missing_enterprise_package_docker.value
+                    )
 
                 if premium_user is not True:
                     raise Exception("Trying to use OpenAI Moderations Check" + CommonProxyErrors.not_premium_user.value)
 
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
+            elif isinstance(callback, str) and callback == "lakera_prompt_injection":
+                                    lakeraAI_Moderation,
+                )
+
+                init_params = {}
                 if "lakera_prompt_injection" in callback_specific_params and isinstance(
                     callback_specific_params["lakera_prompt_injection"], dict
                 ):
                     init_params = callback_specific_params["lakera_prompt_injection"]
                 lakera_moderations_object = lakeraAI_Moderation(**init_params)
                 imported_list.append(lakera_moderations_object)
+            elif isinstance(callback, str) and callback == "aporia_prompt_injection":
+                                    AporiaGuardrail,
+                )
+
+                aporia_guardrail_object = AporiaGuardrail()
+                imported_list.append(aporia_guardrail_object)
+            elif isinstance(callback, str) and callback == "google_text_moderation":
+                try:
+                    from enterprise.enterprise_hooks.google_text_moderation import (
+                        _ENTERPRISE_GoogleTextModeration,
+                    )
+                except ImportError:
+                    raise Exception(
+                        "Trying to use Google Text Moderation,"
+                        + CommonProxyErrors.missing_enterprise_package_docker.value
+                    )
 
                 if premium_user is not True:
                     raise Exception("Trying to use Google Text Moderation" + CommonProxyErrors.not_premium_user.value)
@@ -170,6 +214,15 @@ def initialize_callbacks_on_proxy(
 
                 blocked_user_list = _ENTERPRISE_BlockedUserList(prisma_client=prisma_client)
                 imported_list.append(blocked_user_list)
+            elif isinstance(callback, str) and callback == "banned_keywords":
+                try:
+                    from enterprise.enterprise_hooks.banned_keywords import (
+                        _ENTERPRISE_BannedKeywords,
+                    )
+                except ImportError:
+                    raise Exception(
+                        "Trying to use Banned Keywords" + CommonProxyErrors.missing_enterprise_package_docker.value
+                    )
 
                 if premium_user is not True:
                     raise Exception("Trying to use ENTERPRISE BannedKeyword" + CommonProxyErrors.not_premium_user.value)
@@ -221,6 +274,18 @@ def initialize_callbacks_on_proxy(
                     callback_specific_params=callback_specific_params,
                 )
                 imported_list.append(websearch_interception_obj)
+            elif isinstance(callback, str) and callback == "datadog_cost_management":
+                from litellm.integrations.datadog.datadog_cost_management import (
+                    DatadogCostManagementLogger,
+                )
+
+                init_params = {}
+                if "datadog_cost_management" in callback_specific_params and isinstance(
+                    callback_specific_params["datadog_cost_management"], dict
+                ):
+                    init_params = callback_specific_params["datadog_cost_management"]
+                datadog_cost_management_obj = DatadogCostManagementLogger(**init_params)
+                imported_list.append(datadog_cost_management_obj)
             elif isinstance(callback, CustomLogger):
                 imported_list.append(callback)
             else:
@@ -237,6 +302,11 @@ def initialize_callbacks_on_proxy(
             litellm.callbacks.extend(imported_list)
         else:
             litellm.callbacks = imported_list  # type: ignore
+
+        if "prometheus" in value:
+            from litellm.integrations.prometheus import PrometheusLogger
+
+            PrometheusLogger._mount_metrics_endpoint()
     else:
         litellm.callbacks = [
             get_instance_fn(
@@ -247,7 +317,7 @@ def initialize_callbacks_on_proxy(
     verbose_proxy_logger.debug(f"{blue_color_code} Initialized Callbacks - {litellm.callbacks} {reset_color_code}")
 
 
-def get_model_group_from_litellm_kwargs(kwargs: dict) -> str | None:
+def get_model_group_from_litellm_kwargs(kwargs: dict) -> Optional[str]:
     _litellm_params = kwargs.get("litellm_params", None) or {}
     _metadata = _litellm_params.get(get_metadata_variable_name_from_kwargs(kwargs)) or {}
     _model_group = _metadata.get("model_group", None)
@@ -257,7 +327,7 @@ def get_model_group_from_litellm_kwargs(kwargs: dict) -> str | None:
     return None
 
 
-def get_model_group_from_request_data(data: dict) -> str | None:
+def get_model_group_from_request_data(data: dict) -> Optional[str]:
     _metadata = data.get("metadata", None) or {}
     _model_group = _metadata.get("model_group", None)
     if _model_group is not None:
@@ -266,7 +336,7 @@ def get_model_group_from_request_data(data: dict) -> str | None:
     return None
 
 
-def get_remaining_tokens_and_requests_from_request_data(data: dict) -> dict[str, str]:
+def get_remaining_tokens_and_requests_from_request_data(data: Dict) -> Dict[str, str]:
     """
     Helper function to return x-litellm-key-remaining-tokens-{model_group} and x-litellm-key-remaining-requests-{model_group}
 
@@ -295,8 +365,8 @@ def get_remaining_tokens_and_requests_from_request_data(data: dict) -> dict[str,
     return headers
 
 
-def get_logging_caching_headers(request_data: dict) -> dict | None:
-    _metadata: dict = {}
+def get_logging_caching_headers(request_data: Dict) -> Optional[Dict]:
+    _metadata: Dict = {}
     metadata_bucket = request_data.get("metadata")
     litellm_metadata_bucket = request_data.get("litellm_metadata")
     if isinstance(metadata_bucket, dict):
@@ -365,8 +435,8 @@ LITELLM_PROXY_INTERNAL_METADATA_KEYS = frozenset(
 
 
 def sanitize_openai_provider_metadata(
-    metadata: dict[str, Any] | None,
-) -> dict[str, str] | None:
+    metadata: Optional[Dict[str, Any]],
+) -> Optional[Dict[str, str]]:
     """
     Keep only provider-safe OpenAI metadata entries (string keys -> string values).
 
@@ -375,7 +445,7 @@ def sanitize_openai_provider_metadata(
     """
     if not metadata:
         return metadata
-    sanitized: dict[str, str] = {}
+    sanitized: Dict[str, str] = {}
     for key, value in metadata.items():
         if key in LITELLM_PROXY_INTERNAL_METADATA_KEYS:
             continue
@@ -390,7 +460,7 @@ def sanitize_openai_provider_metadata(
     return sanitized or None
 
 
-def add_guardrail_to_applied_guardrails_header(request_data: dict, guardrail_name: str | None):
+def add_guardrail_to_applied_guardrails_header(request_data: Dict, guardrail_name: Optional[str]):
     if guardrail_name is None:
         return
     _, _metadata = get_or_create_metadata_bucket(request_data)
@@ -401,7 +471,7 @@ def add_guardrail_to_applied_guardrails_header(request_data: dict, guardrail_nam
         _metadata["applied_guardrails"] = [guardrail_name]
 
 
-def add_policy_to_applied_policies_header(request_data: dict, policy_name: str | None):
+def add_policy_to_applied_policies_header(request_data: Dict, policy_name: Optional[str]):
     """
     Add a policy name to the applied_policies list in request metadata.
 
@@ -418,7 +488,7 @@ def add_policy_to_applied_policies_header(request_data: dict, policy_name: str |
         _metadata["applied_policies"] = [policy_name]
 
 
-def add_policy_sources_to_metadata(request_data: dict, policy_sources: dict[str, str]):
+def add_policy_sources_to_metadata(request_data: Dict, policy_sources: Dict[str, str]):
     """
     Store policy match reasons in metadata for x-litellm-policy-sources header.
 
@@ -442,7 +512,7 @@ def add_guardrail_response_to_standard_logging_object(
 ):
     if litellm_logging_obj is None:
         return
-    standard_logging_object: StandardLoggingPayload | None = litellm_logging_obj.model_call_details.get(
+    standard_logging_object: Optional[StandardLoggingPayload] = litellm_logging_obj.model_call_details.get(
         "standard_logging_object"
     )
     if standard_logging_object is None:
@@ -468,7 +538,7 @@ def process_callback(_callback: str, callback_type: str, environment_variables: 
     return {"name": _callback, "variables": env_vars_dict, "type": callback_type}
 
 
-def normalize_callback_names(callbacks: Iterable[Any]) -> list[Any]:
+def normalize_callback_names(callbacks: Iterable[Any]) -> List[Any]:
     if callbacks is None:
         return []
     return [c.lower() if isinstance(c, str) else c for c in callbacks]
@@ -508,7 +578,7 @@ def _transform_callback_vars(metadata: Any, transform: Callable[[str, Any], Any]
 
 def is_sensitive_callback_key(
     key: str,
-    extra: set[str] | None = None,
+    extra: Optional[set[str]] = None,
 ) -> bool:
     """Return ``True`` if ``key`` is present in ``extra`` (checked as-is), or
     if its lowercase form is in ``_EXTRA_SENSITIVE_CALLBACK_KEYS``, or if

@@ -5,7 +5,8 @@ Used by /health/backlog to expose per-pod queue depth, and emitted as the
 Prometheus gauge `litellm_in_flight_requests`.
 """
 
-from typing import Any
+import os
+from typing import Any, Optional
 
 from starlette.types import ASGIApp, Receive, Scope, Send
 
@@ -26,7 +27,7 @@ class InFlightRequestsMiddleware:
     """
 
     _in_flight: int = 0
-    _gauge: Any | None = None
+    _gauge: Optional[Any] = None
     _gauge_init_attempted: bool = False
 
     def __init__(self, app: ASGIApp) -> None:
@@ -54,11 +55,28 @@ class InFlightRequestsMiddleware:
         return InFlightRequestsMiddleware._in_flight
 
     @staticmethod
-    def _get_gauge() -> Any | None:
+    def _get_gauge() -> Optional[Any]:
         if InFlightRequestsMiddleware._gauge_init_attempted:
             return InFlightRequestsMiddleware._gauge
         InFlightRequestsMiddleware._gauge_init_attempted = True
-        return None
+        try:
+            from prometheus_client import Gauge
+
+            if "PROMETHEUS_MULTIPROC_DIR" in os.environ:
+                # livesum aggregates across all worker processes in the scrape response
+                InFlightRequestsMiddleware._gauge = Gauge(
+                    "litellm_in_flight_requests",
+                    "Number of HTTP requests currently in-flight on this uvicorn worker",
+                    multiprocess_mode="livesum",
+                )
+            else:
+                InFlightRequestsMiddleware._gauge = Gauge(
+                    "litellm_in_flight_requests",
+                    "Number of HTTP requests currently in-flight on this uvicorn worker",
+                )
+        except Exception:
+            InFlightRequestsMiddleware._gauge = None
+        return InFlightRequestsMiddleware._gauge
 
 
 def get_in_flight_requests() -> int:

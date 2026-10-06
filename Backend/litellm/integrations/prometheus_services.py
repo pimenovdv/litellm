@@ -3,6 +3,8 @@
 #    On success + failure, log events to Prometheus for litellm / adjacent services (litellm, redis, postgres, llm api providers)
 
 
+from typing import Dict, List, Optional, Union
+
 import litellm
 from litellm._logging import print_verbose, verbose_logger
 from litellm.types.integrations.prometheus import LATENCY_BUCKETS
@@ -42,10 +44,10 @@ class PrometheusServicesLogger:
 
             verbose_logger.debug("in init prometheus services metrics")
 
-            self.payload_to_prometheus_map: dict[str, list[Histogram | Counter | Gauge | Collector]] = {}
+            self.payload_to_prometheus_map: Dict[str, List[Union[Histogram, Counter, Gauge, Collector]]] = {}
 
             for service in ServiceTypes:
-                service_metrics: list[Histogram | Counter | Gauge | Collector] = []
+                service_metrics: List[Union[Histogram, Counter, Gauge, Collector]] = []
 
                 metrics_to_initialize = self._get_service_metrics_initialize(service)
 
@@ -82,10 +84,10 @@ class PrometheusServicesLogger:
             self.mock_testing_failure_calls = 0
 
         except Exception as e:
-            print_verbose(f"Got exception on init prometheus client {e!s}")
+            print_verbose(f"Got exception on init prometheus client {str(e)}")
             raise e
 
-    def _get_service_metrics_initialize(self, service: ServiceTypes) -> list[ServiceMetrics]:
+    def _get_service_metrics_initialize(self, service: ServiceTypes) -> List[ServiceMetrics]:
         DEFAULT_METRICS = [ServiceMetrics.COUNTER, ServiceMetrics.HISTOGRAM]
         if service not in DEFAULT_SERVICE_CONFIGS:
             return DEFAULT_METRICS
@@ -114,37 +116,37 @@ class PrometheusServicesLogger:
         return self.REGISTRY._names_to_collectors.get(metric_name)
 
     def create_histogram(self, service: str, type_of_request: str):
-        metric_name = f"litellm_{service}_{type_of_request}"
+        metric_name = "litellm_{}_{}".format(service, type_of_request)
         is_registered = self.is_metric_registered(metric_name)
         if is_registered:
             return self._get_metric(metric_name)
         return self.Histogram(
             metric_name,
-            f"Latency for {service} service",
+            "Latency for {} service".format(service),
             labelnames=[service],
             buckets=self.latency_buckets,
         )
 
     def create_gauge(self, service: str, type_of_request: str):
-        metric_name = f"litellm_{service}_{type_of_request}"
+        metric_name = "litellm_{}_{}".format(service, type_of_request)
         is_registered = self.is_metric_registered(metric_name)
         if is_registered:
             return self._get_metric(metric_name)
-        return self.Gauge(metric_name, f"Gauge for {service} service", labelnames=[service])
+        return self.Gauge(metric_name, "Gauge for {} service".format(service), labelnames=[service])
 
     def create_counter(
         self,
         service: str,
         type_of_request: str,
-        additional_labels: list[str] | None = None,
+        additional_labels: Optional[List[str]] = None,
     ):
-        metric_name = f"litellm_{service}_{type_of_request}"
+        metric_name = "litellm_{}_{}".format(service, type_of_request)
         is_registered = self.is_metric_registered(metric_name)
         if is_registered:
             return self._get_metric(metric_name)
         return self.Counter(
             metric_name,
-            f"Total {type_of_request} for {service} service",
+            "Total {} for {} service".format(type_of_request, service),
             labelnames=[service] + (additional_labels or []),
         )
 
@@ -172,7 +174,7 @@ class PrometheusServicesLogger:
         counter,
         labels: str,
         amount: float,
-        additional_labels: list[str] | None = [],
+        additional_labels: Optional[List[str]] = [],
     ):
         assert isinstance(counter, self.Counter)
 
@@ -248,7 +250,7 @@ class PrometheusServicesLogger:
     async def async_service_failure_hook(
         self,
         payload: ServiceLoggerPayload,
-        error: str | Exception,
+        error: Union[str, Exception],
     ):
         if self.mock_testing:
             self.mock_testing_failure_calls += 1
