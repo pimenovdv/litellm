@@ -1,5 +1,4 @@
-- [x] Добавить docstrings к основным модулям маршрутизатора (`Backend/litellm/router.py`, `Backend/litellm/proxy/proxy_server.py`).
-- [ ] Добавить docstrings к модулям LLM-провайдеров (`Backend/litellm/llms/openai/`).
-- [ ] Добавить docstrings к утилитам и вспомогательным функциям (`Backend/litellm/litellm_core_utils/`).
-- [ ] Добавить docstrings к моделям данных Pydantic (`Backend/litellm/types/`).
-- [ ] Запустить `uvx ruff check Backend/ --fix` и `uvx ruff format Backend/` для проверки форматирования и линтинга.
+- [ ] Очистить списки зависимостей `Backend/pyproject.toml` от неиспользуемых библиотек (sentry, datadog, guardrails, telemetry, prometheus, posthog).
+- [ ] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).
+- [ ] Очистить списки зависимостей `frontend/litellm-dashboard/package.json` от неиспользуемых библиотек (sentry, datadog, aws, azure и т.д.).
+- [ ] Очистить `uv.lock` и другие неиспользуемые списки зависимостей.
