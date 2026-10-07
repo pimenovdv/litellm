@@ -1,14 +1,14 @@
 import asyncio
-import aiohttp
 import json
+
+import aiohttp
+
 
 # Asynchronously fetch data from a given URL
 async def fetch_data(url):
     try:
         # Create an asynchronous session
-        async with aiohttp.ClientSession() as session:
-            # Send a GET request to the URL
-            async with session.get(url) as resp:
+        async with aiohttp.ClientSession() as session, session.get(url) as resp:
                 # Raise an error if the response status is not OK
                 resp.raise_for_status()
                 # Parse the response JSON
@@ -16,7 +16,7 @@ async def fetch_data(url):
                 print("Fetch the data from URL.")
                 # Return the 'data' field from the JSON response
                 return resp_json['data']
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         # Print an error message if fetching data fails
         print("Error fetching data from URL:", e)
         return None
@@ -39,7 +39,7 @@ def write_to_file(file_path, data):
             # Dump the data as JSON into the file
             json.dump(data, file, indent=4)
         print("Values updated successfully.")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         # Print an error message if writing to file fails
         print("Error updating JSON file:", e)
 
@@ -97,12 +97,12 @@ def transform_vercel_ai_gateway_data(data):
         if "pricing" in row:
             if "input_cache_read" in row["pricing"] and row["pricing"]["input_cache_read"] is not None:
                 obj['cache_read_input_token_cost'] = float(f"{float(row['pricing']['input_cache_read']):e}")
-            
+
             if "input_cache_write" in row["pricing"] and row["pricing"]["input_cache_write"] is not None:
                 obj['cache_creation_input_token_cost'] = float(f"{float(row['pricing']['input_cache_write']):e}")
 
         mode = "embedding" if "embedding" in row["id"].lower() else "chat"
-        
+
         obj.update({"litellm_provider": "vercel_ai_gateway", "mode": mode})
 
         transformed[f'vercel_ai_gateway/{row["id"]}'] = obj
@@ -133,17 +133,17 @@ def main():
 
     # Load local data from file
     local_data = load_local_data(local_file_path)
-    
+
     # Fetch OpenRouter data
     openrouter_data = asyncio.run(fetch_data(openrouter_url))
     # Transform the fetched OpenRouter data
     openrouter_data = transform_openrouter_data(openrouter_data)
-    
+
     # Fetch Vercel AI Gateway data
     vercel_data = asyncio.run(fetch_data(vercel_ai_gateway_url))
     # Transform the fetched Vercel AI Gateway data
     vercel_data = transform_vercel_ai_gateway_data(vercel_data)
-    
+
     # Combine both datasets
     all_remote_data = {**openrouter_data, **vercel_data}
 
