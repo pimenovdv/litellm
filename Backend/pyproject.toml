@@ -37,7 +37,6 @@ Documentation = "https://docs.litellm.ai"
 # consumers can coexist with other packages and pick up security patches without
 # forking. Reproducibility for our Docker/CI comes from `uv.lock` (images install
 # via `uv sync --frozen`). A few deps stay exact-pinned: litellm's own
-# sub-packages and the opentelemetry trio move in lockstep, and grpcio is
 # supply-chain-pinned to a vetted, aged release.
 [project.optional-dependencies]
 proxy = [
@@ -58,7 +57,6 @@ proxy = [
     "cryptography>=48.0.1,<49.0",
     "pynacl>=1.6.2,<2.0",
     "websockets>=15.0.1,<16.0",
-                "mcp>=1.28.1,<2.0",
     "litellm-proxy-extras==0.4.81",
     "litellm-enterprise==0.1.52",
     "RestrictedPython>=8.1,<9.0",
@@ -115,7 +113,6 @@ stt-nvidia-riva = [
 ]
 bedrock-realtime = [
     # Bedrock Nova Sonic realtime (speech-to-speech) uses the
-    # InvokeModelWithBidirectionalStream API, which boto3 cannot do. This
     # experimental AWS SDK (with its smithy-* deps, pulled transitively)
     # provides the bidirectional stream; imported lazily in the realtime
     # handler so litellm core stays usable without it.
@@ -125,8 +122,8 @@ proxy-runtime = [
     # Historically bundled in the proxy Docker images via requirements.txt.
     # Keep these in a dedicated extra so uv-based images preserve the same
     # feature surface without forcing the base SDK install to grow.
-        "google-genai>=1.37.0,<2.0",
         "grpcio==1.78.0",
+    "ddtrace>=4.8.2,<5.0",
         "mangum>=0.17.0,<1.0",
             "pypdf>=6.12.0,<7.0",
     "llm-sandbox>=0.3.39,<1.0",
@@ -160,7 +157,6 @@ dev = [
     "types-requests==2.32.4.20260107",
     "types-setuptools==75.8.0.20250225",
     "types-redis==4.6.0.20241004",
-    "types-PyYAML==6.0.12.20250915",
         "fastapi-offline==1.7.6",
     "fakeredis==2.34.1",
     "pytest-rerunfailures==15.1",
@@ -175,7 +171,6 @@ e2e-dev = [
     "playwright==1.61.0",
     "websockets>=15.0.1,<16.0",
     "locust==2.45.0",
-    "mcp>=1.28.1,<2.0",
 ]
 proxy-dev = [
     "prisma==0.11.0",
@@ -184,7 +179,6 @@ proxy-dev = [
 ]
 ci = [
     # These are lazily imported at call sites; keep them out of core deps to
-    # avoid bloating the base SDK install (google-generativeai pulls grpcio +
     # protobuf, Pillow is a compiled C extension).
     "tenacity==8.5.0",
         "Pillow==12.3.0",
@@ -207,7 +201,6 @@ ci = [
         "blockbuster==1.5.26",
     "beautifulsoup4==4.14.3",
     "pylint==4.0.5",
-    "langchain-mcp-adapters==0.2.1",
     "langchain-openai==1.1.14",
     "langgraph>=1.2.4,<1.3.0",
     "langgraph-prebuilt>=1.1.0,<1.3.0",
@@ -219,8 +212,8 @@ healthcheck = [
 ]
 
 [build-system]
-requires = ["maturin==1.9.4"]
-build-backend = "maturin"
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.maturin]
 manifest-path = "litellm-rust/crates/python-bridge/Cargo.toml"
@@ -326,3 +319,6 @@ pytest_add_cli_args = [
 [tool.coverage.run]
 source = ["litellm"]
 relative_files = true
+
+[tool.setuptools.packages.find]
+include = ["litellm*"]
