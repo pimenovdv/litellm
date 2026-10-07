@@ -1,4 +1,4 @@
 - [x] Очистить списки зависимостей `Backend/pyproject.toml` от неиспользуемых библиотек (sentry, datadog, guardrails, telemetry, prometheus, posthog).
-- [ ] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).
+- [x] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).
 - [ ] Очистить списки зависимостей `frontend/litellm-dashboard/package.json` от неиспользуемых библиотек (sentry, datadog, aws, azure и т.д.).
-- [ ] Очистить `uv.lock` и другие неиспользуемые списки зависимостей.
+- [x] Очистить `uv.lock` и другие неиспользуемые списки зависимостей.
