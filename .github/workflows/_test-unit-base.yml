@@ -99,7 +99,7 @@ jobs:
           DIST: ${{ inputs.dist }}
         run: |
           if [ "${WORKERS}" = "0" ]; then
-            uv run --no-sync pytest ${TEST_PATH:?} \
+            cd Backend && uv run --no-sync pytest ${TEST_PATH:?} \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
               --reruns "${RERUNS}" \
@@ -109,7 +109,7 @@ jobs:
               --cov-report=xml:coverage.xml \
               --cov-config=pyproject.toml
           else
-            uv run --no-sync pytest ${TEST_PATH:?} \
+            cd Backend && uv run --no-sync pytest ${TEST_PATH:?} \
               --tb=short -vv \
               --maxfail="${MAX_FAILURES}" \
               -n "${WORKERS}" \
@@ -127,7 +127,7 @@ jobs:
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: coverage-${{ inputs.artifact-name }}-${{ github.run_id }}-${{ github.run_attempt }}
-          path: coverage.xml
+          path: Backend/coverage.xml
           retention-days: 1
 
   upload-coverage:
