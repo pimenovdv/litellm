@@ -57,7 +57,8 @@ proxy = [
     "python-multipart>=0.0.27,<1.0",
     "cryptography>=48.0.1,<49.0",
     "pynacl>=1.6.2,<2.0",
-    "websockets>=15.0.1,<16.0",    "litellm-proxy-extras==0.4.81",
+    "websockets>=15.0.1,<16.0",
+    "litellm-proxy-extras==0.4.81",
     "litellm-enterprise==0.1.52",
     "RestrictedPython>=8.1,<9.0",
     "rich>=13.9.4,<14.0",
@@ -124,7 +125,8 @@ proxy-runtime = [
     # Keep these in a dedicated extra so uv-based images preserve the same
     # feature surface without forcing the base SDK install to grow.
         "google-genai>=1.37.0,<2.0",
-        "grpcio==1.78.0",    "opentelemetry-instrumentation-fastapi==0.49b0",        "mangum>=0.17.0,<1.0",
+        "grpcio==1.78.0",
+        "mangum>=0.17.0,<1.0",
             "pypdf>=6.12.0,<7.0",
     "llm-sandbox>=0.3.39,<1.0",
     "detect-secrets>=1.5.0,<2.0",
@@ -157,7 +159,7 @@ dev = [
     "types-requests==2.32.4.20260107",
     "types-setuptools==75.8.0.20250225",
     "types-redis==4.6.0.20241004",
-    "types-PyYAML==6.0.12.20250915",        "fastapi-offline==1.7.6",
+        "fastapi-offline==1.7.6",
     "fakeredis==2.34.1",
     "pytest-rerunfailures==15.1",
     "pytest-cov==5.0.0",
@@ -170,10 +172,12 @@ dev = [
 e2e-dev = [
     "playwright==1.61.0",
     "websockets>=15.0.1,<16.0",
-    "locust==2.45.0",]
+    "locust==2.45.0",
+]
 proxy-dev = [
     "prisma==0.11.0",
-    "hypercorn==0.17.3",        "a2a-sdk==1.1.0",
+    "hypercorn==0.17.3",
+        "a2a-sdk==1.1.0",
 ]
 ci = [
     # These are lazily imported at call sites; keep them out of core deps to
@@ -199,7 +203,9 @@ ci = [
     "jsonlines==4.0.0",
         "blockbuster==1.5.26",
     "beautifulsoup4==4.14.3",
-    "pylint==4.0.5",    "langchain-openai==1.1.14",
+    "pylint==4.0.5",
+    "langchain-mcp-adapters==0.2.1",
+    "langchain-openai==1.1.14",
     "langgraph>=1.2.4,<1.3.0",
     "langgraph-prebuilt>=1.1.0,<1.3.0",
     "claude-agent-sdk==0.1.44",
