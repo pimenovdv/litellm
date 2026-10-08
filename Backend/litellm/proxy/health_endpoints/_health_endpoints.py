@@ -1718,10 +1718,10 @@ async def test_model_connection(
 ):
     """
     Test a direct connection to a specific model.
-    
+
     This endpoint allows you to verify if your proxy can successfully connect to a specific model.
     It's useful for troubleshooting model connectivity issues without going through the full proxy routing.
-    
+
     Example:
     ```bash
     # If model is configured in proxy_config.yaml, you only need to specify the model name:
@@ -1734,9 +1734,9 @@ async def test_model_connection(
         },
         "mode": "chat"
       }'
-    
+
     # The endpoint will automatically use api_key, api_base, etc. from proxy_config.yaml
-    
+
     # You can also override specific params or test with custom credentials:
     curl -X POST 'http://localhost:4000/health/test_connection' \\
       -H 'Authorization: Bearer sk-1234' \\
@@ -1751,14 +1751,14 @@ async def test_model_connection(
         "mode": "chat"
       }'
     ```
-    
-    Note: 
-    - If the model is configured in proxy_config.yaml, credentials (api_key, api_base, etc.) 
+
+    Note:
+    - If the model is configured in proxy_config.yaml, credentials (api_key, api_base, etc.)
       will be automatically loaded from the config (with resolved environment variables).
     - You can override specific params by including them in the request.
     - You can use `os.environ/VARIABLE_NAME` syntax to reference environment variables,
       which will be resolved automatically (same as in proxy_config.yaml).
-    
+
     Returns:
         dict: A dictionary containing the health check result with either success information or error details.
     """
