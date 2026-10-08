@@ -498,7 +498,7 @@ class ProxyInitializationHelpers:
 
         # Clean up prometheus .db files when a worker exits (prevents ghost gauge values)
         if os.environ.get("PROMETHEUS_MULTIPROC_DIR"):
-            from litellm.proxy.prometheus_cleanup import mark_worker_exit
+            pass
 
             def child_exit(server, worker):
                 mark_worker_exit(worker.pid)
@@ -542,48 +542,8 @@ class ProxyInitializationHelpers:
         return "uvloop"
 
     @staticmethod
-    def _maybe_setup_prometheus_multiproc_dir(
-        num_workers: int,
-        litellm_settings: Optional[dict],
-    ) -> None:
-        """
-        Auto-create PROMETHEUS_MULTIPROC_DIR when running with multiple workers
-        and prometheus is configured as a callback.
-        """
-        import tempfile
-
-        if num_workers <= 1 or litellm_settings is None:
-            return
-
-        # Check if prometheus is in any callback list
-        # Each setting can be a list or a single string; normalize to list
-        callbacks = litellm_settings.get("callbacks") or []
-        success_callbacks = litellm_settings.get("success_callback") or []
-        failure_callbacks = litellm_settings.get("failure_callback") or []
-        if isinstance(callbacks, str):
-            callbacks = [callbacks]
-        if isinstance(success_callbacks, str):
-            success_callbacks = [success_callbacks]
-        if isinstance(failure_callbacks, str):
-            failure_callbacks = [failure_callbacks]
-        all_callbacks = callbacks + success_callbacks + failure_callbacks
-        if "prometheus" not in all_callbacks:
-            return
-
-        from litellm.proxy.prometheus_cleanup import wipe_directory
-
-        multiproc_dir = os.environ.get("PROMETHEUS_MULTIPROC_DIR") or os.environ.get("prometheus_multiproc_dir")
-
-        auto_created = not multiproc_dir
-        if not multiproc_dir:
-            multiproc_dir = os.path.join(tempfile.gettempdir(), "litellm_prometheus_multiproc")
-            os.environ["PROMETHEUS_MULTIPROC_DIR"] = multiproc_dir
-
-        os.makedirs(multiproc_dir, exist_ok=True)
-        wipe_directory(multiproc_dir)
-        action = "Auto-created" if auto_created else "Using existing"
-        print(f"LiteLLM: {action} PROMETHEUS_MULTIPROC_DIR={multiproc_dir}")
-
+    def _maybe_setup_prometheus_multiproc_dir(num_workers: int, litellm_settings: Optional[dict]) -> None:
+        return
 
 @click.command()
 @click.argument("cli_args", nargs=-1)

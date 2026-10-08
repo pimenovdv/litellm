@@ -244,7 +244,6 @@ from litellm.constants import (
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
     _get_parent_otel_span_from_kwargs,
     get_litellm_metadata_from_kwargs,
@@ -8473,29 +8472,7 @@ class ProxyStartupEvent:
 
     @classmethod
     def _init_dd_tracer(cls):
-        """
-        Initialize dd tracer - if `USE_DDTRACE=true` in .env
-
-        DD tracer is used to trace Python applications.
-        Doc: https://docs.datadoghq.com/tracing/trace_collection/automatic_instrumentation/dd_libraries/python/
-        """
-        from litellm.litellm_core_utils.dd_tracing import (
-            _should_use_dd_profiler,
-            _should_use_dd_tracer,
-        )
-
-        if _should_use_dd_tracer():
-            import ddtrace
-
-            ddtrace.patch_all(logging=True, openai=False)
-
-        if _should_use_dd_profiler():
-            from ddtrace.profiling import Profiler
-
-            prof = Profiler()
-            prof.start()
-            verbose_proxy_logger.debug("Datadog Profiler started......")
-
+        pass
     @classmethod
     def _init_pyroscope(cls):
         """

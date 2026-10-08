@@ -60,7 +60,7 @@ class InFlightRequestsMiddleware:
             return InFlightRequestsMiddleware._gauge
         InFlightRequestsMiddleware._gauge_init_attempted = True
         try:
-            from prometheus_client import Gauge
+            # from prometheus_client import Gauge
 
             if "PROMETHEUS_MULTIPROC_DIR" in os.environ:
                 # livesum aggregates across all worker processes in the scrape response

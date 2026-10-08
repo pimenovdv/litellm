@@ -1,0 +1,95 @@
+Metadata-Version: 2.4
+Name: litellm
+Version: 1.95.0
+Summary: Library to easily interface with LLM API providers
+Author: BerriAI
+License-Expression: MIT
+Project-URL: Homepage, https://litellm.ai
+Project-URL: Repository, https://github.com/BerriAI/litellm
+Project-URL: Documentation, https://docs.litellm.ai
+Requires-Python: <3.15,>=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: fastuuid<1.0,>=0.14.0
+Requires-Dist: httpx<1.0,>=0.28.0
+Requires-Dist: openai<3.0.0,>=2.20.0
+Requires-Dist: python-dotenv<2.0,>=1.0.0
+Requires-Dist: tiktoken<1.0,>=0.8.0
+Requires-Dist: importlib-metadata<9.0,>=8.0.0
+Requires-Dist: tokenizers<1.0,>=0.21.0
+Requires-Dist: click<9.0,>=8.0.0
+Requires-Dist: jinja2<4.0,>=3.1.6
+Requires-Dist: aiohttp<4.0,>=3.10
+Requires-Dist: pydantic<3.0.0,>=2.10.0
+Requires-Dist: jsonschema<5.0,>=4.0.0
+Provides-Extra: proxy
+Requires-Dist: gunicorn<24.0,>=23.0.0; extra == "proxy"
+Requires-Dist: uvicorn<1.0,>=0.33.0; extra == "proxy"
+Requires-Dist: granian<3.0,>=2.7.4; extra == "proxy"
+Requires-Dist: uvloop<1.0,>=0.21.0; sys_platform != "win32" and extra == "proxy"
+Requires-Dist: fastapi<1.0,>=0.136.3; extra == "proxy"
+Requires-Dist: starlette<2.0,>=1.0.1; extra == "proxy"
+Requires-Dist: backoff<3.0,>=2.2.1; extra == "proxy"
+Requires-Dist: pyyaml<7.0,>=6.0.3; extra == "proxy"
+Requires-Dist: rq<3.0,>=2.7.0; extra == "proxy"
+Requires-Dist: orjson<4.0,>=3.11.6; extra == "proxy"
+Requires-Dist: apscheduler<4.0,>=3.11.2; extra == "proxy"
+Requires-Dist: fastapi-sso<1.0,>=0.19.0; extra == "proxy"
+Requires-Dist: PyJWT<3.0,>=2.13.0; extra == "proxy"
+Requires-Dist: python-multipart<1.0,>=0.0.27; extra == "proxy"
+Requires-Dist: cryptography<49.0,>=48.0.1; extra == "proxy"
+Requires-Dist: pynacl<2.0,>=1.6.2; extra == "proxy"
+Requires-Dist: websockets<16.0,>=15.0.1; extra == "proxy"
+Requires-Dist: mcp<2.0,>=1.28.1; extra == "proxy"
+Requires-Dist: litellm-proxy-extras==0.4.81; extra == "proxy"
+Requires-Dist: litellm-enterprise==0.1.52; extra == "proxy"
+Requires-Dist: RestrictedPython<9.0,>=8.1; extra == "proxy"
+Requires-Dist: rich<14.0,>=13.9.4; extra == "proxy"
+Requires-Dist: InquirerPy<1.0,>=0.3.4; extra == "proxy"
+Requires-Dist: polars<2.0,>=1.38.1; extra == "proxy"
+Requires-Dist: soundfile<1.0,>=0.12.1; extra == "proxy"
+Requires-Dist: pyroscope-io<1.0,>=0.8.16; sys_platform != "win32" and extra == "proxy"
+Requires-Dist: pydantic-settings<3.0,>=2.14.1; extra == "proxy"
+Requires-Dist: expression<6.0,>=5.6.0; extra == "proxy"
+Provides-Extra: cli
+Requires-Dist: rich<14.0,>=13.9.4; extra == "cli"
+Requires-Dist: pyyaml<7.0,>=6.0.3; extra == "cli"
+Requires-Dist: requests<3.0,>=2.32.0; extra == "cli"
+Requires-Dist: InquirerPy<1.0,>=0.3.4; extra == "cli"
+Provides-Extra: extra-proxy
+Requires-Dist: prisma<1.0,>=0.11.0; extra == "extra-proxy"
+Requires-Dist: resend<3.0,>=2.23.0; extra == "extra-proxy"
+Requires-Dist: redisvl<1.0,>=0.4.1; extra == "extra-proxy"
+Requires-Dist: a2a-sdk<2.0,>=1.1.0; extra == "extra-proxy"
+Provides-Extra: utils
+Requires-Dist: numpydoc<2.0,>=1.8.0; extra == "utils"
+Provides-Extra: caching
+Requires-Dist: diskcache<6.0,>=5.6.3; extra == "caching"
+Provides-Extra: saml
+Requires-Dist: python3-saml<2.0,>=1.16.0; extra == "saml"
+Provides-Extra: semantic-router
+Requires-Dist: semantic-router<1.0,>=0.1.15; python_version < "3.14" and extra == "semantic-router"
+Requires-Dist: aurelio-sdk<1.0,>=0.0.19; python_version < "3.14" and extra == "semantic-router"
+Provides-Extra: mlflow
+Requires-Dist: mlflow<4.0,>=3.11.1; extra == "mlflow"
+Provides-Extra: grpc
+Requires-Dist: grpcio==1.78.0; extra == "grpc"
+Provides-Extra: stt-nvidia-riva
+Requires-Dist: nvidia-riva-client>=2.15.0; extra == "stt-nvidia-riva"
+Requires-Dist: soundfile>=0.12.1; extra == "stt-nvidia-riva"
+Requires-Dist: audioread>=3.0.1; extra == "stt-nvidia-riva"
+Requires-Dist: numpy>=1.26.0; extra == "stt-nvidia-riva"
+Provides-Extra: bedrock-realtime
+Requires-Dist: aws-sdk-bedrock-runtime<0.8.0,>=0.7.0; python_version >= "3.12" and extra == "bedrock-realtime"
+Provides-Extra: proxy-runtime
+Requires-Dist: google-genai<2.0,>=1.37.0; extra == "proxy-runtime"
+Requires-Dist: grpcio==1.78.0; extra == "proxy-runtime"
+Requires-Dist: prometheus-client<1.0,>=0.20.0; extra == "proxy-runtime"
+Requires-Dist: opentelemetry-api==1.28.0; extra == "proxy-runtime"
+Requires-Dist: opentelemetry-sdk==1.28.0; extra == "proxy-runtime"
+Requires-Dist: opentelemetry-exporter-otlp==1.28.0; extra == "proxy-runtime"
+Requires-Dist: opentelemetry-instrumentation-fastapi==0.49b0; extra == "proxy-runtime"
+Requires-Dist: ddtrace<5.0,>=4.8.2; extra == "proxy-runtime"
+Requires-Dist: mangum<1.0,>=0.17.0; extra == "proxy-runtime"
+Requires-Dist: pypdf<7.0,>=6.12.0; extra == "proxy-runtime"
+Requires-Dist: llm-sandbox<1.0,>=0.3.39; extra == "proxy-runtime"
+Requires-Dist: detect-secrets<2.0,>=1.5.0; extra == "proxy-runtime"
