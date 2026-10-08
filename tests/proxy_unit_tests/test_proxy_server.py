@@ -3,10 +3,9 @@ import sys
 import traceback
 from unittest import mock
 
-from dotenv import load_dotenv
-
 import litellm.proxy
 import litellm.proxy.proxy_server
+from dotenv import load_dotenv
 
 load_dotenv()
 import json
@@ -15,9 +14,8 @@ sys.path.insert(0, os.path.abspath("../.."))
 import asyncio
 import logging
 
-import pytest
-
 import litellm
+import pytest
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -25,7 +23,6 @@ logging.basicConfig(
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from fastapi.testclient import TestClient
-
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.proxy.proxy_server import app, initialize
 from litellm.proxy.utils import ProxyLogging
@@ -756,9 +753,8 @@ async def test_add_callback_via_key(prisma_client):
     global headers
 
     from fastapi import Request, Response
-    from starlette.datastructures import URL
-
     from litellm.proxy.proxy_server import chat_completion
+    from starlette.datastructures import URL
 
     litellm.proxy.proxy_server.prisma_client = prisma_client
     litellm.proxy.proxy_server.master_key = "sk-1234"
@@ -906,9 +902,8 @@ async def test_proxy_model_group_alias_checks(prisma_client, hidden):
     `/v1/model_group/info`
     """
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy.proxy_server import model_group_info, model_info_v1, model_list
+    from starlette.datastructures import URL
 
     litellm.proxy.proxy_server.prisma_client = prisma_client
     litellm.proxy.proxy_server.master_key = "sk-1234"
@@ -964,9 +959,8 @@ async def test_proxy_model_group_info_rerank(prisma_client):
     `/v1/model_group/info`
     """
     from fastapi import Request
-    from starlette.datastructures import URL
-
     from litellm.proxy.proxy_server import model_group_info, model_info_v1, model_list
+    from starlette.datastructures import URL
 
     litellm.proxy.proxy_server.prisma_client = prisma_client
     litellm.proxy.proxy_server.master_key = "sk-1234"
@@ -1031,7 +1025,6 @@ async def test_get_ui_settings_spend_logs_threshold():
     Test that get_ui_settings correctly sets DISABLE_EXPENSIVE_DB_QUERIES based on spend_logs_row_count threshold
     """
     from fastapi import Request
-
     from litellm.constants import MAX_SPENDLOG_ROWS_TO_QUERY
     from litellm.proxy.management_endpoints.ui_sso import get_ui_settings
     from litellm.proxy.proxy_server import proxy_state

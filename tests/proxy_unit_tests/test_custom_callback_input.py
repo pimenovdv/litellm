@@ -1,23 +1,17 @@
 ### What this tests ####
 ## This test asserts the type of data passed into each method of the custom callback handler
-import asyncio
 import inspect
 import os
 import sys
-import time
 import traceback
-from litellm._uuid import uuid
 from datetime import datetime
 
-import pytest
 from pydantic import BaseModel
 
 sys.path.insert(0, os.path.abspath("../.."))
-from typing import List, Literal, Optional, Union
-from unittest.mock import AsyncMock, MagicMock, patch
+from typing import Literal, Optional
 
 import litellm
-from litellm import Cache, completion, embedding
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.types.utils import LiteLLMCommonStrings
 
@@ -48,7 +42,7 @@ class CompletionCustomHandler(
     # Class variables or attributes
     def __init__(self):
         self.errors = []
-        self.states: List[
+        self.states: list[
             Literal[
                 "sync_pre_api_call",
                 "async_pre_api_call",
@@ -152,9 +146,7 @@ class CompletionCustomHandler(
             ) or isinstance(kwargs["input"], (dict, str))
             assert isinstance(kwargs["api_key"], (str, type(None)))
             assert (
-                isinstance(
-                    kwargs["original_response"], (str, )
-                )
+                isinstance(kwargs["original_response"], (str,))
                 or inspect.isasyncgen(kwargs["original_response"])
                 or inspect.iscoroutine(kwargs["original_response"])
             )
@@ -208,8 +200,10 @@ class CompletionCustomHandler(
             assert isinstance(
                 kwargs["original_response"],
                 (str, BaseModel),
-            ), "Original Response={}. Allowed types=[str, litellm.CustomStreamWrapper, BaseModel]".format(
-                kwargs["original_response"]
+            ), (
+                "Original Response={}. Allowed types=[str, litellm.CustomStreamWrapper, BaseModel]".format(
+                    kwargs["original_response"]
+                )
             )
             assert isinstance(kwargs["additional_args"], (dict, type(None)))
             assert isinstance(kwargs["log_event_type"], str)
@@ -246,9 +240,7 @@ class CompletionCustomHandler(
             ) or isinstance(kwargs["input"], (dict, str))
             assert isinstance(kwargs["api_key"], (str, type(None)))
             assert (
-                isinstance(
-                    kwargs["original_response"], (str, )
-                )
+                isinstance(kwargs["original_response"], (str,))
                 or kwargs["original_response"] == None
             )
             assert isinstance(kwargs["additional_args"], (dict, type(None)))
@@ -274,7 +266,7 @@ class CompletionCustomHandler(
             assert isinstance(kwargs["start_time"], (datetime, type(None)))
             assert isinstance(kwargs["stream"], bool)
             assert isinstance(kwargs["user"], (str, type(None)))
-        except Exception as e:
+        except Exception:
             print(f"Assertion Error: {traceback.format_exc()}")
             self.errors.append(traceback.format_exc())
 
@@ -311,9 +303,7 @@ class CompletionCustomHandler(
             assert isinstance(kwargs["input"], (list, dict, str))
             assert isinstance(kwargs["api_key"], (str, type(None)))
             assert (
-                isinstance(
-                    kwargs["original_response"], (str, )
-                )
+                isinstance(kwargs["original_response"], (str,))
                 or inspect.isasyncgen(kwargs["original_response"])
                 or inspect.iscoroutine(kwargs["original_response"])
             )
@@ -345,9 +335,7 @@ class CompletionCustomHandler(
             assert isinstance(kwargs["input"], (list, str, dict))
             assert isinstance(kwargs["api_key"], (str, type(None)))
             assert (
-                isinstance(
-                    kwargs["original_response"], (str, )
-                )
+                isinstance(kwargs["original_response"], (str,))
                 or inspect.isasyncgen(kwargs["original_response"])
                 or inspect.iscoroutine(kwargs["original_response"])
                 or kwargs["original_response"] == None
