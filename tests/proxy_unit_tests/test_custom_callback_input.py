@@ -1,23 +1,17 @@
 ### What this tests ####
 ## This test asserts the type of data passed into each method of the custom callback handler
-import asyncio
 import inspect
 import os
 import sys
-import time
 import traceback
-from litellm._uuid import uuid
 from datetime import datetime
 
-import pytest
 from pydantic import BaseModel
 
 sys.path.insert(0, os.path.abspath("../.."))
-from typing import List, Literal, Optional, Union
-from unittest.mock import AsyncMock, MagicMock, patch
+from typing import Literal, Optional
 
 import litellm
-from litellm import Cache, completion, embedding
 from litellm.integrations.custom_logger import CustomLogger
 from litellm.types.utils import LiteLLMCommonStrings
 
@@ -48,7 +42,7 @@ class CompletionCustomHandler(
     # Class variables or attributes
     def __init__(self):
         self.errors = []
-        self.states: List[
+        self.states: list[
             Literal[
                 "sync_pre_api_call",
                 "async_pre_api_call",
@@ -91,7 +85,6 @@ class CompletionCustomHandler(
                         metadata_value["raw_request"], str
                     )
         except Exception:
-            print(f"Assertion Error: {traceback.format_exc()}")
             self.errors.append(traceback.format_exc())
 
     def log_post_api_call(self, kwargs, response_obj, start_time, end_time):
@@ -124,7 +117,6 @@ class CompletionCustomHandler(
             assert isinstance(kwargs["additional_args"], (dict, type(None)))
             assert isinstance(kwargs["log_event_type"], str)
         except Exception:
-            print(f"Assertion Error: {traceback.format_exc()}")
             self.errors.append(traceback.format_exc())
 
     async def async_log_stream_event(self, kwargs, response_obj, start_time, end_time):
@@ -161,16 +153,10 @@ class CompletionCustomHandler(
             assert isinstance(kwargs["additional_args"], (dict, type(None)))
             assert isinstance(kwargs["log_event_type"], str)
         except Exception:
-            print(f"Assertion Error: {traceback.format_exc()}")
             self.errors.append(traceback.format_exc())
 
     def log_success_event(self, kwargs, response_obj, start_time, end_time):
         try:
-            print(f"\n\nkwargs={kwargs}\n\n")
-            print(
-                json.dumps(kwargs, default=str)
-            )  # this is a test to confirm no circular references are in the logging object
-
             self.states.append("sync_success")
             ## START TIME
             assert isinstance(start_time, datetime)
@@ -208,19 +194,19 @@ class CompletionCustomHandler(
             assert isinstance(
                 kwargs["original_response"],
                 (str, litellm.CustomStreamWrapper, BaseModel),
-            ), "Original Response={}. Allowed types=[str, litellm.CustomStreamWrapper, BaseModel]".format(
-                kwargs["original_response"]
+            ), (
+                "Original Response={}. Allowed types=[str, litellm.CustomStreamWrapper, BaseModel]".format(
+                    kwargs["original_response"]
+                )
             )
             assert isinstance(kwargs["additional_args"], (dict, type(None)))
             assert isinstance(kwargs["log_event_type"], str)
             assert isinstance(kwargs["response_cost"], (float, type(None)))
         except Exception:
-            print(f"Assertion Error: {traceback.format_exc()}")
             self.errors.append(traceback.format_exc())
 
     def log_failure_event(self, kwargs, response_obj, start_time, end_time):
         try:
-            print(f"kwargs: {kwargs}")
             self.states.append("sync_failure")
             ## START TIME
             assert isinstance(start_time, datetime)
@@ -254,7 +240,6 @@ class CompletionCustomHandler(
             assert isinstance(kwargs["additional_args"], (dict, type(None)))
             assert isinstance(kwargs["log_event_type"], str)
         except Exception:
-            print(f"Assertion Error: {traceback.format_exc()}")
             self.errors.append(traceback.format_exc())
 
     async def async_log_pre_api_call(self, model, messages, kwargs):
@@ -274,15 +259,11 @@ class CompletionCustomHandler(
             assert isinstance(kwargs["start_time"], (datetime, type(None)))
             assert isinstance(kwargs["stream"], bool)
             assert isinstance(kwargs["user"], (str, type(None)))
-        except Exception as e:
-            print(f"Assertion Error: {traceback.format_exc()}")
+        except Exception:
             self.errors.append(traceback.format_exc())
 
     async def async_log_success_event(self, kwargs, response_obj, start_time, end_time):
         try:
-            print(
-                "in async_log_success_event", kwargs, response_obj, start_time, end_time
-            )
             self.states.append("async_success")
             ## START TIME
             assert isinstance(start_time, datetime)
@@ -322,7 +303,6 @@ class CompletionCustomHandler(
             assert kwargs["cache_hit"] is None or isinstance(kwargs["cache_hit"], bool)
             assert isinstance(kwargs["response_cost"], (float, type(None)))
         except Exception:
-            print(f"Assertion Error: {traceback.format_exc()}")
             self.errors.append(traceback.format_exc())
 
     async def async_log_failure_event(self, kwargs, response_obj, start_time, end_time):
@@ -355,5 +335,4 @@ class CompletionCustomHandler(
             assert isinstance(kwargs["additional_args"], (dict, type(None)))
             assert isinstance(kwargs["log_event_type"], str)
         except Exception:
-            print(f"Assertion Error: {traceback.format_exc()}")
             self.errors.append(traceback.format_exc())
