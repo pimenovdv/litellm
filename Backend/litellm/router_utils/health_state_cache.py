@@ -14,7 +14,8 @@ from litellm import verbose_logger
 from litellm.caching.caching import DualCache
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     Span = Union[_Span, Any]
 else:

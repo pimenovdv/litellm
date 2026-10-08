@@ -15,7 +15,8 @@ from litellm.types.utils import (
 )
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     from litellm import ModelResponse as _ModelResponse
     from litellm.litellm_core_utils.litellm_logging import (

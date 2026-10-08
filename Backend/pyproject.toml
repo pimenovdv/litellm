@@ -127,11 +127,7 @@ proxy-runtime = [
     # feature surface without forcing the base SDK install to grow.
         "google-genai>=1.37.0,<2.0",
         "grpcio==1.78.0",
-    "prometheus-client>=0.20.0,<1.0",
-        "opentelemetry-api==1.28.0",
-    "opentelemetry-sdk==1.28.0",
-    "opentelemetry-exporter-otlp==1.28.0",
-    "opentelemetry-instrumentation-fastapi==0.49b0",
+
     "ddtrace>=4.8.2,<5.0",
         "mangum>=0.17.0,<1.0",
             "pypdf>=6.12.0,<7.0",
@@ -166,10 +162,6 @@ dev = [
     "types-requests==2.32.4.20260107",
     "types-setuptools==75.8.0.20250225",
     "types-redis==4.6.0.20241004",
-    "types-PyYAML==6.0.12.20250915",    "opentelemetry-api==1.28.0",
-    "opentelemetry-sdk==1.28.0",
-    "opentelemetry-exporter-otlp==1.28.0",
-    "opentelemetry-instrumentation-fastapi==0.49b0",
         "fastapi-offline==1.7.6",
     "fakeredis==2.34.1",
     "pytest-rerunfailures==15.1",
@@ -189,11 +181,7 @@ e2e-dev = [
 proxy-dev = [
     "prisma==0.11.0",
     "hypercorn==0.17.3",
-    "prometheus-client==0.20.0",
-    "opentelemetry-api==1.28.0",
-    "opentelemetry-sdk==1.28.0",
-    "opentelemetry-exporter-otlp==1.28.0",
-    "opentelemetry-instrumentation-fastapi==0.49b0",
+
         "a2a-sdk==1.1.0",
 ]
 ci = [
