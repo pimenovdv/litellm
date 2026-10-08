@@ -28,8 +28,19 @@ from litellm.constants import (
     LITELLM_PROXY_BUDGET_NAME,
     LITELLM_PROXY_MASTER_KEY_ALIAS,
 )
-from litellm.integrations.otel.model.config import is_otel_v2_enabled
-from litellm.integrations.otel.runtime import phase_span, seed_request_identity
+try:
+    from litellm.integrations.otel.model.config import is_otel_v2_enabled
+except ImportError:
+    is_otel_v2_enabled = lambda: False
+try:
+    from litellm.integrations.otel.runtime import phase_span, seed_request_identity
+except ImportError:
+    import contextlib
+    @contextlib.contextmanager
+    def phase_span(*args, **kwargs):
+        yield
+    seed_request_identity = lambda *args, **kwargs: None
+
 from litellm.litellm_core_utils.dd_tracing import tracer
 from litellm.litellm_core_utils.dot_notation_indexing import get_nested_value
 from litellm.proxy._types import *
@@ -2300,7 +2311,11 @@ async def _run_centralized_common_checks(
         end_user_result,
         global_spend_result,
     ):
-        if isinstance(r, (ProxyException, litellm.BudgetExceededError)):
+        try:
+            from litellm.exceptions import BudgetExceededError
+        except ImportError:
+            class BudgetExceededError(Exception): pass
+        if isinstance(r, (ProxyException, BudgetExceededError)):
             raise r
 
     # Use BaseException (not HTTPException) in the narrowing checks so

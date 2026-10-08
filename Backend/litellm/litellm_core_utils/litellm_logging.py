@@ -2603,7 +2603,7 @@ class Logging(LiteLLMLoggingBaseClass):
                 if callable(callback):  # custom logger functions
                     global customLogger
                     if customLogger is None:
-                        customLogger = Any()
+                        customLogger = type('DummyLogger', (), {})()
                     if self.stream:
                         if "async_complete_streaming_response" in self.model_call_details:
                             await customLogger.async_log_event(
@@ -2831,7 +2831,7 @@ class Logging(LiteLLMLoggingBaseClass):
                     if callable(callback):  # custom logger functions
                         global customLogger
                         if customLogger is None:
-                            customLogger = Any()
+                            customLogger = type('DummyLogger', (), {})()
                         customLogger.log_event(
                             kwargs=self.model_call_details,
                             response_obj=result,
@@ -2963,7 +2963,7 @@ class Logging(LiteLLMLoggingBaseClass):
                 if callable(callback):  # custom logger functions
                     global customLogger
                     if customLogger is None:
-                        customLogger = Any()
+                        customLogger = type('DummyLogger', (), {})()
                     await customLogger.async_log_event(
                         kwargs=self.model_call_details,
                         response_obj=result,
@@ -3510,7 +3510,7 @@ def set_callbacks(callback_list, function_id=None):
                 greenscaleLogger = GreenscaleLogger()
                 print_verbose("Initialized Greenscale Logger")
             elif callable(callback):
-                customLogger = Any()
+                customLogger = type('DummyLogger', (), {})()
     except Exception as e:
         raise e
     return None

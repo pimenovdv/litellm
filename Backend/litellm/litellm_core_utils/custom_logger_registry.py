@@ -11,49 +11,289 @@ Example:
 from typing import Union
 
 from litellm import _custom_logger_compatible_callbacks_literal
-from litellm.integrations.agentops import AgentOps
-from litellm.integrations.anthropic_cache_control_hook import AnthropicCacheControlHook
-from litellm.integrations.argilla import ArgillaLogger
-from litellm.integrations.azure_sentinel.azure_sentinel import AzureSentinelLogger
-from litellm.integrations.azure_storage.azure_storage import AzureBlobStorageLogger
-from litellm.integrations.bitbucket import BitBucketPromptManager
-from litellm.integrations.braintrust_logging import BraintrustLogger
-from litellm.integrations.cloudzero.cloudzero import CloudZeroLogger
-from litellm.integrations.datadog.datadog import DataDogLogger
-from litellm.integrations.datadog.datadog_llm_obs import DataDogLLMObsLogger
-from litellm.integrations.datadog.datadog_metrics import DatadogMetricsLogger
-from litellm.integrations.deepeval import DeepEvalLogger
-from litellm.integrations.dotprompt import DotpromptManager
-from litellm.integrations.focus.focus_logger import FocusLogger
-from litellm.integrations.mavvrik_focus.mavvrik_focus_logger import MavvrikFocusLogger
-from litellm.integrations.vantage.vantage_logger import VantageLogger
-from litellm.integrations.galileo import GalileoObserve
-from litellm.integrations.gcs_bucket.gcs_bucket import GCSBucketLogger
-from litellm.integrations.gcs_pubsub.pub_sub import GcsPubSubLogger
-from litellm.integrations.gitlab import GitLabPromptManager
-from litellm.integrations.humanloop import HumanloopLogger
-from litellm.integrations.lago import LagoLogger
-from litellm.integrations.langfuse.langfuse_prompt_management import (
+try:
+    from litellm.integrations.agentops import AgentOps
+except ImportError:
+    pass
+try:
+    from litellm.integrations.anthropic_cache_control_hook import AnthropicCacheControlHook
+except ImportError:
+    pass
+try:
+    from litellm.integrations.argilla import ArgillaLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.azure_sentinel.azure_sentinel import AzureSentinelLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.azure_storage.azure_storage import AzureBlobStorageLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.bitbucket import BitBucketPromptManager
+except ImportError:
+    pass
+try:
+    from litellm.integrations.braintrust_logging import BraintrustLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.cloudzero.cloudzero import CloudZeroLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.datadog.datadog import DataDogLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.datadog.datadog_llm_obs import DataDogLLMObsLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.datadog.datadog_metrics import DatadogMetricsLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.deepeval import DeepEvalLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.dotprompt import DotpromptManager
+except ImportError:
+    pass
+try:
+    from litellm.integrations.focus.focus_logger import FocusLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.mavvrik_focus.mavvrik_focus_logger import MavvrikFocusLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.vantage.vantage_logger import VantageLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.galileo import GalileoObserve
+except ImportError:
+    pass
+try:
+    from litellm.integrations.gcs_bucket.gcs_bucket import GCSBucketLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.gcs_pubsub.pub_sub import GcsPubSubLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.gitlab import GitLabPromptManager
+except ImportError:
+    pass
+try:
+    from litellm.integrations.humanloop import HumanloopLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.lago import LagoLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.langfuse.langfuse_prompt_management import (
     LangfusePromptManagement,
 )
-from litellm.integrations.langsmith import LangsmithLogger
-from litellm.integrations.litellm_agent import LiteLLMAgentModelResolver
-from litellm.integrations.literal_ai import LiteralAILogger
-from litellm.integrations.mlflow import MlflowLogger
-from litellm.integrations.newrelic import NewRelicLogger
-from litellm.integrations.openmeter import OpenMeterLogger
-from litellm.integrations.opik.opik import OpikLogger
-from litellm.integrations.posthog import PostHogLogger
-from litellm.integrations.prometheus import PrometheusLogger
-from litellm.integrations.s3_v2 import S3Logger
-from litellm.integrations.sqs import SQSLogger
-from litellm.integrations.vector_store_integrations.vector_store_pre_call_hook import (
+except ImportError:
+    pass
+try:
+    from litellm.integrations.langsmith import LangsmithLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.litellm_agent import LiteLLMAgentModelResolver
+except ImportError:
+    pass
+try:
+    from litellm.integrations.literal_ai import LiteralAILogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.mlflow import MlflowLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.newrelic import NewRelicLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.openmeter import OpenMeterLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.opik.opik import OpikLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.posthog import PostHogLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.prometheus import PrometheusLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.s3_v2 import S3Logger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.sqs import SQSLogger
+except ImportError:
+    pass
+try:
+    from litellm.integrations.vector_store_integrations.vector_store_pre_call_hook import (
     VectorStorePreCallHook,
 )
+except ImportError:
+    pass
 from litellm.proxy.hooks.dynamic_rate_limiter import _PROXY_DynamicRateLimitHandler
 from litellm.proxy.hooks.dynamic_rate_limiter_v3 import _PROXY_DynamicRateLimitHandlerV3
 
 
+class DummyLogger: pass
+try: LagoLogger
+except NameError: LagoLogger = DummyLogger
+try: OpenMeterLogger
+except NameError: OpenMeterLogger = DummyLogger
+try: BraintrustLogger
+except NameError: BraintrustLogger = DummyLogger
+try: OpenWebUILogger
+except NameError: OpenWebUILogger = DummyLogger
+try: Supabase
+except NameError: Supabase = DummyLogger
+try: LangsmithLogger
+except NameError: LangsmithLogger = DummyLogger
+try: ArizeLogger
+except NameError: ArizeLogger = DummyLogger
+try: CometLogger
+except NameError: CometLogger = DummyLogger
+try: PrometheusLogger
+except NameError: PrometheusLogger = DummyLogger
+try: QdrantLogger
+except NameError: QdrantLogger = DummyLogger
+try: LangFuseLogger
+except NameError: LangFuseLogger = DummyLogger
+try: LiteDebugger
+except NameError: LiteDebugger = DummyLogger
+try: DataDogLogger
+except NameError: DataDogLogger = DummyLogger
+try: DataDogLLMObs
+except NameError: DataDogLLMObs = DummyLogger
+try: PagerDutyLogger
+except NameError: PagerDutyLogger = DummyLogger
+try: AthinaLogger
+except NameError: AthinaLogger = DummyLogger
+try: LunaryLogger
+except NameError: LunaryLogger = DummyLogger
+try: SlackAlerting
+except NameError: SlackAlerting = DummyLogger
+try: TraceloopLogger
+except NameError: TraceloopLogger = DummyLogger
+try: MlflowLogger
+except NameError: MlflowLogger = DummyLogger
+try: HeliconeLogger
+except NameError: HeliconeLogger = DummyLogger
+try: OpenTelemetry
+except NameError: OpenTelemetry = DummyLogger
+try: AgentOps
+except NameError: AgentOps = DummyLogger
+try: Log10Logger
+except NameError: Log10Logger = DummyLogger
+try: S3Logger
+except NameError: S3Logger = DummyLogger
+try: GCSBucketLogger
+except NameError: GCSBucketLogger = DummyLogger
+try: DynamoDBLogger
+except NameError: DynamoDBLogger = DummyLogger
+try: DatasetLogger
+except NameError: DatasetLogger = DummyLogger
+try: BasetenLogger
+except NameError: BasetenLogger = DummyLogger
+try: UpstashLogger
+except NameError: UpstashLogger = DummyLogger
+try: SignozLogger
+except NameError: SignozLogger = DummyLogger
+try: DifyLogger
+except NameError: DifyLogger = DummyLogger
+try: GenericAPILogger
+except NameError: GenericAPILogger = DummyLogger
+try: SQSLogger
+except NameError: SQSLogger = DummyLogger
+try: ArgillaLogger
+except NameError: ArgillaLogger = DummyLogger
+try: AiseraLogger
+except NameError: AiseraLogger = DummyLogger
+try: GreenscaleLogger
+except NameError: GreenscaleLogger = DummyLogger
+try: DataDogMetricsManager
+except NameError: DataDogMetricsManager = DummyLogger
+try: VectorStorePreCallHook
+except NameError: VectorStorePreCallHook = DummyLogger
+try: _PROXY_DynamicRateLimitHandler
+except NameError: _PROXY_DynamicRateLimitHandler = DummyLogger
+try: _PROXY_DynamicRateLimitHandlerV3
+except NameError: _PROXY_DynamicRateLimitHandlerV3 = DummyLogger
+try: GalileoObserve
+except NameError: GalileoObserve = DummyLogger
+try: LiteralAILogger
+except NameError: LiteralAILogger = DummyLogger
+try: CustomLogger
+except NameError: CustomLogger = DummyLogger
+try: HoneycombLogger
+except NameError: HoneycombLogger = DummyLogger
+try: DataDogLLMObsLogger
+except NameError: DataDogLLMObsLogger = DummyLogger
+try: DatadogMetricsLogger
+except NameError: DatadogMetricsLogger = DummyLogger
+try: AzureSentinelLogger
+except NameError: AzureSentinelLogger = DummyLogger
+try: AzureBlobStorageLogger
+except NameError: AzureBlobStorageLogger = DummyLogger
+try: HumanloopLogger
+except NameError: HumanloopLogger = DummyLogger
+try: LangfusePromptManagement
+except NameError: LangfusePromptManagement = DummyLogger
+try: GcsPubSubLogger
+except NameError: GcsPubSubLogger = DummyLogger
+try: AnthropicCacheControlHook
+except NameError: AnthropicCacheControlHook = DummyLogger
+try: DeepEvalLogger
+except NameError: DeepEvalLogger = DummyLogger
+try: DotpromptManager
+except NameError: DotpromptManager = DummyLogger
+try: BitBucketPromptManager
+except NameError: BitBucketPromptManager = DummyLogger
+try: RedisQueueLogger
+except NameError: RedisQueueLogger = DummyLogger
+try: OpikLogger
+except NameError: OpikLogger = DummyLogger
+try: WandbLogger
+except NameError: WandbLogger = DummyLogger
+try: LoguruLogger
+except NameError: LoguruLogger = DummyLogger
+try: GitLabPromptManager
+except NameError: GitLabPromptManager = DummyLogger
+try: CloudZeroLogger
+except NameError: CloudZeroLogger = DummyLogger
+try: FocusLogger
+except NameError: FocusLogger = DummyLogger
+try: MavvrikFocusLogger
+except NameError: MavvrikFocusLogger = DummyLogger
+try: VantageLogger
+except NameError: VantageLogger = DummyLogger
+try: PostHogLogger
+except NameError: PostHogLogger = DummyLogger
+try: NewRelicLogger
+except NameError: NewRelicLogger = DummyLogger
 class CustomLoggerRegistry:
     """
     Registry mapping the callback class string to the class type.

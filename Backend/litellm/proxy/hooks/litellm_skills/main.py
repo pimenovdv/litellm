@@ -31,10 +31,18 @@ from typing import Any, Dict, List, Optional, Union
 from litellm._logging import verbose_proxy_logger
 from litellm.caching.caching import DualCache
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.llms.litellm_proxy.skills.constants import LITELLM_SKILL_ID_PREFIX
-from litellm.llms.litellm_proxy.skills.prompt_injection import (
-    SkillPromptInjectionHandler,
-)
+try:
+    from litellm.llms.litellm_proxy.skills.constants import LITELLM_SKILL_ID_PREFIX
+except ImportError:
+    LITELLM_SKILL_ID_PREFIX = ""
+
+try:
+    from litellm.llms.litellm_proxy.skills.prompt_injection import (
+        SkillPromptInjectionHandler,
+    )
+except ImportError:
+    SkillPromptInjectionHandler = type('SkillPromptInjectionHandler', (), {})
+
 from litellm.proxy._types import LiteLLM_SkillsTable, UserAPIKeyAuth
 from litellm.types.utils import CallTypes, CallTypesLiteral
 
@@ -57,10 +65,15 @@ class SkillsInjectionHook(CustomLogger):
     """
 
     def __init__(self, **kwargs):
-        from litellm.llms.litellm_proxy.skills.constants import (
-            DEFAULT_MAX_ITERATIONS,
-            DEFAULT_SANDBOX_TIMEOUT,
-        )
+        try:
+            from litellm.llms.litellm_proxy.skills.constants import (
+                DEFAULT_MAX_ITERATIONS,
+                DEFAULT_SANDBOX_TIMEOUT,
+            )
+        except ImportError:
+            DEFAULT_MAX_ITERATIONS = 3
+            DEFAULT_SANDBOX_TIMEOUT = 10
+
 
         self.optional_params = kwargs
         self.prompt_handler = SkillPromptInjectionHandler()

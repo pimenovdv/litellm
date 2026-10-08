@@ -50,7 +50,12 @@ from litellm.utils import (
 
 ####### ENVIRONMENT VARIABLES ###################
 openai_batches_instance = OpenAIBatchesAPI()
-vertex_ai_batches_instance = VertexAIBatchPrediction(gcs_bucket_name="")
+try:
+    from litellm.llms.vertex_ai.batches.main import VertexAIBatchPrediction
+    vertex_ai_batches_instance = VertexAIBatchPrediction(gcs_bucket_name="")
+except ImportError:
+    vertex_ai_batches_instance = None
+
 base_llm_http_handler = BaseLLMHTTPHandler()
 #################################################
 

@@ -244,7 +244,10 @@ from litellm.constants import (
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.custom_guardrail import ModifyResponseException
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
+try:
+    from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
+except ImportError:
+    SlackAlerting = type("SlackAlerting", (), {})
 from litellm.litellm_core_utils.core_helpers import (
     _get_parent_otel_span_from_kwargs,
     get_litellm_metadata_from_kwargs,
@@ -562,7 +565,10 @@ from litellm.secret_managers.main import (
     normalize_nonempty_secret_str,
     str_to_bool,
 )
-from litellm.types.integrations.slack_alerting import SlackAlertingArgs
+try:
+    from litellm.types.integrations.slack_alerting import SlackAlertingArgs
+except ImportError:
+    SlackAlertingArgs = type("SlackAlertingArgs", (), {"model_fields": {}})
 from litellm.types.llms.anthropic import (
     AnthropicMessagesRequest,
     AnthropicResponse,
@@ -1240,11 +1246,18 @@ app = FastAPI(
 ## middleware after an application has started". See
 ## ``litellm.integrations.otel.mount`` for the full rationale; the call is a safe
 ## no-op when the gate is off or the instrumentation package is unavailable.
-from litellm.integrations.otel.mount import instrument_fastapi_app
+try:
+    from litellm.integrations.otel.mount import instrument_fastapi_app
+except ImportError:
+    def instrument_fastapi_app(*args, **kwargs): pass
 
 instrument_fastapi_app(app)
 
-vertex_live_passthrough_vertex_base = VertexBase()
+try:
+    from litellm.llms.vertex_ai.common_utils import VertexBase
+    vertex_live_passthrough_vertex_base = VertexBase()
+except ImportError:
+    vertex_live_passthrough_vertex_base = None
 
 
 ### CUSTOM API DOCS [ENTERPRISE FEATURE] ###

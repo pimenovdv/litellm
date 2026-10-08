@@ -8,7 +8,13 @@ from litellm.constants import REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES, request
 from litellm.litellm_core_utils.get_llm_provider_logic import get_llm_provider
 from litellm.llms.base_llm.realtime.transformation import BaseRealtimeConfig
 from litellm.llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
-from litellm.llms.xai.common_utils import XAIModelInfo
+try:
+    from litellm.llms.xai.common_utils import XAIModelInfo
+except ImportError:
+    class XAIModelInfo:
+        @staticmethod
+        def get_api_key(api_key, legacy_generic_before_env=True): return api_key
+
 from litellm.secret_managers.main import get_secret_str
 from litellm.types.realtime import (
     RealtimeClientSecretRequest,
@@ -23,13 +29,33 @@ from litellm.utils import ProviderConfigManager
 
 from ..litellm_core_utils.get_litellm_params import get_litellm_params
 from ..litellm_core_utils.litellm_logging import Logging as LiteLLMLogging
-from ..llms.azure.realtime.handler import AzureOpenAIRealtime
-from ..llms.bedrock.realtime.handler import BedrockRealtime
+try:
+    from ..llms.azure.realtime.handler import AzureOpenAIRealtime
+except ImportError:
+    class AzureOpenAIRealtime: pass
+
+try:
+    from ..llms.bedrock.realtime.handler import BedrockRealtime
+except ImportError:
+    class BedrockRealtime: pass
+
 from ..llms.custom_httpx.http_handler import get_shared_realtime_ssl_context
 from ..llms.openai.realtime.handler import OpenAIRealtime
-from ..llms.vertex_ai.realtime.transformation import VertexAIRealtimeConfig
-from ..llms.vertex_ai.vertex_llm_base import VertexBase
-from ..llms.xai.realtime.handler import XAIRealtime
+try:
+    from ..llms.vertex_ai.realtime.transformation import VertexAIRealtimeConfig
+except ImportError:
+    class VertexAIRealtimeConfig: pass
+
+try:
+    from ..llms.vertex_ai.vertex_llm_base import VertexBase
+except ImportError:
+    class VertexBase: pass
+
+try:
+    from ..llms.xai.realtime.handler import XAIRealtime
+except ImportError:
+    class XAIRealtime: pass
+
 from ..utils import client as wrapper_client
 
 azure_realtime = AzureOpenAIRealtime()

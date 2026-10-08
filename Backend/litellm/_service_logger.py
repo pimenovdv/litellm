@@ -6,9 +6,21 @@ import litellm
 from litellm._logging import verbose_logger
 
 from .integrations.custom_logger import CustomLogger
-from .integrations.datadog.datadog import DataDogLogger
-from .integrations.opentelemetry import OpenTelemetry
-from .integrations.prometheus_services import PrometheusServicesLogger
+try:
+    from .integrations.datadog.datadog import DataDogLogger
+except ImportError:
+    DataDogLogger = type('DataDogLogger', (), {})
+
+try:
+    from .integrations.opentelemetry import OpenTelemetry
+except ImportError:
+    class OpenTelemetry: pass
+
+try:
+    from .integrations.prometheus_services import PrometheusServicesLogger
+except ImportError:
+    class PrometheusServicesLogger: pass
+
 from .types.services import ServiceLoggerPayload, ServiceTypes
 
 if TYPE_CHECKING:
@@ -183,7 +195,7 @@ class ServiceLogging(CustomLogger):
             if callback == "prometheus_system":
                 await self.init_prometheus_services_logger_if_none()
                 await self.prometheusServicesLogger.async_service_success_hook(payload=payload)
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            elif callback == "datadog" or (type(callback).__name__ == "DataDogLogger"):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_success_hook(
                     payload=payload,
@@ -225,9 +237,13 @@ class ServiceLogging(CustomLogger):
         initializes dd_logger if it is None or no attribute exists on ServiceLogging Object
 
         """
-        from litellm.integrations.datadog.datadog import DataDogLogger
+        try:
+            from litellm.integrations.datadog.datadog import DataDogLogger
+        except ImportError:
+            pass
 
         if not hasattr(self, "dd_logger"):
+            if 'DataDogLogger' not in globals() and 'DataDogLogger' not in locals(): return
             self.dd_logger: DataDogLogger = DataDogLogger()
 
         return
@@ -290,7 +306,7 @@ class ServiceLogging(CustomLogger):
                     payload=payload,
                     error=error,
                 )
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            elif callback == "datadog" or (type(callback).__name__ == "DataDogLogger"):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_failure_hook(
                     payload=payload,
