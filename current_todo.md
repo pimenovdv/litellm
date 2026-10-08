@@ -1,9 +1,9 @@
-- [ ] Отвязать код от `ddtrace` в `Backend/litellm/proxy/proxy_server.py`.
-- [ ] Отвязать код от `prometheus_client` в 1-й группе файлов (integrations/prometheus_services.py, proxy/prometheus_cleanup.py).
-- [ ] Отвязать код от `prometheus_client` во 2-й группе файлов (proxy/middleware/in_flight_requests_middleware.py, proxy/proxy_cli.py и др).
-- [ ] Отвязать код от `opentelemetry` в базовых файлах (router.py, _service_logger.py и core utils).
-- [ ] Отвязать код от `opentelemetry` в кэшировании (caching/*).
-- [ ] Отвязать код от `opentelemetry` в proxy-слое (proxy/*).
+- [x] Отвязать код от `ddtrace` в `Backend/litellm/proxy/proxy_server.py`.
+- [x] Отвязать код от `prometheus_client` в 1-й группе файлов (integrations/prometheus_services.py, proxy/prometheus_cleanup.py).
+- [x] Отвязать код от `prometheus_client` во 2-й группе файлов (proxy/middleware/in_flight_requests_middleware.py, proxy/proxy_cli.py и др).
+- [x] Отвязать код от `opentelemetry` в базовых файлах (router.py, _service_logger.py и core utils).
+- [x] Отвязать код от `opentelemetry` в кэшировании (caching/*).
+- [x] Отвязать код от `opentelemetry` в proxy-слое (proxy/*).
 - [x] Очистить списки зависимостей `Backend/pyproject.toml` от `ddtrace`, `prometheus-client`, `opentelemetry-*`.
 - [x] Очистить списки зависимостей `Backend/pyproject.toml` от неиспользуемых библиотек (sentry, datadog, guardrails, telemetry, prometheus, posthog). (Заменено на атомарные шаги выше)
 - [x] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).
