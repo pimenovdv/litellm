@@ -773,9 +773,11 @@ class LiteLLMProxyRequestSetup:
         """
         forwarded_headers = {}
         for header, value in headers.items():
-            if header.lower().startswith("x-") and not header.lower().startswith(
-                "x-stainless"
-            ) or header.lower().startswith("anthropic-beta"):  # causes openai sdk to fail
+            if (
+                header.lower().startswith("x-")
+                and not header.lower().startswith("x-stainless")
+                or header.lower().startswith("anthropic-beta")
+            ):  # causes openai sdk to fail
                 forwarded_headers[header] = value
 
         return forwarded_headers
@@ -1498,9 +1500,7 @@ async def add_litellm_data_to_request(
     if "metadata" in data and data["metadata"] is not None and isinstance(data["metadata"], str):
         data["metadata"] = safe_json_loads(data["metadata"])
         if not isinstance(data["metadata"], dict):
-            verbose_proxy_logger.warning(
-                f"Failed to parse 'metadata' as JSON dict. Received value: {data['metadata']}"
-            )
+            verbose_proxy_logger.warning(f"Failed to parse 'metadata' as JSON dict. Received value: {data['metadata']}")
         # requester_metadata is snapshotted AFTER the strip below so
         # downstream consumers (e.g. PANW guardrail reading user_ip /
         # profile_id) don't see attacker-injected admin slots preserved in
@@ -2702,7 +2702,6 @@ def add_provider_specific_headers_to_request(
             custom_llm_provider=f"{LlmProviders.ANTHROPIC.value},{LlmProviders.BEDROCK.value},{LlmProviders.VERTEX_AI.value}",
             extra_headers=anthropic_headers,
         )
-
 
 
 def _add_otel_traceparent_to_data(data: dict, request: Request):

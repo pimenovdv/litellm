@@ -220,9 +220,7 @@ def get_llm_provider(
             if api_base is not None and not isinstance(api_base, str):
                 raise Exception(f"api base needs to be a string. api_base={api_base}")
             if dynamic_api_key is not None and not isinstance(dynamic_api_key, str):
-                raise Exception(
-                    f"dynamic_api_key needs to be a string. Got type={type(dynamic_api_key).__name__}"
-                )
+                raise Exception(f"dynamic_api_key needs to be a string. Got type={type(dynamic_api_key).__name__}")
             return model, custom_llm_provider, dynamic_api_key, api_base
         # check if api base is a known openai compatible endpoint
         if api_base:
@@ -297,7 +295,12 @@ def get_llm_provider(
                     elif endpoint == "api.moonshot.ai/v1":
                         custom_llm_provider = "moonshot"
                         dynamic_api_key = get_secret_str("MOONSHOT_API_KEY")
-                    elif endpoint == "api.minimax.io/anthropic" or endpoint == "api.minimaxi.com/anthropic" or endpoint == "api.minimax.io/v1" or endpoint == "api.minimaxi.com/v1":
+                    elif (
+                        endpoint == "api.minimax.io/anthropic"
+                        or endpoint == "api.minimaxi.com/anthropic"
+                        or endpoint == "api.minimax.io/v1"
+                        or endpoint == "api.minimaxi.com/v1"
+                    ):
                         custom_llm_provider = "minimax"
                         dynamic_api_key = get_secret_str("MINIMAX_API_KEY")
                     elif endpoint == "platform.publicai.co/v1":
@@ -346,9 +349,7 @@ def get_llm_provider(
                     if api_base is not None and not isinstance(api_base, str):
                         raise Exception(f"api base needs to be a string. api_base={api_base}")
                     if dynamic_api_key is not None and not isinstance(dynamic_api_key, str):
-                        raise Exception(
-                            f"dynamic_api_key needs to be a string. dynamic_api_key={dynamic_api_key}"
-                        )
+                        raise Exception(f"dynamic_api_key needs to be a string. dynamic_api_key={dynamic_api_key}")
                     return model, custom_llm_provider, dynamic_api_key, api_base  # type: ignore
 
         # check if model in known model provider list  -> for huggingface models, raise exception as they don't have a fixed provider (can be togetherai, anyscale, baseten, runpod, et.)
