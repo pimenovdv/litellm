@@ -15,7 +15,8 @@ from litellm.litellm_core_utils.core_helpers import _get_parent_otel_span_from_k
 from litellm.types.utils import LiteLLMPydanticObjectBase
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     Span = Union[_Span, Any]
 else:

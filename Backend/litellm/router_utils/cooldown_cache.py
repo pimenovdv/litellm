@@ -14,7 +14,8 @@ from litellm.caching.in_memory_cache import InMemoryCache
 from litellm.litellm_core_utils.sensitive_data_masker import SensitiveDataMasker
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     Span = Union[_Span, Any]
 else:

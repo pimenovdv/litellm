@@ -27,7 +27,8 @@ from .in_memory_cache import InMemoryCache
 from .redis_cache import RedisCache
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     Span = Union[_Span, Any]
 else:

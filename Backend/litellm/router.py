@@ -226,7 +226,8 @@ from litellm.utils import (
 from .router_utils.pattern_match_deployments import PatternMatchRouter
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     from litellm.router_strategy.auto_router.auto_router import (
         AutoRouter,

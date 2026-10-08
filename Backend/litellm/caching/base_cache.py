@@ -12,7 +12,8 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     Span = Union[_Span, Any]
 else:

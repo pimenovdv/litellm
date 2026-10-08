@@ -18,11 +18,10 @@ import tempfile
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional, Union
 
-from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
-from opentelemetry.metrics import Counter
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.sdk.resources import Resource
+Counter = Any
+MeterProvider = Any
+PeriodicExportingMetricReader = Any
+Resource = Any
 
 from litellm._logging import verbose_proxy_logger
 from litellm.proxy.middleware.billable_request_metrics_middleware import (

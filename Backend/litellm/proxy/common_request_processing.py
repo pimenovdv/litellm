@@ -4,17 +4,12 @@ import logging
 import math
 import time
 import traceback
+from collections.abc import AsyncGenerator, Callable
 from datetime import datetime
 from typing import (
     TYPE_CHECKING,
     Any,
-    AsyncGenerator,
-    Callable,
-    Dict,
     Literal,
-    Optional,
-    Tuple,
-    Union,
 )
 
 import anyio
@@ -37,7 +32,6 @@ from litellm.constants import (
     STREAM_SSE_DATA_PREFIX,
 )
 from litellm.integrations.custom_guardrail import CustomGuardrail
-from litellm.litellm_core_utils.dd_tracing import NullTracer, tracer
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
 from litellm.litellm_core_utils.llm_response_utils.get_headers import (
     get_response_headers,
@@ -82,7 +76,7 @@ from litellm.types.utils import (
 # runs __enter__/__exit__ for every streamed chunk. Resolve once at import so
 # the per-chunk hot path can skip the context manager entirely when tracing
 # is off (the default).
-_DD_STREAMING_TRACE_ENABLED = not isinstance(tracer, NullTracer)
+_DD_STREAMING_TRACE_ENABLED = False
 
 
 _CLIENT_DISCONNECTED_ERROR_INFORMATION: StandardLoggingPayloadErrorInformation = {
@@ -99,7 +93,7 @@ def _should_return_raw_model_name(request_data: dict[str, object]) -> bool:
     )
 
 
-def _apply_client_disconnect_metadata(target_metadata: Optional[dict[str, object]]) -> None:
+def _apply_client_disconnect_metadata(target_metadata: dict[str, object] | None) -> None:
     if target_metadata is None:
         return
     target_metadata["client_disconnected"] = True
@@ -246,7 +240,7 @@ async def _cancel_pending_gather_tasks(tasks: list["asyncio.Task[Any]"]) -> None
 
 def _serialize_http_exception_detail(
     detail: Any,
-) -> Tuple[str, Optional[dict]]:
+) -> tuple[str, dict | None]:
     """
     Convert an HTTPException.detail value into (message, structured_fields)
     for ProxyException / SSE error frames.
@@ -275,7 +269,7 @@ def _serialize_http_exception_detail(
     return str(detail), None
 
 
-def _collect_response_file_search_vector_store_ids(data: Dict[str, Any]) -> set[str]:
+def _collect_response_file_search_vector_store_ids(data: dict[str, Any]) -> set[str]:
     vector_store_ids: set[str] = set()
     tools = data.get("tools")
     if not isinstance(tools, list):
@@ -302,7 +296,7 @@ def _collect_response_file_search_vector_store_ids(data: Dict[str, Any]) -> set[
 
 
 async def _authorize_response_file_search_vector_stores(
-    data: Dict[str, Any],
+    data: dict[str, Any],
     user_api_key_dict: UserAPIKeyAuth,
 ) -> None:
     vector_store_ids = _collect_response_file_search_vector_store_ids(data)
@@ -320,7 +314,7 @@ async def _authorize_response_file_search_vector_stores(
         )
 
 
-async def _parse_event_data_for_error(event_line: Union[str, bytes]) -> Optional[int]:
+async def _parse_event_data_for_error(event_line: str | bytes) -> int | None:
     """Parses an event line and returns an error code if present, else None."""
     event_line = event_line.decode("utf-8") if isinstance(event_line, bytes) else event_line
     if event_line.startswith("data: "):
@@ -331,7 +325,7 @@ async def _parse_event_data_for_error(event_line: Union[str, bytes]) -> Optional
             data = orjson.loads(json_str)
             if isinstance(data, dict) and "error" in data and isinstance(data["error"], dict):
                 error_code_raw = data["error"].get("code")
-                error_code: Optional[int] = None
+                error_code: int | None = None
 
                 if isinstance(error_code_raw, int):
                     error_code = error_code_raw
@@ -343,7 +337,6 @@ async def _parse_event_data_for_error(event_line: Union[str, bytes]) -> Optional
                             f"Error code is a string but not a valid integer: {error_code_raw}"
                         )
                         # Not a valid integer string, treat as if no valid code was found for this check
-                        pass
 
                 # Ensure error_code is a valid HTTP status code
                 if error_code is not None and 100 <= error_code <= 599:
@@ -356,7 +349,7 @@ async def _parse_event_data_for_error(event_line: Union[str, bytes]) -> Optional
     return None
 
 
-def _extract_error_from_sse_chunk(event_line: Union[str, bytes]) -> dict:
+def _extract_error_from_sse_chunk(event_line: str | bytes) -> dict:
     """
     Extract error dictionary from SSE format chunk.
 
@@ -410,10 +403,10 @@ class _UpstreamClosingStreamingResponse(StreamingResponse):
         self,
         content: AsyncGenerator[str, None],
         *,
-        media_type: Optional[str] = None,
-        headers: Optional[dict] = None,
+        media_type: str | None = None,
+        headers: dict | None = None,
         status_code: int = status.HTTP_200_OK,
-        upstream_generator: Optional[AsyncGenerator[str, None]] = None,
+        upstream_generator: AsyncGenerator[str, None] | None = None,
     ) -> None:
         super().__init__(content, status_code=status_code, headers=headers, media_type=media_type)
         self._upstream_generator = upstream_generator
@@ -459,7 +452,7 @@ async def _wait_for_http_disconnect(request: Request) -> None:
 
 async def _buffer_first_chunk_honoring_disconnect(
     generator: AsyncGenerator[str, None],
-    request: Optional[Request],
+    request: Request | None,
 ) -> str:
     """Fetch the first streamed chunk, cancelling the upstream LLM call if the
     client disconnects before it arrives.
@@ -513,8 +506,8 @@ async def create_response(
     media_type: str,
     headers: dict,
     default_status_code: int = status.HTTP_200_OK,
-    request: Optional[Request] = None,
-) -> Union[StreamingResponse, JSONResponse]:
+    request: Request | None = None,
+) -> StreamingResponse | JSONResponse:
     """
     Create streaming response, checking if the first chunk is an error.
     If the first chunk is an error, return a standard JSON error response.
@@ -527,7 +520,7 @@ async def create_response(
         "Cache-Control": "no-cache",
         "X-Accel-Buffering": "no",
     }
-    first_chunk_value: Optional[str] = None
+    first_chunk_value: str | None = None
     final_status_code = default_status_code
 
     try:
@@ -605,13 +598,13 @@ async def create_response(
 
         existing_fields = getattr(e, "provider_specific_fields", None) or {}
         if structured_fields:
-            merged_fields: Optional[dict] = {**existing_fields, **structured_fields}
+            merged_fields: dict | None = {**existing_fields, **structured_fields}
         else:
             merged_fields = existing_fields or None
 
         # Match ProxyException.to_dict() shape so streaming and non-streaming
         # error frames are byte-identical.
-        error_obj: Dict[str, Any] = {
+        error_obj: dict[str, Any] = {
             "message": message,
             "type": getattr(e, "type", "None"),
             "param": getattr(e, "param", "None"),
@@ -774,7 +767,7 @@ def _override_openai_response_model(
         )
 
     try:
-        setattr(response_obj, "model", requested_model)
+        response_obj.model = requested_model
     except Exception as e:
         verbose_proxy_logger.debug(
             "%s: failed to override response.model=%r on response_type=%s. error=%s",
@@ -787,8 +780,8 @@ def _override_openai_response_model(
 
 
 def _get_cost_breakdown_from_logging_obj(
-    litellm_logging_obj: Optional[LiteLLMLoggingObj],
-) -> Tuple[Optional[float], Optional[float], Optional[float], Optional[float]]:
+    litellm_logging_obj: LiteLLMLoggingObj | None,
+) -> tuple[float | None, float | None, float | None, float | None]:
     """
     Extract discount and margin information from logging object's cost breakdown.
 
@@ -845,9 +838,7 @@ def _log_llm_api_exception(e: Exception) -> None:
             "litellm.proxy.proxy_server._handle_llm_api_exception(): client disconnected, upstream LLM request cancelled"
         )
         return
-    verbose_proxy_logger.exception(
-        f"litellm.proxy.proxy_server._handle_llm_api_exception(): Exception occured - {str(e)}"
-    )
+    verbose_proxy_logger.exception(f"litellm.proxy.proxy_server._handle_llm_api_exception(): Exception occured - {e!s}")
 
 
 async def _cancel_llm_call_on_client_disconnect(
@@ -896,18 +887,18 @@ class ProxyBaseLLMRequestProcessing:
     def get_custom_headers(
         *,
         user_api_key_dict: UserAPIKeyAuth,
-        call_id: Optional[str] = None,
-        model_id: Optional[str] = None,
-        cache_key: Optional[str] = None,
-        api_base: Optional[str] = None,
-        version: Optional[str] = None,
-        model_region: Optional[str] = None,
-        response_cost: Optional[Union[float, str]] = None,
-        hidden_params: Optional[dict] = None,
-        fastest_response_batch_completion: Optional[bool] = None,
-        request_data: Optional[dict] = {},
-        timeout: Optional[Union[float, int, httpx.Timeout]] = None,
-        litellm_logging_obj: Optional[LiteLLMLoggingObj] = None,
+        call_id: str | None = None,
+        model_id: str | None = None,
+        cache_key: str | None = None,
+        api_base: str | None = None,
+        version: str | None = None,
+        model_region: str | None = None,
+        response_cost: float | str | None = None,
+        hidden_params: dict | None = None,
+        fastest_response_batch_completion: bool | None = None,
+        request_data: dict | None = {},
+        timeout: float | httpx.Timeout | None = None,
+        litellm_logging_obj: LiteLLMLoggingObj | None = None,
         **kwargs,
     ) -> dict:
         exclude_values = {"", None, "None"}
@@ -998,9 +989,9 @@ class ProxyBaseLLMRequestProcessing:
         request: Request,
         user_api_key_dict: UserAPIKeyAuth,
         logging_obj: LiteLLMLoggingObj,
-        version: Optional[str],
+        version: str | None,
         proxy_logging_obj: ProxyLogging,
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         """
         Build LiteLLM proxy response headers for routes that call the LLM directly
         (e.g. Google native :generateContent) instead of base_process_llm_request.
@@ -1145,15 +1136,15 @@ class ProxyBaseLLMRequestProcessing:
             "adelete_run",
             "apply_guardrail",
         ],
-        version: Optional[str] = None,
-        user_model: Optional[str] = None,
-        user_temperature: Optional[float] = None,
-        user_request_timeout: Optional[float] = None,
-        user_max_tokens: Optional[int] = None,
-        user_api_base: Optional[str] = None,
-        model: Optional[str] = None,
-        llm_router: Optional[Router] = None,
-    ) -> Tuple[dict, LiteLLMLoggingObj]:
+        version: str | None = None,
+        user_model: str | None = None,
+        user_temperature: float | None = None,
+        user_request_timeout: float | None = None,
+        user_max_tokens: int | None = None,
+        user_api_base: str | None = None,
+        model: str | None = None,
+        llm_router: Router | None = None,
+    ) -> tuple[dict, LiteLLMLoggingObj]:
         start_time = datetime.now()  # start before calling guardrail hooks
 
         self.data = await add_litellm_data_to_request(
@@ -1294,7 +1285,7 @@ class ProxyBaseLLMRequestProcessing:
             if router_settings is not None:
                 self.data["router_settings_override"] = router_settings
 
-        if "messages" in self.data and self.data["messages"]:
+        if self.data.get("messages"):
             logging_obj.update_messages(self.data["messages"])
 
         return self.data, logging_obj
@@ -1305,16 +1296,16 @@ class ProxyBaseLLMRequestProcessing:
         general_settings: dict,
         proxy_logging_obj: ProxyLogging,
         user_api_key_dict: UserAPIKeyAuth,
-        version: Optional[str],
+        version: str | None,
         proxy_config: ProxyConfig,
-        user_model: Optional[str],
-        user_temperature: Optional[float],
-        user_request_timeout: Optional[float],
-        user_max_tokens: Optional[int],
-        user_api_base: Optional[str],
-        model: Optional[str],
+        user_model: str | None,
+        user_temperature: float | None,
+        user_request_timeout: float | None,
+        user_max_tokens: int | None,
+        user_api_base: str | None,
+        model: str | None,
         route_type: str,
-        llm_router: Optional[Router],
+        llm_router: Router | None,
     ) -> tuple[dict, LiteLLMLoggingObj]:
         from litellm.proxy.common_utils.proxy_rate_limit_error import ProxyRateLimitError
 
@@ -1390,7 +1381,7 @@ class ProxyBaseLLMRequestProcessing:
         model: str,
         llm_router: Router,
         user_api_key_dict: UserAPIKeyAuth,
-    ) -> Optional[list]:
+    ) -> list | None:
         from litellm.router_utils.fallback_event_handlers import get_fallback_model_group
 
         fallbacks = None
@@ -1580,23 +1571,23 @@ class ProxyBaseLLMRequestProcessing:
         proxy_logging_obj: ProxyLogging,
         general_settings: dict,
         proxy_config: ProxyConfig,
-        select_data_generator: Optional[Callable] = None,
-        llm_router: Optional[Router] = None,
-        model: Optional[str] = None,
-        user_model: Optional[str] = None,
-        user_temperature: Optional[float] = None,
-        user_request_timeout: Optional[float] = None,
-        user_max_tokens: Optional[int] = None,
-        user_api_base: Optional[str] = None,
-        version: Optional[str] = None,
-        is_streaming_request: Optional[bool] = False,
-        contents: Optional[list] = None,  # Add contents parameter
+        select_data_generator: Callable | None = None,
+        llm_router: Router | None = None,
+        model: str | None = None,
+        user_model: str | None = None,
+        user_temperature: float | None = None,
+        user_request_timeout: float | None = None,
+        user_max_tokens: int | None = None,
+        user_api_base: str | None = None,
+        version: str | None = None,
+        is_streaming_request: bool | None = False,
+        contents: list | None = None,  # Add contents parameter
         skip_pre_call_logic: bool = False,
     ) -> Any:
         """
         Common request processing logic for both chat completions and responses API endpoints
         """
-        requested_model_from_client: Optional[str] = (
+        requested_model_from_client: str | None = (
             self.data.get("model") if isinstance(self.data.get("model"), str) else None
         )
         self._debug_log_request_payload()
@@ -2119,14 +2110,14 @@ class ProxyBaseLLMRequestProcessing:
         general_settings: dict,
         proxy_config: ProxyConfig,
         select_data_generator: Callable,
-        llm_router: Optional[Router] = None,
-        model: Optional[str] = None,
-        user_model: Optional[str] = None,
-        user_temperature: Optional[float] = None,
-        user_request_timeout: Optional[float] = None,
-        user_max_tokens: Optional[int] = None,
-        user_api_base: Optional[str] = None,
-        version: Optional[str] = None,
+        llm_router: Router | None = None,
+        model: str | None = None,
+        user_model: str | None = None,
+        user_temperature: float | None = None,
+        user_request_timeout: float | None = None,
+        user_max_tokens: int | None = None,
+        user_api_base: str | None = None,
+        version: str | None = None,
     ):
         from litellm.proxy.pass_through_endpoints.pass_through_endpoints import (
             HttpPassThroughEndpointHelpers,
@@ -2190,7 +2181,7 @@ class ProxyBaseLLMRequestProcessing:
 
         return False
 
-    def _is_streaming_request(self, data: dict, is_streaming_request: Optional[bool] = False) -> bool:
+    def _is_streaming_request(self, data: dict, is_streaming_request: bool | None = False) -> bool:
         """
         Check if the request is a streaming request.
 
@@ -2263,7 +2254,7 @@ class ProxyBaseLLMRequestProcessing:
             self.data.get("endpoint"),
         )
 
-    def _passthrough_event_stream_media_type(self) -> Optional[str]:
+    def _passthrough_event_stream_media_type(self) -> str | None:
         """
         Content-type for a buffered passthrough event-stream response, resolved
         from the provider handler so the proxy stays provider-agnostic. Mirrors
@@ -2282,8 +2273,8 @@ class ProxyBaseLLMRequestProcessing:
         proxy_logging_obj: "ProxyLogging",
         user_api_key_dict: "UserAPIKeyAuth",
         custom_headers: dict,
-        request_headers: Dict[str, str],
-    ) -> Optional[Response]:
+        request_headers: dict[str, str],
+    ) -> Response | None:
         if not self._has_post_call_guardrails_for_passthrough():
             return None
 
@@ -2530,7 +2521,7 @@ class ProxyBaseLLMRequestProcessing:
         e: Exception,
         user_api_key_dict: UserAPIKeyAuth,
         proxy_logging_obj: ProxyLogging,
-        version: Optional[str] = None,
+        version: str | None = None,
     ):
         """Raises ProxyException (OpenAI API compatible) if an exception is raised"""
         _log_llm_api_exception(e)
@@ -2553,7 +2544,7 @@ class ProxyBaseLLMRequestProcessing:
         timeout = getattr(
             e, "timeout", None
         )  # returns the timeout set by the wrapper. Used for testing if model-specific timeout are set correctly
-        _litellm_logging_obj: Optional[LiteLLMLoggingObj] = self.data.get("litellm_logging_obj", None)
+        _litellm_logging_obj: LiteLLMLoggingObj | None = self.data.get("litellm_logging_obj", None)
 
         # Attempt to get model_id from logging object
         #
@@ -2612,7 +2603,7 @@ class ProxyBaseLLMRequestProcessing:
             message, structured_fields = _serialize_http_exception_detail(raw_detail)
             existing_fields = getattr(e, "provider_specific_fields", None) or {}
             if structured_fields:
-                merged_fields: Optional[dict] = {**existing_fields, **structured_fields}
+                merged_fields: dict | None = {**existing_fields, **structured_fields}
             else:
                 merged_fields = existing_fields or None
             raise ProxyException(
@@ -2634,7 +2625,7 @@ class ProxyBaseLLMRequestProcessing:
                 status_code=http_status_error.response.status_code,
                 detail={"error": error_text},
             )
-        error_msg = f"{str(e)}"
+        error_msg = f"{e!s}"
         # Check for AttributeError in the exception chain.
         # The AttributeError may be wrapped in multiple layers
         # (e.g. AttributeError -> OpenAIException -> APIConnectionError),
@@ -2838,7 +2829,7 @@ class ProxyBaseLLMRequestProcessing:
             raise
         except Exception as e:
             verbose_proxy_logger.exception(
-                "litellm.proxy.proxy_server.async_data_generator(): Exception occured - {}".format(str(e))
+                f"litellm.proxy.proxy_server.async_data_generator(): Exception occured - {e!s}"
             )
             transformed_exception = await proxy_logging_obj.post_call_failure_hook(
                 user_api_key_dict=user_api_key_dict,
@@ -2854,7 +2845,7 @@ class ProxyBaseLLMRequestProcessing:
             if isinstance(e, HTTPException):
                 raise e
             error_traceback = _redact_string(traceback.format_exc())
-            error_msg = f"{str(e)}\n\n{error_traceback}"
+            error_msg = f"{e!s}\n\n{error_traceback}"
             proxy_exception = ProxyException(
                 message=getattr(e, "message", error_msg),
                 type=getattr(e, "type", "None"),
@@ -2944,7 +2935,7 @@ class ProxyBaseLLMRequestProcessing:
         return chunk
 
     @staticmethod
-    def _inject_cost_into_sse_frame_str(frame_str: str, model_name: str) -> Optional[str]:
+    def _inject_cost_into_sse_frame_str(frame_str: str, model_name: str) -> str | None:
         """
         Inject cost information into an SSE frame string by modifying the JSON in the 'data:' line.
 
@@ -2974,7 +2965,7 @@ class ProxyBaseLLMRequestProcessing:
             return None
 
     @staticmethod
-    def _inject_cost_into_usage_dict(obj: dict, model_name: str) -> Optional[dict]:
+    def _inject_cost_into_usage_dict(obj: dict, model_name: str) -> dict | None:
         """
         Inject cost information into a usage dictionary for message_delta events.
 
@@ -3037,7 +3028,7 @@ class ProxyBaseLLMRequestProcessing:
                 return obj
         return None
 
-    def maybe_get_model_id(self, _logging_obj: Optional[LiteLLMLoggingObj]) -> Optional[str]:
+    def maybe_get_model_id(self, _logging_obj: LiteLLMLoggingObj | None) -> str | None:
         """
         Get model_id from logging object or request metadata.
 

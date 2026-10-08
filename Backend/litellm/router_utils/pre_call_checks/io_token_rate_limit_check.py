@@ -24,7 +24,8 @@ from litellm.types.router import RouterCacheEnum, RouterErrors
 from litellm.utils import get_utc_datetime
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     Span = _Span | Any
 else:

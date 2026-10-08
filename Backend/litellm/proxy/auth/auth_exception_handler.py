@@ -26,7 +26,8 @@ from litellm.types.services import ServiceTypes
 DB_UNAVAILABLE_FALLBACK_USER_ID = "__db_unavailable_fallback__"
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     Span = Union[_Span, Any]
 else:

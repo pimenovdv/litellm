@@ -18,7 +18,8 @@ from litellm.utils import get_utc_datetime, print_verbose
 from .base_routing_strategy import BaseRoutingStrategy
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+    Span = Any
+    _Span = Any
 
     Span = Union[_Span, Any]
 else:
