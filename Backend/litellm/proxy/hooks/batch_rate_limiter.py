@@ -59,7 +59,6 @@ from litellm.proxy.hooks.rate_limiter_utils import resolve_llm_provider_for_rate
 
 if TYPE_CHECKING:
 
-
     from litellm.proxy.hooks.parallel_request_limiter_v3 import (
         RateLimitDescriptor as _RateLimitDescriptor,
     )

@@ -107,7 +107,6 @@ from .auth_utils import get_model_from_request, get_request_route_template
 
 if TYPE_CHECKING:
 
-
     Span = Any
 else:
     Span = Any

@@ -62,7 +62,6 @@ from .types_utils.utils import get_instance_fn, validate_custom_validate_return_
 
 if TYPE_CHECKING:
 
-
     Span = Any
 else:
     Span = Any

@@ -27,7 +27,6 @@ DB_UNAVAILABLE_FALLBACK_USER_ID = "__db_unavailable_fallback__"
 
 if TYPE_CHECKING:
 
-
     Span = Any
 else:
     Span = Any

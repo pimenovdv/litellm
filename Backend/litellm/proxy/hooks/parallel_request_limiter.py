@@ -23,7 +23,6 @@ from litellm.proxy.hooks.rate_limiter_utils import resolve_llm_provider_for_rate
 
 if TYPE_CHECKING:
 
-
     from litellm.proxy.utils import InternalUsageCache as _InternalUsageCache
 
     Span = Any

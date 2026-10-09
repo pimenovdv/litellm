@@ -91,7 +91,12 @@ def initialize_callbacks_on_proxy(
             if isinstance(callback, str) and callback in litellm._known_custom_logger_compatible_callbacks:
                 imported_list.append(callback)
             elif isinstance(callback, str) and callback == "presidio":
-                from litellm.proxy._types import _OPTIONAL_PresidioPIIMasking
+                try:
+                    from litellm_enterprise.enterprise_callbacks.presidio_pii_masking import (
+                        _OPTIONAL_PresidioPIIMasking,
+                    )
+                except ImportError:
+                    raise Exception("Missing presidio_pii_masking enterprise package")
 
                 presidio_logging_only: bool | None = litellm_settings.get("presidio_logging_only", None)
                 if presidio_logging_only is not None:
@@ -154,19 +159,25 @@ def initialize_callbacks_on_proxy(
                 openai_moderations_object = _ENTERPRISE_OpenAI_Moderation()
                 imported_list.append(openai_moderations_object)
             elif isinstance(callback, str) and callback == "lakera_prompt_injection":
-
+                try:
+                    from litellm_enterprise.enterprise_callbacks.lakera_ai import lakeraAI_Moderation
+                except ImportError:
+                    raise Exception("Missing lakera_ai enterprise package")
 
                 init_params = {}
                 if "lakera_prompt_injection" in callback_specific_params and isinstance(
                     callback_specific_params["lakera_prompt_injection"], dict
                 ):
                     init_params = callback_specific_params["lakera_prompt_injection"]
-                lakera_moderations_object = None
+                lakera_moderations_object = lakeraAI_Moderation(**init_params)
                 imported_list.append(lakera_moderations_object)
             elif isinstance(callback, str) and callback == "aporia_prompt_injection":
+                try:
+                    from litellm_enterprise.enterprise_callbacks.aporia import AporiaGuardrail
+                except ImportError:
+                    raise Exception("Missing aporia enterprise package")
 
-
-                aporia_guardrail_object = None
+                aporia_guardrail_object = AporiaGuardrail()
                 imported_list.append(aporia_guardrail_object)
             elif isinstance(callback, str) and callback == "google_text_moderation":
                 try:
