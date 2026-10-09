@@ -1093,7 +1093,6 @@ async def proxy_startup_event(app: FastAPI):
     asyncio.create_task(_adaptive_router_flusher_loop())
 
     ## [Optional] Initialize dd tracer
-    ProxyStartupEvent._init_dd_tracer()
 
     ## [Optional] Initialize Pyroscope continuous profiling (env: LITELLM_ENABLE_PYROSCOPE=true)
     ProxyStartupEvent._init_pyroscope()
@@ -8470,31 +8469,6 @@ class ProxyStartupEvent:
         except Exception as e:
             PrismaDBExceptionHandler.handle_db_exception(e)
             return None
-
-    @classmethod
-    def _init_dd_tracer(cls):
-        """
-        Initialize dd tracer - if `USE_DDTRACE=true` in .env
-
-        DD tracer is used to trace Python applications.
-        Doc: https://docs.datadoghq.com/tracing/trace_collection/automatic_instrumentation/dd_libraries/python/
-        """
-        from litellm.litellm_core_utils.dd_tracing import (
-            _should_use_dd_profiler,
-            _should_use_dd_tracer,
-        )
-
-        if _should_use_dd_tracer():
-            import ddtrace
-
-            ddtrace.patch_all(logging=True, openai=False)
-
-        if _should_use_dd_profiler():
-            from ddtrace.profiling import Profiler
-
-            prof = Profiler()
-            prof.start()
-            verbose_proxy_logger.debug("Datadog Profiler started......")
 
     @classmethod
     def _init_pyroscope(cls):
