@@ -541,48 +541,6 @@ class ProxyInitializationHelpers:
             return None  # Let uvicorn choose the default loop on Windows
         return "uvloop"
 
-    @staticmethod
-    def _maybe_setup_prometheus_multiproc_dir(
-        num_workers: int,
-        litellm_settings: Optional[dict],
-    ) -> None:
-        """
-        Auto-create PROMETHEUS_MULTIPROC_DIR when running with multiple workers
-        and prometheus is configured as a callback.
-        """
-        import tempfile
-
-        if num_workers <= 1 or litellm_settings is None:
-            return
-
-        # Check if prometheus is in any callback list
-        # Each setting can be a list or a single string; normalize to list
-        callbacks = litellm_settings.get("callbacks") or []
-        success_callbacks = litellm_settings.get("success_callback") or []
-        failure_callbacks = litellm_settings.get("failure_callback") or []
-        if isinstance(callbacks, str):
-            callbacks = [callbacks]
-        if isinstance(success_callbacks, str):
-            success_callbacks = [success_callbacks]
-        if isinstance(failure_callbacks, str):
-            failure_callbacks = [failure_callbacks]
-        all_callbacks = callbacks + success_callbacks + failure_callbacks
-        if "prometheus" not in all_callbacks:
-            return
-
-        from litellm.proxy.prometheus_cleanup import wipe_directory
-
-        multiproc_dir = os.environ.get("PROMETHEUS_MULTIPROC_DIR") or os.environ.get("prometheus_multiproc_dir")
-
-        auto_created = not multiproc_dir
-        if not multiproc_dir:
-            multiproc_dir = os.path.join(tempfile.gettempdir(), "litellm_prometheus_multiproc")
-            os.environ["PROMETHEUS_MULTIPROC_DIR"] = multiproc_dir
-
-        os.makedirs(multiproc_dir, exist_ok=True)
-        wipe_directory(multiproc_dir)
-        action = "Auto-created" if auto_created else "Using existing"
-        print(f"LiteLLM: {action} PROMETHEUS_MULTIPROC_DIR={multiproc_dir}")
 
 
 @click.command()
@@ -1250,11 +1208,6 @@ def run_server(
         # DO NOT DELETE - enables global variables to work across files
         from litellm.proxy.proxy_server import app
 
-        # Auto-create PROMETHEUS_MULTIPROC_DIR for multi-worker setups
-        ProxyInitializationHelpers._maybe_setup_prometheus_multiproc_dir(
-            num_workers=num_workers,
-            litellm_settings=litellm_settings if config else None,  # type: ignore[possibly-unbound]
-        )
 
         # Skip server startup if requested (after all setup is done)
         if skip_server_startup:
