@@ -7,16 +7,13 @@ from litellm._logging import verbose_logger
 
 from .integrations.custom_logger import CustomLogger
 from .integrations.datadog.datadog import DataDogLogger
-from .integrations.opentelemetry import OpenTelemetry
 from .types.services import ServiceLoggerPayload, ServiceTypes
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
-
     from litellm.proxy._types import UserAPIKeyAuth
 
-    Span = Union[_Span, Any]
-    OTELClass = OpenTelemetry
+    Span = Any
+    OTELClass = Any
 else:
     Span = Any
     OTELClass = Any
@@ -67,8 +64,6 @@ class ServiceLogging(CustomLogger):
         otel_v2_cls = _get_otel_v2_class()
 
         def _is_otel_logger(obj: Any) -> bool:
-            if isinstance(obj, OpenTelemetry):
-                return True
             return otel_v2_cls is not None and isinstance(obj, otel_v2_cls)
 
         if _is_otel_logger(callback):
@@ -223,12 +218,7 @@ class ServiceLogging(CustomLogger):
         from litellm.proxy.proxy_server import open_telemetry_logger
 
         if not hasattr(self, "otel_logger"):
-            if open_telemetry_logger is not None and isinstance(open_telemetry_logger, OpenTelemetry):
-                self.otel_logger: OpenTelemetry = open_telemetry_logger
-            else:
-                verbose_logger.warning(
-                    "ServiceLogger: open_telemetry_logger is None or not an instance of OpenTelemetry"
-                )
+            self.otel_logger = open_telemetry_logger
         return
 
     async def async_service_failure_hook(

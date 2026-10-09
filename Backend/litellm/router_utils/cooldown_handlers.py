@@ -26,12 +26,11 @@ from .router_callbacks.track_deployment_metrics import (
 )
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     from litellm.router import Router as _Router
 
     LitellmRouter = _Router
-    Span = Union[_Span, Any]
+    Span = Any
 else:
     LitellmRouter = Any
     Span = Any
