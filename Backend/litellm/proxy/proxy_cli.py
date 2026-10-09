@@ -495,16 +495,6 @@ class ProxyInitializationHelpers:
                 )
             else:
                 gunicorn_options["max_requests_jitter"] = max_requests_before_restart_jitter
-
-        # Clean up prometheus .db files when a worker exits (prevents ghost gauge values)
-        if os.environ.get("PROMETHEUS_MULTIPROC_DIR"):
-            from litellm.proxy.prometheus_cleanup import mark_worker_exit
-
-            def child_exit(server, worker):
-                mark_worker_exit(worker.pid)
-
-            gunicorn_options["child_exit"] = child_exit
-
         if ssl_certfile_path is not None and ssl_keyfile_path is not None:
             print(
                 f"\033[1;32mLiteLLM Proxy: Using SSL with certfile: {ssl_certfile_path} and keyfile: {ssl_keyfile_path}\033[0m\n"

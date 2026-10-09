@@ -1,3 +1,4 @@
+# prometheus_client dependency was previously removed
 """
 Tracks the number of HTTP requests currently in-flight on this uvicorn worker.
 
