@@ -8,7 +8,6 @@ from litellm._logging import verbose_logger
 from .integrations.custom_logger import CustomLogger
 from .integrations.datadog.datadog import DataDogLogger
 from .integrations.opentelemetry import OpenTelemetry
-from .integrations.prometheus_services import PrometheusServicesLogger
 from .types.services import ServiceLoggerPayload, ServiceTypes
 
 if TYPE_CHECKING:
@@ -51,8 +50,6 @@ class ServiceLogging(CustomLogger):
         self.mock_testing_async_success_hook = 0
         self.mock_testing_sync_failure_hook = 0
         self.mock_testing_async_failure_hook = 0
-        if "prometheus_system" in litellm.service_callback:
-            self.prometheusServicesLogger = PrometheusServicesLogger()
 
     def _resolve_otel_service_logger(self, callback: Any) -> Optional[Any]:
         """Resolve the OTel logger (legacy or V2) to emit a service span on.
@@ -180,10 +177,7 @@ class ServiceLogging(CustomLogger):
         # span, so a single DB call shows up as duplicate ``postgres ...`` spans.
         emitted_otel_logger_ids: set = set()
         for callback in litellm.service_callback:
-            if callback == "prometheus_system":
-                await self.init_prometheus_services_logger_if_none()
-                await self.prometheusServicesLogger.async_service_success_hook(payload=payload)
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            if callback == "datadog" or isinstance(callback, DataDogLogger):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_success_hook(
                     payload=payload,
@@ -208,17 +202,6 @@ class ServiceLogging(CustomLogger):
                         end_time=end_time,
                         event_metadata=event_metadata,
                     )
-
-    async def init_prometheus_services_logger_if_none(self):
-        """
-        initializes prometheusServicesLogger if it is None or no attribute exists on ServiceLogging Object
-
-        """
-        if not hasattr(self, "prometheusServicesLogger"):
-            self.prometheusServicesLogger = PrometheusServicesLogger()
-        elif self.prometheusServicesLogger is None:
-            self.prometheusServicesLogger = self.prometheusServicesLogger()
-        return
 
     async def init_datadog_logger_if_none(self):
         """
@@ -284,13 +267,7 @@ class ServiceLogging(CustomLogger):
         # the same logger can be referenced twice in ``service_callback``.
         emitted_otel_logger_ids: set = set()
         for callback in litellm.service_callback:
-            if callback == "prometheus_system":
-                await self.init_prometheus_services_logger_if_none()
-                await self.prometheusServicesLogger.async_service_failure_hook(
-                    payload=payload,
-                    error=error,
-                )
-            elif callback == "datadog" or isinstance(callback, DataDogLogger):
+            if callback == "datadog" or isinstance(callback, DataDogLogger):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_failure_hook(
                     payload=payload,

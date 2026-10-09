@@ -1,5 +1,5 @@
 - [x] Отвязать код от `ddtrace` в `Backend/litellm/proxy/proxy_server.py`.
-- [ ] Отвязать код от `prometheus_client` в 1-й группе файлов (integrations/prometheus_services.py, proxy/prometheus_cleanup.py).
+- [x] Отвязать код от `prometheus_client` в 1-й группе файлов (integrations/prometheus_services.py, proxy/prometheus_cleanup.py).
 - [ ] Отвязать код от `prometheus_client` во 2-й группе файлов (proxy/middleware/in_flight_requests_middleware.py, proxy/proxy_cli.py и др).
 - [ ] Отвязать код от `opentelemetry` в базовых файлах (router.py, _service_logger.py и core utils).
 - [ ] Отвязать код от `opentelemetry` в кэшировании (caching/*).
