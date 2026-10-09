@@ -3,7 +3,7 @@
 - [x] Отвязать код от `prometheus_client` во 2-й группе файлов (proxy/middleware/in_flight_requests_middleware.py (проверен/чист), proxy/proxy_cli.py и др).
 - [x] Отвязать код от `opentelemetry` в базовых файлах (router.py, _service_logger.py и core utils).
 - [x] Отвязать код от `opentelemetry` в кэшировании (caching/*).
-- [ ] Отвязать код от `opentelemetry` в proxy-слое (proxy/*).
+- [x] Отвязать код от `opentelemetry` в proxy-слое (proxy/*).
 - [ ] Очистить списки зависимостей `Backend/pyproject.toml` от `ddtrace`, `prometheus-client`, `opentelemetry-*`.
 - [x] Очистить списки зависимостей `Backend/pyproject.toml` от неиспользуемых библиотек (sentry, datadog, guardrails, telemetry, prometheus, posthog). (Заменено на атомарные шаги выше)
 - [ ] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).

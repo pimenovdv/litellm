@@ -58,7 +58,6 @@ from litellm.proxy.common_utils.proxy_rate_limit_error import (
 from litellm.proxy.hooks.rate_limiter_utils import resolve_llm_provider_for_rate_limit
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
 
     from litellm.proxy.hooks.parallel_request_limiter_v3 import (
         RateLimitDescriptor as _RateLimitDescriptor,
@@ -72,7 +71,7 @@ if TYPE_CHECKING:
     from litellm.proxy.utils import InternalUsageCache as _InternalUsageCache
     from litellm.router import Router as _Router
 
-    Span = Union[_Span, Any]
+    Span = Any
     InternalUsageCache = _InternalUsageCache
     Router = _Router
     ParallelRequestLimiter = _ParallelRequestLimiter
