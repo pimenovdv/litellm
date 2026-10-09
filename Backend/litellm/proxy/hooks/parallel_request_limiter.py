@@ -22,11 +22,11 @@ from litellm.proxy.common_utils.proxy_rate_limit_error import ProxyRateLimitErro
 from litellm.proxy.hooks.rate_limiter_utils import resolve_llm_provider_for_rate_limit
 
 if TYPE_CHECKING:
-    from opentelemetry.trace import Span as _Span
+
 
     from litellm.proxy.utils import InternalUsageCache as _InternalUsageCache
 
-    Span = Union[_Span, Any]
+    Span = Any
     InternalUsageCache = _InternalUsageCache
 else:
     Span = Any

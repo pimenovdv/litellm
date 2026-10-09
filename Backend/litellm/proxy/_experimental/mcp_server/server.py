@@ -265,66 +265,11 @@ def _mcp_meta_trace_carrier(req_ctx: object) -> Optional[dict[str, str]]:
 
 
 def _otel_set_mcp_trace_carrier(carrier: Optional[dict[str, str]]) -> object:
-    """Stash ``carrier`` for the otel_v2 MCP span and return a reset token, or
-    ``None`` when otel_v2 is unavailable. Lazily imported so opentelemetry stays an
-    optional dependency."""
-    try:
-        from litellm.integrations.otel.plumbing.context import (
-            set_mcp_message_trace_carrier,
-        )
-
-        return set_mcp_message_trace_carrier(carrier)
-    except ImportError:
-        return None
-
-
+    return None
 def _otel_reset_mcp_trace_carrier(token: object) -> None:
-    """Clear the per-message trace carrier so it never leaks to the next message on
-    the same session task. Paired with ``_otel_set_mcp_trace_carrier``."""
-    if token is None:
-        return
-    try:
-        from litellm.integrations.otel.plumbing.context import (
-            reset_mcp_message_trace_carrier,
-        )
-
-        reset_mcp_message_trace_carrier(token)
-    except ImportError:
-        return
-
-
+    pass
 def _otel_publish_transport_span_on_scope(scope: Scope) -> None:
-    """Record this request's tracing span on its own ASGI scope.
-
-    Resolved on the ASGI request task, where the proxy's server span is anchored,
-    and read back by the MCP message handler through ``req_ctx.request`` — the
-    ``Request`` the transport attaches to each message. A stateful streamable-HTTP
-    session handles every message on the task spawned by its ``initialize`` POST, so
-    the handler's own task cannot see later requests' spans.
-
-    The scope, not the shared session auth context: a JSON-RPC *response* POST
-    deliberately skips the per-session lock (it can arrive while the tool call that
-    awaits it is still in flight), so a field on that shared object would be
-    overwritten mid-call and the tool call would attribute itself to the response's
-    request. A scope belongs to exactly one request and dies with it, which also
-    keeps a finished span from being retained by an idle session.
-
-    The live span, not just its context: a failed tool call stamps ``error.*`` on it,
-    which needs a span still open for writes. Lazily imported so opentelemetry stays
-    an optional dependency; a no-op when otel_v2 is unavailable or no request span is
-    anchored."""
-    try:
-        from litellm.integrations.otel.plumbing.context import (
-            request_root_span,
-        )
-
-        span = request_root_span()
-    except ImportError:
-        return
-    if span is not None:
-        scope[_MCP_TRANSPORT_SPAN_SCOPE_KEY] = span
-
-
+    pass
 def _otel_transport_span_from_message(req_ctx: object) -> object:
     """The tracing span of the HTTP request that carried this MCP message.
 
@@ -340,35 +285,9 @@ def _otel_transport_span_from_message(req_ctx: object) -> object:
 
 
 def _otel_set_mcp_transport_span(span: object) -> object:
-    """Publish the current message's transport span, which the otel_v2 MCP span
-    attaches to and a failed tool call stamps its error on. Returns a reset token,
-    or ``None`` when otel_v2 is unavailable."""
-    if span is None:
-        return None
-    try:
-        from litellm.integrations.otel.plumbing.context import (
-            set_mcp_message_transport_span,
-        )
-
-        return set_mcp_message_transport_span(span)
-    except ImportError:
-        return None
-
-
+    return None
 def _otel_reset_mcp_transport_span(token: object) -> None:
-    """Paired with ``_otel_set_mcp_transport_span``."""
-    if token is None:
-        return
-    try:
-        from litellm.integrations.otel.plumbing.context import (
-            reset_mcp_message_transport_span,
-        )
-
-        reset_mcp_message_transport_span(token)
-    except ImportError:
-        return
-
-
+    pass
 def _proxy_exception_to_http_exception(exc: ProxyException) -> HTTPException:
     """Map a ``ProxyException`` to an ``HTTPException`` that preserves its real
     status code and headers.

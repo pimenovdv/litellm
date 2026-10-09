@@ -128,11 +128,11 @@ from litellm.utils import (
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
-    from opentelemetry.trace import Span as _Span
+
 
     OpenTelemetry = Any
 
-    Span = Union[_Span, Any]
+    Span = Any
 else:
     Span = Any
     OpenTelemetry = Any
@@ -987,37 +987,6 @@ async def proxy_startup_event(app: FastAPI):
         redis_usage_cache=transaction_buffer_redis_cache,
     )
 
-    ## V2 OTEL: publish the chosen V2 logger's TracerProvider as the OTel global.
-    ## This MUST run after callback initialization above: a preset (arize, langfuse,
-    ## …) builds its logger there, folding the OTEL_* base exporter and its own
-    ## exporter into one logger. The FastAPI instrumentation mounted at app-creation
-    ## binds to the global provider, so reusing that one logger is what makes the
-    ## server span and the gen-ai spans share one provider and land in the same
-    ## trace, exporting to every configured backend. Running before callback init
-    ## (when no logger exists yet) would build a second, generic logger whose
-    ## provider became the global, orphaning the gen-ai spans onto a different
-    ## backend than the server span. A generic logger is built only when none was
-    ## configured.
-    try:
-        from litellm.integrations.otel.model.config import is_otel_v2_enabled
-
-        if is_otel_v2_enabled():
-            from opentelemetry import trace as _otel_trace
-
-            from litellm.integrations.otel.logger import (
-                OpenTelemetryV2,
-                publish_global_otel_v2_provider,
-            )
-            from litellm.litellm_core_utils.litellm_logging import _in_memory_loggers
-
-            registered = open_telemetry_logger if isinstance(open_telemetry_logger, OpenTelemetryV2) else None
-            publish_global_otel_v2_provider(
-                _in_memory_loggers,  # any-ok: pre-existing untyped List[Any] global
-                _otel_trace.set_tracer_provider,
-                registered=registered,
-            )
-    except Exception as e:
-        verbose_proxy_logger.debug("Skipping OTel V2 provider setup: %s", e)
 
     ## Validate use_redis_transaction_buffer requires Redis cache ##
     ProxyStartupEvent._validate_redis_transaction_buffer_config(
@@ -1400,39 +1369,8 @@ def _close_dangling_otel_server_span(request: Request, status_code: int, exc: Op
     if parent_otel_span is None:
         return
     if open_telemetry_logger is None:
+        pass
         return
-    # Under OTel V2 the FastAPI instrumentor owns the server span (parent_otel_span
-    # is that same span) and ends it itself with the http.* attributes stamped on
-    # completion. The instrumentor only records an error when the exception reaches
-    # it uncaught, but these handlers swallow it into a JSONResponse, so it never
-    # does; stamp the error.* attributes here (without ending or re-statusing the
-    # span, which the instrumentor still owns) so pre-call failures carry the error
-    # like v1 did. Otherwise close and annotate the dangling span ourselves.
-    try:
-        from litellm.integrations.otel.model.config import is_otel_v2_enabled
-
-        v2_enabled = is_otel_v2_enabled()
-    except Exception:
-        v2_enabled = False
-    try:
-        from opentelemetry.trace import Status, StatusCode
-
-        if v2_enabled:
-            if status_code >= 400:
-                open_telemetry_logger.record_error_attributes_on_span(parent_otel_span, exc, status_code)
-            return
-        open_telemetry_logger.set_response_status_code_attribute(parent_otel_span, status_code)
-        if status_code >= 400:
-            open_telemetry_logger.record_error_attributes_on_span(parent_otel_span, exc, status_code)
-        parent_otel_span.set_status(Status(StatusCode.ERROR if status_code >= 400 else StatusCode.OK))
-        parent_otel_span.end()
-    except Exception as e:
-        verbose_proxy_logger.debug("Error closing dangling OTEL SERVER span: %s", str(e))
-    finally:
-        if not v2_enabled:
-            request.state.parent_otel_span = None
-
-
 @app.exception_handler(RequestValidationError)
 async def otel_request_validation_exception_handler(request: Request, exc: RequestValidationError):
     _close_dangling_otel_server_span(request, 422, exc=exc)
