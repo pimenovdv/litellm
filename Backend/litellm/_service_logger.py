@@ -6,8 +6,6 @@ import litellm
 from litellm._logging import verbose_logger
 
 from .integrations.custom_logger import CustomLogger
-from .integrations.datadog.datadog import DataDogLogger
-from .integrations.opentelemetry import OpenTelemetry
 from .types.services import ServiceLoggerPayload, ServiceTypes
 
 if TYPE_CHECKING:
@@ -15,8 +13,8 @@ if TYPE_CHECKING:
 
     from litellm.proxy._types import UserAPIKeyAuth
 
-    Span = Union[_Span, Any]
-    OTELClass = OpenTelemetry
+    Span = Any
+    OTELClass = Any
 else:
     Span = Any
     OTELClass = Any
@@ -67,7 +65,7 @@ class ServiceLogging(CustomLogger):
         otel_v2_cls = _get_otel_v2_class()
 
         def _is_otel_logger(obj: Any) -> bool:
-            if isinstance(obj, OpenTelemetry):
+            if hasattr(obj, "__class__") and obj.__class__.__name__ == "OpenTelemetry":
                 return True
             return otel_v2_cls is not None and isinstance(obj, otel_v2_cls)
 
@@ -85,7 +83,6 @@ class ServiceLogging(CustomLogger):
         service: ServiceTypes,
         duration: float,
         call_type: str,
-        parent_otel_span: Optional[Span] = None,
         start_time: Optional[Union[datetime, float]] = None,
         end_time: Optional[Union[float, datetime]] = None,
     ):
@@ -107,7 +104,6 @@ class ServiceLogging(CustomLogger):
                         service=service,
                         duration=duration,
                         call_type=call_type,
-                        parent_otel_span=parent_otel_span,
                         start_time=start_time,
                         end_time=end_time,
                     )
@@ -119,7 +115,6 @@ class ServiceLogging(CustomLogger):
                         service=service,
                         duration=duration,
                         call_type=call_type,
-                        parent_otel_span=parent_otel_span,
                         start_time=start_time,
                         end_time=end_time,
                     )
@@ -131,7 +126,6 @@ class ServiceLogging(CustomLogger):
                     service=service,
                     duration=duration,
                     call_type=call_type,
-                    parent_otel_span=parent_otel_span,
                     start_time=start_time,
                     end_time=end_time,
                 )
@@ -149,7 +143,6 @@ class ServiceLogging(CustomLogger):
         service: ServiceTypes,
         call_type: str,
         duration: float,
-        parent_otel_span: Optional[Span] = None,
         start_time: Optional[Union[datetime, float]] = None,
         end_time: Optional[Union[datetime, float]] = None,
         event_metadata: Optional[dict] = None,
@@ -177,11 +170,12 @@ class ServiceLogging(CustomLogger):
         # span, so a single DB call shows up as duplicate ``postgres ...`` spans.
         emitted_otel_logger_ids: set = set()
         for callback in litellm.service_callback:
-            if callback == "datadog" or isinstance(callback, DataDogLogger):
+            if callback == "datadog" or (
+                hasattr(callback, "__class__") and callback.__class__.__name__ == "DataDogLogger"
+            ):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_success_hook(
                     payload=payload,
-                    parent_otel_span=parent_otel_span,
                     start_time=start_time,
                     end_time=end_time,
                     event_metadata=event_metadata,
@@ -197,7 +191,6 @@ class ServiceLogging(CustomLogger):
                     emitted_otel_logger_ids.add(id(_otel_logger_to_use))
                     await _otel_logger_to_use.async_service_success_hook(
                         payload=payload,
-                        parent_otel_span=parent_otel_span,
                         start_time=start_time,
                         end_time=end_time,
                         event_metadata=event_metadata,
@@ -211,7 +204,7 @@ class ServiceLogging(CustomLogger):
         from litellm.integrations.datadog.datadog import DataDogLogger
 
         if not hasattr(self, "dd_logger"):
-            self.dd_logger: DataDogLogger = DataDogLogger()
+            self.dd_logger = DataDogLogger()
 
         return
 
@@ -223,8 +216,11 @@ class ServiceLogging(CustomLogger):
         from litellm.proxy.proxy_server import open_telemetry_logger
 
         if not hasattr(self, "otel_logger"):
-            if open_telemetry_logger is not None and isinstance(open_telemetry_logger, OpenTelemetry):
-                self.otel_logger: OpenTelemetry = open_telemetry_logger
+            if open_telemetry_logger is not None and (
+                hasattr(open_telemetry_logger, "__class__")
+                and open_telemetry_logger.__class__.__name__ == "OpenTelemetry"
+            ):
+                self.otel_logger = open_telemetry_logger
             else:
                 verbose_logger.warning(
                     "ServiceLogger: open_telemetry_logger is None or not an instance of OpenTelemetry"
@@ -237,7 +233,6 @@ class ServiceLogging(CustomLogger):
         duration: float,
         error: Union[str, Exception],
         call_type: str,
-        parent_otel_span: Optional[Span] = None,
         start_time: Optional[Union[datetime, float]] = None,
         end_time: Optional[Union[float, datetime]] = None,
         event_metadata: Optional[dict] = None,
@@ -267,12 +262,13 @@ class ServiceLogging(CustomLogger):
         # the same logger can be referenced twice in ``service_callback``.
         emitted_otel_logger_ids: set = set()
         for callback in litellm.service_callback:
-            if callback == "datadog" or isinstance(callback, DataDogLogger):
+            if callback == "datadog" or (
+                hasattr(callback, "__class__") and callback.__class__.__name__ == "DataDogLogger"
+            ):
                 await self.init_datadog_logger_if_none()
                 await self.dd_logger.async_service_failure_hook(
                     payload=payload,
                     error=error_message,
-                    parent_otel_span=parent_otel_span,
                     start_time=start_time,
                     end_time=end_time,
                     event_metadata=event_metadata,
@@ -290,7 +286,6 @@ class ServiceLogging(CustomLogger):
                     await _otel_logger_to_use.async_service_failure_hook(
                         payload=payload,
                         error=error,
-                        parent_otel_span=parent_otel_span,
                         start_time=start_time,
                         end_time=end_time,
                         event_metadata=event_metadata,

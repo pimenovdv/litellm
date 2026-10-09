@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
     from litellm.types.utils import ModelResponseStream
 
-    Span = Union[_Span, Any]
+    Span = Any
 else:
     Span = Any
 
@@ -262,16 +262,16 @@ def _get_parent_otel_span_from_kwargs(
             return None
         litellm_params = kwargs.get("litellm_params")
         _metadata = kwargs.get("metadata") or {}
-        if "litellm_parent_otel_span" in _metadata:
-            return _metadata["litellm_parent_otel_span"]
+        if "litellm_parent_span" in _metadata:
+            return _metadata["litellm_parent_span"]
         elif (
             litellm_params is not None
             and litellm_params.get("metadata") is not None
-            and "litellm_parent_otel_span" in litellm_params.get("metadata", {})
+            and "litellm_parent_span" in litellm_params.get("metadata", {})
         ):
-            return litellm_params["metadata"]["litellm_parent_otel_span"]
-        elif "litellm_parent_otel_span" in kwargs:
-            return kwargs["litellm_parent_otel_span"]
+            return litellm_params["metadata"]["litellm_parent_span"]
+        elif "litellm_parent_span" in kwargs:
+            return kwargs["litellm_parent_span"]
         return None
     except Exception as e:
         verbose_logger.exception("Error in _get_parent_otel_span_from_kwargs: " + str(e))
@@ -356,17 +356,17 @@ def safe_deep_copy(data):
     if litellm.safe_memory_mode is True:
         return data
 
-    litellm_parent_otel_span: Optional[Any] = None
-    # Step 1: Remove the litellm_parent_otel_span
-    litellm_parent_otel_span = None
+    litellm_parent_span: Optional[Any] = None
+    # Step 1: Remove the litellm_parent_span
+    litellm_parent_span = None
     if isinstance(data, dict):
-        # remove litellm_parent_otel_span since this is not picklable
-        if "metadata" in data and "litellm_parent_otel_span" in data["metadata"]:
-            litellm_parent_otel_span = data["metadata"].pop("litellm_parent_otel_span")
-            data["metadata"]["litellm_parent_otel_span"] = "placeholder"
-        if "litellm_metadata" in data and "litellm_parent_otel_span" in data["litellm_metadata"]:
-            litellm_parent_otel_span = data["litellm_metadata"].pop("litellm_parent_otel_span")
-            data["litellm_metadata"]["litellm_parent_otel_span"] = "placeholder"
+        # remove litellm_parent_span since this is not picklable
+        if "metadata" in data and "litellm_parent_span" in data["metadata"]:
+            litellm_parent_span = data["metadata"].pop("litellm_parent_span")
+            data["metadata"]["litellm_parent_span"] = "placeholder"
+        if "litellm_metadata" in data and "litellm_parent_span" in data["litellm_metadata"]:
+            litellm_parent_span = data["litellm_metadata"].pop("litellm_parent_span")
+            data["litellm_metadata"]["litellm_parent_span"] = "placeholder"
 
     # Step 2: Per-key deepcopy with fallback
     if isinstance(data, dict):
@@ -382,12 +382,12 @@ def safe_deep_copy(data):
         except Exception:
             new_data = data
 
-    # Step 3: re-add the litellm_parent_otel_span after doing a deep copy
-    if isinstance(data, dict) and litellm_parent_otel_span is not None:
-        if "metadata" in data and "litellm_parent_otel_span" in data["metadata"]:
-            data["metadata"]["litellm_parent_otel_span"] = litellm_parent_otel_span
-        if "litellm_metadata" in data and "litellm_parent_otel_span" in data["litellm_metadata"]:
-            data["litellm_metadata"]["litellm_parent_otel_span"] = litellm_parent_otel_span
+    # Step 3: re-add the litellm_parent_span after doing a deep copy
+    if isinstance(data, dict) and litellm_parent_span is not None:
+        if "metadata" in data and "litellm_parent_span" in data["metadata"]:
+            data["metadata"]["litellm_parent_span"] = litellm_parent_span
+        if "litellm_metadata" in data and "litellm_parent_span" in data["litellm_metadata"]:
+            data["litellm_metadata"]["litellm_parent_span"] = litellm_parent_span
     return new_data
 
 

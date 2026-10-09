@@ -23,7 +23,7 @@ if TYPE_CHECKING:
     )
 
     LiteLLMModelResponse = _ModelResponse
-    Span = Union[_Span, Any]
+    Span = Any
 else:
     LiteLLMModelResponse = Any
     LiteLLMLoggingObject = Any
@@ -154,32 +154,8 @@ def _get_service_logger():
     return _service_logger
 
 
-def _get_parent_otel_span_from_logging_obj(
-    logging_obj: Optional[LiteLLMLoggingObject] = None,
-) -> Optional[Span]:
-    """
-    Extract the parent OTEL span from the logging object using existing helper.
-
-    Args:
-        logging_obj: The LiteLLM logging object containing model call details
-
-    Returns:
-        The parent OTEL span if found, None otherwise
-    """
-    try:
-        if logging_obj is None or not hasattr(logging_obj, "model_call_details"):
-            return None
-
-        # Reuse existing function by passing model_call_details as kwargs
-        from litellm.litellm_core_utils.core_helpers import (
-            _get_parent_otel_span_from_kwargs,
-        )
-
-        return _get_parent_otel_span_from_kwargs(logging_obj.model_call_details)
-
-    except Exception as e:
-        verbose_logger.exception(f"Error in _get_parent_otel_span_from_logging_obj: {str(e)}")
-        return None
+def _get_parent_otel_span_from_logging_obj(logging_obj):
+    return None
 
 
 def convert_litellm_response_object_to_str(
@@ -282,9 +258,6 @@ def track_llm_api_timing():
             start_time_float = time.time()
             logging_obj = kwargs.get("logging_obj", None)
 
-            # Extract parent OTEL span from logging object
-            parent_otel_span = _get_parent_otel_span_from_logging_obj(logging_obj)
-
             try:
                 result = await func(*args, **kwargs)
                 return result
@@ -317,7 +290,6 @@ def track_llm_api_timing():
                             call_type=call_type,
                             start_time=start_time_float,
                             end_time=end_time_float,
-                            parent_otel_span=parent_otel_span,
                         )
                     )
                 except Exception as e:
@@ -328,9 +300,6 @@ def track_llm_api_timing():
             start_time = datetime.now()
             start_time_float = time.time()
             logging_obj = kwargs.get("logging_obj", None)
-
-            # Extract parent OTEL span from logging object
-            parent_otel_span = _get_parent_otel_span_from_logging_obj(logging_obj)
 
             try:
                 result = func(*args, **kwargs)
@@ -363,7 +332,6 @@ def track_llm_api_timing():
                         call_type=call_type,
                         start_time=start_time_float,
                         end_time=end_time_float,
-                        parent_otel_span=parent_otel_span,
                     )
                 except Exception as e:
                     verbose_logger.debug(f"Error in service logging: {str(e)}")
