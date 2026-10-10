@@ -7,6 +7,8 @@ Guides users through selecting LLM providers, entering API keys,
 and generating a proxy config file — mirroring the Claude Code onboarding UX.
 """
 
+from __future__ import annotations
+
 import importlib.metadata
 import os
 import re
@@ -14,7 +16,6 @@ import secrets
 import sys
 import sysconfig
 from pathlib import Path
-from typing import Dict, List, Optional, Set
 
 # termios / tty are Unix-only; fall back gracefully on Windows
 try:
@@ -39,7 +40,7 @@ from litellm.utils import check_valid_key
 # `models`       — default models written into the generated config
 # ---------------------------------------------------------------------------
 
-PROVIDERS: List[Dict] = [
+PROVIDERS: list[dict] = [
     {
         "id": "openai",
         "name": "OpenAI",
@@ -134,34 +135,42 @@ _MOVE_UP = "\033[{}A"
 
 
 def _supports_color() -> bool:
+    """Check if the current terminal supports color output."""
     return sys.stdout.isatty() and os.environ.get("NO_COLOR") is None
 
 
 def _c(code: str, text: str) -> str:
+    """Wrap a text string in the specified ANSI color code."""
     return f"{code}{text}{_RESET}" if _supports_color() else text
 
 
 def orange(t: str) -> str:
+    """Style the text in orange."""
     return _c(_ORANGE, t)
 
 
 def bold(t: str) -> str:
+    """Style the text in bold."""
     return _c(_BOLD, t)
 
 
 def green(t: str) -> str:
+    """Style the text in green."""
     return _c(_GREEN, t)
 
 
 def blue(t: str) -> str:
+    """Style the text in blue."""
     return _c(_BLUE, t)
 
 
 def grey(t: str) -> str:
+    """Style the text in grey."""
     return _c(_GREY, t)
 
 
 def dim(t: str) -> str:
+    """Style the text with dim formatting."""
     return _c(_DIM, t)
 
 
@@ -221,6 +230,7 @@ class SetupWizard:
 
     @staticmethod
     def run() -> None:
+        """Start the setup wizard execution."""
         try:
             SetupWizard._wizard()
         except (KeyboardInterrupt, EOFError):
@@ -230,6 +240,7 @@ class SetupWizard:
 
     @staticmethod
     def _wizard() -> None:
+        """Execute the main interactive setup wizard flow."""
         SetupWizard._print_welcome()
         print(f"  {bold('Lets get started.')}")
         print()
@@ -253,6 +264,7 @@ class SetupWizard:
 
     @staticmethod
     def _print_welcome() -> None:
+        """Display the welcome message and instructions."""
         try:
             version = importlib.metadata.version("litellm")
         except Exception:
@@ -267,7 +279,7 @@ class SetupWizard:
     # ── provider selector ───────────────────────────────────────────────────
 
     @staticmethod
-    def _select_providers() -> List[Dict]:
+    def _select_providers() -> list[dict]:
         """Arrow-key multi-select. Falls back to number input if /dev/tty unavailable."""
         if not _HAS_RAW_TERMINAL:
             return SetupWizard._select_fallback()
@@ -297,7 +309,7 @@ class SetupWizard:
                 termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
     @staticmethod
-    def _render_selector(cursor: int, selected: Set[int], first_render: bool) -> int:
+    def _render_selector(cursor: int, selected: set[int], first_render: bool) -> int:
         """Draw or redraw the provider list. Returns the number of lines printed."""
         lines = [
             f"\n  {bold('Add your first model')}\n",
@@ -319,7 +331,8 @@ class SetupWizard:
         return content.count("\n")
 
     @staticmethod
-    def _select_interactive() -> List[Dict]:
+    def _select_interactive() -> list[dict]:
+        """Display an interactive prompt for selecting providers."""
         cursor = 0
         selected: set[int] = set()
 
@@ -356,7 +369,7 @@ class SetupWizard:
         return [PROVIDERS[i] for i in sorted(selected)]
 
     @staticmethod
-    def _select_fallback() -> List[Dict]:
+    def _select_fallback() -> list[dict]:
         """Number-based fallback when raw terminal input is unavailable."""
         print()
         print(f"  {bold('Add your first model')}")
@@ -384,8 +397,9 @@ class SetupWizard:
     # ── key collection ───────────────────────────────────────────────────────
 
     @staticmethod
-    def _collect_keys(providers: List[Dict]) -> Dict[str, str]:
-        env_vars: Dict[str, str] = {}
+    def _collect_keys(providers: list[dict]) -> dict[str, str]:
+        """Prompt the user for API keys for the selected providers."""
+        env_vars: dict[str, str] = {}
         print()
         print(_divider())
         print()
@@ -422,7 +436,7 @@ class SetupWizard:
         return env_vars
 
     @staticmethod
-    def _prompt_key(provider: Dict) -> str:
+    def _prompt_key(provider: dict) -> str:
         """Prompt for a provider's API key, with skip option. Returns the key or ''."""
         hint = grey(provider.get("key_hint", ""))
         while True:
@@ -434,12 +448,12 @@ class SetupWizard:
                 return ""
 
     @staticmethod
-    def _validate_and_report(provider: Dict, api_key: str) -> str:
+    def _validate_and_report(provider: dict, api_key: str) -> str:
         """
         Validate credentials using litellm.utils.check_valid_key and print result.
         Offers a re-entry loop on failure. Returns the final (possibly re-entered) key.
         """
-        test_model: Optional[str] = provider.get("test_model")
+        test_model: str | None = provider.get("test_model")
         if not test_model:
             return api_key  # Azure / Bedrock / Ollama — skip validation
 
@@ -466,7 +480,8 @@ class SetupWizard:
     # ── proxy settings ───────────────────────────────────────────────────────
 
     @staticmethod
-    def _proxy_settings() -> "tuple[int, str]":
+    def _proxy_settings() -> tuple[int, str]:
+        """Prompt the user to configure proxy settings (port and master key)."""
         print()
         print(_divider())
         print()
@@ -489,10 +504,11 @@ class SetupWizard:
 
     @staticmethod
     def _build_config(
-        providers: List[Dict],
-        env_vars: Dict[str, str],
+        providers: list[dict],
+        env_vars: dict[str, str],
         master_key: str,
     ) -> str:
+        """Generate the proxy configuration YAML based on the user's inputs."""
         env_copy = dict(env_vars)  # work on a copy — do not mutate caller's dict
         lines = ["model_list:"]
         for p in providers:
@@ -549,6 +565,7 @@ class SetupWizard:
 
     @staticmethod
     def _print_success(config_path: Path, port: int, master_key: str) -> None:
+        """Print a success message indicating the configuration is saved."""
         print()
         print(_divider())
         print()
@@ -568,6 +585,7 @@ class SetupWizard:
 
     @staticmethod
     def _offer_start(config_path: Path, port: int, master_key: str) -> None:
+        """Prompt the user to optionally start the proxy immediately."""
         start = _styled_input(f"  {blue('❯')} Start the proxy now? {grey('(Y/n)')}: ").lower()
         if start not in ("", "y", "yes"):
             print()
