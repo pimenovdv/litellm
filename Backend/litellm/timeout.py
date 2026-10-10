@@ -100,6 +100,7 @@ class _LoopWrapper(Thread):
         self.loop = asyncio.new_event_loop()
 
     def run(self) -> None:
+        """Run the event loop in the daemon thread."""
         try:
             self.loop.run_forever()
             self.loop.call_soon_threadsafe(self.loop.close)
@@ -111,6 +112,7 @@ class _LoopWrapper(Thread):
             asyncio.set_event_loop(None)
 
     def stop_loop(self):
+        """Stop the event loop and cancel all running tasks."""
         for task in asyncio.all_tasks(self.loop):
             task.cancel()
         self.loop.call_soon_threadsafe(self.loop.stop)
