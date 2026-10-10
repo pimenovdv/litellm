@@ -24,6 +24,11 @@ from litellm.utils import ModelResponse
 
 
 class BudgetManager:
+    """
+    Manager for handling user budgets and tracking API usage costs.
+    Supports both local file storage and hosted API database.
+    """
+
     def __init__(
         self,
         project_name: str,
@@ -31,6 +36,15 @@ class BudgetManager:
         api_base: Optional[str] = None,
         headers: Optional[dict] = None,
     ):
+        """
+        Initialize the BudgetManager.
+
+        Args:
+            project_name (str): Name of the project.
+            client_type (str, optional): Type of client storage ("local" or "hosted"). Defaults to "local".
+            api_base (str | None, optional): Base URL for hosted API. Defaults to None.
+            headers (dict | None, optional): Headers for hosted API requests. Defaults to None.
+        """
         self.client_type = client_type
         self.project_name = project_name
         self.api_base = api_base or "https://api.litellm.ai"
@@ -39,6 +53,12 @@ class BudgetManager:
         self.load_data()
 
     def print_verbose(self, print_statement):
+        """
+        Print verbose statements if verbose mode is enabled.
+
+        Args:
+            print_statement (str): The statement to print.
+        """
         try:
             if litellm.set_verbose:
                 import logging
@@ -48,6 +68,9 @@ class BudgetManager:
             pass
 
     def load_data(self):
+        """
+        Load user budget data from local storage or hosted API.
+        """
         if self.client_type == "local":
             # Check if user dict file exists
             if os.path.isfile("user_cost.json"):
@@ -76,6 +99,18 @@ class BudgetManager:
         duration: Optional[Literal["daily", "weekly", "monthly", "yearly"]] = None,
         created_at: float = time.time(),
     ):
+        """
+        Create a new budget for a user.
+
+        Args:
+            total_budget (float): Total budget amount.
+            user (str): User identifier.
+            duration (Literal["daily", "weekly", "monthly", "yearly"] | None, optional): Duration of the budget. Defaults to None.
+            created_at (float, optional): Creation timestamp. Defaults to current time.
+
+        Returns:
+            dict: Updated user budget data.
+        """
         self.user_dict[user] = {"total_budget": total_budget}
         if duration is None:
             return self.user_dict[user]
@@ -100,6 +135,17 @@ class BudgetManager:
         return self.user_dict[user]
 
     def projected_cost(self, model: str, messages: list, user: str):
+        """
+        Calculate the projected cost of a request based on model and messages.
+
+        Args:
+            model (str): Name of the model to be used.
+            messages (list): List of message dictionaries.
+            user (str): User identifier.
+
+        Returns:
+            float: The projected total cost (current + prompt).
+        """
         text = "".join(message["content"] for message in messages)
         prompt_tokens = litellm.token_counter(model=model, text=text)
         prompt_cost, _ = litellm.cost_per_token(model=model, prompt_tokens=prompt_tokens, completion_tokens=0)
@@ -108,6 +154,15 @@ class BudgetManager:
         return projected_cost
 
     def get_total_budget(self, user: str):
+        """
+        Get the total budget allocated to a user.
+
+        Args:
+            user (str): User identifier.
+
+        Returns:
+            float: Total budget amount.
+        """
         return self.user_dict[user]["total_budget"]
 
     def update_cost(
@@ -118,6 +173,19 @@ class BudgetManager:
         input_text: Optional[str] = None,
         output_text: Optional[str] = None,
     ):
+        """
+        Update the current cost for a user based on a completed request.
+
+        Args:
+            user (str): User identifier.
+            completion_obj (ModelResponse | None, optional): Response object from completion. Defaults to None.
+            model (str | None, optional): Model used. Defaults to None.
+            input_text (str | None, optional): Input text. Defaults to None.
+            output_text (str | None, optional): Output text. Defaults to None.
+
+        Returns:
+            dict: Updated user cost record.
+        """
         if model and input_text and output_text:
             prompt_tokens = litellm.token_counter(model=model, messages=[{"role": "user", "content": input_text}])
             completion_tokens = litellm.token_counter(model=model, messages=[{"role": "user", "content": output_text}])
@@ -148,15 +216,48 @@ class BudgetManager:
         return {"user": self.user_dict[user]}
 
     def get_current_cost(self, user):
+        """
+        Get the current accumulated cost for a user.
+
+        Args:
+            user (str): User identifier.
+
+        Returns:
+            float: Current cost amount.
+        """
         return self.user_dict[user].get("current_cost", 0)
 
     def get_model_cost(self, user):
+        """
+        Get the cost breakdown per model for a user.
+
+        Args:
+            user (str): User identifier.
+
+        Returns:
+            dict: Dictionary of model names to costs.
+        """
         return self.user_dict[user].get("model_cost", 0)
 
     def is_valid_user(self, user: str) -> bool:
+        """
+        Check if a user has a budget record.
+
+        Args:
+            user (str): User identifier.
+
+        Returns:
+            bool: True if user exists, False otherwise.
+        """
         return user in self.user_dict
 
     def get_users(self):
+        """
+        Get a list of all recorded users.
+
+        Returns:
+            list: List of user identifiers.
+        """
         return list(self.user_dict.keys())
 
     def reset_cost(self, user):
@@ -177,6 +278,12 @@ class BudgetManager:
         return {"user": self.user_dict[user]}
 
     def reset_on_duration(self, user: str):
+        """
+        Reset the cost for a user if their budget duration has elapsed.
+
+        Args:
+            user (str): User identifier.
+        """
         # Get current and creation time
         last_updated_at = self.user_dict[user]["last_updated_at"]
         current_time = time.time()
@@ -192,15 +299,27 @@ class BudgetManager:
             self._save_data_thread()  # Save the data
 
     def update_budget_all_users(self):
+        """
+        Iterate through all users and reset their costs if their durations have elapsed.
+        """
         for user in self.get_users():
             if "duration" in self.user_dict[user]:
                 self.reset_on_duration(user)
 
     def _save_data_thread(self):
+        """
+        Save budget data in a separate background thread.
+        """
         thread = threading.Thread(target=self.save_data)  # [Non-Blocking]: saves data without blocking execution
         thread.start()
 
     def save_data(self):
+        """
+        Save budget data to local storage or hosted API.
+
+        Returns:
+            dict: Status of the save operation.
+        """
         if self.client_type == "local":
             import json
 
