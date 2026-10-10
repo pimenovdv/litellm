@@ -4,7 +4,7 @@
 - [x] Отвязать код от `opentelemetry` в базовых файлах (router.py, _service_logger.py и core utils).
 - [x] Отвязать код от `opentelemetry` в кэшировании (caching/*).
 - [x] Отвязать код от `opentelemetry` в proxy-слое (proxy/*).
-- [ ] Очистить списки зависимостей `Backend/pyproject.toml` от `ddtrace`, `prometheus-client`, `opentelemetry-*`.
+- [x] Очистить списки зависимостей `Backend/pyproject.toml` от `ddtrace`, `prometheus-client`, `opentelemetry-*`.
 - [x] Очистить списки зависимостей `Backend/pyproject.toml` от неиспользуемых библиотек (sentry, datadog, guardrails, telemetry, prometheus, posthog). (Заменено на атомарные шаги выше)
 - [ ] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).
 - [ ] Очистить списки зависимостей `frontend/litellm-dashboard/package.json` от неиспользуемых библиотек (sentry, datadog, aws, azure и т.д.).
