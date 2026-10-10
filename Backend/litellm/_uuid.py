@@ -1,7 +1,8 @@
 """
 Internal unified UUID helper.
 
-Always uses fastuuid for performance.
+This module provides a unified interface for generating UUIDs.
+It relies on 'fastuuid' for improved performance compared to the standard library.
 """
 
 import fastuuid as _uuid  # type: ignore
@@ -11,5 +12,10 @@ uuid = _uuid
 
 
 def uuid4():
-    """Return a UUID4 using the selected backend."""
+    """
+    Generate and return a random UUID4 string.
+
+    Returns:
+        str: A string representation of a newly generated UUID4.
+    """
     return uuid.uuid4()
