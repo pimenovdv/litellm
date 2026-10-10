@@ -1,11 +1,5 @@
-- [x] Отвязать код от `ddtrace` в `Backend/litellm/proxy/proxy_server.py`.
-- [x] Отвязать код от `prometheus_client` в 1-й группе файлов (integrations/prometheus_services.py, proxy/prometheus_cleanup.py).
-- [x] Отвязать код от `prometheus_client` во 2-й группе файлов (proxy/middleware/in_flight_requests_middleware.py (проверен/чист), proxy/proxy_cli.py и др).
-- [x] Отвязать код от `opentelemetry` в базовых файлах (router.py, _service_logger.py и core utils).
-- [x] Отвязать код от `opentelemetry` в кэшировании (caching/*).
-- [x] Отвязать код от `opentelemetry` в proxy-слое (proxy/*).
-- [x] Очистить списки зависимостей `Backend/pyproject.toml` от `ddtrace`, `prometheus-client`, `opentelemetry-*`.
-- [x] Очистить списки зависимостей `Backend/pyproject.toml` от неиспользуемых библиотек (sentry, datadog, guardrails, telemetry, prometheus, posthog). (Заменено на атомарные шаги выше)
-- [x] Очистить списки зависимостей `Backend/pyproject.toml` от других неиспользуемых библиотек (boto3, azure, vertex, mcp и прочие).
-- [x] Очистить списки зависимостей `frontend/litellm-dashboard/package.json` от неиспользуемых библиотек (sentry, datadog, aws, azure и т.д.). (checked/clean)
-- [x] Очистить `uv.lock` и другие неиспользуемые списки зависимостей.
+# План добавления документации (Часть 1)
+- [ ] Добавить docstrings в Backend/litellm/_version.py, Backend/litellm/_uuid.py и Backend/litellm/check.py.
+- [ ] Добавить docstrings в Backend/litellm/timeout.py и Backend/litellm/scheduler.py.
+- [ ] Добавить docstrings в Backend/litellm/_internal_context.py и Backend/litellm/anthropic_beta_headers_manager.py.
+- [ ] Добавить docstrings в Backend/litellm/budget_manager.py и Backend/litellm/setup_wizard.py.
