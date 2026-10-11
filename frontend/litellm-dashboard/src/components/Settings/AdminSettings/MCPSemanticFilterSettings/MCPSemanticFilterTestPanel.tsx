@@ -7,6 +7,21 @@ import { Textarea } from "@/components/ui/textarea";
 import ModelSelector from "@/components/common_components/ModelSelector";
 import { TestResult } from "./semanticFilterTestUtils";
 
+/**
+ * Props for the MCPSemanticFilterTestPanel component.
+ * @interface MCPSemanticFilterTestPanelProps
+ * @property {string | null} accessToken - The access token for authentication.
+ * @property {string} testQuery - The current test query string entered by the user.
+ * @property {(value: string) => void} setTestQuery - Callback function to update the test query.
+ * @property {string} testModel - The currently selected test model.
+ * @property {(value: string) => void} setTestModel - Callback function to update the selected test model.
+ * @property {boolean} isTesting - Indicates whether a test is currently in progress.
+ * @property {() => void} onTest - Callback function triggered when the user initiates a test.
+ * @property {boolean} filterEnabled - Indicates whether the semantic filter is enabled.
+ * @property {TestResult | null} testResult - The result of the semantic filter test, if available.
+ * @property {string | null} testError - Any error message encountered during testing, if applicable.
+ * @property {string} curlCommand - The generated curl command for testing the filter via API.
+ */
 interface MCPSemanticFilterTestPanelProps {
   accessToken: string | null;
   testQuery: string;
@@ -21,6 +36,14 @@ interface MCPSemanticFilterTestPanelProps {
   curlCommand: string;
 }
 
+/**
+ * MCPSemanticFilterTestPanel is a component that provides an interactive panel
+ * for users to test their MCP (Model Context Protocol) semantic filter configuration.
+ * It allows entering a query, selecting a model, and viewing the filtered tools result or API usage via curl.
+ *
+ * @param {MCPSemanticFilterTestPanelProps} props - The component props.
+ * @returns {JSX.Element} The rendered testing panel component.
+ */
 export default function MCPSemanticFilterTestPanel({
   accessToken,
   testQuery,
