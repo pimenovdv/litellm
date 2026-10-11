@@ -1,8 +1,12 @@
 import { SSOSettingsValues } from "@/app/(dashboard)/hooks/sso/useSSOSettings";
 
 /**
- * Processes SSO settings form values and transforms them into the payload format expected by the API
- * Handles role mappings transformation and field extraction
+ * Processes SSO settings form values and transforms them into the payload format expected by the API.
+ * Handles role mappings transformation, field extraction, and conditional formatting based on the provider.
+ *
+ * @param {Record<string, any>} formValues - The raw form values from the SSO settings form.
+ * @returns {Record<string, any>} The formatted payload ready to be sent to the API.
+
  */
 export const processSSOSettingsPayload = (formValues: Record<string, any>): Record<string, any> => {
   const {
@@ -71,7 +75,12 @@ export const processSSOSettingsPayload = (formValues: Record<string, any>): Reco
   return payload;
 };
 
-// Determine the SSO provider based on the configuration
+/**
+ * Determines the primary SSO provider string identifier based on the configured values.
+ *
+ * @param {SSOSettingsValues} values - The current SSO settings configuration object.
+ * @returns {string | null} The identifier of the detected SSO provider (e.g., "google", "microsoft", "okta", "generic", "saml"), or null if none is detected.
+ */
 export const detectSSOProvider = (values: SSOSettingsValues): string | null => {
   if (values.google_client_id) return "google";
   if (values.microsoft_client_id) return "microsoft";
