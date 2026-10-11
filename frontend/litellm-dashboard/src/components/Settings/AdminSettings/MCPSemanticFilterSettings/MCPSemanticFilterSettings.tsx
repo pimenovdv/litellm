@@ -25,10 +25,23 @@ import { fetchAvailableModels, ModelGroup } from "@/components/llm_calls/fetch_m
 import MCPSemanticFilterTestPanel from "./MCPSemanticFilterTestPanel";
 import { getCurlCommand, runSemanticFilterTest, TestResult } from "./semanticFilterTestUtils";
 
+/**
+ * Props for the MCPSemanticFilterSettings component.
+ * @interface MCPSemanticFilterSettingsProps
+ * @property {string | null} accessToken - The access token for API authentication.
+ */
 interface MCPSemanticFilterSettingsProps {
   accessToken: string | null;
 }
 
+/**
+ * A settings component to configure semantic filtering for MCP tools.
+ * Allows enabling/disabling the filter, configuring the embedding model,
+ * and setting similarity thresholds.
+ *
+ * @param {MCPSemanticFilterSettingsProps} props - The component props.
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFilterSettingsProps) {
   const { data, isLoading, isError, error } = useMCPSemanticFilterSettings();
   const {
