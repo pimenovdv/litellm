@@ -18,15 +18,28 @@ The project consists of two main components separated for independent scaling:
 
 ## Running Locally
 
+### Prerequisites
+Ensure you have Docker and Docker Compose installed. You should also create a `.env` file from the provided `.env.example` file.
+
+### Deployment
 You can launch the entire stack using `docker-compose`:
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
-This will spin up:
--   `litellm`: The Python API Gateway (Port: 4000)
+This will build the images and spin up the following services (as defined in `docker-compose.yml`):
+-   `backend`: The Python API Gateway (Port: 4000)
 -   `frontend`: The Next.js Admin Dashboard (Port: 3000)
 -   `db`: PostgreSQL database for accounts and keys
 -   `redis`: Redis cache for rate limiting and exact matching
 
+To view the logs:
+```bash
+docker-compose logs -f
+```
+
+To stop the stack:
+```bash
+docker-compose down
+```
