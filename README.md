@@ -43,3 +43,11 @@ To stop the stack:
 ```bash
 docker-compose down
 ```
+
+## Adding New Code
+
+To contribute new features or fixes, please follow these guidelines:
+1. **Backend**: Add new Python code to the `Backend/` directory. Ensure it aligns with the strict offline architecture (no external SaaS telemetry or dependencies). Follow the existing type hints and PEP-8 conventions. Run targeted unit tests when modifying backend logic.
+2. **Frontend**: Add new React/Next.js code to the `frontend/` directory. Ensure the UI only communicates with the backend via REST API. Follow existing component structures and JSDoc conventions.
+
+All changes must include relevant unit tests, pass linters, and respect the project's offline-first constraints.
