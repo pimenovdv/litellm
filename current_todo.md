@@ -1,5 +1,4 @@
-# План добавления документации (Часть 2)
-- [x] Добавить JSDoc в frontend/litellm-dashboard/src/components/Settings/AdminSettings/MCPSemanticFilterSettings/semanticFilterTestUtils.ts
-- [x] Добавить JSDoc в frontend/litellm-dashboard/src/components/Settings/AdminSettings/MCPSemanticFilterSettings/MCPSemanticFilterSettings.tsx
-- [x] Добавить JSDoc в frontend/litellm-dashboard/src/components/Settings/AdminSettings/MCPSemanticFilterSettings/MCPSemanticFilterTestPanel.tsx
-- [x] Добавить JSDoc в frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/constants.ts и utils.ts
+# План обновления README.md
+- [ ] Обновить секцию с описанием новой архитектуры в README.md
+- [ ] Обновить инструкции по развертыванию и запуску локально в README.md
+- [ ] Добавить инструкции по добавлению нового кода в README.md
