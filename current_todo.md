@@ -1,4 +1,4 @@
-- [ ] Remove CI/CD workflows related to UI linting, tests and types from `.github/workflows/` (e.g. `test-litellm-ui-build.yml`, `test-litellm-ui-lint.yml`, `test-litellm-ui-unit.yml`, `check-ui-api-types.yml`).
+- [x] Remove CI/CD workflows related to UI linting, tests and types from `.github/workflows/` (e.g. `test-litellm-ui-build.yml`, `test-litellm-ui-lint.yml`, `test-litellm-ui-unit.yml`, `check-ui-api-types.yml`).
 - [ ] Remove CI/CD workflows related to external dependencies, legacy routing or integrations from `.github/workflows/` (e.g. `test-unit-llm-providers.yml`, `test-unit-integrations.yml`, `test-unit-enterprise-routing.yml`, `auto_update_price_and_context_window.yml`).
 - [ ] Remove legacy issue triaging, load anomaly, or model map checking workflows from `.github/workflows/` (e.g. `triage_issue_with_llm.yml`, `triage_reconsider.yml`, `triage_rollout_heads_up.yml`, `weekly_load_anomaly.yml`, `test-model-map.yaml`).
 - [ ] Remove stale, zizmor, osv-scan, or other minor/unneeded analysis actions from `.github/workflows/` (e.g. `stale.yml`, `zizmor.yml`, `osv-scan.yml`).
