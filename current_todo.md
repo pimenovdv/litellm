@@ -1,3 +1,3 @@
-- [ ] Add pytest-cov argument to `Backend/pytest.ini` (`--cov=Backend --cov-report=term-missing`).
+- [x] Add pytest-cov argument to `Backend/pytest.ini` (`--cov=Backend --cov-report=term-missing`).
 - [ ] Add vitest coverage script to `frontend/litellm-dashboard/package.json` if missing or update it.
 - [ ] Add coverage configuration to `frontend/litellm-dashboard/vite.config.ts` or `vitest.config.ts`.
