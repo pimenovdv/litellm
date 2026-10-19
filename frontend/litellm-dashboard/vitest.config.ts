@@ -27,6 +27,7 @@ const config: ViteUserConfig = {
       reporter: ["text", "lcov"],
       include: ["src/**/*.{ts,tsx}"],
       exclude: [
+        // coverage configuration
         "**/*.d.ts",
         "**/*.test.*",
         "**/*.spec.*",
