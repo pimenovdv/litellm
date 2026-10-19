@@ -1,3 +1,5 @@
-- [x] Add pytest-cov argument to `Backend/pytest.ini` (`--cov=Backend --cov-report=term-missing`).
-- [x] Add vitest coverage script to `frontend/litellm-dashboard/package.json` if missing or update it. (проверен/чист)
-- [x] Add coverage configuration to `frontend/litellm-dashboard/vite.config.ts` or `vitest.config.ts`.
+- [ ] Remove CI/CD workflows related to UI linting, tests and types from `.github/workflows/` (e.g. `test-litellm-ui-build.yml`, `test-litellm-ui-lint.yml`, `test-litellm-ui-unit.yml`, `check-ui-api-types.yml`).
+- [ ] Remove CI/CD workflows related to external dependencies, legacy routing or integrations from `.github/workflows/` (e.g. `test-unit-llm-providers.yml`, `test-unit-integrations.yml`, `test-unit-enterprise-routing.yml`, `auto_update_price_and_context_window.yml`).
+- [ ] Remove legacy issue triaging, load anomaly, or model map checking workflows from `.github/workflows/` (e.g. `triage_issue_with_llm.yml`, `triage_reconsider.yml`, `triage_rollout_heads_up.yml`, `weekly_load_anomaly.yml`, `test-model-map.yaml`).
+- [ ] Remove stale, zizmor, osv-scan, or other minor/unneeded analysis actions from `.github/workflows/` (e.g. `stale.yml`, `zizmor.yml`, `osv-scan.yml`).
+- [ ] Remove terraform, helm, or rust specific workflows from `.github/workflows/` (e.g. `test-terraform-provider.yml`, `helm_unit_test.yml`, `test-rust.yml`).
