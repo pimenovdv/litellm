@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     # Whole-folder mutation against ~15 files / ~7.5k LOC can take hours.
     # 350 minutes is just under the GitHub-hosted job cap of 360 minutes.
-    timeout-minutes: 350
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
