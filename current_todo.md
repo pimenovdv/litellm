@@ -2,4 +2,4 @@
 - [x] Remove CI/CD workflows related to external dependencies, legacy routing or integrations from `.github/workflows/` (e.g. `test-unit-llm-providers.yml`, `test-unit-integrations.yml`, `test-unit-enterprise-routing.yml`, `auto_update_price_and_context_window.yml`).
 - [x] Remove legacy issue triaging, load anomaly, or model map checking workflows from `.github/workflows/` (e.g. `triage_issue_with_llm.yml`, `triage_reconsider.yml`, `triage_rollout_heads_up.yml`, `weekly_load_anomaly.yml`, `test-model-map.yaml`).
 - [x] Remove stale, zizmor, osv-scan, or other minor/unneeded analysis actions from `.github/workflows/` (e.g. `stale.yml`, `zizmor.yml`, `osv-scan.yml`).
-- [ ] Remove terraform, helm, or rust specific workflows from `.github/workflows/` (e.g. `test-terraform-provider.yml`, `helm_unit_test.yml`, `test-rust.yml`).
+- [x] Remove terraform, helm, or rust specific workflows from `.github/workflows/` (e.g. `test-terraform-provider.yml`, `helm_unit_test.yml`, `test-rust.yml`).
