@@ -334,3 +334,6 @@ pytest_add_cli_args = [
 [tool.coverage.run]
 source = ["litellm"]
 relative_files = true
+
+[tool.coverage.report]
+fail_under = 90
