@@ -1,3 +1,3 @@
-- [ ] Configure backend coverage threshold to 90% by modifying Backend/pyproject.toml (e.g., adding fail_under = 90 under [tool.coverage.report]).
+- [x] Configure backend coverage threshold to 90% by modifying Backend/pyproject.toml (e.g., adding fail_under = 90 under [tool.coverage.report]).
 - [ ] Configure frontend coverage threshold to 90% by modifying frontend/litellm-dashboard/vitest.config.ts (adding thresholds for 90%).
 - [ ] Update .github/workflows/_test-unit-base.yml to enforce coverage check failure by setting fail_ci_if_error: true in the codecov-action step.
