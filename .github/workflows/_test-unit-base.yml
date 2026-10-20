@@ -160,4 +160,4 @@ jobs:
           directory: coverage-reports
           root_dir: ${{ github.workspace }}
           flags: ${{ inputs.artifact-name }}
-          fail_ci_if_error: false
+          fail_ci_if_error: true
