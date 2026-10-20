@@ -1,3 +1,3 @@
-- [x] Configure backend coverage threshold to 90% by modifying Backend/pyproject.toml (e.g., adding fail_under = 90 under [tool.coverage.report]).
-- [x] Configure frontend coverage threshold to 90% by modifying frontend/litellm-dashboard/vitest.config.ts (adding thresholds for 90%).
-- [x] Update .github/workflows/_test-unit-base.yml to enforce coverage check failure by setting fail_ci_if_error: true in the codecov-action step.
+- [ ] Change `timeout-minutes` to 45 in `.github/workflows/mutation-test.yml`.
+- [ ] Change `timeout-minutes` to 45 in `.github/workflows/test-unit-proxy-endpoints.yml`.
+- [ ] Change `timeout-minutes` to 45 in `.github/workflows/codspeed.yml`.
