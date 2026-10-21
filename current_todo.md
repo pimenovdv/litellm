@@ -1,3 +1,3 @@
 - [x] Add caching for setup-python to `test-linting.yml` and `test-code-quality.yml` (e.g. `cache: 'pip'`).
-- [ ] Add caching for setup-python to `test-unit-proxy-legacy.yml` and `_test-unit-base.yml`.
+- [x] Add caching for setup-python to `test-unit-proxy-legacy.yml` and `_test-unit-base.yml`.
 - [ ] Add caching for `npm ci` in `frontend/Dockerfile` and `frontend/litellm-dashboard/Dockerfile`.
