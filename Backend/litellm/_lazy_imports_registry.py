@@ -24,6 +24,8 @@ UTILS_NAMES = (
     "get_optional_params",
     "get_response_string",
     "token_counter",
+    "get_secret",
+    "get_secret_str",
     "create_pretrained_tokenizer",
     "create_tokenizer",
     "supports_function_calling",
@@ -420,6 +422,15 @@ UTILS_MODULE_NAMES = (
     "ChatCompletionToolCallChunk",
     "ChatCompletionToolCallFunctionChunk",
     "LiteLLM_Params",
+    "get_model_cost_map",
+    "get_secret",
+    "BaseLLMModelInfo",
+    "type_to_response_format_param",
+    "BaseConfig",
+    "BaseTextCompletionConfig",
+    "BaseEvalsAPIConfig",
+    "BaseResponsesAPIConfig",
+    "BaseSkillsAPIConfig",
 )
 
 # Import maps for registry pattern - reduces repetition
@@ -428,6 +439,14 @@ _UTILS_IMPORT_MAP = {
     "get_optional_params": (".utils", "get_optional_params"),
     "get_response_string": (".utils", "get_response_string"),
     "token_counter": (".utils", "token_counter"),
+    "get_secret": (
+        "litellm.secret_managers.main",
+        "get_secret",
+    ),
+    "get_secret_str": (
+        "litellm.secret_managers.main",
+        "get_secret_str",
+    ),
     "create_pretrained_tokenizer": (".utils", "create_pretrained_tokenizer"),
     "create_tokenizer": (".utils", "create_tokenizer"),
     "supports_function_calling": (".utils", "supports_function_calling"),
@@ -1377,6 +1396,42 @@ _UTILS_MODULE_IMPORT_MAP = {
         "update_response_metadata",
     ),
     "executor": ("litellm.litellm_core_utils.thread_pool_executor", "executor"),
+    "get_secret": (
+        "litellm.secret_managers.main",
+        "get_secret",
+    ),
+    "BaseConfig": (
+        "litellm.llms.base_llm.chat.transformation",
+        "BaseConfig",
+    ),
+    "BaseTextCompletionConfig": (
+        "litellm.llms.base_llm.completion.transformation",
+        "BaseTextCompletionConfig",
+    ),
+    "BaseEvalsAPIConfig": (
+        "litellm.llms.base_llm.evals.transformation",
+        "BaseEvalsAPIConfig",
+    ),
+    "BaseResponsesAPIConfig": (
+        "litellm.llms.base_llm.responses.transformation",
+        "BaseResponsesAPIConfig",
+    ),
+    "BaseSkillsAPIConfig": (
+        "litellm.llms.base_llm.skills.transformation",
+        "BaseSkillsAPIConfig",
+    ),
+    "BaseLLMModelInfo": (
+        "litellm.llms.base_llm.base_utils",
+        "BaseLLMModelInfo",
+    ),
+    "type_to_response_format_param": (
+        "litellm.llms.base_llm.base_utils",
+        "type_to_response_format_param",
+    ),
+    "get_model_cost_map": (
+        "litellm.litellm_core_utils.get_model_cost_map",
+        "get_model_cost_map",
+    ),
     "BaseAnthropicMessagesConfig": (
         "litellm.llms.base_llm.anthropic_messages.transformation",
         "BaseAnthropicMessagesConfig",

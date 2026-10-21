@@ -40,8 +40,9 @@ from typing import (
     overload,
     Type,
 )
-from litellm.types.integrations.datadog import DatadogInitParams
-from litellm.types.integrations.newrelic import NewRelicInitParams
+if TYPE_CHECKING:
+    from litellm.types.integrations.datadog import DatadogInitParams
+    from litellm.types.integrations.newrelic import NewRelicInitParams
 from litellm._logging import (
     set_verbose,
     _turn_on_debug,
@@ -514,7 +515,6 @@ _key_management_system: Optional["KeyManagementSystem"] = None
 output_parse_pii: bool = False
 #############################################
 from litellm.litellm_core_utils.get_model_cost_map import get_model_cost_map
-
 model_cost = get_model_cost_map(url=model_cost_map_url)
 cost_discount_config: Dict[str, float] = {}  # Provider-specific cost discounts {"vertex_ai": 0.05} = 5% discount
 cost_margin_config: Dict[
@@ -1227,6 +1227,15 @@ _key_management_settings: KeyManagementSettings = KeyManagementSettings()
 
 # client must be imported immediately as it's used as a decorator at function definition time
 from .utils import client
-from litellm.secret_managers.main import get_secret, get_secret_str
+# get_secret is lazy-loaded via __getattr__
+# get_secret_str is lazy-loaded via __getattr__
 
 # Cleaned up RAG routes and endpoints
+
+
+def __getattr__(name: str) -> Any:
+    from litellm._lazy_imports import _get_lazy_import_registry
+    registry = _get_lazy_import_registry()
+    if name in registry:
+        return registry[name](name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

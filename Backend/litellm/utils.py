@@ -252,10 +252,11 @@ from typing import (
 )
 
 # These are lazy loaded via __getattr__
-from litellm.llms.base_llm.base_utils import (
-    BaseLLMModelInfo,
-    type_to_response_format_param,
-)
+if TYPE_CHECKING:
+    from litellm.llms.base_llm.base_utils import (
+        BaseLLMModelInfo,
+        type_to_response_format_param,
+    )
 
 if TYPE_CHECKING:
     # Heavy types that are only needed for type checking; avoid importing
@@ -386,13 +387,15 @@ if TYPE_CHECKING:
     )
     from litellm.types.router import LiteLLM_Params
 
-from litellm.secret_managers.main import get_secret
+if TYPE_CHECKING:
+    from litellm.secret_managers.main import get_secret
 
-from litellm.llms.base_llm.chat.transformation import BaseConfig
-from litellm.llms.base_llm.completion.transformation import BaseTextCompletionConfig
-from litellm.llms.base_llm.evals.transformation import BaseEvalsAPIConfig
-from litellm.llms.base_llm.responses.transformation import BaseResponsesAPIConfig
-from litellm.llms.base_llm.skills.transformation import BaseSkillsAPIConfig
+if TYPE_CHECKING:
+    from litellm.llms.base_llm.chat.transformation import BaseConfig
+    from litellm.llms.base_llm.completion.transformation import BaseTextCompletionConfig
+    from litellm.llms.base_llm.evals.transformation import BaseEvalsAPIConfig
+    from litellm.llms.base_llm.responses.transformation import BaseResponsesAPIConfig
+    from litellm.llms.base_llm.skills.transformation import BaseSkillsAPIConfig
 
 from ._logging import _is_debugging_on, verbose_logger
 from .caching.caching import (
