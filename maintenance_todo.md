@@ -2,7 +2,7 @@
 
 ## Performance Optimization
 - [x] Optimize import times in `Backend/litellm/__init__.py` and `Backend/litellm/utils.py` by deferring lazy imports.
-- [ ] Reduce redundant Prisma queries in proxy authentication middleware `Backend/litellm/proxy/auth/`.
+- [x] Reduce redundant Prisma queries in proxy authentication middleware `Backend/litellm/proxy/auth/`.
 
 ## Refactoring & Typing
 - [ ] Add rigorous generic type definitions in `Backend/litellm/types/` for all Pydantic models.
