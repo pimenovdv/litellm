@@ -1,3 +1,3 @@
 - [x] Change `timeout-minutes` to 45 in `.github/workflows/mutation-test.yml`.
-- [ ] Change `timeout-minutes` to 45 in `.github/workflows/test-unit-proxy-endpoints.yml`.
+- [x] Change `timeout-minutes` to 45 in `.github/workflows/test-unit-proxy-endpoints.yml`.
 - [ ] Change `timeout-minutes` to 45 in `.github/workflows/codspeed.yml`.

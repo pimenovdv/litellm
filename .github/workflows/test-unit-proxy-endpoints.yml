@@ -65,5 +65,5 @@ jobs:
       test-path: tests/test_litellm/proxy/proxy_server
       workers: 4
       reruns: 2
-      timeout-minutes: 60
+      timeout-minutes: 45
       artifact-name: proxy-server
