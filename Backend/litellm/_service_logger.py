@@ -1,9 +1,16 @@
 import asyncio
+import logging
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 import litellm
-from litellm._logging import verbose_logger
+from litellm._logging import verbose_logger, JsonFormatter
+
+service_logger = logging.getLogger("LiteLLM_ServiceLogger")
+service_logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setFormatter(JsonFormatter())
+service_logger.addHandler(handler)
 
 from .integrations.custom_logger import CustomLogger
 from .integrations.datadog.datadog import DataDogLogger
