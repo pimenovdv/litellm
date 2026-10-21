@@ -1561,31 +1561,6 @@ async def _user_api_key_auth_builder(
 
             return valid_token
 
-        if valid_token is not None and isinstance(valid_token, UserAPIKeyAuth) and valid_token.team_id is not None:
-            ## UPDATE TEAM VALUES BASED ON CACHED TEAM OBJECT - allows `/team/update` values to work for cached token
-            try:
-                team_obj: LiteLLM_TeamTableCachedObj = await get_team_object(
-                    team_id=valid_token.team_id,
-                    prisma_client=prisma_client,
-                    user_api_key_cache=user_api_key_cache,
-                    parent_otel_span=parent_otel_span,
-                    proxy_logging_obj=proxy_logging_obj,
-                    check_cache_only=True,
-                )
-
-                if (
-                    team_obj.last_refreshed_at is not None
-                    and valid_token.last_refreshed_at is not None
-                    and team_obj.last_refreshed_at > valid_token.last_refreshed_at
-                ):
-                    team_obj_dict = team_obj.__dict__
-
-                    for k, v in team_obj_dict.items():
-                        field_name = f"team_{k}"
-                        if field_name in valid_token.__fields__:
-                            setattr(valid_token, field_name, v)
-            except Exception as e:
-                verbose_logger.debug(e)  # moving from .warning to .debug as it spams logs when team missing from cache.
 
         try:
             is_master_key_valid = secrets.compare_digest(api_key, master_key)  # type: ignore
@@ -1724,35 +1699,6 @@ async def _user_api_key_auth_builder(
                 llm_model_list=llm_model_list,
                 llm_router=llm_router,
             )
-
-            # Check 2. If user_id for this token is in budget - done in common_checks()
-            if valid_token.user_id is not None:
-                try:
-                    with tracer.trace("litellm.proxy.auth.get_user_object"):
-                        user_obj = await get_user_object(
-                            user_id=valid_token.user_id,
-                            prisma_client=prisma_client,
-                            user_api_key_cache=user_api_key_cache,
-                            user_id_upsert=False,
-                            parent_otel_span=parent_otel_span,
-                            proxy_logging_obj=proxy_logging_obj,
-                        )
-                except Exception as e:
-                    verbose_logger.debug(
-                        "litellm.proxy.auth.user_api_key_auth.py::user_api_key_auth() - Unable to get user from db/cache. Setting user_obj to None. Exception received - {}".format(
-                            str(e)
-                        )
-                    )
-                    user_obj = None
-
-                if (
-                    user_obj is not None
-                    and isinstance(user_obj.metadata, dict)
-                    and user_obj.metadata.get("scim_active") is False
-                ):
-                    raise Exception(
-                        f"User={valid_token.user_id} has been deactivated via SCIM. Keys owned by this user cannot be used."
-                    )
 
             # Check 2a. Check if model has zero cost - if so, skip all budget checks
             model = _get_model_from_request_context(
@@ -1924,52 +1870,6 @@ async def _user_api_key_auth_builder(
                                 model=model_name,
                             )
 
-            # Check 6: Additional Common Checks across jwt + key auth
-            if valid_token.team_id is not None:
-                try:
-                    with tracer.trace("litellm.proxy.auth.get_team_object"):
-                        _team_obj = await get_team_object(
-                            team_id=valid_token.team_id,
-                            prisma_client=prisma_client,
-                            user_api_key_cache=user_api_key_cache,
-                            parent_otel_span=parent_otel_span,
-                            proxy_logging_obj=proxy_logging_obj,
-                        )
-                except HTTPException:
-                    _team_obj = LiteLLM_TeamTableCachedObj(
-                        team_id=valid_token.team_id,
-                        max_budget=valid_token.team_max_budget,
-                        soft_budget=valid_token.team_soft_budget,
-                        spend=valid_token.team_spend,
-                        tpm_limit=valid_token.team_tpm_limit,
-                        rpm_limit=valid_token.team_rpm_limit,
-                        blocked=valid_token.team_blocked,
-                        models=valid_token.team_models,
-                        metadata=valid_token.team_metadata,
-                        object_permission_id=valid_token.team_object_permission_id,
-                    )
-            else:
-                _team_obj = None
-
-            if _team_obj is not None:
-                valid_token.team_object_permission = _team_obj.object_permission
-                # Keep team_metadata in sync with the freshly fetched team so that
-                # guardrails (or any other metadata) added after the key was cached
-                # are picked up on subsequent requests without a cache eviction.
-                valid_token.team_metadata = _team_obj.metadata
-            else:
-                valid_token.team_object_permission = None
-
-            # Cache under the canonical "team_id:{id}" key so get_team_object and
-            # _update_team_cache serve this write from the L2 cache. The guard keeps a
-            # non-team (personal) key, whose team_id is None, from reaching the cache
-            # layer, which Redis rejects with a NoneType key error.
-            if valid_token.team_id is not None and _team_obj is not None:
-                await user_api_key_cache.async_set_cache(
-                    key=f"team_id:{valid_token.team_id}",
-                    value=_team_obj,
-                    model_type=LiteLLM_TeamTableCachedObj,
-                )
 
             # Fetch project object if key belongs to a project
             _project_obj = None
@@ -2316,7 +2216,32 @@ async def _run_centralized_common_checks(
     else:
         team_object = team_result
 
+    if team_object is not None:
+        user_api_key_auth_obj.team_object_permission = team_object.object_permission
+        user_api_key_auth_obj.team_metadata = team_object.metadata
+
+        if (
+            team_object.last_refreshed_at is not None
+            and user_api_key_auth_obj.last_refreshed_at is not None
+            and team_object.last_refreshed_at > user_api_key_auth_obj.last_refreshed_at
+        ):
+            team_obj_dict = team_object.__dict__
+
+            for k, v in team_obj_dict.items():
+                field_name = f"team_{k}"
+                if field_name in user_api_key_auth_obj.__fields__:
+                    setattr(user_api_key_auth_obj, field_name, v)
+
     user_object: Optional[LiteLLM_UserTable] = None if isinstance(user_result, BaseException) else user_result
+
+    if user_object is not None and isinstance(user_object.metadata, dict) and user_object.metadata.get("scim_active") is False:
+        from fastapi import status
+        raise ProxyException(
+            message=f"User={user_api_key_auth_obj.user_id} has been deactivated via SCIM. Keys owned by this user cannot be used.",
+            type=ProxyErrorTypes.auth_error,
+            code=status.HTTP_401_UNAUTHORIZED,
+            param="",
+        )
     project_object: Optional[LiteLLM_ProjectTableCachedObj] = (
         None if isinstance(project_result, BaseException) else project_result
     )
