@@ -1,7 +1,7 @@
 # Maintenance Tasks
 
 ## Performance Optimization
-- [ ] Optimize import times in `Backend/litellm/__init__.py` and `Backend/litellm/utils.py` by deferring lazy imports.
+- [x] Optimize import times in `Backend/litellm/__init__.py` and `Backend/litellm/utils.py` by deferring lazy imports.
 - [ ] Reduce redundant Prisma queries in proxy authentication middleware `Backend/litellm/proxy/auth/`.
 
 ## Refactoring & Typing
