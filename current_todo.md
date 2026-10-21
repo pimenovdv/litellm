@@ -1,3 +1,3 @@
-- [x] Change `timeout-minutes` to 45 in `.github/workflows/mutation-test.yml`.
-- [x] Change `timeout-minutes` to 45 in `.github/workflows/test-unit-proxy-endpoints.yml`.
-- [x] Change `timeout-minutes` to 45 in `.github/workflows/codspeed.yml`.
+- [ ] Add caching for setup-python to `test-linting.yml` and `test-code-quality.yml` (e.g. `cache: 'pip'`).
+- [ ] Add caching for setup-python to `test-unit-proxy-legacy.yml` and `_test-unit-base.yml`.
+- [ ] Add caching for `npm ci` in `frontend/Dockerfile` and `frontend/litellm-dashboard/Dockerfile`.
