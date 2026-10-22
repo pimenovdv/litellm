@@ -536,13 +536,13 @@ class ChatCompletionThinkingBlock(TypedDict, total=False):
     type: Required[Literal["thinking"]]
     thinking: str
     signature: Optional[str]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
 
 
 class ChatCompletionRedactedThinkingBlock(TypedDict, total=False):
     type: Required[Literal["redacted_thinking"]]
     data: str
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
 
 
 class ChatCompletionReasoningSummaryTextBlock(TypedDict, total=False):
@@ -770,13 +770,13 @@ class ChatCompletionFunctionMessage(TypedDict):
 
 class OpenAIChatCompletionSystemMessage(TypedDict, total=False):
     role: Required[Literal["system"]]
-    content: Required[Union[str, List]]
+    content: Required[Union[str, List[Any]]]
     name: str
 
 
 class OpenAIChatCompletionDeveloperMessage(TypedDict, total=False):
     role: Required[Literal["developer"]]
-    content: Required[Union[str, List]]
+    content: Required[Union[str, List[Any]]]
     name: str
 
 
@@ -790,7 +790,7 @@ class ChatCompletionDeveloperMessage(OpenAIChatCompletionDeveloperMessage, total
 
 class GenericChatCompletionMessage(TypedDict, total=False):
     role: Required[str]
-    content: Required[Union[str, List]]
+    content: Required[Union[str, List[Any]]]
 
 
 ValidUserMessageContentTypes = [
@@ -952,8 +952,8 @@ class ChatCompletionRequest(TypedDict, total=False):
     tools: List[ChatCompletionToolParam]
     tool_choice: ChatCompletionToolChoiceValues
     parallel_tool_calls: bool
-    function_call: Union[str, dict]
-    functions: List
+    function_call: Union[str, Dict[str, Any]]
+    functions: List[Any]
     user: str
     metadata: Dict[str, Any]  # litellm specific param
     reasoning_effort: str  # OpenAI o1/o3 reasoning parameter
@@ -1510,13 +1510,13 @@ class OutputItemDoneEvent(BaseLiteLLMOpenAIResponseObject):
 
 
 class OpenAIChatCompletionLogprobsContentTopLogprobs(TypedDict, total=False):
-    bytes: List
+    bytes: List[Any]
     logprob: Required[float]
     token: Required[str]
 
 
 class OpenAIChatCompletionLogprobsContent(TypedDict, total=False):
-    bytes: List
+    bytes: List[Any]
     logprob: Required[float]
     token: Required[str]
     top_logprobs: List[OpenAIChatCompletionLogprobsContentTopLogprobs]
