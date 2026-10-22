@@ -19,7 +19,7 @@ class FunctionResponse(TypedDict, total=False):
     # Supported on Google AI Studio Gemini 3.5+; Vertex AI rejects this field.
     id: str
     name: Required[str]
-    response: Optional[dict]
+    response: Optional[Dict[str, Any]]
     parts: List["FunctionResponsePartType"]
 
 
@@ -28,7 +28,7 @@ class FunctionCall(TypedDict, total=False):
     # Gemini 3.5+. Vertex AI and older Gemini models omit/reject this field.
     id: str
     name: Required[str]
-    args: Optional[dict]
+    args: Optional[Dict[str, Any]]
 
 
 class FileDataType(TypedDict):
@@ -62,7 +62,7 @@ class HttpxFunctionCall(TypedDict, total=False):
     # Gemini 3.5+. Vertex AI and older Gemini models omit/reject this field.
     id: str
     name: Required[str]
-    args: dict
+    args: Dict[str, Any]
 
 
 class HttpxExecutableCode(TypedDict):
@@ -83,13 +83,13 @@ class HttpxBlobType(TypedDict, total=False):
 class HttpxServerSideToolCall(TypedDict, total=False):
     toolType: str
     id: str
-    args: dict
+    args: Dict[str, Any]
 
 
 class HttpxServerSideToolResponse(TypedDict, total=False):
     toolType: str
     id: str
-    response: Union[str, dict]
+    response: Union[str, Dict[str, Any]]
 
 
 class HttpxPartType(TypedDict, total=False):
@@ -149,7 +149,7 @@ class Schema(TypedDict, total=False):
 class FunctionDeclaration(TypedDict, total=False):
     name: Required[str]
     description: str
-    parameters: Union[Schema, dict]
+    parameters: Union[Schema, Dict[str, Any]]
     response: Schema
 
 
@@ -241,9 +241,9 @@ class GenerationConfig(TypedDict, total=False):
     presence_penalty: float
     frequency_penalty: float
     response_mime_type: Literal["text/plain", "application/json"]
-    response_schema: dict
-    response_json_schema: dict
-    responseFormat: dict
+    response_schema: Dict[str, Any]
+    response_json_schema: Dict[str, Any]
+    responseFormat: Dict[str, Any]
     seed: int
     responseLogprobs: bool
     logprobs: int
@@ -268,13 +268,13 @@ class VertexToolName(str, Enum):
 
 class Tools(TypedDict, total=False):
     function_declarations: List[FunctionDeclaration]
-    googleSearch: dict
-    googleSearchRetrieval: dict
-    enterpriseWebSearch: dict
-    url_context: dict
-    code_execution: dict
-    googleMaps: dict
-    computerUse: dict
+    googleSearch: Dict[str, Any]
+    googleSearchRetrieval: Dict[str, Any]
+    enterpriseWebSearch: Dict[str, Any]
+    url_context: Dict[str, Any]
+    code_execution: Dict[str, Any]
+    googleMaps: Dict[str, Any]
+    computerUse: Dict[str, Any]
     retrieval: Retrieval
 
 
@@ -398,7 +398,7 @@ class SearchEntryPoint(TypedDict, total=False):
 class GroundingMetadata(TypedDict, total=False):
     webSearchQueries: List[str]
     searchEntryPoint: SearchEntryPoint
-    groundingAttributions: List[dict]
+    groundingAttributions: List[Dict[str, Any]]
 
 
 class LogprobsCandidate(TypedDict):
@@ -537,7 +537,7 @@ class Instance(TypedDict, total=False):
 
 class VertexMultimodalEmbeddingRequest(TypedDict, total=False):
     instances: Required[List[Instance]]
-    parameters: dict
+    parameters: Dict[str, Any]
 
 
 class VideoEmbedding(TypedDict):
