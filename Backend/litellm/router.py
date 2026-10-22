@@ -7168,11 +7168,9 @@ class Router:
 
         ### ONLY RAISE ERROR IF CP FALLBACK AVAILABLE ###
         if content_policy_fallbacks is not None:
-            fallback_model_group = None
-            for item in content_policy_fallbacks:  # [{"gpt-3.5-turbo": ["gpt-4"]}]
-                if list(item.keys())[0] == model:
-                    fallback_model_group = item[model]
-                    break
+            fallback_model_group = self._get_fallback_model_group_from_fallbacks(
+                fallbacks=content_policy_fallbacks, model_group=model
+            )
 
             if fallback_model_group is not None:
                 return True
@@ -8017,7 +8015,7 @@ class Router:
             )
             # done reading model["litellm_params"]
             # Check if provider is supported: either in enum or JSON-configured
-            if custom_llm_provider not in litellm.provider_list and not JSONProviderRegistry.exists(
+            if custom_llm_provider not in litellm.provider_list and not litellm.JSONProviderRegistry.exists(
                 custom_llm_provider
             ):
                 raise Exception(f"Unsupported provider - {custom_llm_provider}")
