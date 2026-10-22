@@ -5,7 +5,7 @@
 - [x] Reduce redundant Prisma queries in proxy authentication middleware `Backend/litellm/proxy/auth/`.
 
 ## Refactoring & Typing
-- [ ] Add rigorous generic type definitions in `Backend/litellm/types/` for all Pydantic models.
+- [x] Add rigorous generic type definitions in `Backend/litellm/types/` for all Pydantic models. (проверен/чист)
 - [ ] Refactor redundant logic in `Backend/litellm/router.py` handling fallback execution loops.
 - [x] Standardize logging formatting across `Backend/litellm/_logging.py` and `Backend/litellm/_service_logger.py`.
 
