@@ -75,15 +75,6 @@ def mock_team():
     )
 
 
-@pytest.fixture
-def mock_team_minimal():
-    return LiteLLM_TeamTable(
-        team_id="team-2",
-        team_alias="Test Team 2",
-        members_with_roles=[Member(user_id="user-789", user_email=None, role="user")],
-        created_at=None,
-        updated_at=None,
-    )
 
 
 @pytest.fixture

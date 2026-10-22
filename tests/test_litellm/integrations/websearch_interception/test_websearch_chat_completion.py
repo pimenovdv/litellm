@@ -17,18 +17,6 @@ from litellm.integrations.websearch_interception.handler import (
 from litellm.types.utils import LlmProviders, ModelResponse
 
 
-@pytest.fixture
-def mock_search_response():
-    """Mock search response from litellm.asearch()"""
-    mock_response = MagicMock()
-    mock_response.results = [
-        MagicMock(
-            title="Weather in San Francisco",
-            url="https://weather.com/sf",
-            snippet="Current weather: 65°F, partly cloudy",
-        )
-    ]
-    return mock_response
 
 
 @pytest.fixture

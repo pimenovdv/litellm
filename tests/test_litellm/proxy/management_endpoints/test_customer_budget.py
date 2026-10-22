@@ -41,10 +41,6 @@ def mock_existing_customer():
     return MagicMock(spec=LiteLLM_EndUserTable)
 
 
-@pytest.fixture
-def mock_budget_table():
-    """Mock budget table data."""
-    return MagicMock(spec=LiteLLM_BudgetTable)
 
 
 @pytest.mark.asyncio

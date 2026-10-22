@@ -11,4 +11,4 @@
 
 ## Dead Code & Dependencies Cleanup
 - [ ] Clean up redundant helper scripts from `Backend/litellm/scripts/` if they are fully superseded by CLI.
-- [ ] Remove unused mock test fixtures in `tests/` that are not referenced in the refactored test suite.
+- [x] Remove unused mock test fixtures in `tests/` that are not referenced in the refactored test suite.
