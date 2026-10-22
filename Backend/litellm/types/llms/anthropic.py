@@ -21,7 +21,7 @@ AnthropicInputSchema = TypedDict(
     "AnthropicInputSchema",
     {
         "type": Optional[str],
-        "properties": Optional[dict],
+        "properties": Optional[Dict[str, Any]],
         "additionalProperties": Optional[bool],
         "required": Optional[List[str]],
         "$defs": Optional[Dict],
@@ -33,7 +33,7 @@ AnthropicInputSchema = TypedDict(
 
 class AnthropicOutputSchema(TypedDict, total=False):
     type: Required[Literal["json_schema"]]
-    schema: Required[dict]
+    schema: Required[Dict[str, Any]]
 
 
 class AnthropicOutputConfig(TypedDict, total=False):
@@ -48,7 +48,7 @@ class AnthropicMessagesTool(TypedDict, total=False):
     description: str
     input_schema: Optional[AnthropicInputSchema]
     type: Literal["custom"]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     defer_loading: bool
     allowed_callers: Optional[List[str]]
     input_examples: Optional[List[Dict[str, Any]]]
@@ -58,7 +58,7 @@ class AnthropicComputerTool(TypedDict, total=False):
     display_width_px: Required[int]
     display_height_px: Required[int]
     display_number: int
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     type: Required[str]
     name: Required[str]
 
@@ -74,7 +74,7 @@ class AnthropicWebSearchUserLocation(TypedDict, total=False):
 class AnthropicWebSearchTool(TypedDict, total=False):
     name: Required[Literal["web_search"]]
     type: Required[str]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     max_uses: Optional[int]
     user_location: Optional[AnthropicWebSearchUserLocation]
     defer_loading: Optional[bool]
@@ -85,7 +85,7 @@ class AnthropicWebSearchTool(TypedDict, total=False):
 class AnthropicHostedTools(TypedDict, total=False):  # for bash_tool and text_editor
     type: Required[str]
     name: Required[str]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     defer_loading: Optional[bool]
     allowed_callers: Optional[List[str]]
     input_examples: Optional[List[Dict[str, Any]]]
@@ -94,7 +94,7 @@ class AnthropicHostedTools(TypedDict, total=False):  # for bash_tool and text_ed
 class AnthropicCodeExecutionTool(TypedDict, total=False):
     type: Required[str]
     name: Required[Literal["code_execution"]]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     defer_loading: Optional[bool]
     allowed_callers: Optional[List[str]]
     input_examples: Optional[List[Dict[str, Any]]]
@@ -103,7 +103,7 @@ class AnthropicCodeExecutionTool(TypedDict, total=False):
 class AnthropicMemoryTool(TypedDict, total=False):
     type: Required[str]
     name: Required[Literal["memory"]]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     defer_loading: Optional[bool]
     allowed_callers: Optional[List[str]]
     input_examples: Optional[List[Dict[str, Any]]]
@@ -121,7 +121,7 @@ class AnthropicToolSearchToolBM25(TypedDict, total=False):
 
     type: Required[Literal["tool_search_tool_bm25_20251119"]]
     name: Required[str]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     defer_loading: Optional[bool]
     allowed_callers: Optional[List[str]]
     input_examples: Optional[List[Dict[str, Any]]]
@@ -137,7 +137,7 @@ class AnthropicAdvisorTool(TypedDict, total=False):
     name: Required[Literal["advisor"]]
     model: Required[str]
     max_uses: Optional[int]
-    caching: Optional[dict]
+    caching: Optional[Dict[str, Any]]
 
 
 class ToolReference(TypedDict, total=False):
@@ -198,15 +198,15 @@ class AnthropicMcpServerTool(TypedDict, total=False):
 class AnthropicMessagesTextParam(TypedDict, total=False):
     type: Required[Literal["text"]]
     text: Required[str]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
 
 
 class AnthropicMessagesToolUseParam(TypedDict, total=False):
     type: Required[Literal["tool_use"]]
     id: str
     name: str
-    input: dict
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    input: Dict[str, Any]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     caller: Optional[ToolCaller]
 
 
@@ -252,7 +252,7 @@ class AnthropicContentParamSourceFileId(TypedDict):
 class AnthropicMessagesContainerUploadParam(TypedDict, total=False):
     type: Required[Literal["container_upload"]]
     file_id: str
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
 
 
 class AnthropicMessagesImageParam(TypedDict, total=False):
@@ -264,7 +264,7 @@ class AnthropicMessagesImageParam(TypedDict, total=False):
             AnthropicContentParamSourceUrl,
         ]
     ]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
 
 
 class CitationsObject(TypedDict):
@@ -312,7 +312,7 @@ class AnthropicMessagesDocumentParam(TypedDict, total=False):
             AnthropicContentParamSourceUrl,
         ]
     ]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
     title: str
     context: str
     citations: Optional[CitationsObject]
@@ -321,7 +321,7 @@ class AnthropicMessagesDocumentParam(TypedDict, total=False):
 class AnthropicMessagesToolResultContent(TypedDict, total=False):
     type: Required[Literal["text"]]
     text: Required[str]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
 
 
 class AnthropicMessagesToolResultParam(TypedDict, total=False):
@@ -338,7 +338,7 @@ class AnthropicMessagesToolResultParam(TypedDict, total=False):
             ]
         ],
     ]
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
 
 
 AnthropicMessagesUserMessageValues = Union[
@@ -362,7 +362,7 @@ class AnthropicMetadata(TypedDict, total=False):
 class AnthropicSystemMessageContent(TypedDict, total=False):
     type: str
     text: str
-    cache_control: Optional[Union[dict, ChatCompletionCachedContent]]
+    cache_control: Optional[Union[Dict[str, Any], ChatCompletionCachedContent]]
 
 
 AllAnthropicMessageValues = Union[AnthropicMessagesUserMessageParam, AnthopicMessagesAssistantMessageParam]
@@ -395,7 +395,7 @@ class AnthropicMessagesRequest(AnthropicMessagesRequestOptionalParams, total=Fal
     model: Required[str]
     messages: Required[Union[List[AllAnthropicMessageValues], List[Dict]]]
     # litellm param - used for tracking litellm proxy metadata in the request
-    litellm_metadata: dict
+    litellm_metadata: Dict[str, Any]
 
 
 class ContentTextBlockDelta(TypedDict):
@@ -409,7 +409,7 @@ class ContentTextBlockDelta(TypedDict):
 
 class ContentCitationsBlockDelta(TypedDict):
     type: Literal["citations"]
-    citation: dict
+    citation: Dict[str, Any]
 
 
 class ContentJsonBlockDelta(TypedDict):
@@ -466,7 +466,7 @@ class ToolUseBlock(TypedDict):
 
     id: str
 
-    input: dict
+    input: Dict[str, Any]
 
     name: str
 
@@ -484,7 +484,7 @@ class ContentBlockStartToolUse(TypedDict):
     type: Literal["content_block_start"]
     id: str
     name: str
-    input: dict
+    input: Dict[str, Any]
     content_block: ToolUseBlock
 
 
@@ -602,7 +602,7 @@ class AnthropicResponseContentBlockToolUse(BaseModel):
     type: Literal["tool_use"]
     id: str
     name: str
-    input: dict
+    input: Dict[str, Any]
     provider_specific_fields: Optional[Dict[str, Any]] = None
 
     model_config = ConfigDict(extra="allow")  # Allow provider_specific_fields
