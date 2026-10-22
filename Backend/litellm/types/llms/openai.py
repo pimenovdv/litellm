@@ -115,7 +115,7 @@ EmbeddingInput = Union[str, List[str]]
 
 
 class HttpxBinaryResponseContent(_HttpxBinaryResponseContent):
-    _hidden_params: dict = {}
+    _hidden_params: Dict[str, Any] = {}
     pass
 
 
@@ -263,7 +263,7 @@ class MessageData(TypedDict):
         ],
     ]
     attachments: Optional[List[Attachment]]
-    metadata: Optional[dict]
+    metadata: Optional[Dict[str, Any]]
 
 
 class Thread(BaseModel):
@@ -340,7 +340,7 @@ class OpenAIFileObject(BaseModel):
     `error` field on `fine_tuning.job`.
     """
 
-    _hidden_params: dict = {"response_cost": 0.0}  # no cost for writing a file
+    _hidden_params: Dict[str, Any] = {"response_cost": 0.0}  # no cost for writing a file
 
     def __contains__(self, key):
         # Define custom behavior for the 'in' operator
@@ -905,7 +905,7 @@ ChatCompletionToolChoiceValues = Union[ChatCompletionToolChoiceStringValues, Cha
 class ChatCompletionToolParamFunctionChunk(TypedDict, total=False):
     name: Required[str]
     description: str
-    parameters: dict
+    parameters: Dict[str, Any]
     strict: bool
 
 
@@ -935,18 +935,18 @@ class ChatCompletionRequest(TypedDict, total=False):
     model: Required[str]
     messages: Required[List[AllMessageValues]]
     frequency_penalty: float
-    logit_bias: dict
+    logit_bias: Dict[str, Any]
     logprobs: bool
     top_logprobs: int
     max_tokens: int
     n: int
     presence_penalty: float
-    response_format: dict
+    response_format: Dict[str, Any]
     seed: int
     service_tier: str
     safety_identifier: str
     stop: Union[str, List[str]]
-    stream_options: dict
+    stream_options: Dict[str, Any]
     temperature: float
     top_p: float
     tools: List[ChatCompletionToolParam]
@@ -955,7 +955,7 @@ class ChatCompletionRequest(TypedDict, total=False):
     function_call: Union[str, dict]
     functions: List
     user: str
-    metadata: dict  # litellm specific param
+    metadata: Dict[str, Any]  # litellm specific param
     reasoning_effort: str  # OpenAI o1/o3 reasoning parameter
 
 
@@ -974,7 +974,7 @@ class ChatCompletionResponseMessage(TypedDict, total=False):
     tool_calls: Optional[List[ChatCompletionToolCallChunk]]
     role: Literal["assistant"]
     function_call: Optional[ChatCompletionToolCallFunctionChunk]
-    provider_specific_fields: Optional[dict]
+    provider_specific_fields: Optional[Dict[str, Any]]
     reasoning_content: Optional[str]
     thinking_blocks: Optional[List[Union[ChatCompletionThinkingBlock, ChatCompletionRedactedThinkingBlock]]]
 
@@ -983,8 +983,8 @@ class ChatCompletionUsageBlock(TypedDict, total=False):
     prompt_tokens: Required[int]
     completion_tokens: Required[int]
     total_tokens: Required[int]
-    prompt_tokens_details: Optional[dict]
-    completion_tokens_details: Optional[dict]
+    prompt_tokens_details: Optional[Dict[str, Any]]
+    completion_tokens_details: Optional[Dict[str, Any]]
 
 
 class OpenAIChatCompletionChunk(ChatCompletionChunk):
@@ -1245,10 +1245,10 @@ One of: completed, failed, in_progress, cancelled, queued, or incomplete.
 class ResponsesAPIResponse(BaseLiteLLMOpenAIResponseObject):
     id: str
     created_at: int
-    error: Optional[dict] = None
+    error: Optional[Dict[str, Any]] = None
     incomplete_details: Optional[IncompleteDetails] = None
     instructions: Optional[str] = None
-    metadata: Optional[Dict] = None
+    metadata: Optional[Dict[str, Any]] = None
     model: Optional[str] = None
     object: Optional[str] = None
     output: Union[
@@ -1279,7 +1279,7 @@ class ResponsesAPIResponse(BaseLiteLLMOpenAIResponseObject):
     user: Optional[str] = None
     store: Optional[bool] = None
     # Define private attributes using PrivateAttr
-    _hidden_params: dict = PrivateAttr(default_factory=dict)
+    _hidden_params: Dict[str, Any] = PrivateAttr(default_factory=dict)
 
     @field_validator("reasoning", mode="before")
     @classmethod
@@ -1450,7 +1450,7 @@ class ResponseInProgressEvent(BaseLiteLLMOpenAIResponseObject):
 class ResponseCompletedEvent(BaseLiteLLMOpenAIResponseObject):
     type: Literal[ResponsesAPIStreamEvents.RESPONSE_COMPLETED]
     response: ResponsesAPIResponse
-    _hidden_params: dict = PrivateAttr(default_factory=dict)
+    _hidden_params: Dict[str, Any] = PrivateAttr(default_factory=dict)
 
 
 class ResponseFailedEvent(BaseLiteLLMOpenAIResponseObject):
@@ -1467,7 +1467,7 @@ class ResponsePartAddedEvent(BaseLiteLLMOpenAIResponseObject):
     type: Literal[ResponsesAPIStreamEvents.RESPONSE_PART_ADDED]
     item_id: str
     output_index: int
-    part: dict
+    part: Dict[str, Any]
 
 
 class ReasoningSummaryTextDeltaEvent(BaseLiteLLMOpenAIResponseObject):
@@ -1576,7 +1576,7 @@ class OutputTextAnnotationAddedEvent(BaseLiteLLMOpenAIResponseObject):
     output_index: int
     content_index: int
     annotation_index: int
-    annotation: dict
+    annotation: Dict[str, Any]
 
 
 class OutputTextDoneEvent(BaseLiteLLMOpenAIResponseObject):
@@ -1845,7 +1845,7 @@ class OpenAIRealtimeStreamSession(TypedDict, total=False):
     How the model chooses tools. Options are auto, none, required, or specify a function.
     """
 
-    tools: list
+    tools: List[Any]
     """
     Tools (functions) available to the model.
     """
@@ -1932,7 +1932,7 @@ class OpenAIRealtimeStreamResponseOutputItemAdded(TypedDict):
 
 class OpenAIRealtimeStreamResponseBaseObject(TypedDict):
     event_id: str
-    response: dict
+    response: Dict[str, Any]
     type: str
 
 
@@ -2077,15 +2077,15 @@ class OpenAIRealtimeResponseDoneObject(TypedDict, total=False):
     conversation_id: str
     id: str
     max_output_tokens: int
-    metadata: dict
-    modalities: list
+    metadata: Dict[str, Any]
+    modalities: List[Any]
     object: Literal["realtime.response"]
     output: List[OpenAIRealtimeStreamResponseOutputItem]
     output_audio_format: str
     status: Literal["completed", "cancelled", "failed", "incomplete"]
-    status_details: dict
+    status_details: Dict[str, Any]
     temperature: float
-    usage: dict  # ResponseAPIUsage
+    usage: Dict[str, Any]  # ResponseAPIUsage
     voice: str
 
 
@@ -2168,7 +2168,7 @@ class OpenAIModerationResponse(BaseLiteLLMOpenAIResponseObject):
     """A list of moderation objects."""
 
     # Define private attributes using PrivateAttr
-    _hidden_params: dict = PrivateAttr(default_factory=dict)
+    _hidden_params: Dict[str, Any] = PrivateAttr(default_factory=dict)
 
 
 class OpenAIChatCompletionLogprobs(TypedDict, total=False):

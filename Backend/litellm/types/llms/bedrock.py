@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import Any, Dict, Any, Dict, List, Literal, Optional, Union
 
 from typing_extensions import TYPE_CHECKING, Required, TypedDict, override
 
@@ -56,14 +56,14 @@ class SearchResultBlock(TypedDict, total=False):
     source: str
     title: str
     content: List[dict]
-    citations: dict
+    citations: Dict[str, Any]
 
 
 class ToolResultContentBlock(TypedDict, total=False):
     image: ImageBlock
     document: DocumentBlock
     searchResult: SearchResultBlock
-    json: dict
+    json: Dict[str, Any]
     text: str
 
 
@@ -74,7 +74,7 @@ class ToolResultBlock(TypedDict, total=False):
 
 
 class ToolUseBlock(TypedDict):
-    input: dict
+    input: Dict[str, Any]
     name: str
     toolUseId: str
 
@@ -230,7 +230,7 @@ class ServiceTierBlock(TypedDict):
 
 
 class ConverseResponseBlock(TypedDict, total=False):
-    additionalModelResponseFields: dict
+    additionalModelResponseFields: Dict[str, Any]
     metrics: ConverseMetricsBlock
     output: Required[ConverseResponseOutputBlock]
     stopReason: Required[str]  # end_turn | tool_use | max_tokens | stop_sequence | content_filtered
@@ -240,7 +240,7 @@ class ConverseResponseBlock(TypedDict, total=False):
 
 class ToolJsonSchemaBlock(TypedDict, total=False):
     type: Literal["object"]
-    properties: dict
+    properties: Dict[str, Any]
     required: List[str]
     additionalProperties: bool
 
@@ -283,7 +283,7 @@ class BedrockToolSpec(dict):
         *,
         name: str,
         description: str,
-        parameters: dict,
+        parameters: Dict[str, Any],
         strict: Optional[bool],
         supports_strict_tools: bool,
     ) -> None:
@@ -312,8 +312,8 @@ class SpecificToolChoiceBlock(TypedDict):
 
 
 class ToolChoiceValuesBlock(TypedDict, total=False):
-    any: dict
-    auto: dict
+    any: Dict[str, Any]
+    auto: Dict[str, Any]
     tool: SpecificToolChoiceBlock
 
 
@@ -394,7 +394,7 @@ class OutputConfigBlock(TypedDict, total=False):
 
 
 class CommonRequestObject(TypedDict, total=False):  # common request object across sync + async flows
-    additionalModelRequestFields: dict
+    additionalModelRequestFields: Dict[str, Any]
     additionalModelResponseFieldPaths: List[str]
     inferenceConfig: InferenceConfig
     system: List[SystemContentBlock]
@@ -898,7 +898,7 @@ class BedrockPreparedRequest(TypedDict):
     endpoint_url: str
     prepped: AWSPreparedRequest
     body: bytes
-    data: dict
+    data: Dict[str, Any]
 
 
 class BedrockRerankTextQuery(TypedDict):
@@ -912,7 +912,7 @@ class BedrockRerankQuery(TypedDict):
 
 class BedrockRerankModelConfiguration(TypedDict, total=False):
     modelArn: Required[str]
-    modelConfiguration: dict
+    modelConfiguration: Dict[str, Any]
 
 
 class BedrockRerankBedrockRerankingConfiguration(TypedDict):
@@ -930,7 +930,7 @@ class BedrockRerankTextDocument(TypedDict, total=False):
 
 
 class BedrockRerankInlineDocumentSource(TypedDict, total=False):
-    jsonDocument: dict
+    jsonDocument: Dict[str, Any]
     textDocument: BedrockRerankTextDocument
     type: Literal["TEXT", "JSON"]
 
@@ -1076,7 +1076,7 @@ class BedrockInvokeAnthropicMessagesRequest(TypedDict, total=False):
     # Required by Bedrock
     anthropic_version: str
     max_tokens: int
-    messages: list
+    messages: List[Any]
 
     # Documented optional fields
     anthropic_beta: List[str]
@@ -1085,18 +1085,18 @@ class BedrockInvokeAnthropicMessagesRequest(TypedDict, total=False):
     temperature: float
     top_p: float
     top_k: int
-    tools: list
-    tool_choice: dict
+    tools: List[Any]
+    tool_choice: Dict[str, Any]
 
     # `thinking` is required for Opus 4.5 / Sonnet 4 extended thinking,
     # `metadata` is part of the common Anthropic Messages API shape.
-    thinking: dict
-    metadata: dict
-    output_config: dict
+    thinking: Dict[str, Any]
+    metadata: Dict[str, Any]
+    output_config: Dict[str, Any]
 
     # `context_management` is allowed for Bedrock InvokeModel only when it
     # carries `compact_20260112` edits paired with the `compact-2026-01-12`
     # anthropic-beta header. The Invoke transformation filters edits to the
     # supported subset and strips the field entirely when nothing remains, so
     # other edit types (e.g. `clear_thinking_20251015`) never reach Bedrock.
-    context_management: dict
+    context_management: Dict[str, Any]
