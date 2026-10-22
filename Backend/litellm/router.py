@@ -6196,8 +6196,8 @@ class Router:
 
             if isinstance(e, litellm.ContextWindowExceededError):
                 if context_window_fallbacks is not None:
-                    context_window_fallback_model_group: Optional[List[str]] = (
-                        self._get_fallback_model_group_from_fallbacks(
+                    context_window_fallback_model_group, _ = (
+                        get_fallback_model_group(
                             fallbacks=context_window_fallbacks,
                             model_group=model_group,
                         )
@@ -6233,8 +6233,8 @@ class Router:
                         e.message += "\n{}".format(error_message)
             elif isinstance(e, litellm.ContentPolicyViolationError):
                 if content_policy_fallbacks is not None:
-                    content_policy_fallback_model_group: Optional[List[str]] = (
-                        self._get_fallback_model_group_from_fallbacks(
+                    content_policy_fallback_model_group, _ = (
+                        get_fallback_model_group(
                             fallbacks=content_policy_fallbacks,
                             model_group=model_group,
                         )
@@ -6715,30 +6715,7 @@ class Router:
         """
         return run_async_function(self.async_function_with_fallbacks, *args, **kwargs)
 
-    def _get_fallback_model_group_from_fallbacks(
-        self,
-        fallbacks: List[Dict[str, List[str]]],
-        model_group: Optional[str] = None,
-    ) -> Optional[List[str]]:
-        """
-        Returns the list of fallback models to use for a given model group
 
-        If no fallback model group is found, returns None
-
-        Example:
-            fallbacks = [{"gpt-3.5-turbo": ["gpt-4"]}, {"gpt-4o": ["gpt-3.5-turbo"]}]
-            model_group = "gpt-3.5-turbo"
-            returns: ["gpt-4"]
-        """
-        if model_group is None:
-            return None
-
-        fallback_model_group: Optional[List[str]] = None
-        for item in fallbacks:  # [{"gpt-3.5-turbo": ["gpt-4"]}]
-            if list(item.keys())[0] == model_group:
-                fallback_model_group = item[model_group]
-                break
-        return fallback_model_group
 
     def _get_first_default_fallback(self) -> Optional[str]:
         """
