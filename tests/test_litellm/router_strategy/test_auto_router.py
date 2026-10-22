@@ -164,14 +164,6 @@ def mock_router_instance():
     return router
 
 
-@pytest.fixture
-def mock_semantic_router():
-    """Create a mock SemanticRouter instance."""
-    mock_router = MagicMock()
-    mock_route = MagicMock()
-    mock_route.name = "test-route"
-    mock_router.routes = [mock_route]
-    return mock_router
 
 
 @pytest.fixture

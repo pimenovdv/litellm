@@ -66,24 +66,6 @@ def mock_router_with_zero_cost_model():
     return router
 
 
-@pytest.fixture
-def mock_router_with_paid_model():
-    """Create a mock router with only paid models."""
-    router = Router(
-        model_list=[
-            {
-                "model_name": "cloud-model",
-                "litellm_params": {
-                    "model": "gpt-3.5-turbo",
-                    "api_key": "sk-test",
-                },
-                "model_info": {
-                    "id": "cloud-model-id",
-                },
-            }
-        ]
-    )
-    return router
 
 
 @pytest.fixture
