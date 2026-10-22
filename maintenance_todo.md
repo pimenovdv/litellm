@@ -6,7 +6,7 @@
 
 ## Refactoring & Typing
 - [x] Add rigorous generic type definitions in `Backend/litellm/types/` for all Pydantic models. (проверен/чист)
-- [x] Refactor redundant logic in `Backend/litellm/router.py` handling fallback execution loops.
+- [x] Refactor redundant logic in `Backend/litellm/router.py` handling fallback execution loops. (проверен/чист)
 - [x] Standardize logging formatting across `Backend/litellm/_logging.py` and `Backend/litellm/_service_logger.py`.
 
 ## Dead Code & Dependencies Cleanup
