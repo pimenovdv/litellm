@@ -10,5 +10,5 @@
 - [x] Standardize logging formatting across `Backend/litellm/_logging.py` and `Backend/litellm/_service_logger.py`.
 
 ## Dead Code & Dependencies Cleanup
-- [ ] Clean up redundant helper scripts from `Backend/litellm/scripts/` if they are fully superseded by CLI.
+- [x] Clean up redundant helper scripts from `Backend/litellm/scripts/` if they are fully superseded by CLI. (directory does not exist, zero files to remove)
 - [x] Remove unused mock test fixtures in `tests/` that are not referenced in the refactored test suite.
