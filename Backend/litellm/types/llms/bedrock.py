@@ -55,7 +55,7 @@ class SearchResultBlock(TypedDict, total=False):
 
     source: str
     title: str
-    content: List[dict]
+    content: List[Dict[str, Any]]
     citations: Dict[str, Any]
 
 
@@ -277,7 +277,7 @@ class ToolBlock(TypedDict, total=False):
     cachePoint: Optional[CachePointBlock]
 
 
-class BedrockToolSpec(dict):
+class BedrockToolSpec(Dict[str, Any]):
     def __init__(
         self,
         *,
@@ -1080,7 +1080,7 @@ class BedrockInvokeAnthropicMessagesRequest(TypedDict, total=False):
 
     # Documented optional fields
     anthropic_beta: List[str]
-    system: object  # str or list[TextBlock]
+    system: object  # str or List[Any]
     stop_sequences: List[str]
     temperature: float
     top_p: float
