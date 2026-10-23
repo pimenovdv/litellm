@@ -67,7 +67,7 @@ class OCIToolDefinition(BaseModel):
     type: Literal["FUNCTION"] = "FUNCTION"
     name: Optional[str] = None
     description: Optional[str] = None
-    parameters: Optional[dict] = None
+    parameters: Optional[Dict[str, Any]] = None
 
 
 # --- Message Models (Request and Response) ---

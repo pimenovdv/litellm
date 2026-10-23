@@ -1,3 +1,4 @@
+from typing import List
 from pydantic import BaseModel
 from typing_extensions import TypedDict
 
@@ -12,7 +13,7 @@ class VertexSpeechToTextRecognitionFeatures(TypedDict):
 
 class VertexSpeechToTextRecognitionConfig(TypedDict):
     model: str
-    languageCodes: list[str]
+    languageCodes: List[str]
     features: VertexSpeechToTextRecognitionFeatures
     autoDecodingConfig: VertexSpeechToTextAutoDecodingConfig
 
@@ -27,7 +28,7 @@ class VertexSpeechToTextAlternative(BaseModel):
 
 
 class VertexSpeechToTextResult(BaseModel):
-    alternatives: list[VertexSpeechToTextAlternative] = []
+    alternatives: List[VertexSpeechToTextAlternative] = []
     languageCode: str | None = None
 
 
@@ -36,5 +37,5 @@ class VertexSpeechToTextResponseMetadata(BaseModel):
 
 
 class VertexSpeechToTextRecognizeResponse(BaseModel):
-    results: list[VertexSpeechToTextResult] = []
+    results: List[VertexSpeechToTextResult] = []
     metadata: VertexSpeechToTextResponseMetadata | None = None
