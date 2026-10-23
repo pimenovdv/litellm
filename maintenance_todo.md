@@ -24,4 +24,4 @@
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/databricks.py`.
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/mistral.py`.
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/gemini.py`.
-- [ ] Remove unused mock test fixtures in `tests/local_testing/` that are not referenced in the refactored test suite.
+- [x] Remove unused mock test fixtures in `tests/local_testing/` that are not referenced in the refactored test suite. (zero unused mock fixtures to remove)
