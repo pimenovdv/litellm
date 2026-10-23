@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 
 from typing_extensions import (
     Required,
@@ -10,7 +10,7 @@ class OllamaToolCallFunction(
     TypedDict
 ):  # follows - https://github.com/ollama/ollama/blob/6bd8a4b0a1ac15d5718f52bbe1cd56f827beb694/api/types.go#L148
     name: str
-    arguments: dict
+    arguments: Dict[str, Any]
 
 
 class OllamaToolCall(TypedDict):
