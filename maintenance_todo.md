@@ -28,3 +28,5 @@
 
 - [x] Replace `dict` and `list` with `Dict[str, Any]` and `List` in `Backend/litellm/types/llms/oci.py`, `Backend/litellm/types/llms/ollama.py`, and `Backend/litellm/types/llms/vertex_ai_speech_to_text.py` to improve type safety.
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/openai_evals.py` to improve type safety. (already typed correctly)
+
+- [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/proxy/utils.py` to improve type safety.

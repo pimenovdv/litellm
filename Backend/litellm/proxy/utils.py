@@ -617,7 +617,7 @@ class ProxyLogging:
                 return user_api_key_auth_obj.__dict__
         return {}
 
-    def _convert_mcp_to_llm_format(self, request_obj, kwargs: dict) -> dict:
+    def _convert_mcp_to_llm_format(self, request_obj, kwargs: Dict[str, Any]) -> Dict[str, Any]:
         """
         Convert MCP tool call to LLM message format for existing guardrail validation.
         """
@@ -749,7 +749,7 @@ class ProxyLogging:
             verbose_proxy_logger.error(f"Error extracting modified arguments: {e}")
             return None
 
-    def _parse_arguments_manually(self, args_text: str, original_args: dict) -> Optional[dict]:
+    def _parse_arguments_manually(self, args_text: str, original_args: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """
         Try to manually parse arguments when JSON parsing fails.
         This is a fallback for cases where the guardrail modifies the format.
@@ -840,7 +840,7 @@ class ProxyLogging:
         }
         return result
 
-    def _create_mcp_request_object_from_kwargs(self, kwargs: dict) -> "MCPPreCallRequestObject":
+    def _create_mcp_request_object_from_kwargs(self, kwargs: Dict[str, Any]) -> "MCPPreCallRequestObject":
         """
         Helper function to create MCPPreCallRequestObject from kwargs for standard pre_call_hook.
         """
@@ -857,7 +857,7 @@ class ProxyLogging:
             hidden_params=HiddenParams(),
         )
 
-    def _convert_mcp_hook_response_to_kwargs(self, response_data: Optional[dict], original_kwargs: dict) -> dict:
+    def _convert_mcp_hook_response_to_kwargs(self, response_data: Optional[Dict[str, Any]], original_kwargs: Dict[str, Any]) -> Dict[str, Any]:
         """
         Helper function to convert pre_call_hook response back to kwargs for MCP usage.
 
@@ -1172,7 +1172,7 @@ class ProxyLogging:
             data.pop("prompt_label", None)
             data.pop("prompt_version", None)
 
-    def _process_guardrail_metadata(self, data: dict) -> None:
+    def _process_guardrail_metadata(self, data: Dict[str, Any]) -> None:
         """Process guardrails from metadata and add to applied_guardrails."""
         from litellm.proxy.common_utils.callback_utils import (
             add_guardrail_to_applied_guardrails_header,
@@ -2468,7 +2468,7 @@ class ProxyLogging:
         return merged_headers
 
     @staticmethod
-    def _build_litellm_call_info(data: dict, response: Any) -> Dict[str, Any]:
+    def _build_litellm_call_info(data: Dict[str, Any], response: Any) -> Dict[str, Any]:
         """
         Build a normalized dict of routing metadata from response._hidden_params
         and data, abstracting away the metadata vs litellm_metadata split.
@@ -2490,7 +2490,7 @@ class ProxyLogging:
             "model_id": hidden_params.get("model_id"),
         }
 
-    def is_a2a_streaming_response(self, response: dict) -> bool:
+    def is_a2a_streaming_response(self, response: Dict[str, Any]) -> bool:
         expected_keys = ["jsonrpc", "id", "result"]
         return all(key in response for key in expected_keys)
 
@@ -2646,7 +2646,7 @@ class ProxyLogging:
         ProxyLogging._fire_deferred_stream_logging(request_data)
 
     @staticmethod
-    def _fire_deferred_stream_logging(request_data: dict) -> None:
+    def _fire_deferred_stream_logging(request_data: Dict[str, Any]) -> None:
         """
         Fire the deferred streaming logging callback after the full streaming
         pipeline (including guardrail end-of-stream blocks) has completed.
@@ -2711,7 +2711,7 @@ def on_backoff(details):
     print_verbose(f"Backing off... this was attempt #{details['tries']}")
 
 
-def jsonify_object(data: dict) -> dict:
+def jsonify_object(data: Dict[str, Any]) -> Dict[str, Any]:
     db_data = copy.deepcopy(data)
 
     for k, v in db_data.items():
@@ -3041,7 +3041,7 @@ class PrismaClient:
 
         return hashed_token
 
-    def jsonify_object(self, data: dict) -> dict:
+    def jsonify_object(self, data: Dict[str, Any]) -> Dict[str, Any]:
         db_data = copy.deepcopy(data)
 
         for k, v in db_data.items():
@@ -3679,7 +3679,7 @@ class PrismaClient:
             )
             raise e
 
-    def jsonify_team_object(self, db_data: dict):
+    def jsonify_team_object(self, db_data: Dict[str, Any]):
         db_data = self.jsonify_object(data=db_data)
         if db_data.get("members_with_roles", None) is not None and isinstance(db_data["members_with_roles"], list):
             db_data["members_with_roles"] = json.dumps(db_data["members_with_roles"])
@@ -5851,7 +5851,7 @@ def _check_and_merge_model_level_guardrails(
     return _merge_guardrails_with_existing(data, model_level_guardrails)
 
 
-def _merge_guardrails_with_existing(data: dict, model_level_guardrails: Any) -> dict:
+def _merge_guardrails_with_existing(data: Dict[str, Any], model_level_guardrails: Any) -> Dict[str, Any]:
     """
     Merge model-level guardrails with any existing guardrails in the request data.
 
