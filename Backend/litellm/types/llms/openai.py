@@ -13,41 +13,15 @@ from typing import (
     Union,
 )
 
-import httpx
-from openai import Omit
 from openai._legacy_response import (
     HttpxBinaryResponseContent as _HttpxBinaryResponseContent,
 )
-from openai.lib.streaming._assistants import (
-    AssistantEventHandler,
-    AssistantStreamManager,
-    AsyncAssistantEventHandler,
-    AsyncAssistantStreamManager,
-)
-from openai.pagination import AsyncCursorPage, SyncCursorPage
-from openai.types import Batch, EmbeddingCreateParams, FileObject
-from openai.types.beta.assistant import Assistant
-from openai.types.beta.assistant_tool_param import AssistantToolParam
-from openai.types.beta.thread_create_params import (
-    Message as OpenAICreateThreadParamsMessage,
-)
-from openai.types.beta.threads.message import Message as OpenAIMessage
-from openai.types.beta.threads.message_content import MessageContent
-from openai.types.beta.threads.run import Run
 from openai.types.chat import ChatCompletionChunk
-from openai.types.chat.chat_completion_audio_param import ChatCompletionAudioParam
 from openai.types.chat.chat_completion_content_part_input_audio_param import (
     ChatCompletionContentPartInputAudioParam,
 )
-from openai.types.chat.chat_completion_modality import ChatCompletionModality
-from openai.types.chat.chat_completion_prediction_content_param import (
-    ChatCompletionPredictionContentParam,
-)
-from openai.types.embedding import Embedding as OpenAIEmbedding
-from openai.types.fine_tuning.fine_tuning_job import FineTuningJob
 from openai.types.responses.response import (
     IncompleteDetails,
-    Response,
     ResponseOutputItem,
     Tool,
     ToolChoice,
@@ -116,7 +90,6 @@ EmbeddingInput = Union[str, List[str]]
 
 class HttpxBinaryResponseContent(_HttpxBinaryResponseContent):
     _hidden_params: Dict[str, Any] = {}
-    pass
 
 
 class NotGiven:

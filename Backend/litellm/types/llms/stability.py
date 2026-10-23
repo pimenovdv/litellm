@@ -4,7 +4,7 @@ Type definitions for Stability AI API
 API Reference: https://platform.stability.ai/docs/api-reference
 """
 
-from typing import List, Literal, Optional
+from typing import Literal, Optional
 
 from typing_extensions import TypedDict
 
