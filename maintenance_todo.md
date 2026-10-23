@@ -30,3 +30,5 @@
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/openai_evals.py` to improve type safety. (already typed correctly)
 
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/proxy/utils.py` to improve type safety.
+
+- [x] Replace `dict` and `list` with `Dict[str, Any]` and `List[Any]` in `Backend/litellm/caching/caching.py` to improve type safety.
