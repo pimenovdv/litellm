@@ -1,16 +1,16 @@
-from typing import Iterable, List, Optional, Union
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 from typing_extensions import Literal, Required, TypedDict
 
 
 class CallObject(TypedDict):
     name: str
-    parameters: dict
+    parameters: Dict[str, Any]
 
 
 class ToolResultObject(TypedDict):
     call: CallObject
-    outputs: List[dict]
+    outputs: List[Dict[str, Any]]
 
 
 class ChatHistoryToolResult(TypedDict, total=False):
@@ -20,7 +20,7 @@ class ChatHistoryToolResult(TypedDict, total=False):
 
 class ToolCallObject(TypedDict):
     name: str
-    parameters: dict
+    parameters: Dict[str, Any]
 
 
 class ChatHistoryUser(TypedDict, total=False):
@@ -46,7 +46,7 @@ ChatHistory = List[Union[ChatHistorySystem, ChatHistoryChatBot, ChatHistoryUser,
 
 class CohereV2ChatResponseMessageToolCallFunction(TypedDict, total=False):
     name: str
-    parameters: dict
+    parameters: Dict[str, Any]
 
 
 class CohereV2ChatResponseMessageToolCall(TypedDict):
@@ -66,7 +66,7 @@ class CohereV2ChatResponseMessage(TypedDict, total=False):
     tool_calls: List[CohereV2ChatResponseMessageToolCall]
     tool_plan: str
     content: List[CohereV2ChatResponseMessageContent]
-    citations: List[dict]
+    citations: List[Dict[str, Any]]
 
 
 class CohereV2ChatResponseUsageBilledUnits(TypedDict, total=False):
