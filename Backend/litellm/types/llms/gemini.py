@@ -37,8 +37,8 @@ class GeminiCreateFilesResponseObject(TypedDict):
     uri: str
     state: GeminiFilesState
     source: GeminiFilesSource
-    error: dict
-    metadata: dict
+    error: Dict[str, Any]
+    metadata: Dict[str, Any]
 
 
 class BidiGenerateContentTranscription(TypedDict):
@@ -56,7 +56,7 @@ class BidiGenerateContentServerContent(TypedDict, total=False):
     interrupted: bool
     """Output only. If true, indicates that a client message has interrupted current model generation. If the client is playing out the content in real time, this is a good signal to stop and empty the current playback queue."""
 
-    groundingMetadata: dict
+    groundingMetadata: Dict[str, Any]
     """Output only. Grounding metadata for the generated content."""
 
     inputTranscription: BidiGenerateContentTranscription
@@ -76,7 +76,7 @@ class BidiGenerateContentServerMessage(TypedDict, total=False):
     serverContent: BidiGenerateContentServerContent
     """Output only. The content that the model is currently generating."""
 
-    setupComplete: dict
+    setupComplete: Dict[str, Any]
     """Output only. The setup complete message."""
 
 
@@ -134,19 +134,19 @@ class BidiGenerateContentSetup(TypedDict, total=False):
     realtimeInputConfig: BidiGenerateContentRealtimeInputConfig
     """The realtime config to be used for the realtime session."""
 
-    sessionResumption: dict
+    sessionResumption: Dict[str, Any]
     """The session resumption to be used for the realtime session."""
 
-    sessionResumptionConfig: dict
+    sessionResumptionConfig: Dict[str, Any]
     """The session resumption config to be used for the realtime session."""
 
-    contextWindowCompression: dict
+    contextWindowCompression: Dict[str, Any]
     """The context window compression to be used for the realtime session."""
 
-    inputAudioTranscription: dict
+    inputAudioTranscription: Dict[str, Any]
     """The input audio transcription to be used for the realtime session."""
 
-    outputAudioTranscription: dict
+    outputAudioTranscription: Dict[str, Any]
     """The output audio transcription to be used for the realtime session."""
 
 
@@ -269,7 +269,7 @@ class GeminiVideoGenerationParameters(BaseModel):
     Should be used with the 'image' parameter.
     """
 
-    referenceImages: Optional[list] = None
+    referenceImages: Optional[List[Any]] = None
     """
     Up to three images to be used as style/content references.
     Only supported in Veo 3.1 (list of VideoGenerationReferenceImage objects).
