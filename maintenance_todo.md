@@ -20,3 +20,8 @@
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/vertex_ai.py`.
 - [x] Replace `dict` with `Dict[str, Any]` in `Backend/litellm/types/llms/cohere.py` to improve type safety.
 - [x] Remove unused typing imports across `Backend/litellm/types/llms/` after refactoring.
+
+- [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/databricks.py`.
+- [ ] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/mistral.py`.
+- [ ] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/gemini.py`.
+- [ ] Remove unused mock test fixtures in `tests/local_testing/` that are not referenced in the refactored test suite.
