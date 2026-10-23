@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Any, Dict, List, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from typing_extensions import TYPE_CHECKING, Required, TypedDict, override
 
@@ -776,7 +776,6 @@ class AmazonNovaCanvasRequestBase(TypedDict, total=False):
     Base class for Amazon Nova Canvas API requests
     """
 
-    pass
 
 
 class AmazonNovaCanvasImageGenerationConfig(TypedDict, total=False):

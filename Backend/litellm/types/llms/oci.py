@@ -24,7 +24,6 @@ class OCIVendors(Enum):
 class OCIContentPart(BaseModel):
     """Base model for content parts in an OCI message."""
 
-    pass
 
 
 class OCITextContentPart(OCIContentPart):
