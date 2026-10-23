@@ -1,11 +1,11 @@
-from typing import List, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from typing_extensions import TypedDict
 
 
 class FunctionCall(TypedDict):
     name: Optional[str]
-    arguments: Optional[Union[str, dict]]
+    arguments: Optional[Union[str, Dict[str, Any]]]
 
 
 class MistralToolCallMessage(TypedDict):
