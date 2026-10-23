@@ -97,7 +97,7 @@ class Cache:
         valkey_semantic_cache_embedding_model: str = "text-embedding-ada-002",
         valkey_semantic_cache_index_name: str | None = None,
         redis_flush_size: Optional[int] = None,
-        redis_startup_nodes: Optional[List] = None,
+        redis_startup_nodes: Optional[List[Any]] = None,
         disk_cache_dir: Optional[str] = None,
         qdrant_api_base: Optional[str] = None,
         qdrant_api_key: Optional[str] = None,
@@ -305,10 +305,10 @@ class Cache:
             LiteLLMCacheType.VALKEY_SEMANTIC,
         )
 
-    def _get_semantic_cache_tenant_scope(self, kwargs: dict) -> str:
-        metadata: dict = kwargs.get("metadata") or {}
-        litellm_params: dict = kwargs.get("litellm_params") or {}
-        metadata_in_litellm_params: dict = litellm_params.get("metadata") or {}
+    def _get_semantic_cache_tenant_scope(self, kwargs: Dict[str, Any]) -> str:
+        metadata: Dict[str, Any] = kwargs.get("metadata") or {}
+        litellm_params: Dict[str, Any] = kwargs.get("litellm_params") or {}
+        metadata_in_litellm_params: Dict[str, Any] = litellm_params.get("metadata") or {}
 
         scope = ""
         for field in self._SEMANTIC_CACHE_TENANT_SCOPE_FIELDS:
@@ -374,7 +374,7 @@ class Cache:
     def _get_param_value(
         self,
         param: str,
-        kwargs: dict,
+        kwargs: Dict[str, Any],
     ) -> Optional[str]:
         """
         Get the value for the given param from kwargs
@@ -385,7 +385,7 @@ class Cache:
             return self._get_file_param_value(kwargs)
         return kwargs[param]
 
-    def _get_model_param_value(self, kwargs: dict) -> str:
+    def _get_model_param_value(self, kwargs: Dict[str, Any]) -> str:
         """
         Handles getting the value for the 'model' param from kwargs
 
@@ -400,15 +400,15 @@ class Cache:
         caching_group = self._get_caching_group(metadata, model_group)
         return caching_group or model_group or kwargs["model"]
 
-    def _get_caching_group(self, metadata: dict, model_group: Optional[str]) -> Optional[str]:
-        caching_groups: Optional[List] = metadata.get("caching_groups", [])
+    def _get_caching_group(self, metadata: Dict[str, Any], model_group: Optional[str]) -> Optional[str]:
+        caching_groups: Optional[List[Any]] = metadata.get("caching_groups", [])
         if caching_groups:
             for group in caching_groups:
                 if model_group in group:
                     return str(group)
         return None
 
-    def _get_file_param_value(self, kwargs: dict) -> str:
+    def _get_file_param_value(self, kwargs: Dict[str, Any]) -> str:
         """
         Handles getting the value for the 'file' param from kwargs. Used for `transcription` requests
         """
@@ -766,7 +766,7 @@ class Cache:
             return details_dict
 
         # Distribute integer/float fields evenly across items
-        per_item: dict = {}
+        per_item: Dict[str, Any] = {}
         for key, value in details_dict.items():
             if isinstance(value, int):
                 quotient, remainder = divmod(value, num_items)
@@ -804,9 +804,9 @@ class Cache:
         self,
         result: EmbeddingResponse,
         input: str,
-        kwargs: dict,
+        kwargs: Dict[str, Any],
         idx_in_result_data: int = 0,
-    ) -> Tuple[str, dict, dict]:
+    ) -> Tuple[str, Dict[str, Any], Dict[str, Any]]:
         preset_cache_key = self.get_cache_key(**{**kwargs, "input": input})
         kwargs["cache_key"] = preset_cache_key
         embedding_response = result.data[idx_in_result_data]
