@@ -98,7 +98,6 @@ def initialize_guardrails(
 ) -> Dict[str, GuardrailItem]:
     try:
         verbose_proxy_logger.debug(f"validating  guardrails passed {guardrails_config}")
-        global all_guardrails
         for item in guardrails_config:
             """
             one item looks like this:
