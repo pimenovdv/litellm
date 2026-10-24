@@ -341,7 +341,6 @@ class RouteChecks:
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail=f"user not allowed to access this route. Route={route} is an admin only route",
                 )
-        pass
 
     @staticmethod
     def is_llm_api_route(route: str) -> bool:
