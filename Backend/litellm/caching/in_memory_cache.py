@@ -13,7 +13,7 @@ import sys
 import time
 import heapq
 import threading
-from typing import TYPE_CHECKING, Any, List, Optional
+from typing import TYPE_CHECKING, Any, List, Optional, Dict
 
 if TYPE_CHECKING:
     from litellm.types.caching import RedisPipelineIncrementOperation
@@ -44,9 +44,9 @@ class InMemoryCache(BaseCache):
         self.max_size_per_item = max_size_per_item or MAX_SIZE_PER_ITEM_IN_MEMORY_CACHE_IN_KB  # 1MB = 1024KB
 
         # in-memory cache
-        self.cache_dict: dict = {}
-        self.ttl_dict: dict = {}
-        self.expiration_heap: list[tuple[float, str]] = []
+        self.cache_dict: Dict[str, Any] = {}
+        self.ttl_dict: Dict[str, Any] = {}
+        self.expiration_heap: List[tuple[float, str]] = []
         self._increment_lock = threading.Lock()
 
     def check_value_size(self, value: Any):
@@ -218,7 +218,7 @@ class InMemoryCache(BaseCache):
             return cached_response
         return None
 
-    def batch_get_cache(self, keys: list, **kwargs):
+    def batch_get_cache(self, keys: List[Any], **kwargs):
         return_val = []
         for k in keys:
             val = self.get_cache(key=k, **kwargs)
@@ -236,7 +236,7 @@ class InMemoryCache(BaseCache):
     async def async_get_cache(self, key, **kwargs):
         return self.get_cache(key=key, **kwargs)
 
-    async def async_batch_get_cache(self, keys: list, **kwargs):
+    async def async_batch_get_cache(self, keys: List[Any], **kwargs):
         return_val = []
         for k in keys:
             val = self.get_cache(key=k, **kwargs)
