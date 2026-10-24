@@ -40,3 +40,5 @@
 - [x] Replace `dict` and `list` with `Dict[str, Any]` and `List[Any]` in `Backend/litellm/caching/gcs_cache.py`, `Backend/litellm/caching/s3_cache.py`, and `Backend/litellm/caching/azure_blob_cache.py` to improve type safety.
 - [x] Replace `dict` with `Dict[str, Any]` in `Backend/litellm/utils.py` to improve type safety.
 - [x] Remove unused variables and imports in `Backend/litellm/proxy/auth/` using autoflake.
+
+- [x] Remove unused variables and imports in `Backend/litellm/proxy/management_endpoints/` using autoflake.
