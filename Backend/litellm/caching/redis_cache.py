@@ -19,7 +19,7 @@ import json
 import time
 from collections.abc import Awaitable, Callable, Sequence
 from datetime import timedelta
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, cast, Dict, List
 
 import litellm
 from litellm._logging import print_verbose, verbose_logger
@@ -201,7 +201,7 @@ class RedisCache(BaseCache):
         password=None,
         redis_flush_size: int | None = 100,
         namespace: str | None = None,
-        startup_nodes: list | None = None,  # for redis-cluster
+        startup_nodes: List[Any] | None = None,  # for redis-cluster
         socket_timeout: float | None = 5.0,  # default 5 second timeout
         **kwargs,
     ):
@@ -238,7 +238,7 @@ class RedisCache(BaseCache):
         # redis namespaces
         self.namespace = namespace
         # for high traffic, we store the redis results in memory and then batch write to redis
-        self.redis_batch_writing_buffer: list = []
+        self.redis_batch_writing_buffer: List[Any] = []
         if redis_flush_size is None:
             self.redis_flush_size: int = 100
         else:
@@ -469,7 +469,7 @@ class RedisCache(BaseCache):
             raise e
 
     @_redis_circuit_breaker_guard
-    async def async_scan_iter(self, pattern: str, count: int = 100) -> list:
+    async def async_scan_iter(self, pattern: str, count: int = 100) -> List[Any]:
         start_time = time.time()
         try:
             keys = []
@@ -680,7 +680,7 @@ class RedisCache(BaseCache):
         pipe: pipeline | cluster_pipeline,
         cache_list: list[tuple[Any, Any]],
         ttl: float | None,
-    ) -> list:
+    ) -> List[Any]:
         """
         Helper function for executing a pipeline of set operations on Redis
         """
@@ -763,7 +763,7 @@ class RedisCache(BaseCache):
         self,
         redis_client: async_redis_client,
         key: str,
-        value: list,
+        value: List[Any],
         ttl: float | None,
     ) -> None:
         """Helper function for async_set_cache_sadd. Separated for testing."""
@@ -777,7 +777,7 @@ class RedisCache(BaseCache):
             raise
 
     @_redis_circuit_breaker_guard
-    async def async_set_cache_sadd(self, key, value: list, ttl: float | None, **kwargs):
+    async def async_set_cache_sadd(self, key, value: List[Any], ttl: float | None, **kwargs):
 
         start_time = time.time()
         try:
@@ -1012,7 +1012,7 @@ class RedisCache(BaseCache):
         self,
         key_list: list[str] | list[str | None],
         parent_otel_span: Span | None = None,
-    ) -> dict:
+    ) -> Dict[str, Any]:
         """
         Use Redis for bulk read operations
 
@@ -1020,8 +1020,7 @@ class RedisCache(BaseCache):
             key_list: List of keys to get from Redis
             parent_otel_span: Optional parent OpenTelemetry span
 
-        Returns:
-            dict: A dictionary mapping keys to their cached values
+        Returns: Dict[str, Any]: A dictionary mapping keys to their cached values
         """
         key_value_dict = {}
         _key_list = [key for key in key_list if key is not None]
@@ -1032,7 +1031,7 @@ class RedisCache(BaseCache):
                 cache_key = self.check_and_fix_namespace(key=cache_key or "")
                 _keys.append(cache_key)
             start_time = time.time()
-            results: list = self._run_redis_mget_operation(keys=_keys)
+            results: List[Any] = self._run_redis_mget_operation(keys=_keys)
             end_time = time.time()
             _duration = end_time - start_time
             self.service_logger_obj.service_success_hook(
@@ -1109,7 +1108,7 @@ class RedisCache(BaseCache):
         self,
         key_list: list[str] | list[str | None],
         parent_otel_span: Span | None = None,
-    ) -> dict:
+    ) -> Dict[str, Any]:
         """
         Use Redis for bulk read operations
 
@@ -1117,8 +1116,7 @@ class RedisCache(BaseCache):
             key_list: List of keys to get from Redis
             parent_otel_span: Optional parent OpenTelemetry span
 
-        Returns:
-            dict: A dictionary mapping keys to their cached values
+        Returns: Dict[str, Any]: A dictionary mapping keys to their cached values
 
         `.mget` does not support None keys. This will filter out None keys.
         """
@@ -1252,8 +1250,8 @@ class RedisCache(BaseCache):
         # keys is a list, unpack it so it gets passed as individual elements to delete
         await _redis_client.delete(*keys)
 
-    def client_list(self) -> list:
-        client_list: list = self.redis_client.client_list()  # type: ignore
+    def client_list(self) -> List[Any]:
+        client_list: List[Any] = self.redis_client.client_list()  # type: ignore
         return client_list
 
     def info(self):
@@ -1273,15 +1271,14 @@ class RedisCache(BaseCache):
         except Exception as e:
             verbose_logger.debug("Error closing sync Redis client: %s", e)
 
-    async def test_connection(self) -> dict:
+    async def test_connection(self) -> Dict[str, Any]:
         """
         Test the Redis connection by creating a new client and pinging it.
 
         This creates a fresh connection without using cached clients or connection pools
         to ensure the credentials are actually valid.
 
-        Returns:
-            dict: {"status": "success" | "failed", "message": str, "error": Optional[str]}
+        Returns: Dict[str, Any]: {"status": "success" | "failed", "message": str, "error": Optional[str]}
         """
         try:
             import redis.asyncio as redis_async
