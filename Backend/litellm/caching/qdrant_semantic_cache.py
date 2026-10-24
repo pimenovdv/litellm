@@ -152,7 +152,7 @@ class QdrantSemanticCache(BaseCache):
             cached_response = ast.literal_eval(cached_response)
         return cached_response
 
-    def _get_qdrant_cache_key_filter(self, key: str) -> dict:
+    def _get_qdrant_cache_key_filter(self, key: str) -> Dict[str, Any]:
         return {
             "must": [
                 {
@@ -162,7 +162,7 @@ class QdrantSemanticCache(BaseCache):
             ]
         }
 
-    def _add_cache_key_filter_to_search_data(self, data: dict, key: str) -> None:
+    def _add_cache_key_filter_to_search_data(self, data: Dict[str, Any], key: str) -> None:
         data["filter"] = self._get_qdrant_cache_key_filter(key)
 
     def _ensure_cache_key_payload_index(self) -> None:
@@ -180,7 +180,7 @@ class QdrantSemanticCache(BaseCache):
         except Exception as exc:
             print_verbose(f"Qdrant semantic-cache could not create cache-key payload index: {str(exc)}")
 
-    def _payload_matches_cache_key(self, payload: dict, key: str) -> bool:
+    def _payload_matches_cache_key(self, payload: Dict[str, Any], key: str) -> bool:
         # Pre-isolation points stored only prompt + response with no cache-key
         # payload field. Reassigning them to a caller's key would risk
         # cross-scope hits, so they're treated as misses and re-populated on

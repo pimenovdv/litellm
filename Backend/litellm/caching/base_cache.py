@@ -11,7 +11,7 @@ Has 4 methods:
 """
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any
+from typing import Dict, TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
 
@@ -55,7 +55,7 @@ class BaseCache(ABC):
     async def disconnect(self):
         raise NotImplementedError
 
-    async def test_connection(self) -> dict:
+    async def test_connection(self) -> Dict[str, Any]:
         """
         Test the cache connection.
 
