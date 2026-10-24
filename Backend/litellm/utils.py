@@ -611,7 +611,7 @@ def get_applied_guardrails(kwargs: Dict[str, Any]) -> List[str]:
     return applied_guardrails
 
 
-def load_credentials_from_list(kwargs: dict):
+def load_credentials_from_list(kwargs: Dict[str, Any]):
     """
     Updates kwargs with the credentials if credential_name in kwarg
     """
@@ -658,7 +658,7 @@ def _remove_thought_signature_from_id(tool_call_id: str, separator: str) -> str:
     return tool_call_id
 
 
-def _process_assistant_message_tool_calls(msg_copy: dict, thought_signature_separator: str) -> dict:
+def _process_assistant_message_tool_calls(msg_copy: Dict[str, Any], thought_signature_separator: str) -> dict:
     """
     Process assistant message to remove thought signatures from tool call IDs.
     """
@@ -689,7 +689,7 @@ def _process_assistant_message_tool_calls(msg_copy: dict, thought_signature_sepa
     return msg_copy
 
 
-def _process_tool_message_id(msg_copy: dict, thought_signature_separator: str) -> dict:
+def _process_tool_message_id(msg_copy: Dict[str, Any], thought_signature_separator: str) -> dict:
     """
     Process tool message to remove thought signature from tool_call_id.
     """
@@ -2567,7 +2567,7 @@ def supports_embedding_image_input(model: str, custom_llm_provider: Optional[str
 
 
 ####### HELPER FUNCTIONS ################
-def _update_dictionary(existing_dict: Dict, new_dict: dict) -> dict:
+def _update_dictionary(existing_dict: Dict, new_dict: Dict[str, Any]) -> dict:
     for k, v in new_dict.items():
         if v is not None:
             # Convert stringified numbers to appropriate numeric types
@@ -3508,7 +3508,7 @@ def _remove_unsupported_params(non_default_params: dict, supported_openai_params
     return non_default_params
 
 
-def filter_out_litellm_params(kwargs: dict) -> dict:
+def filter_out_litellm_params(kwargs: Dict[str, Any]) -> dict:
     """
     Filter out LiteLLM internal parameters from kwargs dict.
 
@@ -4671,7 +4671,7 @@ def get_model_region(litellm_params: LiteLLM_Params, mode: Optional[str]) -> Opt
     return None
 
 
-def get_first_chars_messages(kwargs: dict) -> str:
+def get_first_chars_messages(kwargs: Dict[str, Any]) -> str:
     try:
         _messages = kwargs.get("messages")
         _messages = str(_messages)[:100]
@@ -9077,7 +9077,7 @@ def get_standard_openai_params(params: dict) -> dict:
     return {k: v for k, v in params.items() if k in litellm.OPENAI_CHAT_COMPLETION_PARAMS and v is not None}
 
 
-def get_non_default_completion_params(kwargs: dict) -> dict:
+def get_non_default_completion_params(kwargs: Dict[str, Any]) -> dict:
     openai_params = litellm.OPENAI_CHAT_COMPLETION_PARAMS
     default_params = openai_params + all_litellm_params
     non_default_params = {
@@ -9130,7 +9130,7 @@ def strip_reasoning_summary_aliases_from_optional_params(
     return op, rs_val
 
 
-def get_non_default_transcription_params(kwargs: dict) -> dict:
+def get_non_default_transcription_params(kwargs: Dict[str, Any]) -> dict:
     from litellm.constants import OPENAI_TRANSCRIPTION_PARAMS
 
     default_params = OPENAI_TRANSCRIPTION_PARAMS + all_litellm_params
@@ -9190,7 +9190,7 @@ def get_requester_metadata(metadata: dict):
     return None
 
 
-def return_raw_request(endpoint: CallTypes, kwargs: dict) -> RawRequestTypedDict:
+def return_raw_request(endpoint: CallTypes, kwargs: Dict[str, Any]) -> RawRequestTypedDict:
     """
     Return the json str of the request
 
