@@ -1485,7 +1485,6 @@ async def _user_api_key_auth_builder(
                 if isinstance(e, litellm.BudgetExceededError):
                     raise e
                 verbose_proxy_logger.debug("Unable to find user in db. Error - {}".format(str(e)))
-                pass
 
         ### CHECK IF ADMIN ###
         # note: never string compare api keys, this is vulenerable to a time attack. Use secrets.compare_digest instead

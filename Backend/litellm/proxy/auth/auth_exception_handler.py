@@ -2,7 +2,7 @@
 Handles Authentication Errors
 """
 
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional
 
 from fastapi import HTTPException, Request, status
 
