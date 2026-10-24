@@ -238,8 +238,6 @@ def collect_line_profiler_stats(output_file: Optional[str] = None) -> None:
     Args:
         output_file: Optional path to save stats. If None, prints to stdout.
     """
-    global _line_profiler
-
     with _line_profiler_lock:
         if _line_profiler is None:
             verbose_proxy_logger.debug("Line profiler not enabled, nothing to collect")
