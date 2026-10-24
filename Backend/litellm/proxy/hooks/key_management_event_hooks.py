@@ -251,7 +251,6 @@ class KeyManagementEventHooks:
                 )
         # delete the keys from the secret manager
         await KeyManagementEventHooks._delete_virtual_keys_from_secret_manager(keys_being_deleted=keys_being_deleted)
-        pass
 
     @staticmethod
     async def _store_virtual_key_in_secret_manager(secret_name: str, secret_token: str, team_id: Optional[str] = None):

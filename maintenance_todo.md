@@ -43,3 +43,4 @@
 
 - [x] Remove unused variables and imports in `Backend/litellm/proxy/management_endpoints/` using autoflake.
 - [x] Fix unused globals and indentation errors in `Backend/litellm/proxy/common_utils/` and `Backend/litellm/proxy/guardrails/`.
+- [x] Remove unused variables and imports in `Backend/litellm/proxy/hooks/` using autoflake.
