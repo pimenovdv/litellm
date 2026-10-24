@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, List
 
 from .base_cache import BaseCache
 
@@ -51,7 +51,7 @@ class DiskCache(BaseCache):
             return cached_response
         return None
 
-    def batch_get_cache(self, keys: list, **kwargs):
+    def batch_get_cache(self, keys: List[Any], **kwargs):
         return_val = []
         for k in keys:
             val = self.get_cache(key=k, **kwargs)
@@ -69,7 +69,7 @@ class DiskCache(BaseCache):
     async def async_get_cache(self, key, **kwargs):
         return self.get_cache(key=key, **kwargs)
 
-    async def async_batch_get_cache(self, keys: list, **kwargs):
+    async def async_batch_get_cache(self, keys: List[Any], **kwargs):
         return_val = []
         for k in keys:
             val = self.get_cache(key=k, **kwargs)
