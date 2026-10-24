@@ -34,3 +34,5 @@
 - [x] Replace `dict` and `list` with `Dict[str, Any]` and `List[Any]` in `Backend/litellm/caching/caching.py` to improve type safety.
 
 - [x] Replace `dict` and `list` with `Dict[str, Any]` and `List[Any]` in `Backend/litellm/caching/caching_handler.py`, `Backend/litellm/caching/base_cache.py`, `Backend/litellm/caching/_embedding_router.py`, `Backend/litellm/caching/valkey_semantic_cache.py`, and `Backend/litellm/caching/qdrant_semantic_cache.py` to improve type safety.
+
+- [x] Replace `dict` and `list` with `Dict[str, Any]` and `List[Any]` in `Backend/litellm/caching/redis_cache.py` and `Backend/litellm/caching/redis_semantic_cache.py` to improve type safety. (redis_semantic_cache.py already typed correctly with modern annotations)
