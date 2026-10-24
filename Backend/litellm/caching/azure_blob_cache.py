@@ -9,6 +9,7 @@ Has 4 methods:
 """
 
 import asyncio
+from typing import List, Any
 import json
 from contextlib import suppress
 
@@ -98,7 +99,7 @@ class AzureBlobCache(BaseCache):
         self.container_client.close()
         await self.async_container_client.close()
 
-    async def async_set_cache_pipeline(self, cache_list, **kwargs) -> None:
+    async def async_set_cache_pipeline(self, cache_list: List[Any], **kwargs) -> None:
         tasks = []
         for val in cache_list:
             tasks.append(self.async_set_cache(val[0], val[1], **kwargs))

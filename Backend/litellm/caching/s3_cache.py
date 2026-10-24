@@ -12,7 +12,7 @@ import ast
 import asyncio
 import json
 from functools import partial
-from typing import Optional
+from typing import Optional, List, Any
 from datetime import datetime, timezone, timedelta
 
 from litellm._logging import print_verbose, verbose_logger
@@ -172,7 +172,7 @@ class S3Cache(BaseCache):
     async def disconnect(self):
         pass
 
-    async def async_set_cache_pipeline(self, cache_list, **kwargs):
+    async def async_set_cache_pipeline(self, cache_list: List[Any], **kwargs):
         tasks = []
         for val in cache_list:
             tasks.append(self.async_set_cache(val[0], val[1], **kwargs))

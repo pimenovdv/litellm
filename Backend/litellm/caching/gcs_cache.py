@@ -4,7 +4,7 @@ Supports syncing responses to Google Cloud Storage Buckets using HTTP requests.
 
 import json
 import asyncio
-from typing import Optional
+from typing import Optional, Dict, Any, List
 from urllib.parse import quote
 
 from litellm._logging import print_verbose, verbose_logger
@@ -32,7 +32,7 @@ class GCSCache(BaseCache):
         self.async_client = get_async_httpx_client(llm_provider=httpxSpecialProvider.LoggingCallback)
         self.sync_client = _get_httpx_client()
 
-    def _construct_headers(self) -> dict:
+    def _construct_headers(self) -> Dict[str, Any]:
         base = GCSBucketBase(bucket_name=self.bucket_name)
         base.path_service_account_json = self.path_service_account
         base.BUCKET_NAME = self.bucket_name
@@ -97,7 +97,7 @@ class GCSCache(BaseCache):
     async def disconnect(self):
         pass
 
-    async def async_set_cache_pipeline(self, cache_list, **kwargs):
+    async def async_set_cache_pipeline(self, cache_list: List[Any], **kwargs):
         tasks = []
         for val in cache_list:
             tasks.append(self.async_set_cache(val[0], val[1], **kwargs))
