@@ -19,7 +19,7 @@ import hashlib
 import os
 import struct
 from dataclasses import dataclass
-from typing import Any
+from typing import List, Dict, Any
 
 from redis import Redis
 from redis.asyncio import Redis as AsyncRedis
@@ -58,7 +58,7 @@ class ValkeySemanticCache(RedisSemanticCache):
         embedding_model: str = "text-embedding-ada-002",
         index_name: str | None = None,
         ssl: bool = False,
-        startup_nodes: list | None = None,
+        startup_nodes: List[Any] | None = None,
         sync_client: Redis | None = None,
         async_client: AsyncRedis | None = None,
         **kwargs: Any,
@@ -119,7 +119,7 @@ class ValkeySemanticCache(RedisSemanticCache):
         return hashlib.sha256(str(key).encode("utf-8")).hexdigest()
 
     @staticmethod
-    def _embedding_to_bytes(embedding: list[float]) -> bytes:
+    def _embedding_to_bytes(embedding: List[float]) -> bytes:
         return struct.pack(f"<{len(embedding)}f", *embedding)
 
     def _index_schema(self, dim: int) -> tuple[TagField, VectorField]:
@@ -140,7 +140,7 @@ class ValkeySemanticCache(RedisSemanticCache):
         return "already exists" in str(exc).lower()
 
     @staticmethod
-    def _extract_index_dim(info: dict) -> int | None:
+    def _extract_index_dim(info: Dict[str, Any]) -> int | None:
         # FT.INFO nests the vector field's "dimensions" one level inside its
         # "index" block, so flatten each field descriptor a single level and
         # scan for the dimensions marker.
@@ -153,7 +153,7 @@ class ValkeySemanticCache(RedisSemanticCache):
                     return int(flat[i + 1])
         return None
 
-    def _assert_dim_matches(self, info: dict, dim: int) -> None:
+    def _assert_dim_matches(self, info: Dict[str, Any], dim: int) -> None:
         existing_dim = self._extract_index_dim(info)
         if existing_dim is not None and existing_dim != dim:
             raise ValueError(
@@ -193,7 +193,7 @@ class ValkeySemanticCache(RedisSemanticCache):
     def _doc_key(self, key: str) -> str:
         return f"{self.key_prefix}{self._scope_tag(key)}:{uuid.uuid4()}"
 
-    def _doc_mapping(self, key: str, prompt: str, value_str: str, embedding: list[float]) -> dict:
+    def _doc_mapping(self, key: str, prompt: str, value_str: str, embedding: List[float]) -> Dict[str, Any]:
         return {
             self.CACHE_KEY_FIELD_NAME: self._scope_tag(key),
             self.PROMPT_FIELD_NAME: prompt,
@@ -310,11 +310,11 @@ class ValkeySemanticCache(RedisSemanticCache):
             print_verbose(f"Error in async Valkey semantic-cache get_cache: {str(e)}")
             kwargs.setdefault("metadata", {})["semantic-similarity"] = 0.0
 
-    async def async_set_cache_pipeline(self, cache_list: list[tuple[str, Any]], **kwargs: Any) -> None:
+    async def async_set_cache_pipeline(self, cache_list: List[tuple[str, Any]], **kwargs: Any) -> None:
         try:
             await asyncio.gather(*[self.async_set_cache(key, value, **kwargs) for key, value in cache_list])
         except Exception as e:
             print_verbose(f"Error in Valkey semantic-cache async_set_cache_pipeline: {str(e)}")
 
-    async def _index_info(self) -> dict:
+    async def _index_info(self) -> Dict[str, Any]:
         return await self.async_client.ft(self.index_name).info()

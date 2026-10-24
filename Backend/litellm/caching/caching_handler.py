@@ -35,7 +35,7 @@ from pydantic import BaseModel
 
 import litellm
 from litellm._logging import print_verbose, verbose_logger
-from litellm.caching import InMemoryCache
+from litellm.caching import InMemoryCache, S3Cache
 from litellm.litellm_core_utils.llm_response_utils.response_metadata import (
     update_response_metadata,
 )
@@ -84,7 +84,7 @@ class CachingHandlerResponse(BaseModel):
 in_memory_cache_obj = InMemoryCache()
 
 
-def _drop_logging_obj_from_kwargs(request_kwargs: dict[str, object]) -> dict[str, object]:
+def _drop_logging_obj_from_kwargs(request_kwargs: Dict[str, object]) -> Dict[str, object]:
     """
     The caching handler is stored on the Logging object
     (``logging_obj._llm_caching_handler``), so keeping ``litellm_logging_obj``
@@ -100,7 +100,7 @@ def _drop_logging_obj_from_kwargs(request_kwargs: dict[str, object]) -> dict[str
     return {k: v for k, v in request_kwargs.items() if k != "litellm_logging_obj"}
 
 
-def _is_chat_completion_cached_dict(cached_result: dict) -> bool:
+def _is_chat_completion_cached_dict(cached_result: Dict[str, Any]) -> bool:
     cached_id = cached_result.get("id")
     if isinstance(cached_id, str) and cached_id.startswith("chatcmpl"):
         return True
@@ -554,7 +554,7 @@ class LLMCachingHandler:
         dict1 = details1.model_dump(exclude_none=True) if hasattr(details1, "model_dump") else {}
         dict2 = details2.model_dump(exclude_none=True) if hasattr(details2, "model_dump") else {}
 
-        merged: dict = {}
+        merged: Dict[str, Any] = {}
         for key in set(dict1.keys()) | set(dict2.keys()):
             v1 = dict1.get(key, 0)
             v2 = dict2.get(key, 0)
@@ -562,7 +562,7 @@ class LLMCachingHandler:
                 merged[key] = v1 + v2
             elif isinstance(v1, dict) and isinstance(v2, dict):
                 # Recursively merge nested dicts (e.g. cache_creation_token_details)
-                nested: dict = {}
+                nested: Dict[str, Any] = {}
                 for nk in set(v1.keys()) | set(v2.keys()):
                     nv1 = v1.get(nk, 0)
                     nv2 = v2.get(nk, 0)
