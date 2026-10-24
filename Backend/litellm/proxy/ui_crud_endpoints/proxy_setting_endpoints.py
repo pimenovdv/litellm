@@ -7,13 +7,20 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union
 from urllib.parse import urlparse
 
 from fastapi import APIRouter, Body, Depends, File, HTTPException, UploadFile
-from pydantic import ConfigDict, ValidationError, create_model
+from pydantic import BaseModel, Field, ConfigDict, ValidationError, create_model
 from pydantic.fields import FieldInfo
 
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.litellm_core_utils.sensitive_data_masker import mask_sensitive_keys
-from litellm.proxy._types import *
+from litellm.proxy._types import (
+    UserAPIKeyAuth,
+    LitellmUserRoles,
+    LitellmTableNames,
+    DefaultInternalUserParams,
+    NewUserRequestTeam,
+    UpdateTeamRequest,
+)
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 from litellm.proxy.config_resolvers.sso import (
     SSO_FIELD_ENV_VARS,
