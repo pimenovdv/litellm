@@ -163,8 +163,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
 
     from litellm.litellm_core_utils.litellm_logging import Logging as _LiteLLMLoggingObj
-            AnthropicMessagesStreamingResponse,
-    )
+    from litellm.types.llms.anthropic_messages.anthropic_response import AnthropicMessagesStreamingResponse
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
     from litellm.types.llms.openai_evals import (
         CancelEvalResponse,
@@ -2157,7 +2156,8 @@ class BaseLLMHTTPHandler:
 
         initial_response: Union[AsyncIterator, AnthropicMessagesResponse]
         if stream:
-                            AnthropicMessagesStreamingResponse,
+            from litellm.types.llms.anthropic_messages.anthropic_response import (
+                AnthropicMessagesStreamingResponse,
                 anthropic_messages_stream_hidden_params,
             )
 
@@ -2180,8 +2180,7 @@ class BaseLLMHTTPHandler:
                     hidden_params=stream_hidden_params,
                 )
 
-                            AgenticAnthropicStreamingIterator,
-            )
+            from litellm.types.llms.anthropic_messages.anthropic_response import AgenticAnthropicStreamingIterator
 
             initial_response = AgenticAnthropicStreamingIterator(
                 completion_stream=completion_stream,
@@ -2305,11 +2304,11 @@ class BaseLLMHTTPHandler:
 
     @staticmethod
     def _rust_anthropic_messages_fake_stream(
-        rust_response: AnthropicMessagesResponse,
+        rust_response: 'AnthropicMessagesResponse',
     ) -> "AnthropicMessagesStreamingResponse":
-                    FakeAnthropicMessagesStreamIterator,
-        )
-                    AnthropicMessagesStreamHiddenParams,
+        from litellm.types.llms.anthropic_messages.anthropic_response import (
+            FakeAnthropicMessagesStreamIterator,
+            AnthropicMessagesStreamHiddenParams,
             AnthropicMessagesStreamingResponse,
         )
 
@@ -5349,10 +5348,9 @@ class BaseLLMHTTPHandler:
             from typing import cast
 
             from litellm._logging import verbose_logger
-                            FakeAnthropicMessagesStreamIterator,
-            )
             from litellm.types.llms.anthropic_messages.anthropic_response import (
                 AnthropicMessagesResponse,
+                FakeAnthropicMessagesStreamIterator,
             )
 
             verbose_logger.debug(
