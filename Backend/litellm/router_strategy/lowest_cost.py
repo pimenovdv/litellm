@@ -222,7 +222,6 @@ class LowestCostLoggingHandler(CustomLogger):
             input_tokens = 0
 
         # randomly sample from all_deployments, incase all deployments have latency=0.0
-        _items = all_deployments.items()
 
         ### GET AVAILABLE DEPLOYMENTS ### filter out any deployments > tpm/rpm limits
         potential_deployments = []
