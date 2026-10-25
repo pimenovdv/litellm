@@ -50,3 +50,4 @@
 
 - [x] Fix unused variables and imports in `Backend/litellm/proxy/agent_endpoints/` and `Backend/litellm/proxy/management_helpers/` using pyflakes. (проверен/чист)
 - [x] Fix unused variables and imports in `Backend/litellm/proxy/proxy_server.py` using pyflakes.
+- [x] Fix unused variables and imports in `Backend/litellm/proxy/utils.py` using pyflakes.

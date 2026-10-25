@@ -394,6 +394,42 @@ class _CallbackCapabilities:
     resolved_callbacks: Tuple[Any, ...] = field(default_factory=tuple)
 
 
+
+async def _add_langfuse_trace_id_to_alert(
+    request_data: Optional[dict] = None,
+) -> Optional[str]:
+    """
+    Returns langfuse trace url
+
+    - check:
+    -> existing_trace_id
+    -> trace_id
+    -> litellm_call_id
+    """
+    if "langfuse" not in litellm.logging_callback_manager._get_all_callbacks():
+        return None
+    #########################################################
+    # Only run if langfuse is added as a callback
+    #########################################################
+
+    if request_data is not None and request_data.get("litellm_logging_obj", None) is not None:
+        trace_id: Optional[str] = None
+        litellm_logging_obj = request_data["litellm_logging_obj"]
+
+        for _ in range(3):
+            trace_id = litellm_logging_obj._get_trace_id(service_name="langfuse")
+            if trace_id is not None:
+                break
+            await asyncio.sleep(3)  # wait 3s before retrying for trace id
+        #########################################################
+        langfuse_object = litellm_logging_obj._get_callback_object(service_name="langfuse")
+        if langfuse_object is not None:
+            base_url = langfuse_object.Langfuse.base_url
+            return f"{base_url}/trace/{trace_id}"
+
+    return None
+
+
 class ProxyLogging:
     """
     Logging/Custom Handlers for proxy.
@@ -487,8 +523,8 @@ class ProxyLogging:
         if alerting_threshold is not None:
             self.alerting_threshold = alerting_threshold
             updated_slack_alerting = True
-        if alert_types is not None:
-            self.alert_types = alert_types
+        if alert_type_config is not None:
+            self.alert_types = alert_type_config
             updated_slack_alerting = True
         if alert_to_webhook_url is not None:
             self.alert_to_webhook_url = alert_to_webhook_url
@@ -1938,19 +1974,13 @@ class ProxyLogging:
             formatted_message += f"\n\nProxy URL: `{_proxy_base_url}`"
 
         extra_kwargs = {}
-        alerting_metadata = {}
         if request_data is not None:
             _url = await _add_langfuse_trace_id_to_alert(request_data=request_data)
 
             if _url is not None:
                 extra_kwargs["🪢 Langfuse Trace"] = _url
                 formatted_message += "\n\n🪢 Langfuse Trace: {}".format(_url)
-            if (
-                "metadata" in request_data
-                and request_data["metadata"].get("alerting_metadata", None) is not None
-                and isinstance(request_data["metadata"]["alerting_metadata"], dict)
-            ):
-                alerting_metadata = request_data["metadata"]["alerting_metadata"]
+
         for client in self.alerting:
 
             if client == "slack":
