@@ -484,8 +484,8 @@ async def delete_allowed_ip(
 async def _get_settings_with_schema(
     settings_key: str,
     settings_class: Any,
-    config: dict,
-) -> dict:
+    config: Dict[str, Any],
+) -> Dict[str, Any]:
     """
     Common utility function to get settings with schema information.
 
@@ -528,7 +528,7 @@ async def _get_settings_with_schema(
                     resolved = variant
                     break
 
-        prop_entry: dict = {
+        prop_entry: Dict[str, Any] = {
             "description": field_info.get("description", ""),
             "type": resolved.get("type", "string"),
         }
@@ -1301,7 +1301,7 @@ async def update_ui_settings(
 
     # Merge with existing persisted settings so a partial PATCH doesn't
     # overwrite fields the caller didn't send.
-    existing: dict = {}
+    existing: Dict[str, Any] = {}
     db_existing = await UISettingsRepository(prisma_client).table.find_unique(where={"id": "ui_settings"})
     if db_existing and db_existing.ui_settings:
         raw = db_existing.ui_settings
