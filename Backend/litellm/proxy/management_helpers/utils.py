@@ -28,7 +28,6 @@ from litellm.proxy._types import (  # key request types; user request types; tea
     UpdateTeamRequest,
     UpdateUserRequest,
     UserAPIKeyAuth,
-    VirtualKeyEvent,
 )
 from litellm.proxy.common_utils.http_parsing_utils import _read_request_body
 from litellm.proxy.common_utils.timezone_utils import get_budget_reset_time
@@ -433,10 +432,8 @@ async def send_management_endpoint_alert(
     - An internal user is created, updated, or deleted
     - A team is created, updated, or deleted
     """
-    from litellm.proxy.proxy_server import proxy_logging_obj
-
-
     # Check if alerting is enabled
+    pass
 def _redacted_env_var(entry: Any) -> dict:
     get = entry.get if isinstance(entry, dict) else lambda k: getattr(entry, k, None)
     return {

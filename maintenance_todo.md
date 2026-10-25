@@ -47,3 +47,5 @@
 
 - [x] Fix unused variables and imports in `Backend/litellm/proxy/pass_through_endpoints/` using pyflakes. (проверен/чист)
 - [x] Fix unused variables and imports in `Backend/litellm/proxy/ui_crud_endpoints/` using pyflakes. (проверен/чист)
+
+- [x] Fix unused variables and imports in `Backend/litellm/proxy/agent_endpoints/` and `Backend/litellm/proxy/management_helpers/` using pyflakes. (проверен/чист)
