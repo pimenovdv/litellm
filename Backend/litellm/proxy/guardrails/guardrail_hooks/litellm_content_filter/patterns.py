@@ -26,7 +26,6 @@ _PATTERNS_DATA = _load_patterns_from_json()
 class PrebuiltPatternName(str, Enum):
     """Enum for prebuilt pattern names - dynamically generated from JSON"""
 
-    pass
 
 
 # Dynamically create enum values from JSON

@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 
 import litellm
 from litellm.proxy._types import CommonProxyErrors
-from litellm.types.guardrails import *
+from litellm.types.guardrails import LitellmParams, Guardrail, GuardrailEventHooks, lakeraAI_Moderation, LakeraAIGuardrail
 
 
 def initialize_bedrock(litellm_params: LitellmParams, guardrail: Guardrail):
