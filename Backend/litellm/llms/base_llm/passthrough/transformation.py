@@ -18,7 +18,6 @@ class BasePassthroughConfig(BaseLLMModelInfo):
         """
         Check if the request is a streaming request
         """
-        pass
 
     def format_url(
         self,
@@ -66,7 +65,6 @@ class BasePassthroughConfig(BaseLLMModelInfo):
             - complete_url: URL - the complete url for the request
             - base_target_url: str - the base url to add the endpoint to. Useful for auth headers.
         """
-        pass
 
     def sign_request(
         self,

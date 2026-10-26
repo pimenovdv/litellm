@@ -101,7 +101,6 @@ class BaseFilesConfig(BaseConfig):
             - str/bytes: For traditional file uploads
             - TwoStepFileUploadConfig: For two-step upload process (e.g., Manus, GCS)
         """
-        pass
 
     @abstractmethod
     def transform_create_file_response(
@@ -121,7 +120,6 @@ class BaseFilesConfig(BaseConfig):
         litellm_params: dict,
     ) -> tuple[str, dict]:
         """Transform file retrieve request into provider-specific format."""
-        pass
 
     @abstractmethod
     def transform_retrieve_file_response(
@@ -131,7 +129,6 @@ class BaseFilesConfig(BaseConfig):
         litellm_params: dict,
     ) -> OpenAIFileObject:
         """Transform file retrieve response into OpenAI format."""
-        pass
 
     @abstractmethod
     def transform_delete_file_request(
@@ -141,7 +138,6 @@ class BaseFilesConfig(BaseConfig):
         litellm_params: dict,
     ) -> tuple[str, dict]:
         """Transform file delete request into provider-specific format."""
-        pass
 
     @abstractmethod
     def transform_delete_file_response(
@@ -151,7 +147,6 @@ class BaseFilesConfig(BaseConfig):
         litellm_params: dict,
     ) -> "FileDeleted":
         """Transform file delete response into OpenAI format."""
-        pass
 
     @abstractmethod
     def transform_list_files_request(
@@ -161,7 +156,6 @@ class BaseFilesConfig(BaseConfig):
         litellm_params: dict,
     ) -> tuple[str, dict]:
         """Transform file list request into provider-specific format."""
-        pass
 
     @abstractmethod
     def transform_list_files_response(
@@ -171,7 +165,6 @@ class BaseFilesConfig(BaseConfig):
         litellm_params: dict,
     ) -> List[OpenAIFileObject]:
         """Transform file list response into OpenAI format."""
-        pass
 
     @abstractmethod
     def transform_file_content_request(
@@ -181,7 +174,6 @@ class BaseFilesConfig(BaseConfig):
         litellm_params: dict,
     ) -> tuple[str, dict]:
         """Transform file content request into provider-specific format."""
-        pass
 
     @abstractmethod
     def transform_file_content_response(
@@ -191,7 +183,6 @@ class BaseFilesConfig(BaseConfig):
         litellm_params: dict,
     ) -> "HttpxBinaryResponseContent":
         """Transform file content response into OpenAI format."""
-        pass
 
     def transform_request(
         self,

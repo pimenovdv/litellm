@@ -91,7 +91,6 @@ class BaseSkillsAPIConfig(ABC):
         Returns:
             Provider-specific request body
         """
-        pass
 
     @abstractmethod
     def transform_create_skill_response(
@@ -109,7 +108,6 @@ class BaseSkillsAPIConfig(ABC):
         Returns:
             Skill object
         """
-        pass
 
     @abstractmethod
     def transform_list_skills_request(
@@ -129,7 +127,6 @@ class BaseSkillsAPIConfig(ABC):
         Returns:
             Tuple of (url, query_params)
         """
-        pass
 
     @abstractmethod
     def transform_list_skills_response(
@@ -147,7 +144,6 @@ class BaseSkillsAPIConfig(ABC):
         Returns:
             ListSkillsResponse object
         """
-        pass
 
     @abstractmethod
     def transform_get_skill_request(
@@ -169,7 +165,6 @@ class BaseSkillsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers)
         """
-        pass
 
     @abstractmethod
     def transform_get_skill_response(
@@ -187,7 +182,6 @@ class BaseSkillsAPIConfig(ABC):
         Returns:
             Skill object
         """
-        pass
 
     @abstractmethod
     def transform_delete_skill_request(
@@ -209,7 +203,6 @@ class BaseSkillsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers)
         """
-        pass
 
     @abstractmethod
     def transform_delete_skill_response(
@@ -227,7 +220,6 @@ class BaseSkillsAPIConfig(ABC):
         Returns:
             DeleteSkillResponse object
         """
-        pass
 
     def get_error_class(
         self,

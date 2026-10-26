@@ -45,7 +45,7 @@ from litellm.litellm_core_utils.logging_utils import track_llm_api_timing
 from litellm.litellm_core_utils.request_timeout_resolver import (
     get_configured_request_timeout,
 )
-from litellm.types.llms.custom_http import *
+from litellm.types.llms.custom_http import VerifyTypes, httpxSpecialProvider
 
 if TYPE_CHECKING:
     from litellm import LlmProviders
