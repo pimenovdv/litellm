@@ -1,3 +1,4 @@
+from typing import Literal
 import types
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union, cast
@@ -10,7 +11,7 @@ from litellm.types.llms.openai import (
     ResponsesAPIResponse,
     ResponsesAPIStreamingResponse,
 )
-from litellm.types.responses.main import *
+from litellm.types.responses.main import DeleteResponseResult
 from litellm.types.router import GenericLiteLLMParams
 from litellm.types.utils import LlmProviders
 
@@ -146,7 +147,6 @@ class BaseResponsesAPIConfig(ABC):
         """
         Transform a parsed streaming response chunk into a ResponsesAPIStreamingResponse
         """
-        pass
 
     #########################################################
     ########## DELETE RESPONSE API TRANSFORMATION ##############

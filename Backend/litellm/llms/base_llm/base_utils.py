@@ -91,7 +91,6 @@ class BaseLLMModelInfo(ABC):
         Some providers like bedrock - can receive model=`invoke/anthropic.claude-3-opus-20240229-v1:0` or `converse/anthropic.claude-3-opus-20240229-v1:0`
             This function will return `anthropic.claude-3-opus-20240229-v1:0`
         """
-        pass
 
     def get_token_counter(self) -> Optional[BaseTokenCounter]:
         """

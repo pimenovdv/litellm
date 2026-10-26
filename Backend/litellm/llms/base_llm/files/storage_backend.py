@@ -42,7 +42,6 @@ class BaseFileStorageBackend(ABC):
         Raises:
             Exception: If upload fails
         """
-        pass
 
     @abstractmethod
     async def download_file(self, storage_url: str) -> bytes:
@@ -58,7 +57,6 @@ class BaseFileStorageBackend(ABC):
         Raises:
             Exception: If download fails
         """
-        pass
 
     async def delete_file(self, storage_url: str) -> None:
         """
@@ -75,4 +73,3 @@ class BaseFileStorageBackend(ABC):
         """
         # Default implementation: no-op
         # Backends can override if they support deletion
-        pass

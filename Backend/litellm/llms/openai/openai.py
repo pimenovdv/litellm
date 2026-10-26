@@ -1,3 +1,4 @@
+from typing import Dict, Tuple
 import time
 import types
 from typing import (
@@ -51,7 +52,7 @@ from litellm.utils import (
     convert_to_model_response_object,
 )
 
-from ...types.llms.openai import *
+from ...types.llms.openai import AllMessageValues, Assistant, AssistantEventHandler, AssistantStreamManager, AssistantToolParam, AsyncAssistantEventHandler, AsyncAssistantStreamManager, AsyncCursorPage, CancelBatchRequest, CreateBatchRequest, CreateFileRequest, FileContentRequest, FileObject, HttpxBinaryResponseContent, OpenAICreateThreadParamsMessage, OpenAIFileObject, OpenAIMessage, RetrieveBatchRequest, Run, SyncCursorPage, Thread
 from ..base import BaseLLM
 from .chat.gpt_5_transformation import OpenAIGPT5Config
 from .chat.o_series_transformation import OpenAIOSeriesConfig

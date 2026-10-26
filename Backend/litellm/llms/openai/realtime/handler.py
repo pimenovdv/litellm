@@ -1,1 +1,2 @@
-class OpenAIRealtime: pass
+class OpenAIRealtime:
+    pass

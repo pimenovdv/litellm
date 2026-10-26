@@ -25,7 +25,6 @@ class CompletionTransformationBridge(ABC):
         litellm_logging_obj: "LiteLLMLoggingObj",
     ) -> dict:
         """Transform /chat/completions api request to another request"""
-        pass
 
     @abstractmethod
     def transform_response(
@@ -43,7 +42,6 @@ class CompletionTransformationBridge(ABC):
         json_mode: Optional[bool] = None,
     ) -> "ModelResponse":
         """Transform another response to /chat/completions api response"""
-        pass
 
     @abstractmethod
     def get_model_response_iterator(

@@ -62,7 +62,6 @@ class BaseTextToSpeechConfig(ABC):
         """
         Get list of OpenAI TTS parameters supported by this provider
         """
-        pass
 
     @abstractmethod
     def map_openai_params(
@@ -76,7 +75,6 @@ class BaseTextToSpeechConfig(ABC):
         """
         Map OpenAI TTS parameters to provider-specific parameters
         """
-        pass
 
     @abstractmethod
     def validate_environment(
@@ -123,7 +121,6 @@ class BaseTextToSpeechConfig(ABC):
                 - body: The request body (JSON dict, XML string, or binary data)
                 - headers: Provider-specific headers to merge with base headers
         """
-        pass
 
     @abstractmethod
     def transform_text_to_speech_response(
@@ -135,7 +132,6 @@ class BaseTextToSpeechConfig(ABC):
         """
         Transform provider response to standard format
         """
-        pass
 
     def get_error_class(self, error_message: str, status_code: int, headers: Dict) -> BaseLLMException:
         from ..chat.transformation import BaseLLMException

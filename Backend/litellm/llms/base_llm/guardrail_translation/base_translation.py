@@ -85,7 +85,6 @@ class BaseTranslation(ABC):
 
         Note: user_api_key_dict metadata should be available in the data dict.
         """
-        pass
 
     @abstractmethod
     async def process_output_response(
@@ -105,7 +104,6 @@ class BaseTranslation(ABC):
             litellm_logging_obj: Optional logging object
             user_api_key_dict: User API key metadata (passed separately since response doesn't contain it)
         """
-        pass
 
     async def process_output_streaming_response(
         self,

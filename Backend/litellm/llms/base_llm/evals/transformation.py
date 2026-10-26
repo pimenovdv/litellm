@@ -99,7 +99,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Provider-specific request body
         """
-        pass
 
     @abstractmethod
     def transform_create_eval_response(
@@ -117,7 +116,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Eval object
         """
-        pass
 
     @abstractmethod
     def transform_list_evals_request(
@@ -137,7 +135,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, query_params)
         """
-        pass
 
     @abstractmethod
     def transform_list_evals_response(
@@ -155,7 +152,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             ListEvalsResponse object
         """
-        pass
 
     @abstractmethod
     def transform_get_eval_request(
@@ -177,7 +173,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers)
         """
-        pass
 
     @abstractmethod
     def transform_get_eval_response(
@@ -195,7 +190,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Eval object
         """
-        pass
 
     @abstractmethod
     def transform_update_eval_request(
@@ -219,7 +213,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers, body)
         """
-        pass
 
     @abstractmethod
     def transform_update_eval_response(
@@ -237,7 +230,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Eval object
         """
-        pass
 
     @abstractmethod
     def transform_delete_eval_request(
@@ -259,7 +251,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers)
         """
-        pass
 
     @abstractmethod
     def transform_delete_eval_response(
@@ -277,7 +268,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             DeleteEvalResponse object
         """
-        pass
 
     @abstractmethod
     def transform_cancel_eval_request(
@@ -299,7 +289,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers, body)
         """
-        pass
 
     @abstractmethod
     def transform_cancel_eval_response(
@@ -317,7 +306,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             CancelEvalResponse object
         """
-        pass
 
     # Run API Transformations
     @abstractmethod
@@ -340,7 +328,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, request_body)
         """
-        pass
 
     @abstractmethod
     def transform_create_run_response(
@@ -358,7 +345,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Run object
         """
-        pass
 
     @abstractmethod
     def transform_list_runs_request(
@@ -380,7 +366,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, query_params)
         """
-        pass
 
     @abstractmethod
     def transform_list_runs_response(
@@ -398,7 +383,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             ListRunsResponse object
         """
-        pass
 
     @abstractmethod
     def transform_get_run_request(
@@ -422,7 +406,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers)
         """
-        pass
 
     @abstractmethod
     def transform_get_run_response(
@@ -440,7 +423,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Run object
         """
-        pass
 
     @abstractmethod
     def transform_cancel_run_request(
@@ -464,7 +446,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers, body)
         """
-        pass
 
     @abstractmethod
     def transform_cancel_run_response(
@@ -482,7 +463,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             CancelRunResponse object
         """
-        pass
 
     @abstractmethod
     def transform_delete_run_request(
@@ -506,7 +486,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             Tuple of (url, headers, body)
         """
-        pass
 
     @abstractmethod
     def transform_delete_run_response(
@@ -524,7 +503,6 @@ class BaseEvalsAPIConfig(ABC):
         Returns:
             RunDeleteResponse object
         """
-        pass
 
     def get_error_class(
         self,

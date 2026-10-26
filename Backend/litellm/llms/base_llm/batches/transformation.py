@@ -38,7 +38,6 @@ class BaseBatchesConfig(ABC):
     @abstractmethod
     def custom_llm_provider(self) -> LlmProviders:
         """Return the LLM provider type for this configuration."""
-        pass
 
     @classmethod
     def get_config(cls):
@@ -86,7 +85,6 @@ class BaseBatchesConfig(ABC):
         Returns:
             Updated headers dictionary
         """
-        pass
 
     @abstractmethod
     def get_complete_batch_url(
@@ -112,7 +110,6 @@ class BaseBatchesConfig(ABC):
         Returns:
             Complete URL for the batch request
         """
-        pass
 
     @abstractmethod
     def transform_create_batch_request(
@@ -134,7 +131,6 @@ class BaseBatchesConfig(ABC):
         Returns:
             Transformed request data
         """
-        pass
 
     @abstractmethod
     def transform_create_batch_response(
@@ -156,7 +152,6 @@ class BaseBatchesConfig(ABC):
         Returns:
             LiteLLM batch object
         """
-        pass
 
     @abstractmethod
     def transform_retrieve_batch_request(
@@ -176,7 +171,6 @@ class BaseBatchesConfig(ABC):
         Returns:
             Transformed request data
         """
-        pass
 
     @abstractmethod
     def transform_retrieve_batch_response(
@@ -198,7 +192,6 @@ class BaseBatchesConfig(ABC):
         Returns:
             LiteLLM batch object
         """
-        pass
 
     @abstractmethod
     def get_error_class(
@@ -215,4 +208,3 @@ class BaseBatchesConfig(ABC):
         Returns:
             Provider-specific exception class
         """
-        pass

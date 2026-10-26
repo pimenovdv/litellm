@@ -13,7 +13,6 @@ from typing import (
     List,
     Optional,
     TypeVar,
-    Union,
     cast,
 )
 
@@ -83,7 +82,6 @@ class BaseManagedResource(ABC, Generic[ResourceObjectType]):
         Return the resource type identifier (e.g., 'file', 'vector_store', 'vector_store_file').
         Used for logging and unified ID generation.
         """
-        pass
 
     @property
     @abstractmethod
@@ -92,7 +90,6 @@ class BaseManagedResource(ABC, Generic[ResourceObjectType]):
         Return the database table name for this resource type.
         Example: 'litellm_managedfiletable', 'litellm_managedvectorstoretable'
         """
-        pass
 
     @abstractmethod
     def get_unified_resource_id_format(
@@ -114,7 +111,6 @@ class BaseManagedResource(ABC, Generic[ResourceObjectType]):
         Returns:
             Format string to be base64 encoded
         """
-        pass
 
     @abstractmethod
     async def create_resource_for_model(
@@ -136,7 +132,6 @@ class BaseManagedResource(ABC, Generic[ResourceObjectType]):
         Returns:
             Resource object from the provider
         """
-        pass
 
     # ============================================================================
     #                     COMMON STORAGE OPERATIONS

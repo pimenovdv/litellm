@@ -69,14 +69,12 @@ class AzureBlobStorageBackend(BaseFileStorageBackend, AzureBlobStorageLogger):
         Override to do nothing - we're not using this as a logger.
         """
         # Do nothing - this class is used for file storage, not logging
-        pass
 
     async def async_log_failure_event(self, *args, **kwargs):
         """
         Override to do nothing - we're not using this as a logger.
         """
         # Do nothing - this class is used for file storage, not logging
-        pass
 
     def _generate_file_name(self, original_filename: str, file_naming_strategy: str) -> str:
         """Generate file name based on naming strategy."""

@@ -97,4 +97,3 @@ class BaseRealtimeConfig(ABC):
         """
         Keep this state less - leave the state management (e.g. tracking current_output_item_id, current_response_id, current_conversation_id, current_delta_chunks) to the caller.
         """
-        pass

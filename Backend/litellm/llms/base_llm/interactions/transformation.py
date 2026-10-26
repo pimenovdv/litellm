@@ -57,7 +57,6 @@ class BaseInteractionsAPIConfig(ABC):
     @abstractmethod
     def custom_llm_provider(self) -> LlmProviders:
         """Return the LLM provider identifier."""
-        pass
 
     @classmethod
     def get_config(cls):
@@ -83,7 +82,6 @@ class BaseInteractionsAPIConfig(ABC):
         """
         Return the list of supported parameters for the given model.
         """
-        pass
 
     @abstractmethod
     def validate_environment(self, headers: dict, model: str, litellm_params: Optional[GenericLiteLLMParams]) -> dict:
@@ -148,7 +146,6 @@ class BaseInteractionsAPIConfig(ABC):
         Returns:
             The transformed request body as a dictionary
         """
-        pass
 
     @abstractmethod
     def transform_response(
@@ -162,7 +159,6 @@ class BaseInteractionsAPIConfig(ABC):
 
         Per OpenAPI spec, the response is an Interaction object.
         """
-        pass
 
     @abstractmethod
     def transform_streaming_response(
@@ -176,7 +172,6 @@ class BaseInteractionsAPIConfig(ABC):
 
         Per OpenAPI spec, streaming uses SSE with various event types.
         """
-        pass
 
     # =========================================================
     # GET INTERACTION TRANSFORMATION
@@ -198,7 +193,6 @@ class BaseInteractionsAPIConfig(ABC):
         Returns:
             Tuple of (URL, query_params)
         """
-        pass
 
     @abstractmethod
     def transform_get_interaction_response(
@@ -209,7 +203,6 @@ class BaseInteractionsAPIConfig(ABC):
         """
         Transform the get interaction response.
         """
-        pass
 
     # =========================================================
     # DELETE INTERACTION TRANSFORMATION
@@ -231,7 +224,6 @@ class BaseInteractionsAPIConfig(ABC):
         Returns:
             Tuple of (URL, request_body)
         """
-        pass
 
     @abstractmethod
     def transform_delete_interaction_response(
@@ -243,7 +235,6 @@ class BaseInteractionsAPIConfig(ABC):
         """
         Transform the delete interaction response.
         """
-        pass
 
     # =========================================================
     # CANCEL INTERACTION TRANSFORMATION
@@ -263,7 +254,6 @@ class BaseInteractionsAPIConfig(ABC):
         Returns:
             Tuple of (URL, request_body)
         """
-        pass
 
     @abstractmethod
     def transform_cancel_interaction_response(
@@ -274,7 +264,6 @@ class BaseInteractionsAPIConfig(ABC):
         """
         Transform the cancel interaction response.
         """
-        pass
 
     # =========================================================
     # ERROR HANDLING
