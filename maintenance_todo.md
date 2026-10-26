@@ -54,3 +54,11 @@
 - [x] Fix syntax errors and unused variables in `Backend/litellm/llms/custom_httpx/llm_http_handler.py`.
 
 - [x] Fix unused variables and imports in `Backend/litellm/router_strategy/` using pyflakes. (проверен/чист - re-exported import in config.py kept)
+- [x] Fix unused variables and imports in `Backend/litellm/realtime_api/` using pyflakes.
+ (проверен/чист)
+- [x] Fix unused variables and imports in `Backend/litellm/caching/` using pyflakes.
+ (проверен/чист)
+- [x] Fix unused variables and imports in `Backend/litellm/` using pyflakes.
+ (проверен/чист)
+- [x] Fix unused variables and imports in `Backend/litellm/utils.py` using pyflakes.
+ (проверен/чист)
