@@ -63,3 +63,5 @@
 - [x] Fix unused variables and imports in `Backend/litellm/utils.py` using pyflakes.
  (проверен/чист)
 - [x] Fix unused variables and imports in `Backend/litellm/llms/` using pyflakes.
+
+- [x] Fix unused variables and imports in `Backend/litellm/router.py` using pyflakes. (проверен/чист)

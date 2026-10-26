@@ -1,3 +1,4 @@
+from litellm.llms.openai_like.json_loader import JSONProviderRegistry
 # +-----------------------------------------------+
 # |                                               |
 # |           Give Feedback / Get Help            |
@@ -3334,7 +3335,6 @@ class Router:
         pending_tasks = []  # type: ignore
 
         async def check_response(task: asyncio.Task):
-            nonlocal pending_tasks
             try:
                 result = await task
                 if isinstance(result, (ModelResponse, CustomStreamWrapper)):
