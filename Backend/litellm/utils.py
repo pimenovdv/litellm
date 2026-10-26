@@ -7810,18 +7810,6 @@ class ProviderConfigManager:
         return litellm.CohereChatConfig()
 
     @staticmethod
-    def _get_langgraph_config() -> BaseConfig:
-        """Get LangGraph config."""
-
-        return LangGraphConfig()
-
-    @staticmethod
-    def _get_langflow_config() -> BaseConfig:
-        """Get LangFlow config."""
-
-        return LangFlowConfig()
-
-    @staticmethod
     def get_provider_chat_config(
         model: str,
         provider: LlmProviders,
@@ -7899,9 +7887,6 @@ class ProviderConfigManager:
             return litellm.InfinityEmbeddingConfig()
         elif litellm.LlmProviders.SAMBANOVA == provider:
             return litellm.SambaNovaEmbeddingConfig()
-        elif litellm.LlmProviders.OCI == provider:
-
-            return OCIEmbedConfig()
         elif litellm.LlmProviders.COHERE == provider or litellm.LlmProviders.COHERE_CHAT == provider:
             from litellm.llms.cohere.embed.transformation import CohereEmbeddingConfig
 
@@ -8283,9 +8268,6 @@ class ProviderConfigManager:
             return litellm.OpenAIGPTConfig()
         elif LlmProviders.GEMINI == provider:
             return litellm.GeminiModelInfo()
-        elif LlmProviders.VERTEX_AI == provider:
-
-            return VertexAIModelInfo()
         elif LlmProviders.LITELLM_PROXY == provider:
             return litellm.LiteLLMProxyChatConfig()
         elif LlmProviders.TOPAZ == provider:
@@ -8372,9 +8354,6 @@ class ProviderConfigManager:
             )
 
             return GoogleAIStudioFilesHandler()
-        elif LlmProviders.VERTEX_AI == provider:
-
-            return VertexAIFilesConfig()
         elif LlmProviders.BEDROCK == provider:
             from litellm.llms.bedrock.files.transformation import BedrockFilesConfig
 
@@ -8383,9 +8362,6 @@ class ProviderConfigManager:
             from litellm.llms.manus.files.transformation import ManusFilesConfig
 
             return ManusFilesConfig()
-        elif LlmProviders.ANTHROPIC == provider:
-
-            return AnthropicFilesConfig()
         return None
 
     @staticmethod
@@ -8612,9 +8588,6 @@ class ProviderConfigManager:
             from litellm.llms.gemini.videos.transformation import GeminiVideoConfig
 
             return GeminiVideoConfig()
-        elif LlmProviders.VERTEX_AI == provider:
-
-            return VertexAIVideoConfig()
         elif LlmProviders.RUNWAYML == provider:
             from litellm.llms.runwayml.videos.transformation import RunwayMLVideoConfig
 
@@ -8750,10 +8723,6 @@ class ProviderConfigManager:
             from litellm.llms.azure_ai.ocr.common_utils import get_azure_ai_ocr_config
 
             return get_azure_ai_ocr_config(model=model)
-
-        if provider == litellm.LlmProviders.VERTEX_AI:
-
-            return get_vertex_ai_ocr_config(model=model)
 
         if provider == litellm.LlmProviders.REDUCTO:
             from litellm.llms.reducto.ocr.transformation import (
@@ -8893,19 +8862,7 @@ class ProviderConfigManager:
             return GoogleGenAIConfig()
         elif litellm.LlmProviders.VERTEX_AI == provider:
 
-            #########################################################
-            # If Vertex Partner models like Anthropic, Mistral, etc. are used,
-            # return None as we want this to go through the litellm.completion() adapter
-            # and not the Google Gen AI adapter
-            #########################################################
-            if VertexAIPartnerModels.is_vertex_partner_model(model):
-                return None
-
-            #########################################################
-            # If the model is not a Vertex Partner model, return the Vertex AI Google Gen AI Config
-            # This is for Vertex `gemini` models
-            #########################################################
-            return VertexAIGoogleGenAIConfig()
+            pass
         return None
 
 

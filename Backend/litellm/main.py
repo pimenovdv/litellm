@@ -120,6 +120,7 @@ from litellm.llms.cohere.common_utils import CohereModelInfo
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.openai.chat.gpt_5_transformation import OpenAIGPT5Config
 from litellm.llms.openai_like.json_loader import JSONProviderRegistry
+from litellm.llms.vertex_ai.vertex_llm.vertex_ai_model_route import (
     VertexAIModelRoute,
     get_vertex_ai_model_route,
 )
@@ -3548,7 +3549,8 @@ def _complete_vertex_ai(ctx: _CompletionDispatchContext) -> _CompletionDispatchR
         )
     elif model_route == VertexAIModelRoute.AGENT_ENGINE:
         # Vertex AI Agent Engine (Reasoning Engines)
-                    VertexAgentEngineConfig,
+        from litellm.llms.vertex_ai.vertex_ai_agent_engine import (
+            VertexAgentEngineConfig,
         )
 
         vertex_agent_engine_config = VertexAgentEngineConfig()
@@ -4724,13 +4726,7 @@ def _complete_langgraph(ctx: _CompletionDispatchContext) -> _CompletionDispatchR
     timeout = ctx.timeout
 
 
-    (
-        api_base,
-        api_key,
-    ) = LangGraphConfig()._get_openai_compatible_provider_info(
-        api_base=api_base or litellm.api_base,
-        api_key=api_key or litellm.api_key,
-    )
+    # langgraph provider removed
 
     headers = headers or litellm.headers
 
@@ -4772,13 +4768,7 @@ def _complete_langflow(ctx: _CompletionDispatchContext) -> _CompletionDispatchRe
     timeout = ctx.timeout
 
 
-    (
-        api_base,
-        api_key,
-    ) = LangFlowConfig()._get_openai_compatible_provider_info(
-        api_base=api_base or litellm.api_base,
-        api_key=api_key or litellm.api_key,
-    )
+    # langflow provider removed
 
     headers = headers or litellm.headers
 
@@ -7696,7 +7686,8 @@ def transcription(
             ),
         )
     elif custom_llm_provider == "soniox":
-                    SonioxAudioTranscriptionHandler,
+        from litellm.llms.soniox.audio_transcription.handler import (
+            SonioxAudioTranscriptionHandler,
         )
 
         response = SonioxAudioTranscriptionHandler().audio_transcriptions(
@@ -8039,7 +8030,8 @@ def speech(
                 litellm_params=litellm_params_dict,
             )
     elif custom_llm_provider == "elevenlabs":
-                    ElevenLabsTextToSpeechConfig,
+        from litellm.llms.elevenlabs.text_to_speech.transformation import (
+            ElevenLabsTextToSpeechConfig,
         )
 
         if text_to_speech_provider_config is None:
@@ -8082,7 +8074,8 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "vertex_ai" or custom_llm_provider == "vertex_ai_beta":
-                    VertexAITextToSpeechConfig,
+        from litellm.llms.vertex_ai.text_to_speech.transformation import (
+            VertexAITextToSpeechConfig,
         )
 
         generic_optional_params = GenericLiteLLMParams(**kwargs)
@@ -8182,7 +8175,8 @@ def speech(
             **kwargs,
         )
     elif custom_llm_provider == "minimax":
-                    MinimaxTextToSpeechConfig,
+        from litellm.llms.minimax.text_to_speech.transformation import (
+            MinimaxTextToSpeechConfig,
         )
 
         # MiniMax Text-to-Speech
@@ -8219,7 +8213,8 @@ def speech(
             _is_async=aspeech or False,
         )
     elif custom_llm_provider == "aws_polly":
-                    AWSPollyTextToSpeechConfig,
+        from litellm.llms.aws_polly.text_to_speech.transformation import (
+            AWSPollyTextToSpeechConfig,
         )
 
         # AWS Polly Text-to-Speech
