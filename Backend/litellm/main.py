@@ -13,15 +13,9 @@ import asyncio
 import contextvars
 import datetime
 import inspect
-import json
 import os
-import random
-import sys
 import time
 import traceback
-from concurrent import futures
-from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
-from copy import deepcopy
 from functools import partial
 from typing import (
     TYPE_CHECKING,
@@ -38,7 +32,6 @@ from typing import (
     Type,
     Union,
     cast,
-    get_args,
 )
 
 from litellm._logging import _redact_string
@@ -47,7 +40,6 @@ from litellm._uuid import uuid
 if TYPE_CHECKING:
     from aiohttp import ClientSession
 
-import dotenv
 import httpx
 import openai
 import tiktoken
@@ -79,10 +71,8 @@ from litellm.constants import (
 )
 from litellm.exceptions import LiteLLMUnknownProvider
 from litellm.integrations.custom_logger import CustomLogger
-from litellm.litellm_core_utils.asyncify import run_async_function
 from litellm.litellm_core_utils.audio_utils.utils import (
     calculate_request_duration,
-    get_audio_file_for_health_check,
 )
 from litellm.litellm_core_utils.chat_completion_agentic_loop import (
     maybe_run_chat_completion_agentic_loop,
@@ -98,12 +88,10 @@ from litellm.litellm_core_utils.get_provider_specific_headers import (
 )
 from litellm.litellm_core_utils.health_check_utils import (
     _create_health_check_response,
-    _filter_model_params,
 )
 from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLoggingObj
 from litellm.litellm_core_utils.mock_functions import (
     mock_embedding,
-    mock_image_generation,
 )
 from litellm.litellm_core_utils.prompt_templates.common_utils import (
     get_content_from_model_response,
@@ -111,7 +99,7 @@ from litellm.litellm_core_utils.prompt_templates.common_utils import (
 from litellm.litellm_core_utils.request_timeout_resolver import (
     get_configured_request_timeout,
 )
-from litellm.llms.base_llm import BaseConfig, BaseImageGenerationConfig
+from litellm.llms.base_llm import BaseConfig
 from litellm.llms.base_llm.base_model_iterator import (
     convert_model_response_to_streaming,
 )
@@ -124,7 +112,6 @@ from litellm.llms.vertex_ai.vertex_llm.vertex_ai_model_route import (
     VertexAIModelRoute,
     get_vertex_ai_model_route,
 )
-from litellm.realtime_api.main import _realtime_health_check
 from litellm.secret_managers.main import get_secret_bool, get_secret_str
 from litellm.types.completion import (
     _CompletionDispatchContext,
@@ -134,38 +121,27 @@ from litellm.types.router import GenericLiteLLMParams
 from litellm.types.utils import (
     CustomPricingLiteLLMParams,
     ModelResponseStream,
-    RawRequestTypedDict,
-    StreamingChoices,
 )
 from litellm.utils import (
     Choices,
     CustomStreamWrapper,
     EmbeddingResponse,
-    Message,
     ModelResponse,
     ProviderConfigManager,
-    TextChoices,
     TextCompletionResponse,
     TextCompletionStreamWrapper,
     TranscriptionResponse,
     Usage,
     _get_model_info_helper,
-    add_provider_specific_params_to_optional_params,
     async_mock_completion_streaming_obj,
-    convert_to_model_response_object,
-    create_pretrained_tokenizer,
-    create_tokenizer,
-    get_api_key,
     get_llm_provider,
     get_model_info,
     get_non_default_completion_params,
     get_non_default_transcription_params,
     get_optional_params_embeddings,
-    get_optional_params_image_gen,
     get_optional_params_transcription,
     get_requester_metadata,
     get_secret,
-    get_standard_openai_params,
     mock_completion_streaming_obj,
     pre_process_non_default_params,
     read_config_args,
@@ -180,7 +156,6 @@ from litellm.utils import (
 )
 
 from ._logging import verbose_logger
-from .caching.caching import disable_cache, enable_cache, update_cache
 from .litellm_core_utils.core_helpers import safe_deep_copy
 from .litellm_core_utils.fallback_utils import (
     async_completion_with_fallbacks,
@@ -192,11 +167,8 @@ from .litellm_core_utils.prompt_templates.common_utils import (
     update_messages_with_model_file_ids,
 )
 from .litellm_core_utils.prompt_templates.factory import (
-    custom_prompt,
     function_call_prompt,
     map_system_message_pt,
-    ollama_pt,
-    prompt_factory,
     stringify_json_tool_call_content,
 )
 from .litellm_core_utils.streaming_chunk_builder_utils import ChunkProcessor
@@ -207,19 +179,17 @@ from .llms.azure.chat.o_series_handler import AzureOpenAIO1ChatCompletion
 from .llms.azure.completion.handler import AzureTextCompletion
 from .llms.azure_ai.anthropic.handler import AzureAnthropicChatCompletion
 from .llms.azure_ai.embed import AzureAIEmbedding
-from .llms.bedrock.chat import BedrockConverseLLM, BedrockLLM
+from .llms.bedrock.chat import BedrockConverseLLM
 from .llms.bedrock.embed.embedding import BedrockEmbedding
 from .llms.bedrock.image_edit.handler import BedrockImageEdit
 from .llms.bedrock.image_generation.image_handler import BedrockImageGeneration
 from .llms.bytez.chat.transformation import BytezChatConfig
-from .llms.clarifai.chat.transformation import ClarifaiConfig
 from .llms.codestral.completion.handler import CodestralTextCompletion
-from .llms.cohere.embed import handler as cohere_embed
 from .llms.custom_httpx.aiohttp_handler import BaseLLMAIOHTTPHandler
 from .llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
 from .llms.custom_llm import CustomLLM, custom_chat_llm_router
 from .llms.databricks.embed.handler import DatabricksEmbeddingHandler
-from .llms.deprecated_providers import aleph_alpha, palm
+from .llms.deprecated_providers import aleph_alpha
 from .llms.gdc.chat.transformation import GDCGeminiConfig
 from .llms.gemini.common_utils import get_api_key_from_env
 from .llms.groq.chat.handler import GroqChatCompletion
@@ -281,11 +251,8 @@ from .types.llms.openai import (
 from .types.utils import (
     AdapterCompletionStreamWrapper,
     ChatCompletionMessageToolCall,
-    CompletionTokensDetails,
     FileTypes,
-    HiddenParams,
     LlmProviders,
-    PromptTokensDetails,
     ProviderSpecificHeader,
     all_litellm_params,
 )
@@ -4479,7 +4446,6 @@ def _complete_bytez(ctx: _CompletionDispatchContext) -> _CompletionDispatchResul
         provider_config=bytez_transformation,
     )
 
-    pass
 
     return response
 
@@ -4521,7 +4487,6 @@ def _complete_lemonade(ctx: _CompletionDispatchContext) -> _CompletionDispatchRe
         provider_config=lemonade_transformation,
     )
 
-    pass
 
     return response
 
@@ -4570,7 +4535,6 @@ def _complete_ovhcloud(ctx: _CompletionDispatchContext) -> _CompletionDispatchRe
         provider_config=ovhcloud_transformation,
     )
 
-    pass
 
     return response
 
@@ -5588,7 +5552,6 @@ def completion(  # type: ignore
             """
             Deprecated. We now do together ai calls via the openai client - https://docs.together.ai/docs/openai-api-compatibility
             """
-            pass
         elif custom_llm_provider == "palm":
             raise ValueError(
                 "Palm was decommisioned on October 2024. Please use the `gemini/` route for Gemini Google AI Studio Models. Announcement: https://ai.google.dev/palm_docs/palm?hl=en"
@@ -7069,7 +7032,7 @@ def text_completion(
     *args,
     **kwargs,
 ):
-    import copy
+    pass
 
     """
     Generate text completions using the OpenAI API.
