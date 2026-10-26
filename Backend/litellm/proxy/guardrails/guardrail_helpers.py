@@ -1,11 +1,11 @@
 import os
 import sys
-from typing import Dict
+from typing import Dict, Optional
 
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.proxy.proxy_server import LiteLLM_TeamTable, UserAPIKeyAuth
-from litellm.types.guardrails import *
+from litellm.types.guardrails import GuardrailItem
 
 sys.path.insert(0, os.path.abspath("../.."))  # Adds the parent directory to the system path
 
