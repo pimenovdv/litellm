@@ -106,6 +106,7 @@ class StandardBuiltInToolCostTracking:
         resolved_usage = StandardBuiltInToolCostTracking._usage_with_anthropic_web_search(
             usage=usage, response_object=response_object
         )
+        _ = resolved_usage
 
 
         return StandardBuiltInToolCostTracking.get_cost_for_web_search(
@@ -291,7 +292,8 @@ class StandardBuiltInToolCostTracking:
 
         if usage is not None and (_get_web_search_requests(getattr(usage, "server_tool_use", None)) is not None):
             return usage
-        return usage
+
+        web_search_requests = 1
         server_tool_use = ServerToolUse(web_search_requests=web_search_requests)
         if usage is None:
             return Usage(server_tool_use=server_tool_use)

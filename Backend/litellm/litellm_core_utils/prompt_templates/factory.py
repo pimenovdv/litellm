@@ -6,7 +6,8 @@ import mimetypes
 import re
 import xml.etree.ElementTree as ET
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, TypedDict, Union, cast, overload
+from typing import Any, Dict, List, Optional, Set, Tuple, TypedDict, Union, cast, overload, Literal
+from pydantic import BaseModel
 
 from jinja2.sandbox import ImmutableSandboxedEnvironment
 
@@ -17,8 +18,27 @@ from litellm import verbose_logger
 from litellm._uuid import uuid
 from litellm.litellm_core_utils.url_utils import async_safe_get, safe_get
 from litellm.llms.custom_httpx.http_handler import HTTPHandler, get_async_httpx_client
+from litellm.llms.vertex_ai_and_google_ai_studio.gemini.transformation import VertexGeminiConfig
 from litellm.types.files import get_file_extension_from_mime_type
-from litellm.types.llms.anthropic import *
+from litellm.types.llms.anthropic import (
+    AnthropicMessagesImageParam,
+    AnthropicContentParamSource,
+    AnthropicMessagesDocumentParam,
+    AnthropicMessagesContainerUploadParam,
+    AnthropicContentParamSourceFileId,
+    AnthropicContentParamSourceUrl,
+    ChatCompletionThinkingBlock,
+    ChatCompletionRedactedThinkingBlock,
+    AnthropicMessagesUserMessageParam,
+    AnthopicMessagesAssistantMessageParam,
+    AnthropicMessagesUserMessageValues,
+    AnthropicMessagesTextParam,
+    AnthropicMessagesAssistantMessageValues,
+    AnthropicMessagesToolResultParam,
+    AnthropicMessagesToolResultContent,
+    AnthropicMessagesToolUseParam,
+    ChatCompletionCachedContent
+)
 from litellm.types.llms.bedrock import CachePointBlock
 from litellm.types.llms.bedrock import MessageBlock as BedrockMessageBlock
 from litellm.types.llms.custom_http import httpxSpecialProvider
