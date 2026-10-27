@@ -1,5 +1,7 @@
 from enum import Enum
 
+from typing import List
+
 from pydantic import BaseModel, Field
 
 
@@ -36,4 +38,4 @@ class LAR1Metadata(BaseModel):
     time: LAR1Time = LAR1Time.NOW
     mind: LAR1Mind = LAR1Mind.REF
     confidence: float = Field(default=0.5, ge=0.0, le=1.0)
-    evidence: list[LAR1Evidence] = []
+    evidence: List[LAR1Evidence] = []

@@ -436,7 +436,7 @@ class BedrockChecksContentFilterCategoryItem(BaseModel):
 
 
 class BedrockChecksContentFilterModel(BaseModel):
-    categories: list[BedrockChecksContentFilterCategoryItem]
+    categories: List[BedrockChecksContentFilterCategoryItem]
 
 
 class BedrockChecksPromptAttackCategoryItem(BaseModel):
@@ -444,7 +444,7 @@ class BedrockChecksPromptAttackCategoryItem(BaseModel):
 
 
 class BedrockChecksPromptAttackModel(BaseModel):
-    categories: list[BedrockChecksPromptAttackCategoryItem]
+    categories: List[BedrockChecksPromptAttackCategoryItem]
 
 
 class BedrockChecksSensitiveInformationEntityItem(BaseModel):
@@ -452,7 +452,7 @@ class BedrockChecksSensitiveInformationEntityItem(BaseModel):
 
 
 class BedrockChecksSensitiveInformationModel(BaseModel):
-    entities: list[BedrockChecksSensitiveInformationEntityItem]
+    entities: List[BedrockChecksSensitiveInformationEntityItem]
 
 
 class BedrockChecksConfigModel(BaseModel):

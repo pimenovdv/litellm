@@ -73,3 +73,4 @@
 - [x] Fix unused variables and imports in `Backend/litellm/_service_logger.py` using pyflakes.
 - [x] Fix incorrect generic types (List[Any][Any] -> List[Any] and Dict[str, Any][str, Any] -> Dict[str, Any]) and missing typing imports in `Backend/litellm/types/caching.py` and `Backend/litellm/types/embedding.py`.
 - [x] Fix unused variables and imports in `Backend/litellm/interactions/` using pyflakes.
+- [x] Fix untyped list and dict collections in Backend/litellm/types/ (lar1.py, object_permission.py, integrations/prometheus.py, guardrails.py) by replacing them with typing.List and typing.Dict.
