@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 import litellm
-from litellm._logging import verbose_logger, JsonFormatter
+from litellm._logging import JsonFormatter
 
 service_logger = logging.getLogger("LiteLLM_ServiceLogger")
 service_logger.setLevel(logging.INFO)

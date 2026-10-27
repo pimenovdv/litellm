@@ -69,3 +69,5 @@
 - [x] Restore missing imports for undefined functions in `Backend/litellm/cost_calculator.py`. (проверен/чист)
 - [x] Fix unexpected indents in Backend/litellm/anthropic_interface/messages/__init__.py and Backend/litellm/proxy/anthropic_endpoints/endpoints.py. (проверен/чист)
 - [x] Fix unused variables and imports in `Backend/litellm/litellm_core_utils/` using pyflakes. (проверен/чист)
+
+- [x] Fix unused variables and imports in `Backend/litellm/_service_logger.py` using pyflakes.
