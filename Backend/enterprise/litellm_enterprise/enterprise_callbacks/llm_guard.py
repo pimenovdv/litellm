@@ -200,9 +200,11 @@ class _ENTERPRISE_LLMGuard(CustomLogger):
             return await self.moderation_check(text=input_)
         if isinstance(input_, list):
             return [
-                await self.moderation_check(text=item)
-                if isinstance(item, str)
-                else item
+                (
+                    await self.moderation_check(text=item)
+                    if isinstance(item, str)
+                    else item
+                )
                 for item in input_
             ]
         return input_

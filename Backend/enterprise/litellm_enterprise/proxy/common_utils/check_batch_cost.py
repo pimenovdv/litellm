@@ -58,7 +58,9 @@ class CheckBatchCost:
                 "user_api_key_alias": getattr(user_row, "user_alias", None),
             }
         except Exception as e:
-            verbose_proxy_logger.error(f"CheckBatchCost: could not look up user {user_id} for batch {batch_id}: {e}")
+            verbose_proxy_logger.error(
+                f"CheckBatchCost: could not look up user {user_id} for batch {batch_id}: {e}"
+            )
             return {}
 
     async def _cleanup_stale_managed_objects(self) -> None:
@@ -67,11 +69,22 @@ class CheckBatchCost:
         in non-terminal states as 'stale_expired'. These will never complete and
         should not be polled.
         """
-        cutoff = datetime.now(timezone.utc) - timedelta(days=MANAGED_OBJECT_STALENESS_CUTOFF_DAYS)
+        cutoff = datetime.now(timezone.utc) - timedelta(
+            days=MANAGED_OBJECT_STALENESS_CUTOFF_DAYS
+        )
         result = await self.prisma_client.db.litellm_managedobjecttable.update_many(
             where={
                 "file_purpose": "batch",
-                "status": {"not_in": ["completed", "complete", "failed", "expired", "cancelled", "stale_expired"]},
+                "status": {
+                    "not_in": [
+                        "completed",
+                        "complete",
+                        "failed",
+                        "expired",
+                        "cancelled",
+                        "stale_expired",
+                    ]
+                },
                 "created_at": {"lt": cutoff},
             },
             data={"status": "stale_expired"},
@@ -154,7 +167,9 @@ class CheckBatchCost:
             if VertexAIBatchTransformation.is_unmanaged_gcs_batch_input_file_id(
                 input_file_id
             ):
-                assert input_file_id is not None  # narrowed by is_unmanaged_gcs_batch_input_file_id
+                assert (
+                    input_file_id is not None
+                )  # narrowed by is_unmanaged_gcs_batch_input_file_id
                 return self._resolve_unmanaged_provider_routing(
                     job=job,
                     prom_logger=prom_logger,
@@ -164,7 +179,9 @@ class CheckBatchCost:
                     ),
                 )
             if BedrockBatchesConfig.is_unmanaged_s3_batch_input_file_id(input_file_id):
-                assert input_file_id is not None  # narrowed by is_unmanaged_s3_batch_input_file_id
+                assert (
+                    input_file_id is not None
+                )  # narrowed by is_unmanaged_s3_batch_input_file_id
                 return self._resolve_unmanaged_provider_routing(
                     job=job,
                     prom_logger=prom_logger,
@@ -193,7 +210,9 @@ class CheckBatchCost:
         llm_provider: str,
         bare_model_name: str,
     ) -> Optional[Tuple[str, str]]:
-        deployment_id = self._get_deployment_id_for_bare_model(bare_model_name, llm_provider)
+        deployment_id = self._get_deployment_id_for_bare_model(
+            bare_model_name, llm_provider
+        )
         if deployment_id is None:
             verbose_proxy_logger.info(
                 f"Skipping unmanaged {llm_provider} batch {job.unified_object_id}: no {llm_provider} "
@@ -209,7 +228,9 @@ class CheckBatchCost:
     ) -> Optional[str]:
         model_group = self.llm_router.resolve_model_name_from_model_id(bare_model_name)
         deployment_id = (
-            self._get_deployment_id_for_provider(model_group, llm_provider) if model_group else None
+            self._get_deployment_id_for_provider(model_group, llm_provider)
+            if model_group
+            else None
         )
         if deployment_id is not None:
             return deployment_id
@@ -252,9 +273,8 @@ class CheckBatchCost:
         # a no-op for providers like vertex_ai whose model ids never contain a colon.
         normalized_actual = actual_model.replace(":", "-")
         normalized_bare = bare_model_name.replace(":", "-")
-        return (
-            normalized_actual == normalized_bare
-            or normalized_actual.endswith(f"/{normalized_bare}")
+        return normalized_actual == normalized_bare or normalized_actual.endswith(
+            f"/{normalized_bare}"
         )
 
     def _get_deployment_id_for_provider(
@@ -352,20 +372,24 @@ class CheckBatchCost:
         decoded = _is_base64_encoded_unified_file_id(raw_output_file_id)
         if decoded:
             try:
-                raw_output_file_id = decoded.split("llm_output_file_id,")[1].split(";")[0]
+                raw_output_file_id = decoded.split("llm_output_file_id,")[1].split(";")[
+                    0
+                ]
             except (IndexError, AttributeError):
                 pass
 
-        credentials = self.llm_router.get_deployment_credentials_with_provider(model_id) or {}
+        credentials = (
+            self.llm_router.get_deployment_credentials_with_provider(model_id) or {}
+        )
         _file_content = await afile_content(
             file_id=raw_output_file_id,
             **credentials,
         )
 
         # Access content - handle both direct attribute and method call
-        if hasattr(_file_content, 'content'):
+        if hasattr(_file_content, "content"):
             content_bytes = _file_content.content  # type: ignore[union-attr]
-        elif hasattr(_file_content, 'read'):
+        elif hasattr(_file_content, "read"):
             content_bytes = await _file_content.read()  # type: ignore[misc]
         else:
             content_bytes = _file_content  # type: ignore[assignment]
@@ -406,18 +430,27 @@ class CheckBatchCost:
         managed_files_hook = self.proxy_logging_obj.get_proxy_hook("managed_files")
         if managed_files_hook is not None:
             from litellm.proxy._types import UserAPIKeyAuth
+
             _minimal_auth = UserAPIKeyAuth(
                 user_id=job.created_by or "default-user-id",
                 team_id=getattr(job, "team_id", None),
             )
             for _file_attr in ["output_file_id", "error_file_id"]:
                 _raw_file_id = getattr(response, _file_attr, None)
-                if _raw_file_id and not _is_base64_encoded_unified_file_id(_raw_file_id):
+                if _raw_file_id and not _is_base64_encoded_unified_file_id(
+                    _raw_file_id
+                ):
                     try:
-                        _unified_file_id = managed_files_hook.get_unified_output_file_id(
-                            output_file_id=_raw_file_id,
-                            model_id=model_id,
-                            model_name=str(model_name) if model_name else deployment_info.model_name or None,
+                        _unified_file_id = (
+                            managed_files_hook.get_unified_output_file_id(
+                                output_file_id=_raw_file_id,
+                                model_id=model_id,
+                                model_name=(
+                                    str(model_name)
+                                    if model_name
+                                    else deployment_info.model_name or None
+                                ),
+                            )
                         )
                         await managed_files_hook.store_unified_file_id(
                             file_id=_unified_file_id,
@@ -439,14 +472,16 @@ class CheckBatchCost:
 
         # Pass deployment model_info so custom batch pricing
         # (input_cost_per_token_batches etc.) is used for cost calc
-        deployment_model_info = deployment_info.model_info.model_dump() if deployment_info.model_info else {}
-        batch_cost, batch_usage, batch_models = (
-            await calculate_batch_cost_and_usage(
-                file_content_dictionary=file_content_as_dict,
-                custom_llm_provider=llm_provider,  # type: ignore
-                model_name=model_name,
-                model_info=deployment_model_info,  # type: ignore[arg-type]
-            )
+        deployment_model_info = (
+            deployment_info.model_info.model_dump()
+            if deployment_info.model_info
+            else {}
+        )
+        batch_cost, batch_usage, batch_models = await calculate_batch_cost_and_usage(
+            file_content_dictionary=file_content_as_dict,
+            custom_llm_provider=llm_provider,  # type: ignore
+            model_name=model_name,
+            model_info=deployment_model_info,  # type: ignore[arg-type]
         )
         logging_obj = LiteLLMLogging(
             model=batch_models[0],
@@ -506,9 +541,12 @@ class CheckBatchCost:
         """
         try:
             from litellm.integrations.prometheus import PrometheusLogger
+
             prom_logger = PrometheusLogger.get_instance()
         except Exception as e:
-            verbose_proxy_logger.error(f"CheckBatchCost: could not get Prometheus logger: {e}")
+            verbose_proxy_logger.error(
+                f"CheckBatchCost: could not get Prometheus logger: {e}"
+            )
             prom_logger = None
 
         processed_models: List[Tuple[Optional[str], Optional[str]]] = []
@@ -547,7 +585,11 @@ class CheckBatchCost:
                     order={"created_at": "asc"},
                 )
             except Exception as query_err:
-                if "batch_processed" not in str(query_err).lower() and "unknown column" not in str(query_err).lower() and "does not exist" not in str(query_err).lower():
+                if (
+                    "batch_processed" not in str(query_err).lower()
+                    and "unknown column" not in str(query_err).lower()
+                    and "does not exist" not in str(query_err).lower()
+                ):
                     raise
                 # Permanent schema gap — cache the result so future cycles skip straight to fallback
                 self._has_batch_processed_column = False
@@ -581,14 +623,13 @@ class CheckBatchCost:
                     f"Skipping job {job.unified_object_id} because of error querying model ID: {model_id} for cost and usage of batch ID: {batch_id}: {e}"
                 )
                 if prom_logger:
-                    prom_logger.record_check_batch_cost_error("provider_retrieval_error")
+                    prom_logger.record_check_batch_cost_error(
+                        "provider_retrieval_error"
+                    )
                 continue
 
             ## RETRIEVE THE BATCH JOB OUTPUT FILE
-            if (
-                response.status == "completed"
-                and response.output_file_id is not None
-            ):
+            if response.status == "completed" and response.output_file_id is not None:
                 try:
                     tracked = await self._track_completed_batch_cost(
                         job=job,

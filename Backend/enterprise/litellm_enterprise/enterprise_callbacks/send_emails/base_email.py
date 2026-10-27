@@ -351,8 +351,10 @@ class BaseEmailLogger(CustomLogger):
         )
 
         # Calculate percentage and alert threshold
-        percentage = threshold_pct if threshold_pct is not None else int(
-            EMAIL_BUDGET_ALERT_MAX_SPEND_ALERT_PERCENTAGE * 100
+        percentage = (
+            threshold_pct
+            if threshold_pct is not None
+            else int(EMAIL_BUDGET_ALERT_MAX_SPEND_ALERT_PERCENTAGE * 100)
         )
         threshold_fraction = percentage / 100.0
         alert_threshold_str = (
@@ -607,9 +609,7 @@ class BaseEmailLogger(CustomLogger):
                 continue
 
             _id = user_info.token or user_info.user_id or "default_id"
-            _cache_key = (
-                f"email_budget_alerts:max_budget_alert:{threshold_pct}:{_id}"
-            )
+            _cache_key = f"email_budget_alerts:max_budget_alert:{threshold_pct}:{_id}"
 
             # Parse emails + auto-include owner
             emails = _parse_email_list(raw_emails)
@@ -632,7 +632,9 @@ class BaseEmailLogger(CustomLogger):
             if send_count is not None and send_count > 1:
                 continue
 
-            event_message = f"Max Budget Alert - {threshold_pct}% of Maximum Budget Reached"
+            event_message = (
+                f"Max Budget Alert - {threshold_pct}% of Maximum Budget Reached"
+            )
             webhook_event = WebhookEvent(
                 event="max_budget_alert",
                 event_message=event_message,
@@ -665,7 +667,9 @@ class BaseEmailLogger(CustomLogger):
                 )
                 await self._release_budget_alert_claim(_cache, _cache_key)
 
-    async def _release_budget_alert_claim(self, cache: DualCache, cache_key: str) -> None:
+    async def _release_budget_alert_claim(
+        self, cache: DualCache, cache_key: str
+    ) -> None:
         try:
             await cache.async_delete_cache(key=cache_key)
         except Exception:
