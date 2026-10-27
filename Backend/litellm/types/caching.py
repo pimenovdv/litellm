@@ -1,6 +1,6 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Literal
+from typing import Any, Dict, List, Literal
 
 from pydantic import BaseModel
 from typing_extensions import TypedDict
@@ -60,7 +60,7 @@ class RedisPipelineRpushOperation(TypedDict):
     """
 
     key: str
-    values: List[Any][Any]
+    values: List[Any]
 
 
 class RedisPipelineLpopOperation(TypedDict):
@@ -108,7 +108,7 @@ class HealthCheckCacheParams(BaseModel):
 
     host: str | None = None
     port: str | int | None = None
-    redis_kwargs: Dict[str, Any][str, Any] | None = None
+    redis_kwargs: Dict[str, Any] | None = None
     namespace: str | None = None
     redis_version: str | int | float | None = None
 
@@ -116,7 +116,7 @@ class HealthCheckCacheParams(BaseModel):
 class CachedEmbedding(TypedDict):
     """Type definition for cached embedding objects"""
 
-    embedding: List[Any][float] | None
+    embedding: List[float] | None
     index: int | None
     object: str | None
     model: str | None

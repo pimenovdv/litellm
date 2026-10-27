@@ -71,3 +71,4 @@
 - [x] Fix unused variables and imports in `Backend/litellm/litellm_core_utils/` using pyflakes. (проверен/чист)
 
 - [x] Fix unused variables and imports in `Backend/litellm/_service_logger.py` using pyflakes.
+- [x] Fix incorrect generic types (List[Any][Any] -> List[Any] and Dict[str, Any][str, Any] -> Dict[str, Any]) and missing typing imports in `Backend/litellm/types/caching.py` and `Backend/litellm/types/embedding.py`.
