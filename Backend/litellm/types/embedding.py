@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from typing import Any, Dict, List
+
 from pydantic import BaseModel, ConfigDict
 
 
 class EmbeddingRequest(BaseModel):
     model: str
-    input: List[Any][str] = []
+    input: List[str] = []
     timeout: int = 600
     api_base: str | None = None
     api_version: str | None = None
