@@ -760,7 +760,7 @@ class PrometheusMetricLabels:
     litellm_check_batch_cost_last_run_timestamp: List[str] = []
 
     # MCP tool call metrics
-    litellm_mcp_tool_calls_total: list[str] = [
+    litellm_mcp_tool_calls_total: List[str] = [
         UserAPIKeyLabelNames.MCP_TOOL_NAME.value,
         UserAPIKeyLabelNames.MCP_SERVER_NAME.value,
         UserAPIKeyLabelNames.API_KEY_HASH.value,
@@ -771,7 +771,7 @@ class PrometheusMetricLabels:
         UserAPIKeyLabelNames.END_USER.value,
     ]
 
-    litellm_mcp_tool_call_spend_metric: list[str] = list(litellm_mcp_tool_calls_total)
+    litellm_mcp_tool_call_spend_metric: List[str] = list(litellm_mcp_tool_calls_total)
 
     @staticmethod
     def get_labels(label_name: DEFINED_PROMETHEUS_METRICS) -> List[str]:
