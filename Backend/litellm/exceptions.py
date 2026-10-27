@@ -1213,3 +1213,11 @@ class SensitiveDataRouteException(Exception):
         self.sticky_session_routing = sticky_session_routing
         self.message = message or f"Sensitive data detected by {guardrail_name}. Routing to model: {route_to_model}"
         super().__init__(self.message)
+
+class AnthropicContextManagementError(Exception):
+    """Validation error from the polyfill, surfaced as an Anthropic-format 4xx."""
+
+    def __init__(self, *, status_code: int, message: str) -> None:
+        super().__init__(message)
+        self.status_code = status_code
+        self.message = message
