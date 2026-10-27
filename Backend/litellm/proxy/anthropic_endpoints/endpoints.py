@@ -9,12 +9,12 @@ import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm.anthropic_interface.exceptions import AnthropicExceptionMapping
 from litellm.integrations.custom_guardrail import ModifyResponseException
-    AnthropicContextManagementError,
-)
+from litellm.exceptions import ContextWindowExceededError as AnthropicContextManagementError
 from litellm.llms.base_llm.guardrail_translation.utils import (
     blocked_response_usage as _blocked_response_usage,
 )
-from litellm.proxy._types import *
+from typing import Any
+from litellm.proxy._types import UserAPIKeyAuth, ProxyException
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 from litellm.proxy.common_request_processing import (
     ProxyBaseLLMRequestProcessing,

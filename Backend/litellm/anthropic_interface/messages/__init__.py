@@ -10,9 +10,11 @@ This is an __init__.py file to allow the following interface
 
 """
 
-from typing import Any, AsyncIterator, Coroutine, Dict, Iterator, List, Optional, Union
-    AnthropicMessagesResponse,
-)
+from typing import Any, AsyncIterator, Coroutine, Dict, Iterator, List, Optional, Union, TYPE_CHECKING
+if TYPE_CHECKING:
+    from ...types.llms.anthropic import AnthropicMessagesResponse
+else:
+    AnthropicMessagesResponse = Any
 
 
 async def acreate(

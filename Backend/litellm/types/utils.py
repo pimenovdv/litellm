@@ -56,9 +56,10 @@ from .agents import LiteLLMSendMessageResponse
 from .guardrails import GuardrailEventHooks
 from .llms.anthropic_messages.anthropic_response import AnthropicMessagesResponse
 from .llms.base import HiddenParams
+from openai.types.fine_tuning.fine_tuning_job import FineTuningJob
+from openai.types.batch import Batch
 from .llms.openai import (
     AllMessageValues,
-    Batch,
     ChatCompletionAnnotation,
     ChatCompletionReasoningItem,
     ChatCompletionRedactedThinkingBlock,
@@ -67,7 +68,6 @@ from .llms.openai import (
     ChatCompletionToolParam,
     ChatCompletionUsageBlock,
     FileSearchTool,
-    FineTuningJob,
     ImageURLListItem,
     OpenAIChatCompletionChunk,
     OpenAIChatCompletionFinishReason,
@@ -2051,9 +2051,9 @@ class EmbeddingResponse(OpenAIObject):
     ):
         object = "list"
         if response_ms:
-            _response_ms = response_ms
+            pass
         else:
-            _response_ms = None
+            pass
         if data:
             data = data
         else:
@@ -2358,9 +2358,9 @@ class ImageResponse(OpenAIImageResponse, BaseLiteLLMOpenAIResponseObject):
         **kwargs,
     ):
         if response_ms:
-            _response_ms = response_ms
+            pass
         else:
-            _response_ms = None
+            pass
         if data:
             data = data
         else:
@@ -3877,3 +3877,18 @@ class GenericGuardrailAPIInputs(TypedDict, total=False):
     stream_holdback_chars: List[
         int
     ]  # trailing chars to withhold from streaming emission per text (word-boundary safety)
+
+
+__all__ = [
+    "FileTypes",
+    "ChatCompletion",
+    "Categories",
+    "CategoryAppliedInputTypes",
+    "CategoryScores",
+    "Moderation",
+    "ModerationCreateResponse",
+    "RerankResponse",
+    "CredentialBase",
+    "CredentialItem",
+    "CreateCredentialItem"
+]

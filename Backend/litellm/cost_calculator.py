@@ -1,5 +1,26 @@
 # What is this?
 ## File for 'response_cost' calculation in Logging
+
+from typing import TYPE_CHECKING, Any
+if TYPE_CHECKING:
+    google_cost_router = Any
+    google_cost_per_character = Any
+    google_cost_per_token = Any
+    anthropic_cost_per_token = Any
+    bedrock_cost_per_token = Any
+    databricks_cost_per_token = Any
+    fireworks_ai_cost_per_token = Any
+    azure_openai_cost_per_token = Any
+    gemini_cost_per_token = Any
+    deepseek_cost_per_token = Any
+    tencent_cost_per_token = Any
+    perplexity_cost_per_token = Any
+    xai_cost_per_token = Any
+    lemonade_cost_per_token = Any
+    dashscope_cost_per_token = Any
+    azure_ai_cost_per_token = Any
+    get_model_params_and_category = Any
+    AzureFoundryModelInfo = Any
 import logging
 import time
 from functools import lru_cache
@@ -216,7 +237,7 @@ def _get_additional_costs(
         config_class = None
         if custom_llm_provider == "azure_ai":
 
-            config_class = AzureFoundryModelInfo.get_azure_ai_config_for_model(model)
+            config_class = AzureFoundryModelInfo.get_azure_ai_config_for_model(model)  # noqa: F821
         # Add more providers here as needed
         # elif custom_llm_provider == "other_provider":
         #     config_class = get_other_provider_config(model)
@@ -541,13 +562,13 @@ def cost_per_token(
             optional_params=(response._hidden_params if response and hasattr(response, "_hidden_params") else None),
         )
     elif custom_llm_provider == "vertex_ai":
-        cost_router = google_cost_router(
+        cost_router = google_cost_router(  # noqa: F821
             model=model_without_prefix,
             custom_llm_provider=custom_llm_provider,
             call_type=call_type,
         )
         if cost_router == "cost_per_character":
-            return google_cost_per_character(
+            return google_cost_per_character(  # noqa: F821
                 model=model_without_prefix,
                 custom_llm_provider=custom_llm_provider,
                 prompt_characters=prompt_characters,
@@ -555,16 +576,16 @@ def cost_per_token(
                 usage=usage_block,
             )
         elif cost_router == "cost_per_token":
-            return google_cost_per_token(
+            return google_cost_per_token(  # noqa: F821
                 model=model_without_prefix,
                 custom_llm_provider=custom_llm_provider,
                 usage=usage_block,
                 service_tier=service_tier,
             )
     elif custom_llm_provider == "anthropic":
-        return anthropic_cost_per_token(model=model, usage=usage_block, service_tier=service_tier)
+        return anthropic_cost_per_token(model=model, usage=usage_block, service_tier=service_tier)  # noqa: F821
     elif custom_llm_provider == "bedrock":
-        return bedrock_cost_per_token(model=model, usage=usage_block, service_tier=service_tier)
+        return bedrock_cost_per_token(model=model, usage=usage_block, service_tier=service_tier)  # noqa: F821
     elif custom_llm_provider == "openai":
         return openai_cost_per_token(
             model=model,
@@ -573,33 +594,33 @@ def cost_per_token(
             data_residency=data_residency,
         )
     elif custom_llm_provider == "databricks":
-        return databricks_cost_per_token(model=model, usage=usage_block)
+        return databricks_cost_per_token(model=model, usage=usage_block)  # noqa: F821
     elif custom_llm_provider == "fireworks_ai":
-        return fireworks_ai_cost_per_token(model=model, usage=usage_block)
+        return fireworks_ai_cost_per_token(model=model, usage=usage_block)  # noqa: F821
     elif custom_llm_provider == "azure":
-        return azure_openai_cost_per_token(
+        return azure_openai_cost_per_token(  # noqa: F821
             model=model,
             usage=usage_block,
             response_time_ms=response_time_ms,
             service_tier=service_tier,
         )
     elif custom_llm_provider == "gemini":
-        return gemini_cost_per_token(model=model, usage=usage_block, service_tier=service_tier)
+        return gemini_cost_per_token(model=model, usage=usage_block, service_tier=service_tier)  # noqa: F821
     elif custom_llm_provider == "deepseek":
-        return deepseek_cost_per_token(model=model, usage=usage_block)
+        return deepseek_cost_per_token(model=model, usage=usage_block)  # noqa: F821
     elif custom_llm_provider == "tencent":
-        return tencent_cost_per_token(model=model, usage=usage_block)
+        return tencent_cost_per_token(model=model, usage=usage_block)  # noqa: F821
     elif custom_llm_provider == "perplexity":
-        return perplexity_cost_per_token(model=model, usage=usage_block)
+        return perplexity_cost_per_token(model=model, usage=usage_block)  # noqa: F821
     elif custom_llm_provider == "xai":
-        return xai_cost_per_token(model=model, usage=usage_block)
+        return xai_cost_per_token(model=model, usage=usage_block)  # noqa: F821
     elif custom_llm_provider == "lemonade":
-        return lemonade_cost_per_token(model=model, usage=usage_block)
+        return lemonade_cost_per_token(model=model, usage=usage_block)  # noqa: F821
     elif custom_llm_provider == "dashscope":
 
-        return dashscope_cost_per_token(model=model, usage=usage_block)
+        return dashscope_cost_per_token(model=model, usage=usage_block)  # noqa: F821
     elif custom_llm_provider == "azure_ai":
-        return azure_ai_cost_per_token(
+        return azure_ai_cost_per_token(  # noqa: F821
             model=model,
             usage=usage_block,
             response_time_ms=response_time_ms,
@@ -1469,9 +1490,9 @@ def completion_cost(
                 # Calculate cost based on prompt_tokens, completion_tokens
                 if "togethercomputer" in model or "together_ai" in model or custom_llm_provider == "together_ai":
                     # together ai prices based on size of llm
-                    # get_model_params_and_category takes a model name and returns the category of LLM size it is in model_prices_and_context_window.json
+                    # get_model_params_and_category takes a model name and returns the category of LLM size it is in model_prices_and_context_window.json  # noqa: F821
 
-                    model = get_model_params_and_category(model, call_type=CallTypes(call_type))
+                    model = get_model_params_and_category(model, call_type=CallTypes(call_type))  # noqa: F821
 
                 # replicate llms are calculate based on time for request running
                 # see https://replicate.com/pricing
