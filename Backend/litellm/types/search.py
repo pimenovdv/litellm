@@ -4,7 +4,7 @@ LiteLLM Search API Types
 This module defines types for the unified search API across different providers.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from typing_extensions import Required, TypedDict
 
@@ -49,7 +49,7 @@ class SearchTool(TypedDict, total=False):
     search_tool_id: Optional[str]
     search_tool_name: Required[str]
     litellm_params: Required[SearchToolLiteLLMParams]
-    search_tool_info: Optional[dict]
+    search_tool_info: Optional[Dict]
     created_at: Optional[str]
     updated_at: Optional[str]
 
@@ -59,8 +59,8 @@ class SearchToolInfoResponse(TypedDict, total=False):
 
     search_tool_id: Optional[str]
     search_tool_name: str
-    litellm_params: dict
-    search_tool_info: Optional[dict]
+    litellm_params: Dict
+    search_tool_info: Optional[Dict]
     created_at: Optional[str]
     updated_at: Optional[str]
     is_from_config: Optional[bool]  # True if this tool is defined in config file, False if from DB
