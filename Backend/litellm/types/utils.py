@@ -2051,9 +2051,9 @@ class EmbeddingResponse(OpenAIObject):
     ):
         object = "list"
         if response_ms:
-            _response_ms = response_ms
+            self._response_ms = response_ms
         else:
-            _response_ms = None
+            self._response_ms = None
         if data:
             data = data
         else:
@@ -2358,9 +2358,9 @@ class ImageResponse(OpenAIImageResponse, BaseLiteLLMOpenAIResponseObject):
         **kwargs,
     ):
         if response_ms:
-            _response_ms = response_ms
+            self._response_ms = response_ms
         else:
-            _response_ms = None
+            self._response_ms = None
         if data:
             data = data
         else:
