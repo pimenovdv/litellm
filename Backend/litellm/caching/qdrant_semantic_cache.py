@@ -344,7 +344,6 @@ class QdrantSemanticCache(BaseCache):
         else:
             # cache miss !
             return None
-        pass
 
     async def async_set_cache(self, key, value, **kwargs):
         from litellm._uuid import uuid
@@ -452,7 +451,6 @@ class QdrantSemanticCache(BaseCache):
         else:
             # cache miss !
             return None
-        pass
 
     async def _collection_info(self):
         return self.collection_info

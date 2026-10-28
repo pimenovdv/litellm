@@ -21,14 +21,20 @@ import litellm
 from litellm._logging import verbose_logger
 from litellm.constants import CACHED_STREAMING_CHUNK_DELAY
 from litellm.litellm_core_utils.model_param_helper import ModelParamHelper
-from litellm.types.caching import *
+from litellm.types.caching import LiteLLMCacheType, CachingSupportedCallTypes, DynamicCacheControl, CachedEmbedding
 from litellm.types.utils import EmbeddingResponse, all_litellm_params
 
 from .base_cache import BaseCache
-from .dual_cache import DualCache  # noqa: F401
 from .in_memory_cache import InMemoryCache
 from .redis_cache import RedisCache
 from .redis_cluster_cache import RedisClusterCache
+from .redis_semantic_cache import RedisSemanticCache
+from .valkey_semantic_cache import ValkeySemanticCache
+from .qdrant_semantic_cache import QdrantSemanticCache
+from .s3_cache import S3Cache
+from .gcs_cache import GCSCache
+from .azure_blob_cache import AzureBlobCache
+from .disk_cache import DiskCache
 
 
 def print_verbose(print_statement):
