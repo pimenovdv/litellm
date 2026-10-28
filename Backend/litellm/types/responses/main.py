@@ -1,8 +1,7 @@
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional
 
-from openai.types.responses.response_function_tool_call import ResponseFunctionToolCall
 from pydantic import PrivateAttr
-from typing_extensions import Any, List, Optional, TypedDict
+from typing_extensions import Any, TypedDict
 
 from litellm.types.llms.base import BaseLiteLLMOpenAIResponseObject
 

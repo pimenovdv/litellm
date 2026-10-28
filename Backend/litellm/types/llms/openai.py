@@ -41,10 +41,8 @@ from openai.types.responses.response_create_params import (
     Reasoning,
     ResponseIncludable,
     ResponseInputParam,
-    ToolChoice,
     ToolParam,
 )
-from openai.types.responses.response_function_tool_call import ResponseFunctionToolCall
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -55,7 +53,6 @@ from pydantic import (
 )
 from typing_extensions import (
     Annotated,
-    Dict,
     NotRequired,
     Required,
     TypedDict,
