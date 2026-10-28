@@ -4,7 +4,6 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 from typing_extensions import TypedDict
 
-from litellm._uuid import uuid
 
 
 class ServiceMetrics(enum.Enum):
@@ -105,6 +104,6 @@ class ServiceLoggerPayload(BaseModel):
     def to_json(self, **kwargs):
         try:
             return self.model_dump(**kwargs)  # noqa
-        except Exception as e:
+        except Exception:
             # if using pydantic v1
             return self.dict(**kwargs)

@@ -1,8 +1,6 @@
 # Import types from the Google GenAI SDK
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, TypeAlias
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from pydantic import BaseModel
-from typing_extensions import TypedDict
 
 from litellm.types.llms.openai import BaseLiteLLMOpenAIResponseObject
 
@@ -25,7 +23,6 @@ if TYPE_CHECKING:
 
     class GenerateContentResponse(GoogleGenAIGenerateContentResponse, BaseLiteLLMOpenAIResponseObject):  # type: ignore[misc, valid-type]
         _hidden_params: dict = {}
-        pass
 
 else:
     # Fallback types when google.genai is not available
