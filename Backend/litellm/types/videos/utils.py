@@ -6,7 +6,7 @@ Format: vid_{base64_encoded_string}
 """
 
 import base64
-from typing import Optional, Tuple
+from typing import Optional
 
 from litellm._logging import verbose_logger
 from litellm.types.utils import SpecialEnums

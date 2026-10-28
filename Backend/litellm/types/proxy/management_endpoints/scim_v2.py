@@ -1,6 +1,5 @@
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
-from fastapi import HTTPException
 from pydantic import (
     BaseModel,
     ConfigDict,
