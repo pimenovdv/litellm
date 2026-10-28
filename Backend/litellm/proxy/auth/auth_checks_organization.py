@@ -6,7 +6,7 @@ from typing import Awaitable, Callable, Dict, List, Optional, Tuple
 
 from fastapi import status
 
-from litellm.proxy._types import *
+from litellm.proxy._types import LiteLLM_UserTable, LitellmUserRoles, ProxyErrorTypes, ProxyException, LiteLLMRoutes
 
 
 def organization_role_based_access_check(
