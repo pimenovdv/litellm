@@ -3,47 +3,32 @@
 # from __future__ import annotations must be the first non-comment statement
 from __future__ import annotations
 
-import ast
 import asyncio
 import base64
-import binascii
 import contextvars
 import copy
 import datetime
 import hashlib
-import inspect
-import io
-import itertools
 import json
-import logging
 import os
 import random  # type: ignore
 import re
-import struct
-import subprocess
 
 # What is this?
 ## Generic utils.py file. Problem-specific utils (e.g. 'cost calculation), should all be in `litellm_core_utils/`.
 import sys
-import textwrap
-import threading
 import time
 import traceback
-from dataclasses import dataclass, field
 from functools import lru_cache, wraps
 from importlib import resources
-from inspect import iscoroutine
 from io import StringIO
-from os.path import abspath, dirname, join
 
-import dotenv
 import httpx
 import openai
-import tiktoken
 from httpx import Proxy
 from httpx._utils import get_environment_proxies
 from openai.lib import _parsing, _pydantic
-from openai.types.chat.completion_create_params import ResponseFormat
+import inspect
 from pydantic import BaseModel
 from tiktoken import Encoding
 from tokenizers import Tokenizer
@@ -68,7 +53,6 @@ from litellm.constants import (
     DEFAULT_EMBEDDING_PARAM_VALUES,
     DEFAULT_MAX_LRU_CACHE_SIZE,
     DEFAULT_TRIM_RATIO,
-    FUNCTION_DEFINITION_TOKEN_COUNT,
     INITIAL_RETRY_DELAY,
     JITTER,
     MAX_RETRY_DELAY,
@@ -76,7 +60,6 @@ from litellm.constants import (
     DEFAULT_MINIMUM_PROMPT_CACHE_TOKEN_COUNT,
     MINIMUM_PROMPT_CACHE_TOKEN_COUNT_OVERRIDE,
     OPENAI_EMBEDDING_PARAMS,
-    TOOL_CHOICE_OBJECT_TOKEN_COUNT,
 )
 
 _CachingHandlerResponse = None
@@ -162,22 +145,15 @@ def _get_cached_audio_utils():
 
 from litellm.types.llms.openai import (
     AllMessageValues,
-    AllPromptValues,
-    ChatCompletionAssistantToolCall,
     ChatCompletionNamedToolChoiceParam,
     ChatCompletionToolParam,
     ChatCompletionToolParamFunctionChunk,
-    OpenAITextCompletionUserMessage,
     OpenAIWebSearchOptions,
 )
 from litellm.types.utils import FileTypes  # type: ignore
 from litellm.types.utils import (
-    OPENAI_RESPONSE_HEADERS,
     CallTypes,
-    ChatCompletionDeltaToolCall,
-    ChatCompletionMessageToolCall,
     Choices,
-    CostPerToken,
     CredentialItem,
     CustomHuggingfaceTokenizer,
     Delta,
@@ -398,29 +374,10 @@ if TYPE_CHECKING:
     from litellm.llms.base_llm.skills.transformation import BaseSkillsAPIConfig
 
 from ._logging import _is_debugging_on, verbose_logger
-from .caching.caching import (
-
-    Cache,
-
-    RedisCache,
-
-
-)
 from .exceptions import (
-    APIConnectionError,
-    APIError,
     AuthenticationError,
     BadRequestError,
     BudgetExceededError,
-    ContentPolicyViolationError,
-    ContextWindowExceededError,
-    NotFoundError,
-    OpenAIError,
-    PermissionDeniedError,
-    RateLimitError,
-    ServiceUnavailableError,
-    Timeout,
-    UnprocessableEntityError,
     UnsupportedParamsError,
 )
 
@@ -5714,7 +5671,6 @@ def function_to_dict(input_function) -> dict:  # noqa: C901
     """
     # Get function name and docstring
     try:
-        import inspect
         from ast import literal_eval
 
         from numpydoc.docscrape import NumpyDocString
@@ -5722,7 +5678,7 @@ def function_to_dict(input_function) -> dict:  # noqa: C901
         raise e
 
     name = input_function.__name__
-    docstring = inspect.getdoc(input_function)
+    docstring = input_function.__doc__
     numpydoc = NumpyDocString(docstring)
     description = "\n".join([s.strip() for s in numpydoc["Summary"]])
 
@@ -7360,11 +7316,6 @@ def add_dummy_tool(custom_llm_provider: str) -> List[ChatCompletionToolParam]:
 
 
 from litellm.types.llms.openai import (
-    ChatCompletionAudioObject,
-    ChatCompletionImageObject,
-    ChatCompletionTextObject,
-    ChatCompletionUserMessage,
-    OpenAIMessageContent,
     ValidUserMessageContentTypes,
 )
 

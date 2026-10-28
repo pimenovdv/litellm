@@ -1,1 +1,2 @@
 - [x] Fix unused variables and imports in `Backend/litellm/types/` (excluding `proxy`) using pyflakes.
+- [x] Clean up unused variables and imports in Backend/litellm/utils.py.
