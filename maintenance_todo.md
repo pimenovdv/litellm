@@ -82,3 +82,4 @@
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/completion.py` and `Backend/litellm/types/search.py` to improve type safety.
 - [x] Clean up unused variables and imports in Backend/litellm/caching/ using pyflakes and autoflake.
 - [x] Clean up unused variables and imports in Backend/litellm/integrations/ using pyflakes.
+- [ ] Remove unused variables and imports in `Backend/enterprise/litellm_enterprise/proxy/` using pyflakes.
