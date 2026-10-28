@@ -7,7 +7,6 @@ from litellm.proxy._types import (
     LiteLLM_DeletedTeamTable,
     LiteLLM_TeamMembership,
     LiteLLM_TeamTable,
-    LiteLLM_UserTable,
     Member,
 )
 
