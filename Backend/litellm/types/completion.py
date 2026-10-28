@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import (
+    Dict,
     TYPE_CHECKING,
     Any,
     Callable,
@@ -188,13 +189,13 @@ class CompletionRequest(BaseModel):
     top_p: Optional[float] = None
     n: Optional[int] = None
     stream: Optional[bool] = None
-    stop: Optional[dict] = None
+    stop: Optional[Dict] = None
     max_tokens: Optional[int] = None
     presence_penalty: Optional[float] = None
     frequency_penalty: Optional[float] = None
-    logit_bias: Optional[dict] = None
+    logit_bias: Optional[Dict] = None
     user: Optional[str] = None
-    response_format: Optional[dict] = None
+    response_format: Optional[Dict] = None
     seed: Optional[int] = None
     tools: Optional[List[str]] = None
     tool_choice: Optional[str] = None
@@ -220,21 +221,21 @@ class _CompletionDispatchContext:
     api_version: Optional[str]
     client: Any
     custom_llm_provider: str
-    custom_prompt_dict: dict
-    extra_headers: Optional[dict]
-    headers: dict
+    custom_prompt_dict: Dict
+    extra_headers: Optional[Dict]
+    headers: Dict
     hf_model_name: Optional[str]
-    kwargs: dict
-    litellm_params: dict
+    kwargs: Dict
+    litellm_params: Dict
     logger_fn: Optional[Callable]
     logging: LiteLLMLoggingObj
     max_retries: Optional[int]
     max_tokens: Optional[int]
-    messages: list
-    metadata: Optional[dict]
+    messages: List
+    metadata: Optional[Dict]
     model: str
     model_response: ModelResponse
-    optional_params: dict
+    optional_params: Dict
     organization: Optional[str]
     provider_config: Optional[BaseConfig]
     shared_session: Optional[ClientSession]
