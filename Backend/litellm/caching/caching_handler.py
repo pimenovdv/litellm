@@ -144,7 +144,6 @@ class LLMCachingHandler:
             )
         else:
             self.dual_cache = None
-        pass
 
     async def _async_get_cache(
         self,
