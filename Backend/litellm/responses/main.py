@@ -56,7 +56,7 @@ else:
 from litellm.litellm_core_utils.get_litellm_params import get_litellm_params
 from litellm.llms.openai.data_residency import infer_openai_data_residency
 from litellm.secret_managers.main import get_secret_str
-from litellm.types.responses.main import *
+from litellm.types.responses.main import DeleteResponseResult, DecodedResponseId
 from litellm.types.router import GenericLiteLLMParams
 from litellm.utils import (
     ProviderConfigManager,

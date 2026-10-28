@@ -77,3 +77,4 @@
 - [x] Fix unused variables and imports in `Backend/litellm/types/utils.py`, `Backend/litellm/types/llms/openai.py`, and `Backend/litellm/types/responses/main.py` using pyflakes.
 - [x] Fix unused variables and imports in `Backend/litellm/types/proxy/` using pyflakes.
 - [x] Fix unused variables and imports in `Backend/litellm/types/` (excluding `proxy`) using pyflakes.
+- [x] Fix unused variables and imports in Backend/litellm/responses/ using pyflakes.
