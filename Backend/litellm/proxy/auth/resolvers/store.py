@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING, Sequence, Any
 
 from pydantic import BaseModel
 
@@ -59,7 +59,7 @@ class IdentityStore:
         prisma_client: PrismaClient | None,
         cache: DualCache,
         *,
-        parent_otel_span: Span | None = None,
+        parent_otel_span: Any | None = None,
         proxy_logging_obj: ProxyLogging | None = None,
         check_cache_only: bool = False,
     ) -> None:

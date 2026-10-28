@@ -3,7 +3,8 @@ from typing import Optional, Union
 import litellm
 
 from ..exceptions import UnsupportedParamsError
-from ..types.llms.openai import *
+from ..types.llms.openai import MessageContentTextObject, MessageContentImageFileObject, MessageContentImageURLObject, Attachment
+from typing import List
 
 
 def get_optional_params_add_message(

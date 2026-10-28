@@ -23,8 +23,7 @@ from litellm.utils import (
 
 from ..llms.azure.assistants import AzureAssistantsAPI
 from ..llms.openai.openai import OpenAIAssistantsAPI
-from ..types.llms.openai import *
-from ..types.router import *
+from ..types.llms.openai import AsyncCursorPage, SyncCursorPage, Thread, OpenAICreateThreadParamsMessage, OpenAICreateThreadParamsToolResources, Attachment, OpenAIMessage, MessageData, AssistantEventHandler, AsyncAssistantStreamManager, AsyncAssistantEventHandler, AssistantToolParam, Run, AssistantStreamManager
 from .utils import get_optional_params_add_message
 
 ####### ENVIRONMENT VARIABLES ###################

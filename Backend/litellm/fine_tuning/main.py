@@ -23,7 +23,8 @@ from litellm.llms.openai.fine_tuning.handler import OpenAIFineTuningAPI
 from litellm.llms.vertex_ai.fine_tuning.handler import VertexFineTuningAPI
 from litellm.secret_managers.main import get_secret_str
 from litellm.types.llms.openai import FineTuningJobCreate, Hyperparameters
-from litellm.types.router import *
+from litellm.types.router import GenericLiteLLMParams
+from typing import List
 from litellm.types.utils import LiteLLMFineTuningJob
 from litellm.utils import client, supports_httpx_timeout
 

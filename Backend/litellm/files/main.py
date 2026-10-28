@@ -51,7 +51,7 @@ from litellm.types.llms.openai import (
     HttpxBinaryResponseContent,
     OpenAIFileObject,
 )
-from litellm.types.router import *
+from litellm.types.router import GenericLiteLLMParams
 from litellm.types.utils import (
     OPENAI_COMPATIBLE_BATCH_AND_FILES_PROVIDERS,
     LlmProviders,

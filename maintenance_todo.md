@@ -78,3 +78,4 @@
 - [x] Fix unused variables and imports in `Backend/litellm/types/proxy/` using pyflakes.
 - [x] Fix unused variables and imports in `Backend/litellm/types/` (excluding `proxy`) using pyflakes.
 - [x] Fix unused variables and imports in Backend/litellm/responses/ using pyflakes.
+- [x] Fix unused variables and star imports in proxy auth and assistant files.
