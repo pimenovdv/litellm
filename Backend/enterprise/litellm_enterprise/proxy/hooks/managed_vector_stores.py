@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union, cast
 
 from fastapi import HTTPException
 
-import litellm
 from litellm import Router, verbose_logger
 from litellm._uuid import uuid
 from litellm.integrations.custom_logger import CustomLogger
