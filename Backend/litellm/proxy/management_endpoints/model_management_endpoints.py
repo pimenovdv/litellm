@@ -1066,7 +1066,6 @@ async def delete_model(
     model_info: ModelInfoDelete,
     user_api_key_dict: UserAPIKeyAuth = Depends(user_api_key_auth),
 ):
-    from litellm.proxy.proxy_server import llm_router
 
     try:
         """
