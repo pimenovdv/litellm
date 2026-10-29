@@ -1,4 +1,3 @@
-from typing import Any
 # What is this?
 ## Common Utility file for Logging handler
 # Logging function -> log the exact model details + what's being sent | Non-Blocking
@@ -19,7 +18,6 @@ from typing import (
     Callable,
     Dict,
     List,
-    Literal,
     Optional,
     Tuple,
     Type,
@@ -134,6 +132,70 @@ from .initialize_dynamic_callback_params import (
 from .specialty_caches.dynamic_logging_cache import DynamicLoggingCache
 
 if TYPE_CHECKING:
+    OpenTelemetryConfig = Any
+    CloudZeroLogger = Any
+    ArizePhoenixLogger = Any
+    PostHogLogger = Any
+    LangFuseLogger = Any
+    DatadogMetricsLogger = Any
+    LunaryLogger = Any
+    PRESET_BY_CALLBACK = Any
+    NewRelicLogger = Any
+    DataDogHandler = Any
+    get_s3_object_key = Any
+    CustomPromptManagement = Any
+    FocusLogger = Any
+    LogfireLogger = Any
+    WeightsBiasesLogger = Any
+    AnthropicCacheControlHook = Any
+    DataDogLogger = Any
+    BitBucketPromptManager = Any
+    is_otel_v2_enabled = Any
+    GitLabPromptManager = Any
+    PromptLayerLogger = Any
+    DataDogLLMObsLogger = Any
+    VantageLogger = Any
+    DeepEvalLogger = Any
+    LangFuseHandler = Any
+    PrometheusLogger = Any
+    LangfusePromptManagement = Any
+    S3V2Logger = Any
+    VectorStorePreCallHook = Any
+    DotpromptManager = Any
+    SQSLogger = Any
+    Supabase = Any
+    LagoLogger = Any
+    S3Logger = Any
+    BraintrustLogger = Any
+    GCSBucketLogger = Any
+    GreenscaleLogger = Any
+    ArizeLogger = Any
+    HumanloopLogger = Any
+    AthinaLogger = Any
+    MavvrikFocusLogger = Any
+    LiteralAILogger = Any
+    HeliconeLogger = Any
+    AzureSentinelLogger = Any
+    OpenTelemetryV2 = Any
+    OpenMeterLogger = Any
+    DyanmoDBLogger = Any
+    TraceloopLogger = Any
+    LangsmithLogger = Any
+    ArgillaLogger = Any
+    LangfuseOtelLogger = Any
+    LiteLLMAgentModelResolver = Any
+    WeaveOtelLogger = Any
+    OpikLogger = Any
+    AgentOps = Any
+    OpenTelemetry = Any
+    CustomGuardrail = Any
+    LevoLogger = Any
+    GcsPubSubLogger = Any
+    LogfireLevel = Any
+    get_weave_otel_config = Any
+    GalileoObserve = Any
+    AzureBlobStorageLogger = Any
+    MlflowLogger = Any
     from litellm.llms.base_llm.passthrough.transformation import BasePassthroughConfig
 try:
     from litellm_enterprise.enterprise_callbacks.callback_controls import (
@@ -3618,7 +3680,6 @@ def _init_custom_logger_compatible_class(
             _dd_api_key = custom_logger_init_args.get("dd_api_key")
             _dd_site = custom_logger_init_args.get("dd_site")
             _dd_agent_host = custom_logger_init_args.get("dd_agent_host")
-            _dd_agent_port = custom_logger_init_args.get("dd_agent_port")
 
             if _dd_api_key or _dd_site or _dd_agent_host:
                 # Team-scoped credentials: use DynamicLoggingCache for per-credential isolation
