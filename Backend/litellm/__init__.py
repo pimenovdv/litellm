@@ -43,6 +43,21 @@ from typing import (
 if TYPE_CHECKING:
     from litellm.types.integrations.datadog import DatadogInitParams
     from litellm.types.integrations.newrelic import NewRelicInitParams
+    CustomLogger = Any
+    LLMClientCache = Any
+    COHERE_EMBEDDING_INPUT_TYPES = Any
+    CredentialItem = Any
+    GuardrailItem = Any
+    Cache = Any
+    ModelGroupSettings = Any
+    DatadogLLMObsInitParams = Any
+    LiteLLM_UpperboundKeyGenerateParams = Any
+    StandardKeyGenerationConfig = Any
+    DefaultTeamSSOParams = Any
+    BudgetConfig = Any
+    PriorityReservationDict = Any
+    PriorityReservationSettings = Any
+    KeyManagementSystem = Any
 from litellm._logging import (
     set_verbose,
     _turn_on_debug,
