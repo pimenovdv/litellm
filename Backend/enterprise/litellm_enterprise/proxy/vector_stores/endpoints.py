@@ -8,7 +8,6 @@ All /vector_store management endpoints
 /vector_store/list
 """
 
-import copy
 import json
 from typing import List, Optional
 

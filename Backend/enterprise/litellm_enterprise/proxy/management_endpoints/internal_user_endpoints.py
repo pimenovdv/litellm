@@ -25,7 +25,7 @@ async def available_enterprise_users(
     from litellm.proxy._types import CommonProxyErrors
     from litellm.proxy.proxy_server import (
         premium_user,
-        premium_user_data,
+
         prisma_client,
     )
     from litellm.repositories.team_repository import TeamRepository
