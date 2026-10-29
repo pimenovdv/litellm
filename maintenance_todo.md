@@ -85,3 +85,6 @@
 - [x] Remove unused variables and imports in `Backend/enterprise/litellm_enterprise/proxy/` using pyflakes.
 - [x] Remove unused variables and imports in Backend/enterprise/enterprise_hooks/ and Backend/enterprise/litellm_enterprise/ using pyflakes.
 - [x] Fix unused variables and star imports in `Backend/litellm/proxy/auth/` and `Backend/litellm/proxy/google_endpoints/` using pyflakes.
+- [x] Fix unused variables and imports in `Backend/litellm/types/utils.py` using pyflakes. (проверен/чист - intentionally re-exported for backwards compat)
+- [x] Fix unused globals and imports in `Backend/litellm/proxy/proxy_server.py` using pyflakes.
+- [x] Clean up unused variables and imports in `Backend/litellm/litellm_core_utils/get_model_cost_map.py` using pyflakes.
