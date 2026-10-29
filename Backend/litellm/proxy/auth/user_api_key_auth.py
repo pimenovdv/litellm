@@ -32,7 +32,7 @@ from litellm.integrations.otel.model.config import is_otel_v2_enabled
 from litellm.integrations.otel.runtime import phase_span, seed_request_identity
 from litellm.litellm_core_utils.dd_tracing import tracer
 from litellm.litellm_core_utils.dot_notation_indexing import get_nested_value
-from litellm.proxy._types import *
+from litellm.proxy._types import Callable, SpecialHeaders, JWTRoutingOverride, LiteLLM_BudgetTable, UnregisteredJWTClientBehavior, CommonProxyErrors, LiteLLM_EndUserTable, LitellmUserRoles, UserAPIKeyAuth, hash_token, ProxyException, ProxyErrorTypes, LiteLLMRoutes, LiteLLM_UserTable, LiteLLM_TeamTableCachedObj, LiteLLM_ProjectTableCachedObj, Span, LiteLLM_TeamMembership, Litellm_EntityType, CallInfo
 from litellm.proxy.auth.auth_checks import (
     ExperimentalUIJWTToken,
     _cache_key_object,
