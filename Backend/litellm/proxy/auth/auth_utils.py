@@ -3,7 +3,7 @@ import re
 import sys
 from functools import lru_cache
 from logging import Logger
-from typing import Any, Dict, FrozenSet, Iterator, List, Mapping, Optional, Tuple, Union
+from typing import Any, Dict, FrozenSet, Iterator, List, Literal, Mapping, Optional, Tuple, Union
 
 from fastapi import HTTPException, Request, status
 
@@ -18,7 +18,7 @@ from litellm.litellm_core_utils.url_utils import (
     provider_url_destination_candidates,
     validate_url,
 )
-from litellm.proxy._types import *
+from litellm.proxy._types import CommonProxyErrors, ProxyException, ProxyErrorTypes, UserAPIKeyAuth, LitellmUserRoles
 from litellm.types.passthrough_endpoints.pass_through_endpoints import (
     LITELLM_PASS_THROUGH_ENDPOINT_MARKER,
 )
