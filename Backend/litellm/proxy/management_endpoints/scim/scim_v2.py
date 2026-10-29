@@ -5,7 +5,7 @@ This is an enterprise feature and requires a premium license.
 """
 
 import re
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Literal, Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from fastapi import (
     APIRouter,
@@ -61,7 +61,26 @@ from litellm.repositories.user_repository import UserRepository
 from litellm.repositories.verification_token_repository import (
     VerificationTokenRepository,
 )
-from litellm.types.proxy.management_endpoints.scim_v2 import *
+from litellm.types.proxy.management_endpoints.scim_v2 import (
+    LiteLLM_UserScimMetadata,
+    SCIMEnterpriseUser,
+    SCIMGroup,
+    SCIMListResponse,
+    SCIMMember,
+    SCIMMultiValuedAttribute,
+    SCIMPatchOp,
+    SCIMResourceType,
+    SCIMSchema,
+    SCIMSchemaAttribute,
+    SCIMServiceProviderConfig,
+    SCIMUser,
+    SCIMUserGroup,
+    SCIM_ENTERPRISE_METADATA_KEY,
+    SCIM_ENTITLEMENTS_METADATA_KEY,
+    SCIM_MULTI_VALUED_ATTRIBUTE_METADATA_KEYS,
+    SCIM_MULTI_VALUED_LIST_ADAPTER,
+    SCIM_ROLES_METADATA_KEY,
+)
 
 
 class UserProvisionerHelpers:
