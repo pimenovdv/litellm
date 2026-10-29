@@ -1,0 +1,82 @@
+Backend/litellm/utils.py:121:9: redefinition of unused 'LLMCachingHandler' from line 231
+Backend/litellm/utils.py:231:5: 'litellm.caching.caching_handler.LLMCachingHandler' imported but unused
+Backend/litellm/utils.py:244:5: 'litellm.litellm_core_utils.exception_mapping_utils.exception_type' imported but unused
+Backend/litellm/utils.py:245:5: 'litellm.litellm_core_utils.get_llm_provider_logic._is_non_openai_azure_model' imported but unused
+Backend/litellm/utils.py:245:5: 'litellm.litellm_core_utils.get_llm_provider_logic.get_llm_provider' imported but unused
+Backend/litellm/utils.py:249:5: 'litellm.litellm_core_utils.get_supported_openai_params.get_supported_openai_params' imported but unused
+Backend/litellm/utils.py:252:5: 'litellm.litellm_core_utils.llm_response_utils.convert_dict_to_response.LiteLLMResponseObjectHandler' imported but unused
+Backend/litellm/utils.py:252:5: 'litellm.litellm_core_utils.llm_response_utils.convert_dict_to_response._handle_invalid_parallel_tool_calls' imported but unused
+Backend/litellm/utils.py:252:5: 'litellm.litellm_core_utils.llm_response_utils.convert_dict_to_response.convert_to_model_response_object' imported but unused
+Backend/litellm/utils.py:252:5: 'litellm.litellm_core_utils.llm_response_utils.convert_dict_to_response.convert_to_streaming_response' imported but unused
+Backend/litellm/utils.py:252:5: 'litellm.litellm_core_utils.llm_response_utils.convert_dict_to_response.convert_to_streaming_response_async' imported but unused
+Backend/litellm/utils.py:259:5: 'litellm.litellm_core_utils.llm_response_utils.get_api_base.get_api_base' imported but unused
+Backend/litellm/utils.py:260:5: 'litellm.litellm_core_utils.llm_response_utils.response_metadata.ResponseMetadata' imported but unused
+Backend/litellm/utils.py:263:5: 'litellm.litellm_core_utils.prompt_templates.common_utils._parse_content_for_reasoning' imported but unused
+Backend/litellm/utils.py:266:5: 'litellm.litellm_core_utils.redact_messages.redact_message_input_output_from_logging' imported but unused
+Backend/litellm/utils.py:270:5: 'litellm.litellm_core_utils.streaming_handler.CustomStreamWrapper' imported but unused
+Backend/litellm/utils.py:280:5: 'litellm.llms.bedrock.common_utils.BedrockModelInfo' imported but unused
+Backend/litellm/utils.py:281:5: 'litellm.llms.cohere.common_utils.CohereModelInfo' imported but unused
+Backend/litellm/utils.py:284:5: 'litellm.litellm_core_utils.cached_imports.get_coroutine_checker' imported but unused
+Backend/litellm/utils.py:284:5: 'litellm.litellm_core_utils.cached_imports.get_litellm_logging_class' imported but unused
+Backend/litellm/utils.py:284:5: 'litellm.litellm_core_utils.cached_imports.get_set_callbacks' imported but unused
+Backend/litellm/utils.py:289:5: 'litellm.litellm_core_utils.core_helpers.get_litellm_metadata_from_kwargs' imported but unused
+Backend/litellm/utils.py:289:5: 'litellm.litellm_core_utils.core_helpers.map_finish_reason' imported but unused
+Backend/litellm/utils.py:289:5: 'litellm.litellm_core_utils.core_helpers.process_response_headers' imported but unused
+Backend/litellm/utils.py:294:5: 'litellm.litellm_core_utils.dot_notation_indexing.delete_nested_value' imported but unused
+Backend/litellm/utils.py:294:5: 'litellm.litellm_core_utils.dot_notation_indexing.is_nested_path' imported but unused
+Backend/litellm/utils.py:298:5: 'litellm.litellm_core_utils.get_litellm_params._get_base_model_from_litellm_call_metadata' imported but unused
+Backend/litellm/utils.py:298:5: 'litellm.litellm_core_utils.get_litellm_params.get_litellm_params' imported but unused
+Backend/litellm/utils.py:302:5: 'litellm.litellm_core_utils.llm_request_utils._ensure_extra_body_is_safe' imported but unused
+Backend/litellm/utils.py:303:5: 'litellm.litellm_core_utils.llm_response_utils.get_formatted_prompt.get_formatted_prompt' imported but unused
+Backend/litellm/utils.py:306:5: 'litellm.litellm_core_utils.llm_response_utils.get_headers.get_response_headers' imported but unused
+Backend/litellm/utils.py:309:5: 'litellm.litellm_core_utils.llm_response_utils.response_metadata.update_response_metadata' imported but unused
+Backend/litellm/utils.py:312:5: 'litellm.litellm_core_utils.rules.Rules' imported but unused
+Backend/litellm/utils.py:313:5: 'litellm.litellm_core_utils.thread_pool_executor.executor' imported but unused
+Backend/litellm/utils.py:320:5: 'litellm.llms.custom_httpx.http_handler.AsyncHTTPHandler' imported but unused
+Backend/litellm/utils.py:320:5: 'litellm.llms.custom_httpx.http_handler.HTTPHandler' imported but unused
+Backend/litellm/utils.py:321:5: 'litellm.router_utils.get_retry_from_policy.get_num_retries_from_retry_policy' imported but unused
+Backend/litellm/utils.py:321:5: 'litellm.router_utils.get_retry_from_policy.reset_retry_policy' imported but unused
+Backend/litellm/utils.py:345:5: 'litellm.types.llms.anthropic.ANTHROPIC_API_ONLY_HEADERS' imported but unused
+Backend/litellm/utils.py:349:5: 'litellm.types.rerank.RerankResponse' imported but unused
+Backend/litellm/utils.py:350:5: 'litellm.types.llms.openai.ChatCompletionDeltaToolCallChunk' imported but unused
+Backend/litellm/utils.py:350:5: 'litellm.types.llms.openai.ChatCompletionToolCallChunk' imported but unused
+Backend/litellm/utils.py:350:5: 'litellm.types.llms.openai.ChatCompletionToolCallFunctionChunk' imported but unused
+Backend/litellm/utils.py:746:13: redefinition of unused 'get_set_callbacks' from line 284
+Backend/litellm/utils.py:846:13: redefinition of unused 'Rules' from line 312
+Backend/litellm/utils.py:871:21: redefinition of unused 'get_llm_provider' from line 245
+Backend/litellm/utils.py:978:9: redefinition of unused 'get_litellm_logging_class' from line 284
+Backend/litellm/utils.py:1064:9: redefinition of unused 'get_num_retries_from_retry_policy' from line 321
+Backend/litellm/utils.py:1065:9: redefinition of unused 'reset_retry_policy' from line 321
+Backend/litellm/utils.py:1089:5: redefinition of unused 'get_coroutine_checker' from line 284
+Backend/litellm/utils.py:1227:5: redefinition of unused 'Rules' from line 312
+Backend/litellm/utils.py:1282:13: redefinition of unused 'LLMCachingHandler' from line 231
+Backend/litellm/utils.py:1389:21: redefinition of unused 'update_response_metadata' from line 309
+Backend/litellm/utils.py:1433:13: redefinition of unused 'executor' from line 313
+Backend/litellm/utils.py:1457:21: redefinition of unused 'get_num_retries_from_retry_policy' from line 321
+Backend/litellm/utils.py:1460:21: redefinition of unused 'reset_retry_policy' from line 321
+Backend/litellm/utils.py:1537:9: redefinition of unused 'LLMCachingHandler' from line 231
+Backend/litellm/utils.py:1825:5: redefinition of unused 'get_coroutine_checker' from line 284
+Backend/litellm/utils.py:2206:9: redefinition of unused 'get_llm_provider' from line 245
+Backend/litellm/utils.py:3032:5: redefinition of unused 'get_supported_openai_params' from line 249
+Backend/litellm/utils.py:3818:5: redefinition of unused 'get_supported_openai_params' from line 249
+Backend/litellm/utils.py:3989:9: redefinition of unused 'BedrockModelInfo' from line 280
+Backend/litellm/utils.py:4302:9: redefinition of unused 'is_nested_path' from line 294
+Backend/litellm/utils.py:4303:9: redefinition of unused 'delete_nested_value' from line 294
+Backend/litellm/utils.py:4341:13: redefinition of unused '_ensure_extra_body_is_safe' from line 302
+Backend/litellm/utils.py:4779:9: redefinition of unused 'get_llm_provider' from line 245
+Backend/litellm/utils.py:4809:5: redefinition of unused 'BedrockModelInfo' from line 280
+Backend/litellm/utils.py:5064:13: redefinition of unused 'get_llm_provider' from line 245
+Backend/litellm/utils.py:5855:9: redefinition of unused 'get_llm_provider' from line 245
+Backend/litellm/utils.py:6243:13: 'anthropic' imported but unused
+Backend/litellm/utils.py:6246:9: 'anthropic.AI_PROMPT' imported but unused
+Backend/litellm/utils.py:6246:9: 'anthropic.HUMAN_PROMPT' imported but unused
+Backend/litellm/utils.py:6423:9: redefinition of unused 'get_llm_provider' from line 245
+Backend/litellm/utils.py:6502:13: redefinition of unused 'exception_type' from line 244
+Backend/litellm/utils.py:7061:9: redefinition of unused '_get_base_model_from_litellm_call_metadata' from line 298
+Backend/litellm/utils.py:7451:5: 'litellm.types.llms.openai.ChatCompletionToolChoiceObjectParam' imported but unused
+Backend/litellm/utils.py:7451:5: 'litellm.types.llms.openai.ChatCompletionToolChoiceStringValues' imported but unused
+Backend/litellm/utils.py:7749:9: redefinition of unused 'CohereModelInfo' from line 281
+Backend/litellm/utils.py:7954:13: redefinition of unused 'BedrockModelInfo' from line 280
+Backend/litellm/utils.py:8247:13: redefinition of unused 'BedrockModelInfo' from line 280
+Backend/litellm/utils.py:8782:9: 'litellm.llms.base_llm.text_to_speech.transformation.BaseTextToSpeechConfig' imported but unused
+Backend/litellm/utils.py:8837:5: redefinition of unused 'get_litellm_metadata_from_kwargs' from line 289

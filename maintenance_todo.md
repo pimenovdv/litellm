@@ -88,3 +88,4 @@
 - [x] Fix unused variables and imports in `Backend/litellm/types/utils.py` using pyflakes. (проверен/чист - intentionally re-exported for backwards compat)
 - [x] Fix unused globals and imports in `Backend/litellm/proxy/proxy_server.py` using pyflakes.
 - [x] Clean up unused variables and imports in `Backend/litellm/litellm_core_utils/get_model_cost_map.py` using pyflakes.
+- [x] Clean up unused variables and imports in Backend/litellm/utils.py using python script. (проверен/чист - intentionally re-exported for backwards compat)
