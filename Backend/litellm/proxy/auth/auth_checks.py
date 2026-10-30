@@ -739,7 +739,7 @@ async def common_checks(
         route_template=get_request_route_template(request),
     )
 
-    _is_route_allowed = _is_api_route_allowed(
+    _is_api_route_allowed(
         route=route,
         request=request,
         request_data=request_body_for_route_check,
