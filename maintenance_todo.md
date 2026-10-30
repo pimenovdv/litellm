@@ -96,3 +96,6 @@
 - [x] Fix unused variables and imports in Backend/litellm/a2a_protocol/main.py using pyflakes. (проверен/чист)
 - [x] Remove unused variables in Backend/litellm/proxy/auth/auth_checks.py
 - [x] Fix redefined unused import RedisPipelineIncrementOperation in Backend/litellm/proxy/hooks/parallel_request_limiter_v3.py
+- [x] Fix unused variables and imports in `Backend/litellm/proxy/spend_tracking/spend_management_endpoints.py` using pyflakes. (проверен/чист)
+- [x] Remove unused typing imports across `Backend/litellm/types/utils.py`. (проверен/чист - intentionally re-exported)
+- [x] Fix redefined unused imports in Backend/litellm/completion_extras/litellm_responses_transformation/transformation.py (проверен/чист)
