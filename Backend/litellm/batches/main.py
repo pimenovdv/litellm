@@ -14,10 +14,12 @@ import asyncio
 import contextvars
 import os
 from functools import partial
-from typing import Any, Coroutine, Dict, Literal, Optional, Union, cast
+from typing import Any, Coroutine, Dict, Literal, Optional, Union, cast, TYPE_CHECKING
+if TYPE_CHECKING:
+    VertexAIBatchPrediction = Any
+    BedrockBatchesHandler = Any
 
 import httpx
-from openai.types.batch import BatchRequestCounts
 
 import litellm
 from litellm._logging import verbose_logger
@@ -25,7 +27,6 @@ from litellm.litellm_core_utils.litellm_logging import Logging as LiteLLMLogging
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler, HTTPHandler
 from litellm.llms.custom_httpx.llm_http_handler import BaseLLMHTTPHandler
 from litellm.llms.openai.openai import OpenAIBatchesAPI
-from litellm.secret_managers.main import get_secret_str
 from litellm.types.llms.openai import (
     CancelBatchRequest,
     CreateBatchRequest,
@@ -580,7 +581,7 @@ def list_batches(
     try:
         # set API KEY
         optional_params = GenericLiteLLMParams(**kwargs)
-        litellm_params = get_litellm_params(
+        _ = get_litellm_params(
             custom_llm_provider=custom_llm_provider,
             **kwargs,
         )
@@ -724,7 +725,7 @@ def cancel_batch(
                 f"litellm.batches.main.py::cancel_batch() - Error inferring custom_llm_provider - {str(e)}"
             )
         optional_params = GenericLiteLLMParams(**kwargs)
-        litellm_params = get_litellm_params(
+        _ = get_litellm_params(
             custom_llm_provider=custom_llm_provider,
             **kwargs,
         )
