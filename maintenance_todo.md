@@ -100,3 +100,4 @@
 - [x] Remove unused typing imports across `Backend/litellm/types/utils.py`. (проверен/чист - intentionally re-exported)
 - [x] Fix redefined unused imports in Backend/litellm/completion_extras/litellm_responses_transformation/transformation.py (проверен/чист)
 - [x] Fix unused variables and imports in `Backend/litellm/batches/` and `Backend/litellm/rerank_api/` and `Backend/litellm/compression/` using pyflakes.
+- [x] Fix unused variables and star imports in `Backend/litellm/proxy/spend_tracking/spend_management_endpoints.py` using pyflakes.
