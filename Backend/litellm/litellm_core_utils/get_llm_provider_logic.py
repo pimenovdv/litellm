@@ -2,6 +2,7 @@ from typing import Optional, Tuple, cast
 from urllib.parse import urlparse
 
 import litellm
+from litellm.llms.openai_like.json_loader import JSONProviderRegistry
 from litellm.constants import REPLICATE_MODEL_NAME_WITH_ID_LENGTH
 from litellm.litellm_core_utils.fallback_generalizations import (
     match_routing_generalization,

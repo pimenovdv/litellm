@@ -307,17 +307,6 @@ def _get_cached_prometheus_logger():
 
 
 class Logging(LiteLLMLoggingBaseClass):
-    global \
-        supabaseClient, \
-        promptLayerLogger, \
-        weightsBiasesLogger, \
-        logfireLogger, \
-        capture_exception, \
-        add_breadcrumb, \
-        lunaryLogger, \
-        logfireLogger, \
-        prometheusLogger, \
-        slack_app
     custom_pricing: bool = False
     stream_options = None
     litellm_request_debug: bool = False
@@ -2231,7 +2220,6 @@ class Logging(LiteLLMLoggingBaseClass):
                             kwargs=kwargs,
                         )
                     if callback == "langfuse":
-                        global langFuseLogger
                         print_verbose("reaches langfuse for success logging!")
                         kwargs = {}
                         for k, v in self.model_call_details.items():
@@ -2914,7 +2902,6 @@ class Logging(LiteLLMLoggingBaseClass):
                             kwargs=self.model_call_details,
                         )
                     if callback == "langfuse":
-                        global langFuseLogger
                         verbose_logger.debug("reaches langfuse for logging failure")
                         kwargs = {}
                         for k, v in self.model_call_details.items():
@@ -3066,7 +3053,6 @@ class Logging(LiteLLMLoggingBaseClass):
 
         Meant to solve issue when doing key-based/team-based logging
         """
-        global langFuseLogger
 
         if service_name == "langfuse":
             if langFuseLogger is None or (
@@ -5523,7 +5509,6 @@ def scrub_sensitive_keys_in_metadata(litellm_params: Optional[dict]):
 
 # integration helper function
 def modify_integration(integration_name, integration_params):
-    global supabaseClient
     if integration_name == "supabase":
         if "table_name" in integration_params:
             Supabase.supabase_table_name = integration_params["table_name"]

@@ -65,8 +65,6 @@ def get_api_base(model: str, optional_params: Union[dict, LiteLLM_Params]) -> Op
     stream: bool = getattr(optional_params, "stream", False)
 
     if _optional_params.vertex_location is not None and _optional_params.vertex_project is not None:
-        VertexBase = None
-        VertexPartnerProvider = None
 
         if "claude" in model:
             _api_base = None
