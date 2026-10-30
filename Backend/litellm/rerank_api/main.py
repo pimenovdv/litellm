@@ -14,7 +14,7 @@ from litellm.llms.watsonx.common_utils import IBMWatsonXMixin
 from litellm.rerank_api.rerank_utils import get_optional_rerank_params
 from litellm.secret_managers.main import get_secret, get_secret_str
 from litellm.types.rerank import RerankResponse
-from litellm.types.router import *
+from litellm.types.router import GenericLiteLLMParams
 from litellm.utils import ProviderConfigManager, client, exception_type
 
 ####### ENVIRONMENT VARIABLES ###################
