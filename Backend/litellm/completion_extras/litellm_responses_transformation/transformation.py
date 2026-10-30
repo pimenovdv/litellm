@@ -48,10 +48,8 @@ from litellm.types.utils import GenericStreamingChunk, ModelResponseStream
 
 if TYPE_CHECKING:
     from openai.types.responses import ResponseInputImageParam
-    from pydantic import BaseModel
 
-    from litellm import LiteLLMLoggingObj, ModelResponse
-    from litellm.llms.base_llm.base_model_iterator import BaseModelResponseIterator
+    from litellm import LiteLLMLoggingObj
     from litellm.types.llms.openai import (
         ALL_RESPONSES_API_TOOL_PARAMS,
         AllMessageValues,
