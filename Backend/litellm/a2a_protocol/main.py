@@ -40,12 +40,12 @@ if TYPE_CHECKING:
     from a2a.client import Client as A2AClientType
     from a2a.compat.v0_3.types import (
         AgentCard,
-        Message,
-        SendMessageRequest,
-        SendMessageResponse,
-        SendStreamingMessageRequest,
-        SendStreamingMessageResponse,
-        Task,
+        # Message,  # imported globally below
+        # SendMessageRequest,
+        # SendMessageResponse,
+        # SendStreamingMessageRequest,
+        # SendStreamingMessageResponse,
+        # Task,
     )
 
 # Runtime imports — requires a2a-sdk>=1.1.0
