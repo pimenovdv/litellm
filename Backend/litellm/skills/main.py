@@ -26,6 +26,10 @@ from litellm.types.router import GenericLiteLLMParams
 from litellm.types.utils import LlmProviders
 from litellm.utils import ProviderConfigManager, client
 
+from litellm.llms.anthropic.common_utils import AnthropicModelInfo
+
+
+
 # Initialize HTTP handler
 base_llm_http_handler = BaseLLMHTTPHandler()
 DEFAULT_ANTHROPIC_API_BASE = "https://api.anthropic.com/v1"
