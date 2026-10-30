@@ -101,3 +101,13 @@
 - [x] Fix redefined unused imports in Backend/litellm/completion_extras/litellm_responses_transformation/transformation.py (проверен/чист)
 - [x] Fix unused variables and imports in `Backend/litellm/batches/` and `Backend/litellm/rerank_api/` and `Backend/litellm/compression/` using pyflakes.
 - [x] Fix unused variables and star imports in `Backend/litellm/types/utils.py` using pyflakes. (проверен/чист - intentionally re-exported for backwards compat)
+- [x] Улучшение типизации в `Backend/litellm/proxy_auth/credentials.py`
+- [ ] Улучшение типизации в `Backend/litellm/anthropic_beta_headers_manager.py`
+- [ ] Улучшение типизации в `Backend/litellm/llms/base_llm/`
+- [ ] Удаление мертвого кода в `Backend/litellm/router_strategy/`
+- [ ] Оптимизация производительности в `Backend/litellm/proxy_auth/`
+- [ ] Проверка типов в `Backend/litellm/skills/`
+- [ ] Удаление избыточных импортов в `Backend/litellm/router_utils/`
+- [ ] Оптимизация `Backend/litellm/proxy/proxy_server.py`
+- [ ] Проверка `pyflakes` после всех изменений
+- [ ] Документирование изменений

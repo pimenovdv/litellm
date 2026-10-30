@@ -228,7 +228,7 @@ class ProxyAuthHandler:
             self._cached_token = self.credential.get_token(self.scope)
         return self._cached_token
 
-    def get_auth_headers(self) -> dict:
+    def get_auth_headers(self) -> dict[str, Any]:
         """
         Get HTTP headers for authentication.
 
