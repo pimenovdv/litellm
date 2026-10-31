@@ -4,7 +4,7 @@ Wrapper around router cache. Meant to handle model cooldown logic
 
 import functools
 import time
-from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
 from typing_extensions import TypedDict
 
