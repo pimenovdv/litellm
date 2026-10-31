@@ -107,3 +107,4 @@
 - [x] Clean up unused variables and redefinitions in proxy_cli.py and custom_sso.py.
 
 - [x] Clean up remaining unused imports and unused globals in `Backend/litellm/proxy/proxy_server.py` using pyflakes. (проверен/чист - intentionally preserved globals and side-effect imports for backward compatibility)
+- [x] Remove undefined `AnthropicModelInfo` from `Backend/litellm/proxy/proxy_server.py` and `Backend/litellm/proxy/pass_through_endpoints/llm_passthrough_endpoints.py` (since remote providers were removed, or mock it if needed for backward compatibility).
