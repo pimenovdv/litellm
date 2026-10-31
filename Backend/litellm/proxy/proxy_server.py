@@ -236,7 +236,16 @@ from litellm.litellm_core_utils.sensitive_data_masker import (
 )
 from litellm.llms.custom_httpx.http_handler import AsyncHTTPHandler
 from litellm.proxy._lazy_features import attach_lazy_features
-from litellm.proxy._types import VertexBase, LiteLLMRoutes, load_google_kms, load_aws_kms, NewUserRequestTeam, is_cloudzero_setup, AnthropicModelInfo, ProviderInfo, AUDIT_ACTIONS, LitellmTableNames, AllCallbacks
+
+class MockAnthropicModelInfo:
+    @staticmethod
+    def get_token_counter():
+        def token_counter(*args, **kwargs):
+            return 0
+        return token_counter
+AnthropicModelInfo = MockAnthropicModelInfo()
+
+from litellm.proxy._types import VertexBase, LiteLLMRoutes, load_google_kms, load_aws_kms, NewUserRequestTeam, is_cloudzero_setup, ProviderInfo, AUDIT_ACTIONS, LitellmTableNames, AllCallbacks
 from litellm.proxy.analytics_endpoints.analytics_endpoints import (
     router as analytics_router,
 )

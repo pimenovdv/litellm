@@ -23,10 +23,18 @@ from litellm.constants import (
     ALLOWED_VERTEX_AI_PASSTHROUGH_HEADERS,
     BEDROCK_AGENT_RUNTIME_PASS_THROUGH_ROUTES,
 )
+
+class MockAnthropicModelInfo:
+    @staticmethod
+    def get_auth_header(api_key: Optional[str] = None) -> Optional[Dict[str, str]]:
+        if api_key:
+            return {"x-api-key": api_key, "anthropic-version": "2023-06-01"}
+        return None
+AnthropicModelInfo = MockAnthropicModelInfo()
+
 from litellm.proxy._types import (
     UserAPIKeyAuth,
     VertexBase,
-    AnthropicModelInfo,
     ProxyException,
 )
 from litellm.proxy.auth.route_checks import RouteChecks
