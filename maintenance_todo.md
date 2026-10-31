@@ -102,3 +102,4 @@
 - [x] Fix unused variables and imports in `Backend/litellm/batches/` and `Backend/litellm/rerank_api/` and `Backend/litellm/compression/` using pyflakes.
 - [x] Fix unused variables and star imports in `Backend/litellm/types/utils.py` using pyflakes. (проверен/чист - intentionally re-exported for backwards compat)
 - [x] Fix unused variables and globals in `Backend/litellm/litellm_core_utils/litellm_logging.py` using pyflakes. (проверен/чист - intentionally preserved globals for backward compatibility)
+- [x] Fix unused variables and imports in `Backend/litellm/litellm_core_utils/` using pyflakes. (проверен/чист - intentionally preserved globals for backward compatibility)
