@@ -875,7 +875,6 @@ def run_server(
         from proxy_server import (
             KeyManagementSettings,
             ProxyConfig,
-            app,
             save_worker_config,
         )
     else:
@@ -883,7 +882,6 @@ def run_server(
             from .proxy_server import (
                 KeyManagementSettings,
                 ProxyConfig,
-                app,
                 save_worker_config,
             )
         except ModuleNotFoundError as e:
@@ -897,7 +895,6 @@ def run_server(
                 from proxy_server import (
                     KeyManagementSettings,
                     ProxyConfig,
-                    app,
                     save_worker_config,
                 )
     if version is True:
@@ -936,6 +933,7 @@ def run_server(
         if run_granian:
             try:
                 import granian  # noqa: F401
+                _ = granian
             except ImportError as e:
                 raise ImportError(
                     "granian must be installed to use --run_granian. "
@@ -1185,7 +1183,7 @@ def run_server(
                             )
             else:
                 print(
-                    f"Unable to connect to DB. DATABASE_URL found in environment, but prisma package not found."  # noqa: F541
+                    "Unable to connect to DB. DATABASE_URL found in environment, but prisma package not found."  # noqa: F541
                 )
         if port == 4000 and ProxyInitializationHelpers._is_port_in_use(port):
             port = random.randint(1024, 49152)

@@ -30,7 +30,7 @@ async def custom_sso_handler(userIDPInfo: OpenID) -> SSOUserDefinedValues:
 
         # check if user exists in litellm proxy DB
         if proxy_server.prisma_client is not None:
-            _user_info = await proxy_server.prisma_client.get_data(user_id=userIDPInfo.id)
+            _ = await proxy_server.prisma_client.get_data(user_id=userIDPInfo.id)
 
         return SSOUserDefinedValues(
             models=[],
