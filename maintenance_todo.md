@@ -105,3 +105,5 @@
 - [x] Fix unused variables and imports in `Backend/litellm/litellm_core_utils/` using pyflakes. (проверен/чист - intentionally preserved globals for backward compatibility)
 - [x] Fix unused imports in `Backend/litellm/router_utils/cooldown_cache.py`, `Backend/litellm/router_utils/handle_error.py`, `Backend/litellm/router_utils/prompt_caching_cache.py`, `Backend/litellm/router_utils/health_state_cache.py`, and `Backend/litellm/router_utils/pre_call_checks/model_rate_limit_check.py` using pyflakes.
 - [x] Clean up unused variables and redefinitions in proxy_cli.py and custom_sso.py.
+
+- [x] Clean up remaining unused imports and unused globals in `Backend/litellm/proxy/proxy_server.py` using pyflakes. (проверен/чист - intentionally preserved globals and side-effect imports for backward compatibility)
