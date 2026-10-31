@@ -1,3 +1,1 @@
-- [x] Fix unused variables and imports in `Backend/litellm/types/` (excluding `proxy`) using pyflakes.
-- [x] Clean up unused variables and imports in Backend/litellm/utils.py.
-- [x] Clean up unused variables and imports in Backend/litellm/__init__.py. (проверен/чист - intentionally re-exported for backwards compat)
+- [x] Fix undefined `AnthropicModelInfo` in `Backend/litellm/skills/main.py`. Since `AnthropicModelInfo` is no longer available locally due to the cleanup of remote providers, I'll mock `AnthropicModelInfo` inside `Backend/litellm/skills/main.py` directly (similar to how `make_mocks.py` handles other missing symbols), or remove the dependency on `AnthropicModelInfo`.

@@ -6,7 +6,17 @@ Provides create, list, get, and delete operations for skills
 import asyncio
 import contextvars
 from functools import partial
+
 from typing import Any, Coroutine, Dict, List, Optional, Union
+from litellm.secret_managers.main import get_secret_str
+
+class MockAnthropicModelInfo:
+    @staticmethod
+    def get_api_base(api_base: Optional[str] = None) -> Optional[str]:
+        return api_base or get_secret_str("ANTHROPIC_API_BASE") or get_secret_str("ANTHROPIC_BASE_URL") or "https://api.anthropic.com/v1"
+
+AnthropicModelInfo = MockAnthropicModelInfo()
+
 
 import httpx
 
