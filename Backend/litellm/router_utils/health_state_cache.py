@@ -6,7 +6,7 @@ and exposes it for router candidate filtering.
 """
 
 import time
-from typing import TYPE_CHECKING, Any, Dict, Optional, Set, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional, Set
 
 from typing_extensions import TypedDict
 

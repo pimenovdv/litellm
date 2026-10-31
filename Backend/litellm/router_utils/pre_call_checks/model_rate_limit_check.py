@@ -11,7 +11,7 @@ is logged the first time such a deployment is seen.
 """
 
 import contextlib
-from typing import TYPE_CHECKING, Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import httpx
 

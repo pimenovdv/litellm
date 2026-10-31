@@ -4,7 +4,7 @@ Wrapper around router cache. Meant to store model id when prompt caching support
 
 import hashlib
 import json
-from typing import TYPE_CHECKING, Any, List, Optional, Union, cast
+from typing import TYPE_CHECKING, Any, List, Optional, cast
 
 from typing_extensions import TypedDict
 
