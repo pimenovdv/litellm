@@ -1,1 +1,1 @@
-- [x] Fix undefined `AnthropicModelInfo` in `Backend/litellm/skills/main.py`. Since `AnthropicModelInfo` is no longer available locally due to the cleanup of remote providers, I'll mock `AnthropicModelInfo` inside `Backend/litellm/skills/main.py` directly (similar to how `make_mocks.py` handles other missing symbols), or remove the dependency on `AnthropicModelInfo`.
+- [x] Fix unused variables and imports in Backend/litellm/proxy/example_config_yaml/ and Backend/litellm/proxy/middleware/ using pyflakes.
