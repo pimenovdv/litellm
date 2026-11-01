@@ -193,3 +193,4 @@
 - [x] Run automated ESLint fixer to resolve unused vars in `frontend/litellm-dashboard`. (проверен/чист - ran npx eslint src --fix)
 - [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
 - [x] Submit.
+- [x] Evaluate unused pass_through configs in `Backend/litellm/proxy/pass_through_endpoints/pass_through_endpoints.py`. (проверен/чист).
