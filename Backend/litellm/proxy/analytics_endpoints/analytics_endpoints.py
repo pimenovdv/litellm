@@ -5,7 +5,7 @@ from typing import List, Optional
 import fastapi
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from litellm.proxy._types import *
+from litellm.proxy._types import LiteLLM_SpendLogs
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 
 router = APIRouter()
