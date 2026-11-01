@@ -109,3 +109,4 @@
 - [x] Clean up remaining unused imports and unused globals in `Backend/litellm/proxy/proxy_server.py` using pyflakes. (проверен/чист - intentionally preserved globals and side-effect imports for backward compatibility)
 - [x] Remove undefined `AnthropicModelInfo` from `Backend/litellm/proxy/proxy_server.py` and `Backend/litellm/proxy/pass_through_endpoints/llm_passthrough_endpoints.py` (since remote providers were removed, or mock it if needed for backward compatibility).
 - [x] Fix unused variables and star imports in proxy analytics, container and ocr endpoints using pyflakes.
+- [x] Fix f-strings missing placeholders in frontend/litellm-dashboard/scripts/generate_compliance_prompts.py and db_scripts/migrate_keys.py.
