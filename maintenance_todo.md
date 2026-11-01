@@ -114,3 +114,4 @@
 - [x] Fix unused variables and imports in Backend/litellm/proxy/example_config_yaml/ and Backend/litellm/proxy/middleware/ using pyflakes.
 
 - [x] Fix unused variables and imports in Backend/litellm/proxy/spend_tracking/ using pyflakes. (проверен/чист)
+- [x] Evaluated explicit `typing.Dict` and `typing.List` in `Backend/litellm/llms/openai/chat/guardrail_translation/handler.py` and `Backend/litellm/responses/litellm_completion_transformation/transformation.py` (проверен/чист - PEP 585 modern types `list` and `dict` are intentionally kept as they are preferred over deprecated `typing` module equivalents).
