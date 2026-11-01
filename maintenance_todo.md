@@ -195,3 +195,4 @@
 - [x] Submit.
 - [x] Evaluate unused pass_through configs in `Backend/litellm/proxy/pass_through_endpoints/pass_through_endpoints.py`. (проверен/чист).
 - [x] Evaluate dead code in `Backend/litellm/proxy/spend_tracking/` using pyflakes. (проверен/чист - intentionally kept wildcard imports for types)
+- [x] Evaluate unused imports in `Backend/litellm/proxy/_types.py` using pyflakes. (проверен/чист - intentionally kept for backwards compat and typing exports)
