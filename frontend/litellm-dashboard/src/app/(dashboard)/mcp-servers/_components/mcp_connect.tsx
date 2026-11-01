@@ -297,7 +297,7 @@ const MCPConnect: React.FC<MCPConnectProps> = ({ currentServerAccessGroups = [] 
         >
           <Space direction="vertical" size="middle" className="w-full">
             <div>
-              {/* eslint-disable-next-line react/no-unescaped-entities */}
+              { }
               <Text>
                 Get your API key from the{" "}
                 <a

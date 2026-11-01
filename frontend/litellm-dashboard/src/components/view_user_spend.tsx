@@ -17,7 +17,7 @@ interface ViewUserSpendProps {
 }
 const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget, selectedTeam }) => {
   const { accessToken, userRole, userId: userID } = useAuthorized();
-  let [spend, setSpend] = useState(userSpend !== null ? userSpend : 0.0);
+  const [spend, setSpend] = useState(userSpend !== null ? userSpend : 0.0);
   const [maxBudget, setMaxBudget] = useState(
     selectedTeam ? Number(formatNumberWithCommas(selectedTeam.max_budget, 4)) : null,
   );
@@ -79,7 +79,7 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
 
         if (accessToken !== null) {
           const model_available = await modelAvailableCall(accessToken, userID, userRole);
-          let available_model_names = model_available["data"].map((element: { id: string }) => element.id);
+          const available_model_names = model_available["data"].map((element: { id: string }) => element.id);
           setUserModels(available_model_names);
         }
       } catch (error) {

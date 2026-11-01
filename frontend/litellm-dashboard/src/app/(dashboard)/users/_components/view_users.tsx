@@ -98,7 +98,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         }
 
         const model_available = await modelAvailableCall(accessToken, userID, userRole);
-        let available_model_names = model_available["data"].map((element: { id: string }) => element.id);
+        const available_model_names = model_available["data"].map((element: { id: string }) => element.id);
         setUserModels(available_model_names);
       } catch (error) {
         console.error("Error fetching user models:", error);

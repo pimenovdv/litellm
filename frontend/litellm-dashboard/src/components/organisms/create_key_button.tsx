@@ -94,10 +94,10 @@ interface UserOption {
 }
 
 const getPredefinedTags = (data: any[] | null) => {
-  let allTags = [];
+  const allTags = [];
 
   if (data) {
-    for (let key of data) {
+    for (const key of data) {
       if (key["metadata"] && key["metadata"]["tags"]) {
         allTags.push(...key["metadata"]["tags"]);
       }
@@ -126,7 +126,7 @@ export const fetchTeamModels = async (
 
     if (accessToken !== null) {
       const model_available = await modelAvailableCall(accessToken, userID, userRole, true, teamID, true);
-      let available_model_names = model_available["data"].map((element: { id: string }) => element.id);
+      const available_model_names = model_available["data"].map((element: { id: string }) => element.id);
       return available_model_names;
     }
     return [];
@@ -149,7 +149,7 @@ export const fetchUserModels = async (
 
     if (accessToken !== null) {
       const model_available = await modelAvailableCall(accessToken, userID, userRole);
-      let available_model_names = model_available["data"].map((element: { id: string }) => element.id);
+      const available_model_names = model_available["data"].map((element: { id: string }) => element.id);
       setUserModels(available_model_names);
     }
   } catch (error) {

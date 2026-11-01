@@ -25,7 +25,7 @@ const CacheControlSettings: React.FC<CacheControlSettingsProps> = ({
   const updateCacheControlPoints = (injectionPoints: CacheControlInjectionPoint[]) => {
     const currentParams = form.getFieldValue("litellm_extra_params");
     try {
-      let paramsObj = currentParams ? JSON.parse(currentParams) : {};
+      const paramsObj = currentParams ? JSON.parse(currentParams) : {};
       if (injectionPoints.length > 0) {
         paramsObj.cache_control_injection_points = injectionPoints;
       } else {

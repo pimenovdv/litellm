@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Form, Select, Input, Steps, Radio, Tag, Divider, Switch, InputNumber, Collapse } from "antd";
+import { Modal, Form, Select, Input, Steps, Radio, Tag, Divider, Switch, InputNumber } from "antd";
 import MessageManager from "@/components/molecules/message_manager";
 import { Logo } from "@/components/molecules/logo/Logo";
 import { Button } from "@tremor/react";

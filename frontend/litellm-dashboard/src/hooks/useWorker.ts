@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { switchToWorkerUrl, WorkerInfo } from "@/components/networking";
 import { useUIConfig } from "@/app/(dashboard)/hooks/uiConfig/useUIConfig";
 
@@ -18,7 +18,7 @@ interface UseWorkerReturn {
 export const useWorker = (): UseWorkerReturn => {
   const { data: uiConfig } = useUIConfig();
   const isControlPlane = uiConfig?.is_control_plane ?? false;
-  const workers: WorkerInfo[] = uiConfig?.workers ?? [];
+  const workers: WorkerInfo[] = useMemo(() => uiConfig?.workers ?? [], [uiConfig?.workers]);
 
   const [selectedWorkerId, setSelectedWorkerId] = useState<string | null>(() => {
     if (typeof window === "undefined") return null;

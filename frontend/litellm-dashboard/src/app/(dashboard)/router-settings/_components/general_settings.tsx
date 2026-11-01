@@ -170,7 +170,7 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
       return;
     }
     getGeneralSettingsCall(accessToken).then((data) => {
-      let general_settings = data;
+      const general_settings = data;
       setGeneralSettings(general_settings);
     });
   }, [accessToken]);
@@ -188,7 +188,7 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
       return;
     }
 
-    let fieldValue = generalSettings.find((setting) => setting.field_name === fieldName)?.field_value;
+    const fieldValue = generalSettings.find((setting) => setting.field_name === fieldName)?.field_value;
 
     if (fieldValue == null || fieldValue == undefined) {
       return;

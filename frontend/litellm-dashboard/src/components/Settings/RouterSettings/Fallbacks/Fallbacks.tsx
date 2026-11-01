@@ -135,7 +135,7 @@ const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) 
       return;
     }
     getCallbacksCall(accessToken, userID, userRole).then((data) => {
-      let router_settings = data.router_settings;
+      const router_settings = data.router_settings;
       if ("model_group_retry_policy" in router_settings) {
         delete router_settings["model_group_retry_policy"];
       }
@@ -231,7 +231,7 @@ const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) 
       NotificationsManager.fromBackend("Failed to update router settings: " + error);
       if (accessToken && userRole && userID) {
         getCallbacksCall(accessToken, userID, userRole).then((data) => {
-          let router_settings = data.router_settings;
+          const router_settings = data.router_settings;
           if ("model_group_retry_policy" in router_settings) {
             delete router_settings["model_group_retry_policy"];
           }

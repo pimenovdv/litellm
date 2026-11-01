@@ -217,7 +217,7 @@ export default function ModelInfoView({
     const getExistingCredential = async () => {
       if (!accessToken) return;
       if (usingExistingCredential) return;
-      let existingCredentialResponse = await credentialGetCall(accessToken, null, modelId);
+      const existingCredentialResponse = await credentialGetCall(accessToken, null, modelId);
       setExistingCredential({
         credential_name: existingCredentialResponse["credential_name"],
         credential_values: existingCredentialResponse["credential_values"],
@@ -229,7 +229,7 @@ export default function ModelInfoView({
       if (!accessToken) return;
       // Only fetch if we don't have modelData yet
       if (modelData) return;
-      let modelInfoResponse = await modelInfoV1Call(accessToken, modelId);
+      const modelInfoResponse = await modelInfoV1Call(accessToken, modelId);
       let specificModelData = modelInfoResponse.data[0];
       if (specificModelData && !specificModelData.litellm_model_name) {
         specificModelData = {
@@ -289,7 +289,7 @@ export default function ModelInfoView({
 
   const handleReuseCredential = async (values: any) => {
     if (!accessToken) return;
-    let credentialItem = {
+    const credentialItem = {
       credential_name: values.credential_name,
       model_id: modelId,
       credential_info: {
@@ -297,7 +297,7 @@ export default function ModelInfoView({
       },
     };
     NotificationsManager.info("Storing credential..");
-    let credentialResponse = await credentialCreateCall(accessToken, credentialItem);
+    const credentialResponse = await credentialCreateCall(accessToken, credentialItem);
     NotificationsManager.success("Credential stored successfully");
   };
 
@@ -317,7 +317,7 @@ export default function ModelInfoView({
         return;
       }
 
-      let updatedLitellmParams = {
+      const updatedLitellmParams = {
         ...values.litellm_params,
         ...parsedExtraParams,
         model: values.litellm_model_name,

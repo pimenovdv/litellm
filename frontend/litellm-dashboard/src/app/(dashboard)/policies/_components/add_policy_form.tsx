@@ -248,7 +248,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
     const guardrailsAdd = values.guardrails_add || [];
     const guardrailsRemove = values.guardrails_remove || [];
 
-    let resolved = new Set<string>();
+    const resolved = new Set<string>();
 
     if (inheritFrom) {
       const parentPolicy = existingPolicies.find((p) => p.policy_name === inheritFrom);
@@ -265,7 +265,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
   };
 
   const resolveParentGuardrails = (policy: Policy): string[] => {
-    let resolved = new Set<string>();
+    const resolved = new Set<string>();
 
     if (policy.inherit) {
       const grandparent = existingPolicies.find((p) => p.policy_name === policy.inherit);

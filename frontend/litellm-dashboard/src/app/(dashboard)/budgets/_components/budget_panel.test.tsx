@@ -25,8 +25,6 @@ vi.mock("@/app/(dashboard)/hooks/budgets/useBudgets", () => ({
 import {
   useBudgets,
   useDeleteBudget,
-  useCreateBudget,
-  useUpdateBudget,
 } from "@/app/(dashboard)/hooks/budgets/useBudgets";
 
 const createQueryClient = () =>

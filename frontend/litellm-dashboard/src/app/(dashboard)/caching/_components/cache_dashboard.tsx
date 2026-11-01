@@ -140,7 +140,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
       return;
     }
 
-    let new_cache_data = await adminGlobalCacheActivity(
+    const new_cache_data = await adminGlobalCacheActivity(
       accessToken,
       formatDateWithoutTZ(startTime),
       formatDateWithoutTZ(endTime),
@@ -212,9 +212,9 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
     // set header cache statistics
     setCachedResponses(valueFormatterNumbers(cache_hits));
     setCachedTokens(valueFormatterNumbers(cached_tokens));
-    let allRequests = cache_hits + llm_api_requests;
+    const allRequests = cache_hits + llm_api_requests;
     if (allRequests > 0) {
-      let cache_hit_ratio = ((cache_hits / allRequests) * 100).toFixed(2);
+      const cache_hit_ratio = ((cache_hits / allRequests) * 100).toFixed(2);
       setCacheHitRatio(cache_hit_ratio);
     } else {
       setCacheHitRatio("0");
