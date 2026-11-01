@@ -112,3 +112,5 @@
 - [x] Fix f-strings missing placeholders in frontend/litellm-dashboard/scripts/generate_compliance_prompts.py and db_scripts/migrate_keys.py.
 - [x] Fix unused variables and imports in Backend/litellm/proxy/pass_through_endpoints/ using pyflakes.
 - [x] Fix unused variables and imports in Backend/litellm/proxy/example_config_yaml/ and Backend/litellm/proxy/middleware/ using pyflakes.
+
+- [x] Fix unused variables and imports in Backend/litellm/proxy/spend_tracking/ using pyflakes. (проверен/чист)
