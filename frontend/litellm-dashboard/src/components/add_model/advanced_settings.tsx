@@ -62,7 +62,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   const handlePassThroughChange = (checked: boolean) => {
     const currentParams = form.getFieldValue("litellm_extra_params");
     try {
-      let paramsObj = currentParams ? JSON.parse(currentParams) : {};
+      const paramsObj = currentParams ? JSON.parse(currentParams) : {};
       if (checked) {
         paramsObj.use_in_pass_through = true;
       } else {
@@ -89,7 +89,7 @@ const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
     if (!checked) {
       const currentParams = form.getFieldValue("litellm_extra_params");
       try {
-        let paramsObj = currentParams ? JSON.parse(currentParams) : {};
+        const paramsObj = currentParams ? JSON.parse(currentParams) : {};
         delete paramsObj.cache_control_injection_points;
         if (Object.keys(paramsObj).length > 0) {
           form.setFieldValue("litellm_extra_params", JSON.stringify(paramsObj, null, 2));

@@ -165,7 +165,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
 
             const model_available = await modelAvailableCall(accessToken, userID, userRole);
             // loop through model_info["data"] and create an array of element.model_name
-            let available_model_names = model_available["data"].map((element: { id: string }) => element.id);
+            const available_model_names = model_available["data"].map((element: { id: string }) => element.id);
             setUserModels(available_model_names);
 
             sessionStorage.setItem("userModels" + userID, JSON.stringify(available_model_names));

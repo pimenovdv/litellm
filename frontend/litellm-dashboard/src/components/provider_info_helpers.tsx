@@ -445,10 +445,10 @@ export const getPlaceholder = (selectedProvider: string): string => {
 };
 
 export const getProviderModels = (provider: Providers, modelMap: any): Array<string> => {
-  let providerKey = provider;
-  let custom_llm_provider = provider_map[providerKey];
+  const providerKey = provider;
+  const custom_llm_provider = provider_map[providerKey];
 
-  let providerModels: Array<string> = [];
+  const providerModels: Array<string> = [];
 
   if (providerKey && typeof modelMap === "object") {
     Object.entries(modelMap).forEach(([key, value]) => {

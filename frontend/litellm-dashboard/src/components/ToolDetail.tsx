@@ -26,7 +26,6 @@ import {
   keyListCall,
   teamListCall,
   updateToolPolicy,
-  type ToolPolicyOption,
   type ToolPolicyOverrideRow,
 } from "@/components/networking";
 import type { Team } from "@/components/key_team_helpers/key_list";

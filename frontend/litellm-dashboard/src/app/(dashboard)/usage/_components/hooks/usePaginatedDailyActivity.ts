@@ -232,7 +232,7 @@ export function usePaginatedDailyActivity({
       }
     };
     // argsKey is a stable JSON string so the effect only re-fires when arg values change.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [enabled, fetchFn, argsKey]);
 
   return { data, loading, isFetchingMore, progress, cancelled, cancel };

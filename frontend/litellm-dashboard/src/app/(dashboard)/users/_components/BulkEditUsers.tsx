@@ -111,7 +111,7 @@ const BulkEditUserModal: React.FC<BulkEditUserModalProps> = ({
         return;
       }
 
-      let successMessages: string[] = [];
+      const successMessages: string[] = [];
 
       // Handle user property updates
       if (hasUserUpdates) {

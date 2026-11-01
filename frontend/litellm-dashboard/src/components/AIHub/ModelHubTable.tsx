@@ -170,8 +170,8 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({ accessToken, publicPage, 
       try {
         setAgentLoading(true);
         const response = await getAgentsList(accessToken);
-        let agents = response.agents;
-        let agent_card_list = agents.map((agent: any) => ({
+        const agents = response.agents;
+        const agent_card_list = agents.map((agent: any) => ({
           agent_id: agent.agent_id,
           ...agent.agent_card_params,
           is_public: agent.litellm_params.is_public,
@@ -339,8 +339,8 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({ accessToken, publicPage, 
       const fetchAgentData = async () => {
         try {
           const response = await getAgentsList(accessToken);
-          let agents = response.agents;
-          let agent_card_list = agents.map((agent: any) => ({
+          const agents = response.agents;
+          const agent_card_list = agents.map((agent: any) => ({
             agent_id: agent.agent_id,
             ...agent.agent_card_params,
             is_public: agent.is_public,

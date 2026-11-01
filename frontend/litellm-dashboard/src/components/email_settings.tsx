@@ -35,7 +35,7 @@ const EmailSettings: React.FC<EmailSettingsProps> = ({ accessToken, premiumUser,
       return;
     }
 
-    let updatedVariables: Record<string, string> = {};
+    const updatedVariables: Record<string, string> = {};
 
     alerts
       .filter((alert) => alert.name === "email")

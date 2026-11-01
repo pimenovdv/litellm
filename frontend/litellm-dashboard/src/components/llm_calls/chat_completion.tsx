@@ -61,7 +61,7 @@ export async function makeOpenAIChatCompletionRequest(
     let fullReasoningContent = "";
 
     // Track MCP metadata cumulatively across chunks
-    let mcpMetadata: {
+    const mcpMetadata: {
       mcp_list_tools?: any[];
       mcp_tool_calls?: any[];
       mcp_call_results?: any[];

@@ -299,13 +299,13 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
         setCallbacks(data.callbacks);
         setAllCallbacks(data.available_callbacks);
 
-        let alerts_data = data.alerts;
+        const alerts_data = data.alerts;
         if (alerts_data) {
           if (alerts_data.length > 0) {
-            let _alert_info = alerts_data[0];
-            let catch_all_webhook = _alert_info.variables.SLACK_WEBHOOK_URL;
+            const _alert_info = alerts_data[0];
+            const catch_all_webhook = _alert_info.variables.SLACK_WEBHOOK_URL;
 
-            let active_alerts = _alert_info.active_alerts;
+            const active_alerts = _alert_info.active_alerts;
             setActiveAlerts(active_alerts);
             setCatchAllWebhookURL(catch_all_webhook);
             setAlertToWebhooks(_alert_info.alerts_to_webhook);
@@ -464,7 +464,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
           },
         };
         setCallbacksCall(accessToken, payload);
-        let newCallback: AlertingObject = {
+        const newCallback: AlertingObject = {
           name: values.callback,
           variables: {
             SLACK_WEBHOOK_URL: null,
@@ -488,7 +488,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
         };
         setCallbacksCall(accessToken, payload);
 
-        let newCallback: AlertingObject = {
+        const newCallback: AlertingObject = {
           name: values.callback,
           variables: {
             SLACK_WEBHOOK_URL: values.slackWebhookUrl,
@@ -509,7 +509,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
           },
         };
         setCallbacksCall(accessToken, payload);
-        let newCallback: AlertingObject = {
+        const newCallback: AlertingObject = {
           name: values.callback,
           variables: {
             SLACK_WEBHOOK_URL: null,

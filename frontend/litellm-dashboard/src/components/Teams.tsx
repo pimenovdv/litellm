@@ -312,7 +312,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
   const handleCreate = async (formValues: Record<string, any>) => {
     try {
       if (accessToken != null) {
-        let organizationId = formValues?.organization_id || currentOrg?.organization_id;
+        const organizationId = formValues?.organization_id || currentOrg?.organization_id;
         if (organizationId === "" || typeof organizationId !== "string") {
           formValues.organization_id = null;
         } else {
@@ -459,7 +459,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
       return false;
     }
     for (let i = 0; i < team.members_with_roles.length; i++) {
-      let member = team.members_with_roles[i];
+      const member = team.members_with_roles[i];
       if (member.user_id == userID && member.role == "admin") {
         return true;
       }

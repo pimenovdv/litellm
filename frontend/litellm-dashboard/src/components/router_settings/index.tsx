@@ -30,7 +30,7 @@ const RouterSettings: React.FC<RouterSettingsProps> = ({ accessToken, userRole, 
       return;
     }
     getCallbacksCall(accessToken, userID, userRole).then((data) => {
-      let router_settings = data.router_settings;
+      const router_settings = data.router_settings;
       if ("model_group_retry_policy" in router_settings) {
         delete router_settings["model_group_retry_policy"];
       }
@@ -140,7 +140,7 @@ const RouterSettings: React.FC<RouterSettingsProps> = ({ accessToken, userRole, 
           } else if (key === "enable_tag_filtering") {
             return [key, formValue.enableTagFiltering];
           } else if (key === "routing_strategy_args" && formValue.selectedStrategy === "latency-based-routing") {
-            let setRoutingStrategyArgs: routingStrategyArgs = {};
+            const setRoutingStrategyArgs: routingStrategyArgs = {};
 
             const lowestLatencyBufferElement = document.querySelector(
               `input[name="lowest_latency_buffer"]`,

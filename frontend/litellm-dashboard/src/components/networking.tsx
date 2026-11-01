@@ -1232,7 +1232,7 @@ export const transformRequestCall = async (accessToken: string, request: object)
    */
 
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/utils/transform_request` : `/utils/transform_request`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/utils/transform_request` : `/utils/transform_request`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -2009,7 +2009,7 @@ export const adminSpendLogsCall = async (accessToken: string) => {
 
 export const adminTopKeysCall = async (accessToken: string) => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/global/spend/keys?limit=5` : `/global/spend/keys?limit=5`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/global/spend/keys?limit=5` : `/global/spend/keys?limit=5`;
 
     //NotificationsManager.info("Making spend keys request");
     const response = await fetch(url, {
@@ -2168,7 +2168,7 @@ export const adminGlobalActivityPerModel = async (
 
 export const adminTopModelsCall = async (accessToken: string) => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/global/spend/models?limit=5` : `/global/spend/models?limit=5`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/global/spend/models?limit=5` : `/global/spend/models?limit=5`;
 
     //NotificationsManager.info("Making top models request");
     const response = await fetch(url, {
@@ -2196,7 +2196,7 @@ export const adminTopModelsCall = async (accessToken: string) => {
 
 export const keyInfoCall = async (accessToken: string, keys: string[]) => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/v2/key/info` : `/v2/key/info`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/v2/key/info` : `/v2/key/info`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -2790,7 +2790,7 @@ export const teamBulkMemberAddCall = async (
   try {
     const url = proxyBaseUrl ? `${proxyBaseUrl}/team/bulk_member_add` : `/team/bulk_member_add`;
 
-    let requestBody: any = {
+    const requestBody: any = {
       team_id: teamId,
     };
 
@@ -3042,7 +3042,7 @@ export const userBulkUpdateUserCall = async (
       };
     } else if (userIds && userIds.length > 0) {
       // Update specific users mode
-      let users = [];
+      const users = [];
       for (const user_id of userIds) {
         users.push({
           user_id: user_id,
@@ -3079,7 +3079,7 @@ export const userBulkUpdateUserCall = async (
 
 export const serviceHealthCheck = async (accessToken: string, service: string) => {
   try {
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/health/services?service=${service}`
       : `/health/services?service=${service}`;
 
@@ -3140,7 +3140,7 @@ export const getCallbacksCall = async (accessToken: string, userID: string, user
 
 export const getGeneralSettingsCall = async (accessToken: string) => {
   try {
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/config/list?config_type=general_settings`
       : `/config/list?config_type=general_settings`;
 
@@ -3282,7 +3282,7 @@ export const getPassThroughEndpointsCall = async (accessToken: string, teamId?: 
 
 export const getConfigFieldSetting = async (accessToken: string, fieldName: string) => {
   try {
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/config/field/info?field_name=${fieldName}`
       : `/config/field/info?field_name=${fieldName}`;
 
@@ -3334,7 +3334,7 @@ export const createPassThroughEndpoint = async (accessToken: string, formValues:
 
 export const updateConfigFieldSetting = async (accessToken: string, fieldName: string, fieldValue: any) => {
   try {
-    let formData = {
+    const formData = {
       field_name: fieldName,
       field_value: fieldValue,
       config_type: "general_settings",
@@ -3353,7 +3353,7 @@ export const updateConfigFieldSetting = async (accessToken: string, fieldName: s
 
 export const deleteConfigFieldSetting = async (accessToken: string, fieldName: string) => {
   try {
-    let formData = {
+    const formData = {
       field_name: fieldName,
       config_type: "general_settings",
     };
@@ -3370,7 +3370,7 @@ export const deleteConfigFieldSetting = async (accessToken: string, fieldName: s
 
 export const deletePassThroughEndpointsCall = async (accessToken: string, endpointId: string) => {
   try {
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/config/pass_through_endpoint?endpoint_id=${endpointId}`
       : `/config/pass_through_endpoint?endpoint_id=${endpointId}`;
 
@@ -3426,7 +3426,7 @@ export const individualModelHealthCheckCall = async (accessToken: string, modelI
    * Run health check for a specific model using model ID (so each deployment is checked separately).
    */
   try {
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/health?model_id=${encodeURIComponent(modelId)}`
       : `/health?model_id=${encodeURIComponent(modelId)}`;
 
@@ -3458,7 +3458,7 @@ export const cachingHealthCheckCall = async (accessToken: string) => {
    * Get all the models user has access to
    */
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/cache/ping` : `/cache/ping`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/cache/ping` : `/cache/ping`;
 
     //NotificationsManager.info("Requesting model data");
     const response = await fetch(url, {
@@ -3490,7 +3490,7 @@ export const latestHealthChecksCall = async (accessToken: string) => {
    * Get the latest health check status for all models
    */
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/health/latest` : `/health/latest`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/health/latest` : `/health/latest`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -4106,7 +4106,7 @@ export const enrichPolicyTemplateStream = async (
   const decoder = new TextDecoder();
   let buffer = "";
 
-  // eslint-disable-next-line no-constant-condition -- stream read loop
+
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -4179,7 +4179,7 @@ export const usageAiChatStream = async (
   const decoder = new TextDecoder();
   let buffer = "";
 
-  // eslint-disable-next-line no-constant-condition -- stream read loop
+
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -4722,7 +4722,7 @@ export const createGuardrailCall = async (accessToken: string, guardrailData: an
 export const uiSpendLogDetailsCall = async (accessToken: string, logId: string, start_date: string) => {
   try {
     // Construct base URL
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/spend/logs/ui/${logId}?start_date=${encodeURIComponent(start_date)}`
       : `/spend/logs/ui/${logId}?start_date=${encodeURIComponent(start_date)}`;
 
@@ -4762,7 +4762,7 @@ export const getInternalUserSettings = async (accessToken: string) => {
 export const updateInternalUserSettings = async (accessToken: string, settings: Record<string, any>) => {
   try {
     // Construct base URL
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/update/internal_user_settings` : `/update/internal_user_settings`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/update/internal_user_settings` : `/update/internal_user_settings`;
 
     const response = await fetch(url, {
       method: "PATCH",
@@ -5131,7 +5131,7 @@ export const listMCPTools = async (
   // Construct base URL. include_disabled_tools returns the full server catalog
   // (admin-only, backend-enforced) so the settings UI can configure the allowlist.
   const query = `server_id=${serverId}${includeDisabledTools ? "&include_disabled_tools=true" : ""}`;
-  let url = proxyBaseUrl ? `${proxyBaseUrl}/mcp-rest/tools/list?${query}` : `/mcp-rest/tools/list?${query}`;
+  const url = proxyBaseUrl ? `${proxyBaseUrl}/mcp-rest/tools/list?${query}` : `/mcp-rest/tools/list?${query}`;
 
   const headers: Record<string, string> = {
     [globalLitellmHeaderName]: `Bearer ${accessToken}`,
@@ -5208,7 +5208,7 @@ export const callMCPTool = async (
 ) => {
   try {
     // Construct base URL
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/mcp-rest/tools/call` : `/mcp-rest/tools/call`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/mcp-rest/tools/call` : `/mcp-rest/tools/call`;
 
     const headers: Record<string, string> = {
       [globalLitellmHeaderName]: `Bearer ${accessToken}`,
@@ -5285,7 +5285,7 @@ export const callMCPTool = async (
 
 export const tagCreateCall = async (accessToken: string, formValues: TagNewRequest): Promise<void> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/tag/new` : `/tag/new`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/tag/new` : `/tag/new`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -5311,7 +5311,7 @@ export const tagCreateCall = async (accessToken: string, formValues: TagNewReque
 
 export const tagUpdateCall = async (accessToken: string, formValues: TagUpdateRequest): Promise<void> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/tag/update` : `/tag/update`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/tag/update` : `/tag/update`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -5337,7 +5337,7 @@ export const tagUpdateCall = async (accessToken: string, formValues: TagUpdateRe
 
 export const tagInfoCall = async (accessToken: string, tagNames: string[]): Promise<TagInfoResponse> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/tag/info` : `/tag/info`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/tag/info` : `/tag/info`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -5408,7 +5408,7 @@ export const tagListCall = async (
 
 export const tagDeleteCall = async (accessToken: string, tagName: string): Promise<void> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/tag/delete` : `/tag/delete`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/tag/delete` : `/tag/delete`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -5454,7 +5454,7 @@ export const updateDefaultTeamSettings = async (accessToken: string, settings: R
 
 export const getTeamPermissionsCall = async (accessToken: string, teamId: string) => {
   try {
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/team/permissions_list?team_id=${teamId}`
       : `/team/permissions_list?team_id=${teamId}`;
 
@@ -5516,7 +5516,7 @@ export const sessionSpendLogsCall = async (
       page: String(page),
       page_size: String(page_size),
     });
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/spend/logs/session/ui?${params.toString()}`
       : `/spend/logs/session/ui?${params.toString()}`;
 
@@ -5545,7 +5545,7 @@ export const sessionSpendLogsCall = async (
 
 export const vectorStoreCreateCall = async (accessToken: string, formValues: Record<string, any>): Promise<void> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/new` : `/vector_store/new`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/new` : `/vector_store/new`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -5574,7 +5574,7 @@ export const vectorStoreListCall = async (
   page_size: number = 100,
 ): Promise<any> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/list` : `/vector_store/list`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/list` : `/vector_store/list`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -5598,7 +5598,7 @@ export const vectorStoreListCall = async (
 
 export const vectorStoreDeleteCall = async (accessToken: string, vectorStoreId: string): Promise<void> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/delete` : `/vector_store/delete`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/delete` : `/vector_store/delete`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -5623,7 +5623,7 @@ export const vectorStoreDeleteCall = async (accessToken: string, vectorStoreId: 
 
 export const vectorStoreInfoCall = async (accessToken: string, vectorStoreId: string): Promise<any> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/info` : `/vector_store/info`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/info` : `/vector_store/info`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -5648,7 +5648,7 @@ export const vectorStoreInfoCall = async (accessToken: string, vectorStoreId: st
 
 export const vectorStoreUpdateCall = async (accessToken: string, formValues: Record<string, any>): Promise<any> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/update` : `/vector_store/update`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/vector_store/update` : `/vector_store/update`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -5681,7 +5681,7 @@ export const ragIngestCall = async (
   providerSpecificParams?: Record<string, any>,
 ): Promise<any> => {
   try {
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/rag/ingest` : `/rag/ingest`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/rag/ingest` : `/rag/ingest`;
 
     const formData = new FormData();
     formData.append("file", file);
@@ -6376,7 +6376,7 @@ export const getSSOSettings = async (accessToken: string) => {
 export const updateSSOSettings = async (accessToken: string, settings: Record<string, any>) => {
   try {
     // Construct base URL
-    let url = proxyBaseUrl ? `${proxyBaseUrl}/update/sso_settings` : `/update/sso_settings`;
+    const url = proxyBaseUrl ? `${proxyBaseUrl}/update/sso_settings` : `/update/sso_settings`;
 
     const response = await fetch(url, {
       method: "PATCH",
@@ -6561,7 +6561,7 @@ export const updatePassThroughEndpoint = async (
   formValues: Record<string, any>,
 ) => {
   try {
-    let url = proxyBaseUrl
+    const url = proxyBaseUrl
       ? `${proxyBaseUrl}/config/pass_through_endpoint/${encodeURIComponent(endpointPath)}`
       : `/config/pass_through_endpoint/${encodeURIComponent(endpointPath)}`;
 

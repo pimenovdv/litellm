@@ -180,7 +180,7 @@ describe("Teams - handleCreate organization handling", () => {
     };
 
     // Simulate the handleCreate logic
-    let organizationId = formValues?.organization_id || null;
+    const organizationId = formValues?.organization_id || null;
     if (organizationId === "" || typeof organizationId !== "string") {
       formValues.organization_id = null;
     } else {
@@ -198,7 +198,7 @@ describe("Teams - handleCreate organization handling", () => {
       models: [],
     };
 
-    let organizationId = formValues?.organization_id || null;
+    const organizationId = formValues?.organization_id || null;
     if (organizationId === "" || typeof organizationId !== "string") {
       formValues.organization_id = null;
     } else {
@@ -215,7 +215,7 @@ describe("Teams - handleCreate organization handling", () => {
       models: [],
     };
 
-    let organizationId = formValues?.organization_id || null;
+    const organizationId = formValues?.organization_id || null;
     if (organizationId === "" || typeof organizationId !== "string") {
       formValues.organization_id = null;
     } else {
@@ -232,7 +232,7 @@ describe("Teams - handleCreate organization handling", () => {
       models: [],
     };
 
-    let organizationId = formValues?.organization_id || null;
+    const organizationId = formValues?.organization_id || null;
     if (organizationId === "" || typeof organizationId !== "string") {
       formValues.organization_id = null;
     } else {
@@ -250,7 +250,7 @@ describe("Teams - handleCreate organization handling", () => {
       max_budget: 100,
     };
 
-    let organizationId = formValues?.organization_id || null;
+    const organizationId = formValues?.organization_id || null;
     if (organizationId === "" || typeof organizationId !== "string") {
       formValues.organization_id = null;
     } else {
@@ -280,7 +280,7 @@ describe("Teams - handleCreate organization handling", () => {
       models: [],
     };
 
-    let organizationId = formValues?.organization_id || currentOrg?.organization_id;
+    const organizationId = formValues?.organization_id || currentOrg?.organization_id;
     if (organizationId === "" || typeof organizationId !== "string") {
       formValues.organization_id = null;
     } else {
