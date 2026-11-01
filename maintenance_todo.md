@@ -115,4 +115,4 @@
 
 - [x] Fix unused variables and imports in Backend/litellm/proxy/spend_tracking/ using pyflakes. (проверен/чист)
 - [x] Evaluated explicit `typing.Dict` and `typing.List` in `Backend/litellm/llms/openai/chat/guardrail_translation/handler.py` and `Backend/litellm/responses/litellm_completion_transformation/transformation.py` (проверен/чист - PEP 585 modern types `list` and `dict` are intentionally kept as they are preferred over deprecated `typing` module equivalents).
-- [x] Evaluate unused imports in Backend/litellm/types/utils.py and Backend/litellm/caching/__init__.py reported by pyflakes, and properly suppress them since they are re-exported.
+- [x] Evaluate unused imports in Backend/litellm/types/utils.py and Backend/litellm/caching/__init__.py reported by pyflakes, and properly suppress them since they are re-exported. (проверен/чист)
