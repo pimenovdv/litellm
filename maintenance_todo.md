@@ -242,4 +242,13 @@
 - [x] Fix undefined names and unused imports in Backend/litellm/proxy/ui_crud_endpoints/. (проверен/чист)
 - [x] Fix unused imports in Backend/litellm/proxy/management_endpoints/team_endpoints.py. (проверен/чист - ran previous evaluation correctly)
 - [x] Evaluate unused definitions in Backend/litellm/proxy/auth/ using pyflakes. (проверен/чист)
-- [ ] Evaluate unused definitions in Backend/litellm/proxy/hooks/ using pyflakes.
+- [x] Evaluate unused definitions in Backend/litellm/proxy/hooks/ using pyflakes. (проверен/чист)
+- [x] Evaluate unused definitions in Backend/litellm/proxy/a2a/ and other endpoints using pyflakes. (проверен/чист - intentionally kept star imports in endpoints)
+- [x] Clean up redundant unused import litellm.passthrough.timeout_utils in Backend/litellm/proxy/pass_through_endpoints/pass_through_endpoints.py. (проверен/чист - restored, these are explicitly exported for backward compatibility)
+- [x] Evaluate unused definitions in Backend/litellm/proxy/google_endpoints/ and other remaining endpoints using pyflakes. (проверен/чист - fixed redundant import in search_endpoints)
+- [x] Clean up redundant unused import litellm.proxy._types in Backend/litellm/proxy/response_api_endpoints/endpoints.py (проверен/чист)
+- [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
+- [x] Submit. (проверен/чист)
+- [x] Finish current step.
+
+- [ ] Remove missing dependencies from dependency array in frontend/litellm-dashboard/src/hooks/useWorker.ts (fix react-hooks/exhaustive-deps).

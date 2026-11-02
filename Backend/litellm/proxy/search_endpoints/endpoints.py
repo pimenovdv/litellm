@@ -154,7 +154,6 @@ async def search(
             if user_api_key_dict.team_id:
                 from litellm.proxy.proxy_server import (
                     prisma_client,
-                    proxy_logging_obj,
                     user_api_key_cache,
                 )
 
