@@ -231,3 +231,4 @@
 - [x] Refactor imports in `Backend/litellm/proxy/example_config_yaml/custom_callbacks1.py` (проверен/чист - уже было исправлено)
 - [x] Evaluate unused imports in `Backend/litellm/router_utils/` and `Backend/litellm/router_strategy/` using pyflakes. (проверен/чист - удален импорт RequestType)
 - [x] Fix undefined name is_anthropic_oauth_key in Backend/litellm/proxy/litellm_pre_call_utils.py by injecting local mock.
+- [x] Remove undefined wildcard imports from Backend/litellm/proxy/management_endpoints/ui_sso.py
