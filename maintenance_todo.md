@@ -230,3 +230,4 @@
 - [x] Add explicit return type hints to `Backend/litellm/litellm_core_utils/llm_request_utils.py` and `Backend/litellm/litellm_core_utils/core_helpers.py` to improve typing.
 - [x] Refactor imports in `Backend/litellm/proxy/example_config_yaml/custom_callbacks1.py` (проверен/чист - уже было исправлено)
 - [x] Evaluate unused imports in `Backend/litellm/router_utils/` and `Backend/litellm/router_strategy/` using pyflakes. (проверен/чист - удален импорт RequestType)
+- [x] Fix undefined name is_anthropic_oauth_key in Backend/litellm/proxy/litellm_pre_call_utils.py by injecting local mock.

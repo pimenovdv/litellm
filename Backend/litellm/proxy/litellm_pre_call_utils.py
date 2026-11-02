@@ -6,6 +6,15 @@ import time
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
+def is_anthropic_oauth_key(value: str) -> bool:
+    '''Check if value is an anthropic oauth key (sk-ant-oat*)'''
+    if not isinstance(value, str):
+        return False
+    if value.startswith('Bearer '):
+        value = value[7:]
+    return value.startswith('sk-ant-oat')
+
+
 from fastapi import HTTPException, Request
 from pydantic import ValidationError as PydanticValidationError
 from starlette.datastructures import Headers
