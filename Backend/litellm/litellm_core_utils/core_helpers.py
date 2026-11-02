@@ -213,7 +213,7 @@ def get_or_create_metadata_bucket(
     return metadata_key, metadata_bucket
 
 
-def get_litellm_metadata_from_kwargs(kwargs: dict):
+def get_litellm_metadata_from_kwargs(kwargs: dict) -> dict:
     """
     Helper to get litellm metadata from all litellm request kwargs
 
@@ -338,7 +338,7 @@ def preserve_upstream_non_openai_attributes(
             setattr(model_response, key, value)
 
 
-def safe_deep_copy(data):
+def safe_deep_copy(data: Any) -> Any:
     """
     Safe Deep Copy
 

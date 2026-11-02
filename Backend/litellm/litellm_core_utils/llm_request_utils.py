@@ -30,7 +30,7 @@ def _ensure_extra_body_is_safe(extra_body: Optional[Dict]) -> Optional[Dict]:
     return extra_body
 
 
-def pick_cheapest_chat_models_from_llm_provider(custom_llm_provider: str, n=1):
+def pick_cheapest_chat_models_from_llm_provider(custom_llm_provider: str, n: int = 1) -> list[str]:
     """
     Pick the n cheapest chat models from the LLM provider.
 
