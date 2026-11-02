@@ -234,4 +234,12 @@
 - [x] Remove undefined wildcard imports from Backend/litellm/proxy/management_endpoints/ui_sso.py
 - [x] Evaluate unused imports and redefinitions in Backend/litellm/proxy/management_endpoints/common_utils.py (resolved pyflakes warnings)
 - [x] Evaluate unused definitions in Backend/litellm/proxy/management_endpoints/key_management_endpoints.py using pyflakes. (проверен/чист)
-- [ ] Evaluate unused definitions in Backend/litellm/proxy/management_endpoints/team_endpoints.py using pyflakes.
+- [x] Evaluate unused definitions in Backend/litellm/proxy/management_endpoints/team_endpoints.py using pyflakes. (проверен/чист)
+- [x] Fix unused definitions in Backend/litellm/proxy/proxy_server.py reported by pyflakes. (проверен/чист - intentionally preserved globals for configurations and side-effect imports for enterprise)
+- [x] Evaluate unused definitions in Backend/litellm/proxy/pass_through_endpoints/ using pyflakes. (проверен/чист - intentionally kept re-exports for backwards compatibility)
+- [x] Evaluate unused imports in Backend/litellm/proxy/ui_crud_endpoints/ using pyflakes. (проверен/чист)
+- [x] Evaluate unused imports in Backend/litellm/proxy/config_management_endpoints/ using pyflakes. (проверен/чист)
+- [x] Fix undefined names and unused imports in Backend/litellm/proxy/ui_crud_endpoints/. (проверен/чист)
+- [x] Fix unused imports in Backend/litellm/proxy/management_endpoints/team_endpoints.py. (проверен/чист - ran previous evaluation correctly)
+- [x] Evaluate unused definitions in Backend/litellm/proxy/auth/ using pyflakes. (проверен/чист)
+- [ ] Evaluate unused definitions in Backend/litellm/proxy/hooks/ using pyflakes.
