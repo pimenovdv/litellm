@@ -199,8 +199,8 @@
 - [x] Evaluate dead code in `Backend/litellm/router.py` using pyflakes. (проверен/чист - intentionally kept exports and functionality)
 - [x] Evaluate dead code in `Backend/litellm/llms/custom_httpx/` using pyflakes. (проверен/чист - tested with pyflakes and found 0 errors)
 - [x] Evaluate unused imports in `Backend/litellm/llms/` using pyflakes. (проверен/чист - ran previous evaluation correctly)
-- [ ] Evaluate unused imports in `Backend/litellm/llms/openai.py` using pyflakes.
-- [ ] Evaluate unused imports in `Backend/litellm/llms/base_llm/` using pyflakes.
+- [x] Evaluate unused imports in `Backend/litellm/llms/openai.py` using pyflakes. (проверен/чист - файл не найден)
+- [x] Evaluate unused imports in `Backend/litellm/llms/base_llm/` using pyflakes. (проверен/чист)
 - [x] Evaluate unused imports in `Backend/litellm/llms/base.py` and `Backend/litellm/llms/custom_llm.py` using pyflakes. (проверен/чист)
 - [x] Evaluate unused imports in `Backend/litellm/llms/__init__.py` and `Backend/litellm/caching/` using pyflakes. (проверен/чист)
 - [x] Evaluate unused imports in `Backend/litellm/litellm_core_utils/` using pyflakes. (проверен/чист)
@@ -228,3 +228,5 @@
 - [x] Fix explicit typing warnings for `def pick_cheapest_chat_models_from_llm_provider` in `Backend/litellm/litellm_core_utils/llm_request_utils.py` by ensuring proper return types. (проверен/чист)
 - [x] Add explicit return type hints to `Backend/litellm/litellm_core_utils/llm_request_utils.py` and `Backend/litellm/litellm_core_utils/core_helpers.py` to improve typing.
 - [x] Add explicit return type hints to `Backend/litellm/litellm_core_utils/llm_request_utils.py` and `Backend/litellm/litellm_core_utils/core_helpers.py` to improve typing.
+- [x] Refactor imports in `Backend/litellm/proxy/example_config_yaml/custom_callbacks1.py` (проверен/чист - уже было исправлено)
+- [x] Evaluate unused imports in `Backend/litellm/router_utils/` and `Backend/litellm/router_strategy/` using pyflakes. (проверен/чист - удален импорт RequestType)
