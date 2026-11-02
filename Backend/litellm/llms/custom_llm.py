@@ -222,7 +222,7 @@ class CustomLLM(BaseLLM):
         raise CustomLLMError(status_code=500, message="Not implemented yet!")
 
 
-def custom_chat_llm_router(async_fn: bool, stream: Optional[bool], custom_llm: CustomLLM):
+def custom_chat_llm_router(async_fn: bool, stream: Optional[bool], custom_llm: CustomLLM) -> Any:
     """
     Routes call to CustomLLM completion/acompletion/streaming/astreaming functions, based on call type
 
