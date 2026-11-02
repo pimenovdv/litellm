@@ -37,9 +37,9 @@ from litellm.proxy._types import (
     UpdateProjectRequest,
     UserAPIKeyAuth,
 )
-from litellm.proxy._types import (  # noqa: F401  re-exported
-    user_api_key_has_admin_view as _user_has_admin_view,
-)
+from litellm.proxy._types import user_api_key_has_admin_view as _user_has_admin_view
+
+__all__ = ['_user_has_admin_view']
 from litellm.proxy.common_utils.timezone_utils import get_budget_reset_time
 from litellm.proxy.utils import _premium_user_check
 from litellm.repositories.team_repository import TeamRepository

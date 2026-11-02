@@ -24,7 +24,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
 import litellm
 from litellm._logging import verbose_proxy_logger
 from litellm._uuid import uuid
-from litellm.proxy._types import *
+from litellm.proxy._types import (BaseModel, CommonProxyErrors, DeleteUserRequest, LiteLLM_AuditLogs, LiteLLM_ManagementEndpoint_MetadataFields, LiteLLM_TeamMembership, LiteLLM_TeamTable, LiteLLM_UserTable, LiteLLM_UserTableFiltered, LiteLLM_UserTableWithKeyCount, LiteLLM_VerificationToken, LitellmTableNames, LitellmUserRoles, Literal, Member, NewUserRequest, NewUserRequestTeam, NewUserResponse, OrgMember, OrganizationMemberAddRequest, ProxyErrorTypes, ProxyException, TYPE_CHECKING, TeamListResponseObject, TeamMemberAddRequest, TeamMemberDeleteRequest, UpdateUserRequest, UpdateUserRequestNoUserIDorEmail, UserAPIKeyAuth, UserInfoResponse, UserInfoV2Response)
 from litellm.proxy.auth.auth_checks import get_team_object, get_user_object
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 from litellm.proxy.hooks.user_management_event_hooks import UserManagementEventHooks

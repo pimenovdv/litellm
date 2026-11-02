@@ -45,7 +45,8 @@ from litellm.proxy._experimental.mcp_server.db import (
 from litellm.proxy._experimental.mcp_server.outbound_credentials.sso_assertion_store import (
     rotate_sso_identity_assertions_master_key,
 )
-from litellm.proxy._types import *
+from litellm.proxy._types import (BaseModel, BlockKeyRequest, BudgetLimitEntry, CommonProxyErrors, GenerateKeyRequest, GenerateKeyResponse, GenerateRequestBase, KeyHealthResponse, KeyListResponseObject, KeyManagementRoutes, KeyRequest, LiteLLMKeyType, LiteLLM_AuditLogs, LiteLLM_BudgetTable, LiteLLM_DeletedVerificationToken, LiteLLM_ManagementEndpoint_MetadataFields, LiteLLM_ManagementEndpoint_MetadataFields_Premium, LiteLLM_ObjectPermissionBase, LiteLLM_OrganizationTable, LiteLLM_Reserved_Metadata_Fields, LiteLLM_TeamTable, LiteLLM_TeamTableCachedObj, LiteLLM_UserTable, LitellmTableNames, LitellmUserRoles, LoggingCallbackStatus, Member, ObjectPermissionDict, ProxyErrorTypes, ProxyException, RegenerateKeyRequest, ResetSpendRequest, SpecialModelNames, UI_TEAM_ID, UpdateKeyRequest, UserAPIKeyAuth)
+from typing import Union
 from litellm.proxy._types import LiteLLM_VerificationToken, hash_token
 from litellm.proxy.auth.auth_checks import (
     _delete_cache_key_object,
