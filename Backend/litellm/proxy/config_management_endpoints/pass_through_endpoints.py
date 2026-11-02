@@ -6,7 +6,7 @@ CRUD endpoints for managing pass-through endpoints
 
 from fastapi import APIRouter, Depends, Request, Response
 
-from litellm.proxy._types import *
+from litellm.proxy._types import UserAPIKeyAuth
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 
 router = APIRouter()
