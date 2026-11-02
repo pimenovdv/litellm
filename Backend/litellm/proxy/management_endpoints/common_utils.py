@@ -45,7 +45,6 @@ from litellm.proxy.utils import _premium_user_check
 from litellm.repositories.team_repository import TeamRepository
 
 if TYPE_CHECKING:
-    from litellm.proxy._types import NewProjectRequest, UpdateProjectRequest
     from litellm.proxy.utils import PrismaClient, ProxyLogging
 
 
