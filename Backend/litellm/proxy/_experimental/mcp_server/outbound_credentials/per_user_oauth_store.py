@@ -47,6 +47,8 @@ from litellm.proxy._experimental.mcp_server.outbound_credentials.v2_token_store 
 if TYPE_CHECKING:
     from litellm.types.mcp_server.mcp_server_manager import MCPServer
 
+    _ = MCPServer  # type: ignore
+
 # A token with no declared expiry is cached for this long; one with an expiry is cached until then.
 _DEFAULT_TTL_SECONDS = 300.0
 

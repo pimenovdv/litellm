@@ -26,6 +26,8 @@ from litellm.proxy._experimental.mcp_server.outbound_credentials.oauth_token_sto
 if TYPE_CHECKING:
     from litellm.types.mcp_server.mcp_server_manager import MCPServer
 
+    _ = MCPServer  # type: ignore
+
 ServerLookup = Callable[[str], "MCPServer | None"]
 TokenEndpointPost = Callable[[str, dict[str, str], dict[str, str]], Awaitable["dict[str, object] | None"]]
 
