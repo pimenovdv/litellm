@@ -20,7 +20,7 @@ import {
   Tooltip,
 } from "antd";
 import { QuestionCircleOutlined, CheckCircleOutlined, SaveOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { fetchAvailableModels, ModelGroup } from "@/components/llm_calls/fetch_models";
 import MCPSemanticFilterTestPanel from "./MCPSemanticFilterTestPanel";
 import { getCurlCommand, runSemanticFilterTest, TestResult } from "./semanticFilterTestUtils";
@@ -63,7 +63,7 @@ export default function MCPSemanticFilterSettings({ accessToken }: MCPSemanticFi
   const [isTesting, setIsTesting] = useState(false);
 
   const schema = data?.field_schema;
-  const values = data?.values ?? {};
+  const values = useMemo(() => data?.values ?? {}, [data?.values]);
 
   useEffect(() => {
     const loadEmbeddingModels = async () => {

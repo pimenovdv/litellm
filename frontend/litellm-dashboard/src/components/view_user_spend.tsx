@@ -63,6 +63,7 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
     } else {
       setMaxBudget(userMaxBudget);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTeam, userMaxBudget]);
   const [userModels, setUserModels] = useState([]);
   useEffect(() => {

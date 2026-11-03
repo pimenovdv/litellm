@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Typography, Button, Divider } from "antd";
 import { WarningOutlined, InfoCircleOutlined, CopyOutlined } from "@ant-design/icons";
 import { testConnectionRequest } from "../networking";
@@ -30,7 +30,7 @@ const ModelConnectionTest: React.FC<ModelConnectionTestProps> = ({
   const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
   const [showDetails, setShowDetails] = React.useState<boolean>(false);
 
-  const testModelConnection = async () => {
+  const testModelConnection = useCallback(async () => {
     setIsLoading(true);
     setShowDetails(false);
     setError(null);
@@ -73,7 +73,7 @@ const ModelConnectionTest: React.FC<ModelConnectionTestProps> = ({
       setIsLoading(false);
       if (onTestComplete) onTestComplete();
     }
-  };
+  }, [formValues, accessToken, onTestComplete]);
 
   React.useEffect(() => {
     // Run the test once when component mounts
@@ -83,7 +83,7 @@ const ModelConnectionTest: React.FC<ModelConnectionTestProps> = ({
     }, 200);
 
     return () => clearTimeout(timer);
-  }, []); // Empty dependency array means this runs once on mount
+  }, [testModelConnection]);
 
   const getCleanErrorMessage = (errorMsg: string) => {
     if (!errorMsg) return "Unknown error";

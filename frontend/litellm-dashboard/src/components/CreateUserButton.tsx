@@ -106,7 +106,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
 
     setBaseUrl(getProxyBaseUrl());
     fetchData();
-  }, []);
+  }, [accessToken, userID]);
 
   const handleOk = () => {
     setIsModalVisible(false);

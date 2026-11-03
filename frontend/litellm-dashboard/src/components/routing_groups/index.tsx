@@ -29,7 +29,7 @@ const RoutingGroups: React.FC = () => {
   const [editingGroup, setEditingGroup] = useState<RoutingGroup | null>(null);
   const [deletingGroup, setDeletingGroup] = useState<RoutingGroup | null>(null);
 
-  const groups = data?.routingGroups ?? [];
+  const groups = useMemo(() => data?.routingGroups ?? [], [data?.routingGroups]);
 
   const filteredGroups = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();

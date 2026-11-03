@@ -245,6 +245,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
 
   useEffect(() => {
     fetchTeamInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teamId, accessToken]);
 
   // Fetch organization data when team has organization_id

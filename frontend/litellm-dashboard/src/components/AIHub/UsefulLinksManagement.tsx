@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import TableIconActionButton from "@/components/common_components/IconActionButton/TableIconActionButtons/TableIconActionButton";
 import NotificationsManager from "@/components/molecules/notifications_manager";
 import { isAdminRole } from "@/utils/roles";
@@ -28,7 +29,7 @@ const UsefulLinksManagement: React.FC<UsefulLinksManagementProps> = ({ accessTok
   const [isRearranging, setIsRearranging] = useState(false);
   const [originalLinksOrder, setOriginalLinksOrder] = useState<Link[]>([]);
 
-  const fetchUsefulLinks = async () => {
+  const fetchUsefulLinks = useCallback(async () => {
     if (!accessToken) return;
 
     try {
@@ -76,11 +77,11 @@ const UsefulLinksManagement: React.FC<UsefulLinksManagementProps> = ({ accessTok
     } finally {
       setLoading(false);
     }
-  };
+  }, [accessToken]);
 
   useEffect(() => {
     fetchUsefulLinks();
-  }, [accessToken]);
+  }, [fetchUsefulLinks]);
 
   // Check if user is admin
   if (!isAdminRole(userRole || "")) {

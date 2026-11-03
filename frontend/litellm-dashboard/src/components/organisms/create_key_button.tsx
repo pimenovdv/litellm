@@ -622,7 +622,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
     }
     // Clear MCP server selection when team changes (available servers may differ)
     form.setFieldValue("allowed_mcp_servers_and_groups", { servers: [], accessGroups: [] });
-  }, [selectedCreateKeyTeam, selectedProjectId, accessToken, userID, userRole, form]);
+  }, [selectedCreateKeyTeam, selectedProjectId, accessToken, userID, userRole, form, pendingPrefillModels, projects]);
 
   // Apply deferred model prefill once the available model list arrives.
   // This handles timing where prefill data arrives before or after models are fetched.
@@ -653,7 +653,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({ team, teams, data, addKey, autoOp
       setSelectedCreateKeyTeam(projectTeam);
       form.setFieldValue("team_id", projectTeam.team_id);
     }
-  }, [teams, selectedProjectId, projects]);
+  }, [teams, selectedProjectId, projects, form, selectedCreateKeyTeam?.team_id]);
 
   // Add a callback function to handle user creation
   const handleUserCreated = (userId: string) => {

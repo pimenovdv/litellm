@@ -83,7 +83,7 @@ export function MCPServerPermissions({
       }
     };
     fetchToolsets();
-  }, [accessToken, mcpToolsets.length]);
+  }, [accessToken, mcpToolsets.length, mcpToolsets]);
 
   // Function to get display name for MCP server
   const getMCPServerDisplayName = (serverId: string) => {

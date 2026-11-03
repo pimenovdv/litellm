@@ -194,6 +194,7 @@ const useKeyList = ({
 
   useEffect(() => {
     fetchKeys();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTeam, currentOrg, accessToken, selectedKeyAlias, createClicked]);
 
   const setKeys = (newKeysOrUpdater: KeyResponse[] | ((prevKeys: KeyResponse[]) => KeyResponse[])) => {

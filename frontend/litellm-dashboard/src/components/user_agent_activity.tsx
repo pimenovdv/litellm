@@ -168,6 +168,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({ accessToken, user
   // Effect to fetch available tags on mount
   useEffect(() => {
     fetchAvailableTags();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
   // Effect for DAU/WAU/MAU data (independent of date picker)
@@ -181,6 +182,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({ accessToken, user
     }, 50);
 
     return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, userAgentFilter, selectedTags]);
 
   // Effect for summary data (depends on date picker)
@@ -192,6 +194,7 @@ const UserAgentActivity: React.FC<UserAgentActivityProps> = ({ accessToken, user
     }, 50);
 
     return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, dateValue, selectedTags]);
 
   // Helper function to extract user agent from tag

@@ -58,7 +58,7 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchPerUserData = async () => {
+  const fetchPerUserData = useCallback(async () => {
     if (!accessToken) return;
 
     setLoading(true);
@@ -75,11 +75,11 @@ const PerUserUsage: React.FC<PerUserUsageProps> = ({ accessToken, selectedTags, 
     } finally {
       setLoading(false);
     }
-  };
+  }, [accessToken, selectedTags, currentPage]);
 
   useEffect(() => {
     fetchPerUserData();
-  }, [accessToken, selectedTags, currentPage]);
+  }, [fetchPerUserData]);
 
   const handleNextPage = () => {
     if (currentPage < perUserData.total_pages) {

@@ -40,7 +40,7 @@ export function FallbackSelectionForm({
       // If groups is empty, reset activeKey
       setActiveKey("1");
     }
-  }, [groups]);
+  }, [groups, activeKey]);
 
   const handleAddGroup = () => {
     if (groups.length >= maxGroups) {

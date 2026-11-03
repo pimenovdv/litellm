@@ -20,6 +20,7 @@ const EmailEventSettings: React.FC<EmailEventSettingsProps> = ({ accessToken }) 
   // Fetch email event settings on component mount
   useEffect(() => {
     fetchEventSettings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
   const fetchEventSettings = async () => {

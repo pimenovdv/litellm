@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 "use client";
 
 import { useHashicorpVaultConfig } from "@/app/(dashboard)/hooks/configOverrides/useHashicorpVaultConfig";
@@ -50,7 +51,7 @@ const EditHashicorpVaultModal: React.FC<EditHashicorpVaultModalProps> = ({ isVis
 
   const schema = data?.field_schema;
   const properties = schema?.properties ?? {};
-  const rawValues = data?.values ?? {};
+  const rawValues = useMemo(() => data?.values ?? {}, [data?.values]);
 
   useEffect(() => {
     if (isVisible && data) {
@@ -64,7 +65,7 @@ const EditHashicorpVaultModal: React.FC<EditHashicorpVaultModalProps> = ({ isVis
       }
       form.setFieldsValue(formValues);
     }
-  }, [isVisible, data, form]);
+  }, [isVisible, data, form, rawValues]);
 
   const handleSubmit = (formValues: Record<string, any>) => {
     const config: Record<string, any> = {};

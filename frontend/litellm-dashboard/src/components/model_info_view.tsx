@@ -155,14 +155,14 @@ export default function ModelInfoView({
   const { data: modelHubData } = useModelHub();
 
   // Transform the model data
-  const getProviderFromModel = (model: string) => {
+  const getProviderFromModel = useCallback((model: string) => {
     if (modelCostMapData !== null && modelCostMapData !== undefined) {
       if (typeof modelCostMapData == "object" && model in modelCostMapData) {
         return modelCostMapData[model]["litellm_provider"];
       }
     }
     return "openai";
-  };
+  }, [modelCostMapData]);
 
   const transformedModelData = useMemo(() => {
     if (!rawModelDataResponse?.data || rawModelDataResponse.data.length === 0) {
@@ -170,7 +170,7 @@ export default function ModelInfoView({
     }
     const transformed = transformModelData(rawModelDataResponse, getProviderFromModel);
     return transformed.data[0] || null;
-  }, [rawModelDataResponse, modelCostMapData]);
+  }, [rawModelDataResponse, getProviderFromModel]);
 
   // Keep modelData variable name for backwards compatibility
   const modelData = transformedModelData;
@@ -285,6 +285,7 @@ export default function ModelInfoView({
     fetchGuardrails();
     fetchTags();
     fetchCredentials();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, modelId]);
 
   const handleReuseCredential = async (values: any) => {

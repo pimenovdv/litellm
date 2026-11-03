@@ -135,7 +135,7 @@ const SchemaFormFields: React.FC<SchemaFormFieldsProps> = ({
     };
 
     fetchOpenAPISchema();
-  }, [schemaComponent, form, excludedFields]);
+  }, [schemaComponent, form, excludedFields, defaultValues]);
 
   const getPropertyType = (property: SchemaProperty): string => {
     if (property.type) {

@@ -109,6 +109,7 @@ const EditAutoRouterModal: React.FC<EditAutoRouterModalProps> = ({
     if (isVisible && modelData) {
       initializeForm();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, modelData]);
 
   useEffect(() => {

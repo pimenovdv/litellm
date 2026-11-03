@@ -80,7 +80,7 @@ const MakeMCPPublicForm: React.FC<MakeMCPPublicFormProps> = ({
       // Preselect servers that are already public
       setSelectedServers(new Set(publicServerIds));
     }
-  }, [visible]); // Only re-run when modal visibility changes, not when mcpHubData updates
+  }, [visible, mcpHubData]);
 
   const handleSubmit = async () => {
     if (selectedServers.size === 0) {

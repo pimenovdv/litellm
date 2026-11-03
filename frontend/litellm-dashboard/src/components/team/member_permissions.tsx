@@ -2,7 +2,7 @@ import { getTeamPermissionsCall, teamPermissionsUpdateCall } from "@/components/
 import { ReloadOutlined, SaveOutlined } from "@ant-design/icons";
 import { Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import { Button, Checkbox, Empty } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import NotificationsManager from "../molecules/notifications_manager";
 import { getPermissionInfo } from "./permission_definitions";
 
@@ -19,7 +19,7 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
-  const fetchPermissions = async () => {
+  const fetchPermissions = useCallback(async () => {
     try {
       setLoading(true);
       if (!accessToken) return;
@@ -35,11 +35,11 @@ const MemberPermissions: React.FC<MemberPermissionsProps> = ({ teamId, accessTok
     } finally {
       setLoading(false);
     }
-  };
+  }, [accessToken, teamId]);
 
   useEffect(() => {
     fetchPermissions();
-  }, [teamId, accessToken]);
+  }, [fetchPermissions]);
 
   const handlePermissionChange = (permission: string, checked: boolean) => {
     const newSelectedPermissions = checked

@@ -181,6 +181,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
         fetchTeams(accessToken, userID, userRole, currentOrg, setTeams);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID, token, accessToken, userRole]);
 
   useEffect(() => {
@@ -203,6 +204,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
     if (accessToken) {
       fetchTeams(accessToken, userID, userRole, currentOrg, setTeams);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentOrg]);
 
   useEffect(() => {
@@ -223,6 +225,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
       }
       setTeamSpend(sum);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTeam]);
 
   function gotoLogin() {

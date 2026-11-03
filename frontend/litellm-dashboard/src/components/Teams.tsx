@@ -160,7 +160,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
     const models = getOrganizationModels(currentOrgForCreateTeam, userModels);
     setModelsToPick(models);
     form.setFieldValue("models", []);
-  }, [currentOrgForCreateTeam, userModels]);
+  }, [currentOrgForCreateTeam, userModels, form]);
 
   // Handle organization preselection when modal opens
   useEffect(() => {
@@ -179,7 +179,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
         setCurrentOrgForCreateTeam(currentOrg);
       }
     }
-  }, [isTeamModalVisible, userRole, userID, organizations, currentOrg]);
+  }, [isTeamModalVisible, userRole, userID, organizations, currentOrg, form]);
 
   // Add this useEffect to fetch guardrails
   useEffect(() => {
@@ -215,7 +215,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
     fetchPolicies();
   }, [accessToken]);
 
-  const fetchMcpAccessGroups = async () => {
+  const fetchMcpAccessGroups = useCallback(async () => {
     try {
       if (accessToken == null) {
         return;
@@ -225,10 +225,11 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
     } catch (error) {
       console.error("Failed to fetch MCP access groups:", error);
     }
-  };
+  }, [accessToken]);
 
   useEffect(() => {
     fetchMcpAccessGroups();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
   const handleOk = () => {
