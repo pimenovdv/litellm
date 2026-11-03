@@ -251,4 +251,7 @@
 - [x] Submit. (проверен/чист)
 - [x] Finish current step.
 
-- [ ] Remove missing dependencies from dependency array in frontend/litellm-dashboard/src/hooks/useWorker.ts (fix react-hooks/exhaustive-deps).
+- [x] Remove missing dependencies from dependency array in frontend/litellm-dashboard/src/hooks/useWorker.ts (fix react-hooks/exhaustive-deps). (проверен/чист - ran npx eslint src --fix earlier, and useWorker.ts is clean)
+- [x] Resolve react-hooks/exhaustive-deps in frontend/litellm-dashboard/src/hooks/useMcpOAuthFlow.tsx. (проверен/чист)
+- [ ] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
+- [ ] Submit.
