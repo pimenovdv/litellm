@@ -1273,7 +1273,6 @@ async def convert_prompt_file_to_json(
 
     Returns the JSON structure with 'content' and 'metadata' fields.
     """
-    global general_settings
     from litellm.integrations.dotprompt.prompt_manager import PromptManager
 
     # Validate file extension

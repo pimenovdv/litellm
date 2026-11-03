@@ -362,3 +362,4 @@
 - [x] Evaluate unused imports in Backend/litellm/types/utils.py. (проверен/чист - intentionally kept re-exports for backwards compatibility)
 - [x] Fix react-hooks/exhaustive-deps and typescript-eslint/no-explicit-any in frontend/litellm-dashboard/src/app/(dashboard)/admin-panel/_components/AdminPanel.tsx. (проверен/чист)
 - [x] Resolve unused `MCPServer` import warning in `Backend/litellm/proxy/_experimental/mcp_server/outbound_credentials/authz_code_refresher.py` and `per_user_oauth_store.py` by assigning to `_` for static analysis without breaking `TYPE_CHECKING` forward references.
+- [x] Resolve unused global warnings in `Backend/litellm/proxy/fine_tuning_endpoints/endpoints.py` and `Backend/litellm/proxy/prompts/prompt_endpoints.py` without breaking existing codebase logic.
