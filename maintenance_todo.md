@@ -356,3 +356,5 @@
 - [x] Evaluate explicitly remaining console warnings in `frontend/litellm-dashboard/`. (проверен/чист - explicitly ignored because these console logs are useful for local debugging in playgrounds, network requests, and fallback components. Suppressing them would hinder dev experience)
 - [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
 - [x] Submit.
+
+- [x] Evaluate unused definitions in Backend/litellm/proxy/openai_files_endpoints/files_endpoints.py using pyflakes. (проверен/чист - intentionnally kept for backwards compatibilty)
