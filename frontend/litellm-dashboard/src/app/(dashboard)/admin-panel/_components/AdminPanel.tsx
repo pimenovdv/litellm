@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@tremor/react";
 import { Alert, Button as Button2, Form, Input, Modal, Space, Tabs, Typography } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import NewBadge from "@/components/common_components/NewBadge";
 import { useBaseUrl } from "@/components/constants";
 import NotificationsManager from "@/components/molecules/notifications_manager";
@@ -32,7 +32,7 @@ import UIAccessControlForm from "@/components/UIAccessControlForm";
 const { Title, Paragraph, Text } = Typography;
 
 interface AdminPanelProps {
-  proxySettings?: any;
+  proxySettings?: Record<string, unknown>;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
@@ -54,7 +54,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
   let nonSssoUrl = baseUrl;
   nonSssoUrl += "/fallback/login";
 
-  const checkSSOConfiguration = async () => {
+  const checkSSOConfiguration = useCallback(async () => {
     if (accessToken) {
       try {
         const ssoData = await getSSOSettings(accessToken);
@@ -73,7 +73,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
         setSsoConfigured(false);
       }
     }
-  };
+  }, [accessToken]);
 
   const handleShowAllowedIPs = async () => {
     try {
@@ -153,7 +153,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ proxySettings }) => {
     form.resetFields();
   };
 
-  const handleShowInstructions = (formValues: Record<string, any>) => {
+  const handleShowInstructions = (_formValues: Record<string, unknown>) => {
     setIsAddSSOModalVisible(false);
     setIsInstructionsModalVisible(true);
   };
