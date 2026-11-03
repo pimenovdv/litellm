@@ -105,7 +105,7 @@ export const useMcpOAuthFlow = ({
     }
   };
 
-  const buildCallbackUrl = () => {
+  const buildCallbackUrl = useCallback(() => {
     if (typeof window !== "undefined") {
       const path = window.location.pathname || "";
       const uiIndex = path.indexOf("/ui");
@@ -117,9 +117,9 @@ export const useMcpOAuthFlow = ({
     const base = (getProxyBaseUrl() || "").replace(/\/+$/, "");
     const rootPrefix = serverRootPath && serverRootPath !== "/" ? serverRootPath : "";
     return `${base}${rootPrefix}/ui/mcp/oauth/callback`;
-  };
+  }, []);
 
-  const callbackUrl = () => buildCallbackUrl();
+  const callbackUrl = useCallback(() => buildCallbackUrl(), [buildCallbackUrl]);
 
   const startOAuthFlow = useCallback(async () => {
     const credentials = getCredentials() || {};
@@ -223,7 +223,7 @@ export const useMcpOAuthFlow = ({
       setError(message);
       NotificationsManager.error(message);
     }
-  }, [accessToken, getCredentials, getTemporaryPayload, onBeforeRedirect]);
+  }, [accessToken, getCredentials, getTemporaryPayload, onBeforeRedirect, callbackUrl, flowSource]);
 
   const resumeOAuthFlow = useCallback(async () => {
     if (typeof window === "undefined") {
@@ -348,7 +348,7 @@ export const useMcpOAuthFlow = ({
         }, 1000);
       }
     }
-  }, [onTokenReceived]);
+  }, [onTokenReceived, accessToken, flowSource]);
 
   useEffect(() => {
     resumeOAuthFlow();
