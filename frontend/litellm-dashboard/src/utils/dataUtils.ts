@@ -5,7 +5,7 @@ export function updateExistingKeys<Source extends object>(target: Source, source
 
   for (const [key, value] of Object.entries(source)) {
     if (key in clonedTarget) {
-      (clonedTarget as any)[key] = value;
+      (clonedTarget as Record<string, unknown>)[key] = value;
     }
   }
 

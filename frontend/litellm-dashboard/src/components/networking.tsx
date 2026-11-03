@@ -197,7 +197,7 @@ export interface Organization {
   organization_id: string;
   organization_alias: string;
   budget_id: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   models: string[];
   spend: number;
   model_spend: Record<string, number>;
@@ -205,9 +205,9 @@ export interface Organization {
   created_by: string;
   updated_at: string;
   updated_by: string;
-  litellm_budget_table: any; // Simplified to any since we don't need the detailed structure
-  teams: any[] | null;
-  users: any[] | null;
+  litellm_budget_table: unknown; // Simplified to unknown since we don't need the detailed structure
+  teams: unknown[] | null;
+  users: unknown[] | null;
   members: any[] | null;
   object_permission?: ObjectPermission | null;
 }

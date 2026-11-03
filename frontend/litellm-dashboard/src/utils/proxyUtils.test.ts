@@ -23,7 +23,7 @@ describe("fetchProxySettings", () => {
   });
 
   it("should return null when accessToken is undefined", async () => {
-    const result = await fetchProxySettings(undefined as any);
+    const result = await fetchProxySettings(undefined as unknown as string);
 
     expect(result).toBeNull();
     expect(getProxyUISettings).not.toHaveBeenCalled();

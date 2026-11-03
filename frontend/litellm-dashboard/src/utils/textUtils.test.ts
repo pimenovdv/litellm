@@ -11,8 +11,8 @@ describe("formatLabel", () => {
   });
 
   it("should return the same value when text is falsy", () => {
-    expect(formatLabel(null as any)).toBe(null);
-    expect(formatLabel(undefined as any)).toBe(undefined);
+    expect(formatLabel(null as unknown as string)).toBe(null);
+    expect(formatLabel(undefined as unknown as string)).toBe(undefined);
   });
 });
 
@@ -41,10 +41,10 @@ describe("formItemValidateJSON", () => {
   });
 
   it("should resolve when value is null", async () => {
-    await expect(formItemValidateJSON({}, null as any)).resolves.toBeUndefined();
+    await expect(formItemValidateJSON({}, null as unknown as string)).resolves.toBeUndefined();
   });
 
   it("should resolve when value is undefined", async () => {
-    await expect(formItemValidateJSON({}, undefined as any)).resolves.toBeUndefined();
+    await expect(formItemValidateJSON({}, undefined as unknown as string)).resolves.toBeUndefined();
   });
 });
