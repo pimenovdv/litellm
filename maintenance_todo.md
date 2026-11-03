@@ -360,3 +360,4 @@
 - [x] Evaluate unused definitions in Backend/litellm/proxy/openai_files_endpoints/files_endpoints.py using pyflakes. (проверен/чист - intentionnally kept for backwards compatibilty)
 
 - [x] Evaluate unused imports in Backend/litellm/types/utils.py. (проверен/чист - intentionally kept re-exports for backwards compatibility)
+- [x] Fix react-hooks/exhaustive-deps and typescript-eslint/no-explicit-any in frontend/litellm-dashboard/src/app/(dashboard)/admin-panel/_components/AdminPanel.tsx. (проверен/чист)
