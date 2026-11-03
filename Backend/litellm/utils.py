@@ -239,7 +239,6 @@ if TYPE_CHECKING:
     # their modules at runtime during `litellm` import.
     from litellm.caching.caching_handler import (
         CachingHandlerResponse,
-        LLMCachingHandler,
     )
     from litellm.integrations.custom_logger import CustomLogger
     from litellm.llms.base_llm.files.transformation import BaseFilesConfig
