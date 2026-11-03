@@ -44,10 +44,10 @@ export class ApiError extends Error {
  * Lives here because error parsing is the client's job; networking.tsx re-exports
  * it so existing `@/components/networking` import paths keep working.
  */
-export const deriveErrorMessage = (errorData: any): string => {
-  const detail = errorData?.detail;
+export const deriveErrorMessage = (errorData: unknown): string => {
+  const detail = (errorData as Record<string, unknown>)?.detail;
   const detailStr = Array.isArray(detail)
-    ? detail.map((d: any) => d?.msg || JSON.stringify(d)).join("; ")
+    ? detail.map((d: unknown) => (d as { msg?: string })?.msg || JSON.stringify(d)).join("; ")
     : typeof detail === "string"
       ? detail
       : undefined;
@@ -72,12 +72,12 @@ export interface ApiClientConfig {
 }
 
 export interface ApiClient {
-  request<T = any>(method: HttpMethod, path: string, options?: RequestOptions): Promise<T>;
-  get<T = any>(path: string, options?: RequestOptions): Promise<T>;
-  post<T = any>(path: string, options?: RequestOptions): Promise<T>;
-  put<T = any>(path: string, options?: RequestOptions): Promise<T>;
-  delete<T = any>(path: string, options?: RequestOptions): Promise<T>;
-  patch<T = any>(path: string, options?: RequestOptions): Promise<T>;
+  request<T = unknown>(method: HttpMethod, path: string, options?: RequestOptions): Promise<T>;
+  get<T = unknown>(path: string, options?: RequestOptions): Promise<T>;
+  post<T = unknown>(path: string, options?: RequestOptions): Promise<T>;
+  put<T = unknown>(path: string, options?: RequestOptions): Promise<T>;
+  delete<T = unknown>(path: string, options?: RequestOptions): Promise<T>;
+  patch<T = unknown>(path: string, options?: RequestOptions): Promise<T>;
 }
 
 const appendQuery = (url: string, query: QueryParams | undefined): string => {
@@ -100,7 +100,7 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
   const { getBaseUrl, getAuthHeaderName, onError, fetchImpl } = config;
   const doFetch: typeof fetch = (input, init) => (fetchImpl ?? fetch)(input, init);
 
-  async function request<T = any>(method: HttpMethod, path: string, options: RequestOptions = {}): Promise<T> {
+  async function request<T = unknown>(method: HttpMethod, path: string, options: RequestOptions = {}): Promise<T> {
     const { accessToken, body, rawBody, query, headers: extraHeaders, signal } = options;
 
     const url = appendQuery(`${getBaseUrl()}${path}`, query);
