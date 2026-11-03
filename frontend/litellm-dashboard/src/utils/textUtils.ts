@@ -1,4 +1,4 @@
-export const formatLabel = (text: string): string => {
+export const formatLabel = (text: string | null | undefined): string | null | undefined => {
   if (!text) {
     return text;
   }
@@ -11,7 +11,7 @@ export function truncateString(str: string, maxLength: number) {
   return str.length > maxLength ? str.substring(0, maxLength) + "..." : str;
 }
 
-export const formItemValidateJSON = (_: any, value: string) => {
+export const formItemValidateJSON = (_: unknown, value: string) => {
   if (!value) {
     return Promise.resolve();
   }

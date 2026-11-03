@@ -2,9 +2,9 @@ import { jwtDecode } from "jwt-decode";
 
 export function isJwtExpired(token: string): boolean {
   try {
-    const decoded: any = jwtDecode(token);
-    if (decoded && typeof decoded.exp === "number") {
-      return decoded.exp * 1000 <= Date.now();
+    const decoded: unknown = jwtDecode(token);
+    if (decoded && typeof (decoded as Record<string, unknown>).exp === "number") {
+      return ((decoded as Record<string, unknown>).exp as number) * 1000 <= Date.now();
     }
     return false;
   } catch {
@@ -13,10 +13,10 @@ export function isJwtExpired(token: string): boolean {
   }
 }
 
-export function decodeToken(token: string | null): Record<string, any> | null {
+export function decodeToken(token: string | null): Record<string, unknown> | null {
   if (!token) return null;
   try {
-    return jwtDecode(token) as Record<string, any>;
+    return jwtDecode(token) as Record<string, unknown>;
   } catch {
     return null;
   }

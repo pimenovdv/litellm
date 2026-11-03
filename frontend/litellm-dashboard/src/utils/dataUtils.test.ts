@@ -17,7 +17,7 @@ describe("dataUtils", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset document.execCommand mock
-    delete (document as any).execCommand;
+    delete (document as unknown as { execCommand?: unknown }).execCommand;
   });
 
   afterEach(() => {
@@ -185,7 +185,7 @@ describe("dataUtils", () => {
         // Mock HTTP scenario - no clipboard API
         Object.assign(navigator, {
           clipboard: undefined,
-        });
+        } as unknown as Navigator);
 
         // Mock successful execCommand
         document.execCommand = vi.fn().mockReturnValue(true);
@@ -276,7 +276,7 @@ describe("dataUtils", () => {
         // Mock scenario where navigator exists but clipboard is null
         Object.assign(navigator, {
           clipboard: null,
-        });
+        } as unknown as Navigator);
 
         document.execCommand = vi.fn().mockReturnValue(true);
         const mockTextArea = {
@@ -300,8 +300,8 @@ describe("dataUtils", () => {
 
       it("should handle navigator.clipboard.writeText being undefined", async () => {
         Object.assign(navigator, {
-          clipboard: {}, // clipboard exists but writeText doesn't
-        });
+          clipboard: {} as Clipboard,
+        } as unknown as Navigator);
 
         const result = await copyToClipboard("test text");
 

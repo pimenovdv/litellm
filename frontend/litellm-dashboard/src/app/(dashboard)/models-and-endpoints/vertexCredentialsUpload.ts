@@ -1,4 +1,5 @@
-import type { FormInstance, UploadProps } from "antd";
+import type { FormInstance } from "rc-field-form";
+type UploadProps = any;
 import NotificationsManager from "@/components/molecules/notifications_manager";
 
 export function vertexCredentialsUploadProps(form: FormInstance): UploadProps {

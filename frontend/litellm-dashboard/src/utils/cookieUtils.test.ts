@@ -61,8 +61,8 @@ describe("cookieUtils", () => {
       const originalDocument = global.document;
 
       // Mock server-side environment
-      delete (global as any).window;
-      delete (global as any).document;
+      delete (global as unknown as { window?: Window }).window;
+      delete (global as unknown as { document?: Document }).document;
 
       // This should not throw an error and should return early
       expect(() => clearTokenCookies()).not.toThrow();
@@ -76,7 +76,7 @@ describe("cookieUtils", () => {
       const originalDocument = global.document;
 
       // Mock server-side environment where document is undefined
-      delete (global as any).document;
+      delete (global as unknown as { document?: Document }).document;
 
       // This should not throw an error and should return early
       expect(() => clearTokenCookies()).not.toThrow();
@@ -149,7 +149,7 @@ describe("cookieUtils", () => {
 
     it("should not throw when window is undefined (server-side rendering)", () => {
       const originalWindow = global.window;
-      delete (global as any).window;
+      delete (global as unknown as { window?: Window }).window;
 
       expect(() => storeLoginToken("token")).not.toThrow();
 

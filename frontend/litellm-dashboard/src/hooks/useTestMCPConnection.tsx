@@ -12,7 +12,7 @@ interface MCPServerConfig {
   authorization_url?: string;
   token_url?: string;
   registration_url?: string;
-  mcp_info?: any;
+  mcp_info?: unknown;
   static_headers?: Record<string, string>;
   credentials?: {
     auth_value?: string;
@@ -25,12 +25,12 @@ interface MCPServerConfig {
 interface UseTestMCPConnectionProps {
   accessToken: string | null;
   oauthAccessToken?: string | null;
-  formValues: Record<string, any>;
+  formValues: Record<string, unknown>;
   enabled?: boolean; // Optional flag to enable/disable auto-fetching
 }
 
 interface UseTestMCPConnectionReturn {
-  tools: any[];
+  tools: unknown[];
   isLoadingTools: boolean;
   toolsError: string | null;
   toolsErrorStatus: number | null;
@@ -47,7 +47,7 @@ export const useTestMCPConnection = ({
   formValues,
   enabled = true,
 }: UseTestMCPConnectionProps): UseTestMCPConnectionReturn => {
-  const [tools, setTools] = useState<any[]>([]);
+  const [tools, setTools] = useState<unknown[]>([]);
   const [isLoadingTools, setIsLoadingTools] = useState(false);
   const [toolsError, setToolsError] = useState<string | null>(null);
   const [toolsErrorStatus, setToolsErrorStatus] = useState<number | null>(null);
@@ -115,7 +115,7 @@ export const useTestMCPConnection = ({
 
       const credentials =
         formValues.credentials && typeof formValues.credentials === "object"
-          ? Object.entries(formValues.credentials).reduce((acc: Record<string, any>, [key, value]) => {
+          ? Object.entries(formValues.credentials as Record<string, unknown>).reduce((acc: Record<string, unknown>, [key, value]) => {
               if (value === undefined || value === null || value === "") {
                 return acc;
               }

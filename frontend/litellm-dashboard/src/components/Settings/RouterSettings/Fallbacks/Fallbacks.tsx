@@ -116,7 +116,7 @@ async function testFallbackModelResponse(selectedModel: string, accessToken: str
 }
 
 const Fallbacks: React.FC<FallbacksProps> = ({ accessToken, userRole, userID }) => {
-  const [routerSettings, setRouterSettings] = useState<{ [key: string]: any }>({});
+  const [routerSettings, setRouterSettings] = useState<{ [key: string]: unknown }>({});
   const [isDeleting, setIsDeleting] = useState(false);
   const [fallbackToDelete, setFallbackToDelete] = useState<FallbackEntry | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
