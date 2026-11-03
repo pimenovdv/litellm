@@ -364,3 +364,4 @@
 - [x] Resolve unused `MCPServer` import warning in `Backend/litellm/proxy/_experimental/mcp_server/outbound_credentials/authz_code_refresher.py` and `per_user_oauth_store.py` by assigning to `_` for static analysis without breaking `TYPE_CHECKING` forward references.
 - [x] Resolve unused global warnings in `Backend/litellm/proxy/fine_tuning_endpoints/endpoints.py` and `Backend/litellm/proxy/prompts/prompt_endpoints.py` without breaking existing codebase logic.
 - [x] Resolve unused definition `LLMCachingHandler` in `Backend/litellm/utils.py`.
+- [x] Resolve star import in Backend/litellm/proxy/management_endpoints/scim/scim_transformations.py.

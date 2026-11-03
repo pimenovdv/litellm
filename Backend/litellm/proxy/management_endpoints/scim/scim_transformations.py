@@ -10,7 +10,22 @@ from litellm.proxy._types import (
     NewUserResponse,
 )
 from litellm.repositories.team_repository import TeamRepository
-from litellm.types.proxy.management_endpoints.scim_v2 import *
+from litellm.types.proxy.management_endpoints.scim_v2 import (
+    LiteLLM_UserScimMetadata,
+    SCIMEnterpriseUser,
+    SCIMGroup,
+    SCIMMember,
+    SCIMUser,
+    SCIMUserEmail,
+    SCIMUserGroup,
+    SCIMUserName,
+    SCIM_ENTERPRISE_METADATA_KEY,
+    SCIM_ENTERPRISE_USER_SCHEMA,
+    SCIM_ENTITLEMENTS_METADATA_KEY,
+    SCIM_MULTI_VALUED_LIST_ADAPTER,
+    SCIM_ROLES_METADATA_KEY,
+)
+from fastapi import HTTPException
 
 T = TypeVar("T")
 
