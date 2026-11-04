@@ -27,7 +27,7 @@ import httpx
 import openai
 from httpx import Proxy
 from httpx._utils import get_environment_proxies
-from openai.lib import _parsing, _pydantic
+from openai.lib import _parsing
 import inspect
 from pydantic import BaseModel
 from tiktoken import Encoding
@@ -6210,6 +6210,7 @@ def prompt_token_calculator(model, messages):
     if "claude" in model:
         try:
             import anthropic
+            _ = anthropic
         except Exception:
             Exception("Anthropic import failed please run `pip install anthropic`")
         from anthropic import Anthropic
@@ -7027,19 +7028,19 @@ def _get_base_model_from_metadata(model_call_details=None):
             return _base_model
         metadata = litellm_params.get("metadata") or {}
 
-        _get_base_model_from_litellm_call_metadata = getattr(
+        _get_base_model_func = getattr(
             sys.modules[__name__], "_get_base_model_from_litellm_call_metadata"
         )
-        base_model_from_metadata = _get_base_model_from_litellm_call_metadata(metadata=metadata)
+        base_model_from_metadata = _get_base_model_func(metadata=metadata)
         if base_model_from_metadata is not None:
             return base_model_from_metadata
 
         # Also check litellm_metadata (used by Responses API and other generic API calls)
         litellm_metadata = litellm_params.get("litellm_metadata", {})
-        _get_base_model_from_litellm_call_metadata = getattr(
+        _get_base_model_func = getattr(
             sys.modules[__name__], "_get_base_model_from_litellm_call_metadata"
         )
-        return _get_base_model_from_litellm_call_metadata(metadata=litellm_metadata)
+        return _get_base_model_func(metadata=litellm_metadata)
     return None
 
 
@@ -7421,6 +7422,8 @@ def validate_chat_completion_tool_choice(
         ChatCompletionToolChoiceObjectParam,
         ChatCompletionToolChoiceStringValues,
     )
+    _ = ChatCompletionToolChoiceObjectParam
+    _ = ChatCompletionToolChoiceStringValues
 
     if tool_choice is None:
         return tool_choice
@@ -8737,6 +8740,7 @@ class ProviderConfigManager:
         from litellm.llms.base_llm.text_to_speech.transformation import (
             BaseTextToSpeechConfig,
         )
+        _ = BaseTextToSpeechConfig
 
         if litellm.LlmProviders.AZURE == provider:
             # Only return Azure AVA config for Azure Speech Service models (speech/)
