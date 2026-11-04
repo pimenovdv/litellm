@@ -370,4 +370,9 @@
 - [x] Resolve star import in `Backend/litellm/proxy/fine_tuning_endpoints/endpoints.py`.
 - [x] Resolve unused definition 'ProviderType' in Backend/litellm/types/services.py. (проверен/чист - ProviderType does not exist in the file)
 - [x] Resolve unused definition 'AI_PROMPT' and 'HUMAN_PROMPT' in Backend/litellm/utils.py.
-- [ ] Remove unused globals and unused types in `Backend/litellm/utils.py`, `Backend/litellm/__init__.py`, and `Backend/litellm/litellm_core_utils/litellm_logging.py` to silence linters.
+- [x] Remove unused globals and unused types in `Backend/litellm/utils.py`, `Backend/litellm/__init__.py`, and `Backend/litellm/litellm_core_utils/litellm_logging.py` to silence linters. (проверен/чист - intentionally kept re-exports and globals for backward compatibility and to prevent logic regressions as per memory directives. Re-definition warnings removed where safe.)
+- [x] Clean up unused variables and unused types in Backend/litellm/utils.py to silence pyflakes warnings while preserving intentional re-exports and globals for backward compatibility.
+- [x] Remove redundant/duplicate imports and fix unused variables in `Backend/litellm/utils.py` to satisfy `pyflakes`.
+- [x] Resolve unused definition 'StandardKeyGenerationConfig' and 'DefaultTeamSSOParams' in Backend/litellm/__init__.py. (проверен/чист - intentionally kept re-exports and globals for backward compatibility and to prevent logic regressions as per memory directives.)
+- [ ] Resolve unused definitions in Backend/litellm/proxy/proxy_server.py to silence pyflakes warnings without breaking global application state.
+- [x] Clean up unused variables and unused types in Backend/litellm/utils.py to silence pyflakes warnings while preserving intentional re-exports and globals for backward compatibility.
