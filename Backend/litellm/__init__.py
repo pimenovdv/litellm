@@ -1241,7 +1241,6 @@ from litellm.types.secret_managers.main import KeyManagementSettings
 _key_management_settings: KeyManagementSettings = KeyManagementSettings()
 
 # client must be imported immediately as it's used as a decorator at function definition time
-from .utils import client
 # get_secret is lazy-loaded via __getattr__
 # get_secret_str is lazy-loaded via __getattr__
 
