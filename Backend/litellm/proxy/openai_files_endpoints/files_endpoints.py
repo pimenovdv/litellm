@@ -26,7 +26,10 @@ import litellm
 from litellm import CreateFileRequest, get_secret_str
 from litellm._logging import verbose_proxy_logger
 from litellm.llms.base_llm.files.transformation import BaseFileEndpoints
-from litellm.proxy._types import *
+from litellm.proxy._types import UserAPIKeyAuth, ProxyException
+from typing import List, Dict
+import json
+from litellm.types.utils import CallTypes
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 from litellm.proxy.common_request_processing import ProxyBaseLLMRequestProcessing
 from litellm.proxy.common_utils.http_parsing_utils import (
@@ -86,7 +89,6 @@ def set_files_config(config):
 def get_files_provider_config(
     custom_llm_provider: str,
 ):
-    global files_config
     if custom_llm_provider == "vertex_ai":
         return None
     if files_config is None:
