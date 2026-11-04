@@ -12,7 +12,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 
 import litellm
 from litellm._logging import verbose_proxy_logger
-from litellm.proxy._types import *
+from litellm.proxy._types import UserAPIKeyAuth, CommonProxyErrors, CallTypes
+import json
+from typing import Union, Literal, Any
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 from litellm.proxy.common_request_processing import ProxyBaseLLMRequestProcessing
 from litellm.proxy.openai_files_endpoints.common_utils import (
