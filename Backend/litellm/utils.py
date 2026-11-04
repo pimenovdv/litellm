@@ -154,17 +154,12 @@ from litellm.types.utils import FileTypes  # type: ignore
 from litellm.types.utils import (
     CallTypes,
     Choices,
-    CredentialItem,
     CustomHuggingfaceTokenizer,
     Delta,
-    Embedding,
     EmbeddingResponse,
-    Function,
-    ImageResponse,
     LlmProviders,
     LlmProvidersSet,
     LLMResponseTypes,
-    Message,
     ModelInfo,
     ModelInfoBase,
     ModelResponse,
@@ -178,7 +173,6 @@ from litellm.types.utils import (
     StreamingChoices,
     TextChoices,
     TextCompletionResponse,
-    TranscriptionResponse,
     Usage,
     all_litellm_params,
 )
@@ -209,7 +203,6 @@ except (ImportError, AttributeError, TypeError):
 
 # Convert to str (if necessary)
 claude_json_str = json.dumps(json_data)
-import importlib.metadata
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -221,10 +214,8 @@ from typing import (
     Mapping,
     Optional,
     Tuple,
-    Type,
     Union,
     cast,
-    get_args,
 )
 
 # These are lazy loaded via __getattr__
@@ -249,18 +240,7 @@ if TYPE_CHECKING:
 
     # Type stubs for lazy-loaded functions to help mypy understand their types
     # These imports allow mypy to understand the types when these are accessed via __getattr__
-    from litellm.litellm_core_utils.exception_mapping_utils import exception_type
-    from litellm.litellm_core_utils.get_llm_provider_logic import (
-        _is_non_openai_azure_model,
-        get_llm_provider,
-    )
-    from litellm.litellm_core_utils.get_supported_openai_params import (
-        get_supported_openai_params,
-    )
     from litellm.litellm_core_utils.llm_response_utils.convert_dict_to_response import (
-        LiteLLMResponseObjectHandler,
-        _handle_invalid_parallel_tool_calls,
-        convert_to_model_response_object,
         convert_to_streaming_response,
         convert_to_streaming_response_async,
     )
@@ -695,7 +675,7 @@ def function_setup(
             "`litellm.set_verbose` is deprecated. Please set `os.environ['LITELLM_LOG'] = 'DEBUG'` for debug logs."
         )
     try:
-        global callback_list, add_breadcrumb, user_logger_fn, Logging
+        global callback_list, user_logger_fn
 
         ## CUSTOM LLM SETUP ##
         custom_llm_setup()

@@ -3479,10 +3479,8 @@ def set_callbacks(callback_list, function_id=None):
         dynamoLogger, \
         s3Logger, \
         dataDogLogger, \
-        prometheusLogger, \
         greenscaleLogger, \
-        openMeterLogger, \
-        deepevalLogger
+        openMeterLogger
 
     try:
         for callback in callback_list:

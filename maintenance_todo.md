@@ -370,3 +370,4 @@
 - [x] Resolve star import in `Backend/litellm/proxy/fine_tuning_endpoints/endpoints.py`.
 - [x] Resolve unused definition 'ProviderType' in Backend/litellm/types/services.py. (проверен/чист - ProviderType does not exist in the file)
 - [x] Resolve unused definition 'AI_PROMPT' and 'HUMAN_PROMPT' in Backend/litellm/utils.py.
+- [ ] Remove unused globals and unused types in `Backend/litellm/utils.py`, `Backend/litellm/__init__.py`, and `Backend/litellm/litellm_core_utils/litellm_logging.py` to silence linters.
