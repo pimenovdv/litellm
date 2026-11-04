@@ -368,3 +368,5 @@
 - [x] Resolve unused star imports in `Backend/litellm/proxy/video_endpoints/endpoints.py` and `Backend/litellm/proxy/search_endpoints/endpoints.py`. (проверен/чист)
 - [x] Evaluate unused `RequestType` import in `Backend/litellm/router_strategy/adaptive_router/config.py` using pyflakes. (проверен/чист - intentionally kept for typing exports)
 - [x] Resolve star import in `Backend/litellm/proxy/fine_tuning_endpoints/endpoints.py`.
+- [x] Resolve unused definition 'ProviderType' in Backend/litellm/types/services.py. (проверен/чист - ProviderType does not exist in the file)
+- [x] Resolve unused definition 'AI_PROMPT' and 'HUMAN_PROMPT' in Backend/litellm/utils.py.
