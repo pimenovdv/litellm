@@ -731,7 +731,6 @@ def function_setup(
                     + litellm.failure_callback
                 )
             )
-            get_set_callbacks = getattr(sys.modules[__name__], "get_set_callbacks")
             get_set_callbacks()(callback_list=callback_list, function_id=function_id)
         ## ASYNC CALLBACKS - safety net for callbacks added via direct append
         if len(litellm.input_callback) > 0:
@@ -831,7 +830,6 @@ def function_setup(
             elif kwargs.get("messages", None):
                 messages = kwargs["messages"]
             ### PRE-CALL RULES ###
-            Rules = getattr(sys.modules[__name__], "Rules")
             if (
                 Rules.has_pre_call_rules()
                 and isinstance(messages, list)
@@ -963,7 +961,6 @@ def function_setup(
             call_type=call_type,
         ):
             stream = True
-        get_litellm_logging_class = getattr(sys.modules[__name__], "get_litellm_logging_class")
         logging_obj = get_litellm_logging_class()(  # Victim for object pool
             model=model,  # type: ignore
             messages=messages,
@@ -1049,8 +1046,6 @@ def _get_wrapper_num_retries(kwargs: Dict[str, Any], exception: Exception) -> Tu
     if num_retries is None:
         num_retries = litellm.num_retries
     if kwargs.get("retry_policy", None):
-        get_num_retries_from_retry_policy = getattr(sys.modules[__name__], "get_num_retries_from_retry_policy")
-        reset_retry_policy = getattr(sys.modules[__name__], "reset_retry_policy")
         retry_policy_num_retries = get_num_retries_from_retry_policy(
             exception=exception,
             retry_policy=kwargs.get("retry_policy"),
@@ -1074,7 +1069,6 @@ def _get_wrapper_timeout(kwargs: Dict[str, Any], exception: Exception) -> Option
 
 
 def check_coroutine(value) -> bool:
-    get_coroutine_checker = getattr(sys.modules[__name__], "get_coroutine_checker")
     return get_coroutine_checker().is_async_callable(value)
 
 
@@ -1212,7 +1206,6 @@ def post_call_processing(
 
 
 def client(original_function):
-    Rules = getattr(sys.modules[__name__], "Rules")
     rules_obj = Rules()
 
     @wraps(original_function)
@@ -1374,7 +1367,6 @@ def client(original_function):
                     return litellm.stream_chunk_builder(chunks, messages=kwargs.get("messages", None))
                 else:
                     # RETURN RESULT
-                    update_response_metadata = getattr(sys.modules[__name__], "update_response_metadata")
                     update_response_metadata(
                         result=result,
                         logging_obj=logging_obj,
@@ -1418,7 +1410,6 @@ def client(original_function):
             # Copy the current context to propagate it to the background thread
             # This is essential for OpenTelemetry span context propagation
             ctx = contextvars.copy_context()
-            executor = getattr(sys.modules[__name__], "executor")
             executor.submit(
                 ctx.run,
                 logging_obj.success_handler,
@@ -1427,7 +1418,6 @@ def client(original_function):
                 end_time,
             )
             # RETURN RESULT
-            update_response_metadata = getattr(sys.modules[__name__], "update_response_metadata")
             update_response_metadata(
                 result=result,
                 logging_obj=logging_obj,
@@ -1445,7 +1435,6 @@ def client(original_function):
                     get_num_retries_from_retry_policy = getattr(
                         sys.modules[__name__], "get_num_retries_from_retry_policy"
                     )
-                    reset_retry_policy = getattr(sys.modules[__name__], "reset_retry_policy")
                     num_retries = get_num_retries_from_retry_policy(
                         exception=e,
                         retry_policy=kwargs.get("retry_policy"),
@@ -1484,7 +1473,6 @@ def client(original_function):
                     get_num_retries_from_retry_policy = getattr(
                         sys.modules[__name__], "get_num_retries_from_retry_policy"
                     )
-                    reset_retry_policy = getattr(sys.modules[__name__], "reset_retry_policy")
                     num_retries = get_num_retries_from_retry_policy(
                         exception=e,
                         retry_policy=kwargs.get("retry_policy"),
@@ -1809,8 +1797,6 @@ def client(original_function):
             timeout = _get_wrapper_timeout(kwargs=kwargs, exception=e)
             setattr(e, "timeout", timeout)
             raise e
-
-    get_coroutine_checker = getattr(sys.modules[__name__], "get_coroutine_checker")
     is_coroutine = get_coroutine_checker().is_async_callable(original_function)
 
     # Return the appropriate wrapper based on the original function type
@@ -3974,7 +3960,6 @@ def get_optional_params(
             drop_params=(drop_params if drop_params is not None and isinstance(drop_params, bool) else False),
         )
     elif custom_llm_provider == "bedrock":
-        BedrockModelInfo = getattr(sys.modules[__name__], "BedrockModelInfo")
         bedrock_route = BedrockModelInfo.get_bedrock_route(model)
         bedrock_base_model = BedrockModelInfo.get_base_model(model)
         if bedrock_route == "converse" or bedrock_route == "converse_like":
@@ -4287,8 +4272,6 @@ def get_optional_params(
 
     # Apply nested drops from additional_drop_params
     if additional_drop_params:
-        is_nested_path = getattr(sys.modules[__name__], "is_nested_path")
-        delete_nested_value = getattr(sys.modules[__name__], "delete_nested_value")
         nested_paths = [p for p in additional_drop_params if is_nested_path(p)]
         for path in nested_paths:
             optional_params = delete_nested_value(optional_params, path)
@@ -4325,8 +4308,6 @@ def add_provider_specific_params_to_optional_params(
                 processed_extra_body = {k: v for k, v in initial_extra_body.items() if k not in additional_drop_params}
             else:
                 processed_extra_body = initial_extra_body
-
-            _ensure_extra_body_is_safe = getattr(sys.modules[__name__], "_ensure_extra_body_is_safe")
             optional_params["extra_body"] = _ensure_extra_body_is_safe(extra_body=processed_extra_body)
     else:
         for k in passed_params.keys():
@@ -7733,7 +7714,6 @@ class ProviderConfigManager:
     @staticmethod
     def _get_cohere_config(model: str) -> BaseConfig:
         """Get Cohere config based on route."""
-        CohereModelInfo = getattr(sys.modules[__name__], "CohereModelInfo")
         route = CohereModelInfo.get_cohere_route(model)
         if route == "v2":
             return litellm.CohereV2ChatConfig()
@@ -8805,7 +8785,6 @@ def get_end_user_id_for_cost_tracking(
 
     service_type: "litellm_logging" or "prometheus" - used to allow prometheus only disable cost tracking.
     """
-    get_litellm_metadata_from_kwargs = getattr(sys.modules[__name__], "get_litellm_metadata_from_kwargs")
     _metadata = cast(dict, get_litellm_metadata_from_kwargs(dict(litellm_params=litellm_params)))
 
     end_user_id = cast(
