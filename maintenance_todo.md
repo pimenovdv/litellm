@@ -366,3 +366,4 @@
 - [x] Resolve unused definition `LLMCachingHandler` in `Backend/litellm/utils.py`.
 - [x] Resolve star import in Backend/litellm/proxy/management_endpoints/scim/scim_transformations.py.
 - [x] Resolve unused star imports in `Backend/litellm/proxy/video_endpoints/endpoints.py` and `Backend/litellm/proxy/search_endpoints/endpoints.py`. (проверен/чист)
+- [x] Evaluate unused `RequestType` import in `Backend/litellm/router_strategy/adaptive_router/config.py` using pyflakes. (проверен/чист - intentionally kept for typing exports)
