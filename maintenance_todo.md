@@ -386,3 +386,4 @@
 - [x] Resolve star import in `Backend/litellm/proxy/anthropic_endpoints/endpoints.py`.
 - [x] Resolved star imports in Backend/litellm/proxy/batches_endpoints/endpoints.py
 - [x] Resolve star import in `Backend/litellm/proxy/vertex_ai_endpoints/langfuse_endpoints.py` and `Backend/litellm/proxy/image_endpoints/endpoints.py`.
+- [x] Resolve unused definition 'ObjectPermissionDict' in Backend/litellm/proxy/_types.py to satisfy pyflakes while preserving intentional re-exports.
