@@ -1021,6 +1021,7 @@ from litellm.models.team import BudgetLimitEntry as BudgetLimitEntry  # noqa: E4
 from litellm.types.object_permission import (  # noqa: E402
     ObjectPermissionDict as ObjectPermissionDict,
 )
+_ = ObjectPermissionDict
 
 
 class GenerateRequestBase(LiteLLMPydanticObjectBase):
@@ -1214,7 +1215,9 @@ class KeyRequest(LiteLLMPydanticObjectBase):
 from litellm.models.model import (  # noqa: E402
     LiteLLM_ProxyModelTable as LiteLLM_ProxyModelTable,
 )
+_ = LiteLLM_ProxyModelTable
 from litellm.models.team import LiteLLM_ModelTable as LiteLLM_ModelTable  # noqa: E402
+_ = LiteLLM_ModelTable
 
 
 # MCP Types
@@ -1235,6 +1238,7 @@ from litellm.models.mcp_server import (  # noqa: E402
 from litellm.models.mcp_server import (  # noqa: E402
     MCPEnvVarScope as MCPEnvVarScope,
 )
+_ = MCPEnvVarScope
 
 
 # MCP Proxy Request Types
@@ -1563,6 +1567,7 @@ class UpdateSkillRequest(LiteLLMPydanticObjectBase):
 from litellm.models.skills import (  # noqa: E402
     LiteLLM_SkillsTable as LiteLLM_SkillsTable,
 )
+_ = LiteLLM_SkillsTable
 
 
 class ListSkillsRequest(LiteLLMPydanticObjectBase):
@@ -1964,10 +1969,12 @@ from litellm.models.object_permission import (  # noqa: E402
 from litellm.models.team import (  # noqa: E402
     LiteLLM_DeletedTeamTable as LiteLLM_DeletedTeamTable,
 )
+_ = LiteLLM_DeletedTeamTable
 from litellm.models.team import LiteLLM_TeamTable as LiteLLM_TeamTable  # noqa: E402
 from litellm.models.team import (  # noqa: E402
     LiteLLM_TeamTableCachedObj as LiteLLM_TeamTableCachedObj,
 )
+_ = LiteLLM_TeamTableCachedObj
 
 
 class TeamRequest(LiteLLMPydanticObjectBase):
@@ -1983,6 +1990,7 @@ from litellm.models.budget import (  # noqa: E402
 from litellm.models.budget import (  # noqa: E402
     LiteLLM_TeamMemberTable as LiteLLM_TeamMemberTable,
 )
+_ = LiteLLM_TeamMemberTable
 
 
 class NewOrganizationRequest(LiteLLM_BudgetTable):
@@ -2773,6 +2781,7 @@ class UserInfoV2Response(LiteLLMPydanticObjectBase):
 
 
 from litellm.models.config import LiteLLM_Config as LiteLLM_Config  # noqa: E402
+_ = LiteLLM_Config
 from litellm.models.organization_membership import (  # noqa: E402
     LiteLLM_OrganizationMembershipTable as LiteLLM_OrganizationMembershipTable,
 )
@@ -2968,16 +2977,19 @@ class LiteLLM_UserTableWithKeyCount(LiteLLM_UserTable):
 from litellm.models.access_group import (  # noqa: E402
     LiteLLM_AccessGroupTable as LiteLLM_AccessGroupTable,
 )
+_ = LiteLLM_AccessGroupTable
 from litellm.models.end_user import (  # noqa: E402
     LiteLLM_EndUserTable as LiteLLM_EndUserTable,
 )
 from litellm.models.spend_logs import (  # noqa: E402
     LiteLLM_ErrorLogs as LiteLLM_ErrorLogs,
 )
+_ = LiteLLM_ErrorLogs
 from litellm.models.spend_logs import (  # noqa: E402
     LiteLLM_SpendLogs as LiteLLM_SpendLogs,
 )
 from litellm.models.tag import LiteLLM_TagTable as LiteLLM_TagTable  # noqa: E402
+_ = LiteLLM_TagTable
 
 AUDIT_ACTIONS = Literal["created", "updated", "deleted", "blocked", "unblocked", "rotated"]
 
@@ -4605,15 +4617,18 @@ class ToolDiscoveryQueueItem(TypedDict, total=False):
 from litellm.models.managed_files import (  # noqa: E402
     LiteLLM_ManagedFileTable as LiteLLM_ManagedFileTable,
 )
+_ = LiteLLM_ManagedFileTable
 from litellm.models.managed_files import (  # noqa: E402
     LiteLLM_ManagedObjectTable as LiteLLM_ManagedObjectTable,
 )
+_ = LiteLLM_ManagedObjectTable
 from litellm.models.managed_files import (  # noqa: E402
     LiteLLM_ManagedVectorStoresTable as LiteLLM_ManagedVectorStoresTable,
 )
 from litellm.models.managed_files import (  # noqa: E402
     LiteLLM_ManagedVectorStoreTable as LiteLLM_ManagedVectorStoreTable,
 )
+_ = LiteLLM_ManagedVectorStoreTable
 
 
 class EnterpriseLicenseData(TypedDict, total=False):
