@@ -13,7 +13,8 @@ from litellm.exceptions import AnthropicContextManagementError
 from litellm.llms.base_llm.guardrail_translation.utils import (
     blocked_response_usage as _blocked_response_usage,
 )
-from litellm.proxy._types import *
+from litellm.proxy._types import UserAPIKeyAuth, ProxyException
+from typing import Any
 from litellm.proxy.auth.user_api_key_auth import user_api_key_auth
 from litellm.proxy.common_request_processing import (
     ProxyBaseLLMRequestProcessing,
