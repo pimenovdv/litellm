@@ -1,6 +1,6 @@
 import asyncio
 import traceback
-from typing import List
+from typing import List, Optional
 
 import orjson
 from fastapi import APIRouter, Depends, File, HTTPException, Request, Response, status
@@ -11,7 +11,7 @@ from litellm._logging import verbose_proxy_logger
 from litellm.litellm_core_utils.prompt_templates.common_utils import (
     get_str_from_messages,
 )
-from litellm.proxy._types import *
+from litellm.proxy._types import ProxyException
 from litellm.proxy.auth.user_api_key_auth import UserAPIKeyAuth, user_api_key_auth
 from litellm.proxy.common_request_processing import ProxyBaseLLMRequestProcessing
 from litellm.proxy.route_llm_request import route_request
