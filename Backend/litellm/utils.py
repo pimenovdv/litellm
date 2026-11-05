@@ -342,6 +342,24 @@ if TYPE_CHECKING:
         ChatCompletionToolCallChunk,
         ChatCompletionToolCallFunctionChunk,
     )
+    _ = convert_to_streaming_response
+    _ = convert_to_streaming_response_async
+    _ = get_api_base
+    _ = ResponseMetadata
+    _ = _parse_content_for_reasoning
+    _ = redact_message_input_output_from_logging
+    _ = CustomStreamWrapper
+    _ = _get_base_model_from_litellm_call_metadata
+    _ = get_litellm_params
+    _ = get_formatted_prompt
+    _ = get_response_headers
+    _ = AsyncHTTPHandler
+    _ = HTTPHandler
+    _ = ANTHROPIC_API_ONLY_HEADERS
+    _ = RerankResponse
+    _ = ChatCompletionDeltaToolCallChunk
+    _ = ChatCompletionToolCallChunk
+    _ = ChatCompletionToolCallFunctionChunk
     from litellm.types.router import LiteLLM_Params
 
 if TYPE_CHECKING:
