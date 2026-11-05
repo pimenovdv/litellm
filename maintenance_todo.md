@@ -379,3 +379,4 @@
 - [x] Resolve star import in `Backend/litellm/proxy/rerank_endpoints/endpoints.py` to fix undefined name warnings.
 - [x] Resolve unused variables and redefinition warnings in `Backend/litellm/utils.py` (specifically `openai.lib._pydantic`, `anthropic`, `_get_base_model_from_litellm_call_metadata`, `ChatCompletionToolChoiceObjectParam`, and `BaseTextToSpeechConfig`) to satisfy `pyflakes` while preserving other intentional re-exports.
 - [x] Resolve unused star import in Backend/litellm/proxy/__init__.py.
+- [x] Resolve unused definition 'map_finish_reason' and 'process_response_headers' in Backend/litellm/utils.py to satisfy pyflakes while preserving intentional re-exports.
