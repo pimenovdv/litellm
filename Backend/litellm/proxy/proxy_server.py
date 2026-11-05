@@ -596,10 +596,12 @@ enterprise_router = APIRouter()
 try:
     # when using litellm cli
     from litellm.proxy import enterprise  # noqa: F401
+    _ = enterprise
 except Exception:
     # when using litellm docker image
     try:
-        import enterprise  # type: ignore  # noqa: F401
+        import enterprise  # type: ignore
+        _ = enterprise  # noqa: F401
     except Exception:
         pass
 
