@@ -383,3 +383,4 @@
 - [x] Resolve remaining unused definitions in `Backend/litellm/utils.py` by safely assigning them to `_` within the TYPE_CHECKING block.
 - [x] Resolve unused enterprise import in Backend/litellm/proxy/proxy_server.py by safely assigning to `_` to satisfy pyflakes without breaking side-effects.
 - [x] Resolve star import in `Backend/litellm/proxy/spend_tracking/spend_management_endpoints.py` to fix undefined name warnings.
+- [x] Resolve star import in `Backend/litellm/proxy/anthropic_endpoints/endpoints.py`.
