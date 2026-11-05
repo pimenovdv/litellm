@@ -279,6 +279,8 @@ if TYPE_CHECKING:
         map_finish_reason,
         process_response_headers,
     )
+    _ = map_finish_reason
+    _ = process_response_headers
     from litellm.litellm_core_utils.dot_notation_indexing import (
         delete_nested_value,
         is_nested_path,
