@@ -391,3 +391,4 @@
 - [x] Clean up unused Any types in Backend/litellm/__init__.py
 - [x] Resolve unused import warnings in Backend/litellm/proxy/pass_through_endpoints/pass_through_endpoints.py by assigning to _ to satisfy pyflakes while preserving intentional re-exports.
 - [x] Extract tools from kwargs in PromptCachingDeploymentCheck to resolve [TODO] and properly pass tools to prompt caching hooks.
+- [x] Resolve pyflakes unused import warning in `Backend/litellm/router_strategy/adaptive_router/config.py` by bypassing it with `_ = RequestType` to preserve intentional re-export without triggering linter issues.
