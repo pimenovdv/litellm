@@ -5,7 +5,7 @@ import GuardrailCard from "./guardrail_garden_card";
 import type { GuardrailCardInfo } from "./guardrail_garden_data";
 
 vi.mock("@ant-design/icons", () => ({
-  CheckCircleFilled: ({ style, ...props }: any) => <span data-testid="check-icon" {...props} />,
+  CheckCircleFilled: ({ style, ...props }: Record<string, unknown>) => <span data-testid="check-icon" {...props} />,
 }));
 
 const baseCard: GuardrailCardInfo = {

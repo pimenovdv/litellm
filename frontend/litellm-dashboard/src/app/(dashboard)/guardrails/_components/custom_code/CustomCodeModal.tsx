@@ -152,7 +152,7 @@ export interface EditGuardrailData {
     mode?: string | string[];
     default_on?: boolean;
     custom_code?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -267,7 +267,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
   };
 
   const [testInput, setTestInput] = useState(JSON.stringify(TEST_INPUT_EXAMPLES.pre_call.data, null, 2));
-  const [testResult, setTestResult] = useState<any>(null);
+  const [testResult, setTestResult] = useState<unknown>(null);
   const [copiedPrimitive, setCopiedPrimitive] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -354,7 +354,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
     try {
       if (isEditMode && editData) {
         // Update existing guardrail
-        const updateData: any = {
+        const updateData: Record<string, unknown> = {
           litellm_params: {
             custom_code: code,
           },

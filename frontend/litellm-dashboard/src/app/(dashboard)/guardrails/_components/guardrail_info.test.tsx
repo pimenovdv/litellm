@@ -14,7 +14,7 @@ vi.mock("@/components/networking", () => ({
 // Mock ContentFilterManager
 vi.mock("./content_filter/ContentFilterManager", () => ({
   __esModule: true,
-  default: ({ onUnsavedChanges, onDataChange, isEditing }: any) => (
+  default: ({ onUnsavedChanges, onDataChange, isEditing }: Record<string, unknown>) => (
     <div data-testid="mock-content-filter-manager">
       {isEditing && (
         <button
@@ -28,7 +28,7 @@ vi.mock("./content_filter/ContentFilterManager", () => ({
       )}
     </div>
   ),
-  formatContentFilterDataForAPI: (patterns: any[], blockedWords: any[], categories?: any[]) => ({
+  formatContentFilterDataForAPI: (patterns: unknown[], blockedWords: unknown[], categories?: unknown[]) => ({
     patterns,
     blocked_words: blockedWords,
     categories: categories ?? [],
@@ -261,7 +261,7 @@ describe("Guardrail Info", () => {
 
     // Verify call did NOT include patterns or blocked_words (because no changes)
     // updateGuardrailCall(accessToken, guardrailId, updateData) -> index 2 is updateData
-    const firstCallArgs: any = vi.mocked(networking.updateGuardrailCall).mock.calls[0][2];
+    const firstCallArgs: Record<string, unknown> = vi.mocked(networking.updateGuardrailCall).mock.calls[0][2] as Record<string, unknown>;
 
     // Verify attributes that definitely changed
     expect(firstCallArgs.guardrail_name).toBe("Updated Name");
@@ -294,7 +294,7 @@ describe("Guardrail Info", () => {
     });
 
     // Verify call INCLUDES patterns and blocked_words
-    const secondCallArgs: any = vi.mocked(networking.updateGuardrailCall).mock.calls[0][2];
+    const secondCallArgs: Record<string, unknown> = vi.mocked(networking.updateGuardrailCall).mock.calls[0][2] as Record<string, unknown>;
     expect(secondCallArgs.litellm_params).toBeDefined();
     expect(secondCallArgs.litellm_params.patterns).toEqual(["new_pattern"]);
     expect(secondCallArgs.litellm_params.blocked_words).toEqual(["new_word"]);
