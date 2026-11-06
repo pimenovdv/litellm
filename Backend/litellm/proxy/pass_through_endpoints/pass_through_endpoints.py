@@ -770,6 +770,9 @@ from litellm.passthrough.timeout_utils import (
     resolve_pass_through_request_timeout,
 )
 
+_ = DEFAULT_PASS_THROUGH_REQUEST_TIMEOUT_SECONDS
+_ = resolve_llm_passthrough_timeout
+
 
 async def pass_through_request(
     request: Request,

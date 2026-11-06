@@ -389,3 +389,4 @@
 - [x] Resolve unused definition 'ObjectPermissionDict' in Backend/litellm/proxy/_types.py to satisfy pyflakes while preserving intentional re-exports.
 - [x] Resolve unused definition 'get_provider_agents_api_config' and 'merge_agent_headers' in Backend/litellm/proxy/agent_endpoints/utils.py.
 - [x] Clean up unused Any types in Backend/litellm/__init__.py
+- [x] Resolve unused import warnings in Backend/litellm/proxy/pass_through_endpoints/pass_through_endpoints.py by assigning to _ to satisfy pyflakes while preserving intentional re-exports.
