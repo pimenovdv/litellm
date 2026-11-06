@@ -733,7 +733,6 @@ def cleanup_router_config_variables():
 
 
 async def proxy_shutdown_event():
-    global prisma_client, master_key, user_custom_auth, user_custom_key_generate, user_custom_key_update
     verbose_proxy_logger.info("Shutting down LiteLLM Proxy Server")
     if prisma_client:
         verbose_proxy_logger.debug("Disconnecting from Prisma")
@@ -3173,7 +3172,6 @@ async def _adaptive_router_flusher_loop():
     Postgres on a fixed cadence. Hot-path writes go to memory; this loop is
     the only writer to the adaptive router DB tables.
     """
-    global llm_router, prisma_client
     while True:
         try:
             await asyncio.sleep(_ADAPTIVE_ROUTER_FLUSH_INTERVAL_SECONDS)
@@ -3205,8 +3203,7 @@ async def _run_background_health_check():
     Update health_check_results, based on this.
     Uses shared health check state when Redis is available to coordinate across pods.
     """
-    global health_check_results, llm_model_list, health_check_interval
-    global health_check_concurrency, health_check_details, use_shared_health_check
+    global health_check_details, use_shared_health_check
     global redis_usage_cache, prisma_client
     global background_health_check_loop_active, background_health_check_cycle_seq
 
