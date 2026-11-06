@@ -394,3 +394,4 @@
 - [x] Resolve pyflakes unused import warning in `Backend/litellm/router_strategy/adaptive_router/config.py` by bypassing it with `_ = RequestType` to preserve intentional re-export without triggering linter issues.
 - [x] Clean up unused globals in proxy_server.py and unused imports in test/db scripts.
 - [x] Resolved unused self-import in Backend/enterprise/__init__.py.
+- [x] Resolve unused imports and types in `Backend/litellm/__init__.py`, `Backend/litellm/caching/__init__.py`, and `Backend/litellm/types/utils.py` by bypassing pyflakes with `_` assignments to preserve intentional re-exports.

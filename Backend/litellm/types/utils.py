@@ -15,22 +15,22 @@ from typing import (
 )
 
 from openai._models import BaseModel as OpenAIObject
-from openai.types.audio.transcription_create_params import (
+from openai.types.audio.transcription_create_params import (  # noqa: F401
     FileTypes as FileTypes,  # type: ignore
 )
-from openai.types.chat.chat_completion import ChatCompletion as ChatCompletion
+from openai.types.chat.chat_completion import ChatCompletion  # noqa: F401 as ChatCompletion
 from openai.types.completion_usage import (
     CompletionTokensDetails,
     CompletionUsage,
     PromptTokensDetails,
 )
 from openai.types.moderation import Categories as Categories
-from openai.types.moderation import (
+from openai.types.moderation import (  # noqa: F401
     CategoryAppliedInputTypes as CategoryAppliedInputTypes,
 )
 from openai.types.moderation import CategoryScores as CategoryScores
 from openai.types.moderation_create_response import Moderation as Moderation
-from openai.types.moderation_create_response import (
+from openai.types.moderation_create_response import (  # noqa: F401
     ModerationCreateResponse as ModerationCreateResponse,
 )
 from pydantic import (
@@ -76,7 +76,7 @@ from .llms.openai import (
     ResponsesAPIResponse,
     WebSearchOptions,
 )
-from .rerank import RerankResponse as RerankResponse
+from .rerank import RerankResponse  # noqa: F401 as RerankResponse
 
 if TYPE_CHECKING:
     from .vector_stores import VectorStoreSearchResponse
@@ -3711,7 +3711,7 @@ class RawRequestTypedDict(TypedDict, total=False):
 
 from litellm.models.credentials import CredentialBase as CredentialBase  # noqa: E402
 from litellm.models.credentials import CredentialItem as CredentialItem  # noqa: E402
-from litellm.models.credentials import (  # noqa: E402
+from litellm.models.credentials import (  # noqa: F401  # noqa: E402
     CreateCredentialItem as CreateCredentialItem,
 )
 
@@ -3877,3 +3877,7 @@ class GenericGuardrailAPIInputs(TypedDict, total=False):
     stream_holdback_chars: List[
         int
     ]  # trailing chars to withhold from streaming emission per text (word-boundary safety)
+
+
+if TYPE_CHECKING:
+    _ = (FileTypes, Categories, CategoryAppliedInputTypes, CategoryScores, Moderation, ModerationCreateResponse, RerankResponse, CredentialBase, CredentialItem, CreateCredentialItem, ChatCompletion)
