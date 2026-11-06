@@ -26,7 +26,7 @@ def _dev_env_hot_reload_enabled() -> bool:
 if os.getenv("LITELLM_MODE", "DEV") == "DEV":
     _dotenv.load_dotenv(override=_dev_env_hot_reload_enabled())
 
-from typing import (
+from typing import (  # noqa: F401
     Callable,
     List,
     Optional,
@@ -55,7 +55,7 @@ if TYPE_CHECKING:
     StandardKeyGenerationConfig = Any
     DefaultTeamSSOParams = Any
     BudgetConfig = Any
-from litellm._logging import (
+from litellm._logging import (  # noqa: F401
     set_verbose,
     _turn_on_debug,
     verbose_logger,
@@ -64,7 +64,7 @@ from litellm._logging import (
     log_level,
 )
 import re
-from litellm.constants import (
+from litellm.constants import (  # noqa: F401
     DEFAULT_BATCH_SIZE,
     DEFAULT_FLUSH_INTERVAL_SECONDS,
     ROUTER_MAX_FALLBACKS,
@@ -103,6 +103,36 @@ from litellm.constants import (
     DEFAULT_SOFT_BUDGET,
     DEFAULT_ALLOWED_FAILS,
 )
+
+if TYPE_CHECKING:
+    _ = (Tuple, overload, Type)
+    _ = (verbose_logger, json_logs, _turn_on_json, log_level)
+    _ = (
+        DEFAULT_BATCH_SIZE,
+        DEFAULT_FLUSH_INTERVAL_SECONDS,
+        ROUTER_MAX_FALLBACKS,
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_REPLICATE_POLLING_RETRIES,
+        DEFAULT_REPLICATE_POLLING_DELAY_SECONDS,
+        LITELLM_CHAT_PROVIDERS,
+        HUMANLOOP_PROMPT_CACHE_TTL_SECONDS,
+        OPENAI_CHAT_COMPLETION_PARAMS,
+        _openai_completion_params,
+        OPENAI_FINISH_REASONS,
+        _openai_finish_reasons,
+        openai_compatible_endpoints,
+        openai_compatible_providers,
+        openai_text_completion_compatible_providers,
+        _openai_like_providers,
+        REPEATED_STREAMING_CHUNK_LIMIT,
+        request_timeout,
+        request_timeout_explicitly_set,
+        known_tokenizer_config,
+        BEDROCK_INVOKE_PROVIDERS_LITERAL,
+        BEDROCK_EMBEDDING_PROVIDERS_LITERAL,
+        DEFAULT_ALLOWED_FAILS,
+    )
+
 import httpx
 
 # register_async_client_cleanup is lazy-loaded and called on first access
