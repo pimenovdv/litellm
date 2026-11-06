@@ -388,3 +388,4 @@
 - [x] Resolve star import in `Backend/litellm/proxy/vertex_ai_endpoints/langfuse_endpoints.py` and `Backend/litellm/proxy/image_endpoints/endpoints.py`.
 - [x] Resolve unused definition 'ObjectPermissionDict' in Backend/litellm/proxy/_types.py to satisfy pyflakes while preserving intentional re-exports.
 - [x] Resolve unused definition 'get_provider_agents_api_config' and 'merge_agent_headers' in Backend/litellm/proxy/agent_endpoints/utils.py.
+- [x] Clean up unused Any types in Backend/litellm/__init__.py
