@@ -55,9 +55,6 @@ if TYPE_CHECKING:
     StandardKeyGenerationConfig = Any
     DefaultTeamSSOParams = Any
     BudgetConfig = Any
-    PriorityReservationDict = Any
-    PriorityReservationSettings = Any
-    KeyManagementSystem = Any
 from litellm._logging import (
     set_verbose,
     _turn_on_debug,
@@ -488,11 +485,11 @@ public_agent_groups: Optional[List[str]] = None
 # Old format: { "displayName": "url" } (for backward compatibility)
 public_model_groups_links: Dict[str, Union[str, Dict[str, Any]]] = {}
 #### REQUEST PRIORITIZATION #######
-priority_reservation: Optional[Dict[str, Union[float, "PriorityReservationDict"]]] = None
+priority_reservation: Optional[Dict[str, Union[float, "Any"]]] = None
 # priority_reservation_settings is lazy-loaded via __getattr__
 # Only declare for type checking - at runtime __getattr__ handles it
 if TYPE_CHECKING:
-    priority_reservation_settings: Optional["PriorityReservationSettings"] = None
+    priority_reservation_settings: Optional["Any"] = None
 
 
 ######## Networking Settings ########
@@ -521,7 +518,7 @@ secret_manager_client: Optional[Any] = (
     None  # list of instantiated key management clients - e.g. azure kv, infisical, etc.
 )
 _google_kms_resource_name: Optional[str] = None
-_key_management_system: Optional["KeyManagementSystem"] = None
+_key_management_system: Optional["Any"] = None
 # Note: KeyManagementSettings must be eagerly imported because _key_management_settings
 # is accessed during import time in secret_managers/main.py
 # We'll import it after the lazy import system is set up
