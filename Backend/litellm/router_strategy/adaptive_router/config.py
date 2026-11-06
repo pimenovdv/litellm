@@ -7,7 +7,9 @@ Expect to retune after first 1000 sessions of real traffic.
 
 from typing import Dict
 
-from litellm.types.router import RequestType  # re-export for convenience  # noqa: F401
+from litellm.types.router import RequestType
+
+_ = RequestType  # re-export for convenience  # noqa: F401
 
 # D3 — Score weights (default; user-overridable via AdaptiveRouterConfig.weights)
 DEFAULT_QUALITY_WEIGHT: float = 0.7  # UNVALIDATED — calibrated against [0] sessions
