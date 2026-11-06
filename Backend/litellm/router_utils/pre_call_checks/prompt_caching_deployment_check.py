@@ -54,9 +54,11 @@ class PromptCachingDeploymentCheck(CustomLogger):
         request_kwargs: Optional[dict] = None,
         parent_otel_span: Optional[Span] = None,
     ) -> List[dict]:
+        tools = request_kwargs.get("tools") if request_kwargs else None
         if messages is not None and is_prompt_caching_valid_prompt(
             messages=messages,
             model=model,
+            tools=tools,
             min_token_count=_get_min_token_count_for_deployments(healthy_deployments),
         ):
             prompt_cache = PromptCachingCache(
@@ -65,7 +67,7 @@ class PromptCachingDeploymentCheck(CustomLogger):
 
             model_id_dict = await prompt_cache.async_get_model_id(
                 messages=cast(List[AllMessageValues], messages),
-                tools=None,
+                tools=tools,
             )
             if model_id_dict is not None:
                 model_id = model_id_dict["model_id"]
@@ -108,10 +110,12 @@ class PromptCachingDeploymentCheck(CustomLogger):
             )
             return
 
+        tools = kwargs.get("kwargs", {}).get("tools")
         ## PROMPT CACHING - cache model id, if prompt caching valid prompt + provider
         if is_prompt_caching_valid_prompt(
             model=model,
             messages=cast(List[AllMessageValues], messages),
+            tools=tools,
         ):
             cache = PromptCachingCache(
                 cache=self.cache,
@@ -119,7 +123,7 @@ class PromptCachingDeploymentCheck(CustomLogger):
             await cache.async_add_model_id(
                 model_id=model_id,
                 messages=messages,
-                tools=None,  # [TODO]: add tools once standard_logging_object supports it
+                tools=tools,
             )
 
         return
