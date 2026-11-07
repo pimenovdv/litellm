@@ -261,7 +261,7 @@ def llm_passthrough_route(
         litellm_params=litellm_params_dict,
     )
 
-    # [TODO: Refactor to bedrockpassthroughconfig] need to encode the id of application-inference-profile for bedrock
+
     if custom_llm_provider == "bedrock" and "application-inference-profile" in endpoint:
         encoded_url_str = CommonUtils.encode_bedrock_runtime_modelid_arn(str(updated_url))
         updated_url = httpx.URL(encoded_url_str)
@@ -293,7 +293,7 @@ def llm_passthrough_route(
         model=model,
     )
 
-    ## SWAP MODEL IN JSON BODY [TODO: REFACTOR TO A provider_config.transform_request method]
+    ## SWAP MODEL IN JSON BODY
     if json and isinstance(json, dict) and "model" in json:
         json["model"] = model
 
