@@ -1,4 +1,3 @@
-import pytest
 import os
 
 def test_no_duplicate_get_team_object_in_builder():
