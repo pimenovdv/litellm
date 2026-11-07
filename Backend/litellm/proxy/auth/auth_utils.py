@@ -901,6 +901,41 @@ def _get_deployment_default_tpm_limit(model_name: str) -> Optional[int]:
     return _get_deployment_default_limit(model_name, "default_api_key_tpm_limit")
 
 
+
+def get_key_model_max_parallel_requests(
+    user_api_key_dict: UserAPIKeyAuth,
+    model_name: Optional[str] = None,
+) -> Optional[int]:
+    """
+    Get the model max_parallel_requests limit for a given api key.
+
+    Priority order (returns first found):
+    1. Key metadata (model_max_parallel_requests)
+    2. Key model_max_budget (max_parallel_requests per model)
+    3. Team metadata (model_max_parallel_requests)
+    """
+    # 1. Check key metadata first
+    if user_api_key_dict.metadata:
+        result = user_api_key_dict.metadata.get("model_max_parallel_requests")
+        if result and isinstance(result, dict) and model_name in result:
+            return result[model_name]
+
+    # 2. Check model_max_budget
+    if user_api_key_dict.model_max_budget:
+        if model_name in user_api_key_dict.model_max_budget:
+            result = user_api_key_dict.model_max_budget[model_name].get("max_parallel_requests")
+            if result is not None:
+                return result
+
+    # 3. Check team metadata
+    if user_api_key_dict.team_metadata:
+        result = user_api_key_dict.team_metadata.get("model_max_parallel_requests")
+        if result and isinstance(result, dict) and model_name in result:
+            return result[model_name]
+
+    return None
+
+
 def get_key_model_rpm_limit(
     user_api_key_dict: UserAPIKeyAuth,
     model_name: Optional[str] = None,

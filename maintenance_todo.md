@@ -395,3 +395,4 @@
 - [x] Clean up unused globals in proxy_server.py and unused imports in test/db scripts.
 - [x] Resolved unused self-import in Backend/enterprise/__init__.py.
 - [x] Resolve unused imports and types in `Backend/litellm/__init__.py`, `Backend/litellm/caching/__init__.py`, and `Backend/litellm/types/utils.py` by bypassing pyflakes with `_` assignments to preserve intentional re-exports.
+- [x] Implement `get_key_model_max_parallel_requests` in `Backend/litellm/proxy/auth/auth_utils.py` and integrate it into `Backend/litellm/proxy/hooks/parallel_request_limiter.py` to resolve TODOs for model, user, team, and end-user max parallel requests.
