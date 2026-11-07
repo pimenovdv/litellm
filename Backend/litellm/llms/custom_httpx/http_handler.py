@@ -591,8 +591,8 @@ class AsyncHTTPHandler:
         response = await self.client.get(
             url,
             params=params,
-            headers=headers,  # type: ignore
-            follow_redirects=_follow_redirects,  # type: ignore
+            headers=headers,
+            follow_redirects=_follow_redirects,
             timeout=timeout if timeout is not None else USE_CLIENT_DEFAULT,
         )
         return response
@@ -601,7 +601,7 @@ class AsyncHTTPHandler:
     async def post(
         self,
         url: str,
-        data: Optional[Union[dict, str, bytes]] = None,  # type: ignore
+        data: Optional[Union[dict, str, bytes]] = None,
         json: Optional[dict] = None,
         params: Optional[dict] = None,
         headers: Optional[dict] = None,
@@ -671,7 +671,7 @@ class AsyncHTTPHandler:
     async def put(
         self,
         url: str,
-        data: Optional[Union[dict, str, bytes]] = None,  # type: ignore
+        data: Optional[Union[dict, str, bytes]] = None,
         json: Optional[dict] = None,
         params: Optional[dict] = None,
         headers: Optional[dict] = None,
@@ -694,7 +694,7 @@ class AsyncHTTPHandler:
                 params=params,
                 headers=headers,
                 timeout=timeout,
-                content=request_content,  # type: ignore
+                content=request_content,
             )
             response = await self.client.send(req)
             response.raise_for_status()
@@ -735,7 +735,7 @@ class AsyncHTTPHandler:
     async def patch(
         self,
         url: str,
-        data: Optional[Union[dict, str, bytes]] = None,  # type: ignore
+        data: Optional[Union[dict, str, bytes]] = None,
         json: Optional[dict] = None,
         params: Optional[dict] = None,
         headers: Optional[dict] = None,
@@ -758,7 +758,7 @@ class AsyncHTTPHandler:
                 params=params,
                 headers=headers,
                 timeout=timeout,
-                content=request_content,  # type: ignore
+                content=request_content,
             )
             response = await self.client.send(req)
             response.raise_for_status()
@@ -799,7 +799,7 @@ class AsyncHTTPHandler:
     async def delete(
         self,
         url: str,
-        data: Optional[Union[dict, str, bytes]] = None,  # type: ignore
+        data: Optional[Union[dict, str, bytes]] = None,
         json: Optional[dict] = None,
         params: Optional[dict] = None,
         headers: Optional[dict] = None,
@@ -822,7 +822,7 @@ class AsyncHTTPHandler:
                 params=params,
                 headers=headers,
                 timeout=timeout,
-                content=request_content,  # type: ignore
+                content=request_content,
             )
             response = await self.client.send(req, stream=stream)
             response.raise_for_status()
@@ -851,7 +851,7 @@ class AsyncHTTPHandler:
         self,
         url: str,
         client: httpx.AsyncClient,
-        data: Optional[Union[dict, str, bytes]] = None,  # type: ignore
+        data: Optional[Union[dict, str, bytes]] = None,
         json: Optional[dict] = None,
         params: Optional[dict] = None,
         headers: Optional[dict] = None,
@@ -873,7 +873,7 @@ class AsyncHTTPHandler:
             json=json,
             params=params,
             headers=headers,
-            content=request_content,  # type: ignore
+            content=request_content,
         )
         response = await client.send(req, stream=stream)
         response.raise_for_status()
@@ -1163,13 +1163,13 @@ class HTTPHandler:
                 req = self.client.build_request(
                     "POST",
                     url,
-                    data=request_data,  # type: ignore
+                    data=request_data,
                     json=json,
                     params=params,
                     headers=headers,
                     timeout=timeout,
                     files=files,
-                    content=request_content,  # type: ignore
+                    content=request_content,
                 )
             else:
                 req = self.client.build_request(
@@ -1180,7 +1180,7 @@ class HTTPHandler:
                     params=params,
                     headers=headers,
                     files=files,
-                    content=request_content,  # type: ignore
+                    content=request_content,
                 )
             response = self.client.send(req, stream=stream)
             response.raise_for_status()
@@ -1220,7 +1220,7 @@ class HTTPHandler:
                     params=params,
                     headers=headers,
                     timeout=timeout,
-                    content=request_content,  # type: ignore
+                    content=request_content,
                 )
             else:
                 req = self.client.build_request(
@@ -1230,7 +1230,7 @@ class HTTPHandler:
                     json=json,
                     params=params,
                     headers=headers,
-                    content=request_content,  # type: ignore
+                    content=request_content,
                 )
             response = self.client.send(req, stream=stream)
             response.raise_for_status()
@@ -1270,7 +1270,7 @@ class HTTPHandler:
                     params=params,
                     headers=headers,
                     timeout=timeout,
-                    content=request_content,  # type: ignore
+                    content=request_content,
                 )
             else:
                 req = self.client.build_request(
@@ -1280,7 +1280,7 @@ class HTTPHandler:
                     json=json,
                     params=params,
                     headers=headers,
-                    content=request_content,  # type: ignore
+                    content=request_content,
                 )
             response = self.client.send(req, stream=stream)
             return response
@@ -1298,7 +1298,7 @@ class HTTPHandler:
     def delete(
         self,
         url: str,
-        data: Optional[Union[dict, str, bytes]] = None,  # type: ignore
+        data: Optional[Union[dict, str, bytes]] = None,
         json: Optional[dict] = None,
         params: Optional[dict] = None,
         headers: Optional[dict] = None,
@@ -1319,7 +1319,7 @@ class HTTPHandler:
                     params=params,
                     headers=headers,
                     timeout=timeout,
-                    content=request_content,  # type: ignore
+                    content=request_content,
                 )
             else:
                 req = self.client.build_request(
@@ -1329,7 +1329,7 @@ class HTTPHandler:
                     json=json,
                     params=params,
                     headers=headers,
-                    content=request_content,  # type: ignore
+                    content=request_content,
                 )
             response = self.client.send(req, stream=stream)
             response.raise_for_status()
