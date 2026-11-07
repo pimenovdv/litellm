@@ -400,3 +400,4 @@
 
 - [x] Remove obsolete TODO regarding caching HTTP requests in Backend/litellm/secret_managers/main.py as caching is already implemented.
 - [x] Remove obsolete TODO in `Backend/litellm/proxy/health_endpoints/_health_endpoints.py` by skipping cache ping on readiness check.
+- [x] Explicitly remove unused type ignores and unreachable error handling code in `Backend/litellm/llms/custom_httpx/http_handler.py` reported by pyflakes/mypy.
