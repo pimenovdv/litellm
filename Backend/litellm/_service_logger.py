@@ -141,7 +141,7 @@ class ServiceLogging(CustomLogger):
 
     def service_failure_hook(self, service: ServiceTypes, duration: float, error: Exception, call_type: str):
         """
-        [TODO] Not implemented for sync calls yet. V0 is focused on async monitoring (used by proxy).
+        Not implemented for sync calls yet. V0 is focused on async monitoring (used by proxy).
         """
         if self.mock_testing:
             self.mock_testing_sync_failure_hook += 1

@@ -18,6 +18,7 @@ from inspect import iscoroutinefunction
 from threading import Thread
 
 from litellm.exceptions import Timeout
+from litellm.utils import get_llm_provider
 
 
 def timeout(timeout_duration: float = 0.0, exception_to_raise=Timeout):
@@ -54,10 +55,11 @@ def timeout(timeout_duration: float = 0.0, exception_to_raise=Timeout):
             except futures.TimeoutError:
                 thread.stop_loop()
                 model = args[0] if len(args) > 0 else kwargs["model"]
+                _, custom_llm_provider, _, _ = get_llm_provider(model=model)
                 raise exception_to_raise(
                     f"A timeout error occurred. The function call took longer than {local_timeout_duration} second(s).",
-                    model=model,  # [TODO]: replace with logic for parsing out llm provider from model name
-                    llm_provider="openai",
+                    model=model,
+                    llm_provider=custom_llm_provider or "openai",
                 )
             thread.stop_loop()
             return result
@@ -74,10 +76,11 @@ def timeout(timeout_duration: float = 0.0, exception_to_raise=Timeout):
                 return value
             except asyncio.TimeoutError:
                 model = args[0] if len(args) > 0 else kwargs["model"]
+                _, custom_llm_provider, _, _ = get_llm_provider(model=model)
                 raise exception_to_raise(
                     f"A timeout error occurred. The function call took longer than {local_timeout_duration} second(s).",
-                    model=model,  # [TODO]: replace with logic for parsing out llm provider from model name
-                    llm_provider="openai",
+                    model=model,
+                    llm_provider=custom_llm_provider or "openai",
                 )
 
         if iscoroutinefunction(func):
