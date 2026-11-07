@@ -3793,7 +3793,7 @@ def get_optional_params(
                     continue  # skip this param
                 if (
                     k == "max_retries"
-                ):  # TODO: This is a patch. We support max retries for OpenAI, Azure. For non OpenAI LLMs we need to add support for max retries
+                ):
                     continue  # skip this param
                 # Always keeps this in elif code blocks
                 else:
