@@ -1425,14 +1425,7 @@ async def _get_health_readiness_details(
             cache_type = litellm.cache.type
 
             if isinstance(litellm.cache.cache, RedisSemanticCache):
-                # ping the cache
-                # TODO: @ishaan-jaff - we should probably not ping the cache on every /health/readiness check
-                index_info: Any
-                try:
-                    index_info = await litellm.cache.cache._index_info()
-                except Exception as e:
-                    index_info = "index does not exist - error: " + str(e)  # type: ignore[assignment]
-                cache_type = {"type": cache_type, "index_info": index_info}  # type: ignore[assignment]
+                cache_type = {"type": cache_type, "index_info": "skipped_for_readiness"}  # type: ignore[assignment]
 
         # check log level
         log_level_name = logging.getLevelName(verbose_logger.getEffectiveLevel())

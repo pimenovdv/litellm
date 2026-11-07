@@ -399,3 +399,4 @@
 - [x] Resolve TODOs in `Backend/litellm/timeout.py` (parse out llm provider from model name using `get_llm_provider`) and `Backend/litellm/_service_logger.py` (remove outdated [TODO] comments).
 
 - [x] Remove obsolete TODO regarding caching HTTP requests in Backend/litellm/secret_managers/main.py as caching is already implemented.
+- [x] Remove obsolete TODO in `Backend/litellm/proxy/health_endpoints/_health_endpoints.py` by skipping cache ping on readiness check.
