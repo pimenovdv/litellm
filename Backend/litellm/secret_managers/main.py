@@ -202,7 +202,6 @@ def get_secret(
         secret_name_split = secret_name.replace("oidc/", "")
         oidc_provider, oidc_aud = secret_name_split.split("/", 1)
         oidc_aud = "/".join(secret_name_split.split("/")[1:])
-        # TODO: Add caching for HTTP requests
         if oidc_provider == "google":
             oidc_token = oidc_cache.get_cache(key=secret_name)
             if oidc_token is not None:

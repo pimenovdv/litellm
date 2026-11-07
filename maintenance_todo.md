@@ -397,3 +397,5 @@
 - [x] Resolve unused imports and types in `Backend/litellm/__init__.py`, `Backend/litellm/caching/__init__.py`, and `Backend/litellm/types/utils.py` by bypassing pyflakes with `_` assignments to preserve intentional re-exports.
 - [x] Implement `get_key_model_max_parallel_requests` in `Backend/litellm/proxy/auth/auth_utils.py` and integrate it into `Backend/litellm/proxy/hooks/parallel_request_limiter.py` to resolve TODOs for model, user, team, and end-user max parallel requests.
 - [x] Resolve TODOs in `Backend/litellm/timeout.py` (parse out llm provider from model name using `get_llm_provider`) and `Backend/litellm/_service_logger.py` (remove outdated [TODO] comments).
+
+- [x] Remove obsolete TODO regarding caching HTTP requests in Backend/litellm/secret_managers/main.py as caching is already implemented.
