@@ -402,3 +402,4 @@
 - [x] Remove obsolete TODO in `Backend/litellm/proxy/health_endpoints/_health_endpoints.py` by skipping cache ping on readiness check.
 - [x] Explicitly remove unused type ignores and unreachable error handling code in `Backend/litellm/llms/custom_httpx/http_handler.py` reported by pyflakes/mypy.
 - [x] Clean up unused pytest import in Backend/tests/test_proxy_auth_queries.py.
+- [x] Resolve TODO to extract model from URL for azure openai routes in `Backend/litellm/proxy/auth/auth_utils.py` to fix missing model bypass.

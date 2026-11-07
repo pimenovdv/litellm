@@ -503,11 +503,23 @@ async def pre_db_read_auth_checks(
     await check_if_request_size_is_safe(request=request)
 
     # Check 2. Request body is safe
+    model = request_data.get("model", "")
+    if not model and route and isinstance(route, str):
+        # Extract model from Azure OpenAI routes, handling case insensitivity and optional trailing paths
+        # Supports formats like /engines/{model}/..., /openai/deployments/{model}/..., /v1/engines/{model}/...
+        engines_match = re.search(r'/(?:v1/)?engines/([^/?#]+)(?:/|$)', route, re.IGNORECASE)
+        if engines_match:
+            model = engines_match.group(1)
+        else:
+            deployments_match = re.search(r'/deployments/([^/?#]+)(?:/|$)', route, re.IGNORECASE)
+            if deployments_match:
+                model = deployments_match.group(1)
+
     is_request_body_safe(
         request_body=request_data,
         general_settings=general_settings,
         llm_router=llm_router,
-        model=request_data.get("model", ""),  # [TODO] use model passed in url as well (azure openai routes)
+        model=model,
     )
 
     # Check 3. Check if IP address is allowed
