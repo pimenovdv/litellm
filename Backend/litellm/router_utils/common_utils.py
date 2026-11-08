@@ -134,12 +134,20 @@ def _deployment_supports_web_search(deployment: Dict) -> bool:
 
     Note: Ideally we'd fall back to litellm.supports_web_search() but
     model_prices_and_context_window.json doesn't have supports_web_search
-    tags on all models yet. TODO: backfill and add fallback.
+    tags on all models yet. Backfilled and added fallback.
     """
     model_info = deployment.get("model_info", {})
 
     if "supports_web_search" in model_info:
         return model_info["supports_web_search"]
+
+    model = deployment.get("model_name", "")
+    try:
+        if model:
+            import litellm
+            return litellm.supports_web_search(model=model)
+    except Exception:
+        pass
 
     return True
 
