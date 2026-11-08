@@ -127,6 +127,9 @@ class LitellmUserRoles(str, enum.Enum):
     INTERNAL_USER = "internal_user"
     INTERNAL_USER_VIEW_ONLY = "internal_user_viewer"
 
+    # Internal Service Role
+    INTERNAL_SERVICE = "internal_service"
+
     # Team Roles
     TEAM = "team"
 

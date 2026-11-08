@@ -1630,6 +1630,7 @@ class JWTAuthManager:
     async def map_user_to_teams(
         user_object: Optional[LiteLLM_UserTable],
         team_object: Optional[LiteLLM_TeamTable],
+        jwt_valid_token: Optional[dict] = None,
     ):
         """
         Map user to teams.
@@ -1652,7 +1653,7 @@ class JWTAuthManager:
         data = TeamMemberAddRequest(
             member=Member(
                 user_id=user_object.user_id,
-                role="user",  # [TODO]: allow controlling role within team based on jwt token
+                role=jwt_valid_token.get("team_role", "user") if jwt_valid_token else "user",
             ),
             team_id=team_object.team_id,
         )
@@ -1661,8 +1662,8 @@ class JWTAuthManager:
             await team_member_add(
                 data=data,
                 user_api_key_dict=UserAPIKeyAuth(
-                    user_role=LitellmUserRoles.PROXY_ADMIN
-                ),  # [TODO]: expose an internal service role, for better tracking
+                    user_role=LitellmUserRoles.INTERNAL_SERVICE
+                ),
             )
             verbose_proxy_logger.debug(f"Successfully added user {user_object.user_id} to team {team_object.team_id}")
         except ProxyException as e:
@@ -2287,6 +2288,7 @@ class JWTAuthManager:
         await JWTAuthManager.map_user_to_teams(
             user_object=user_object,
             team_object=team_object,
+            jwt_valid_token=jwt_valid_token,
         )
 
         # Validate that a valid rbac id is returned for spend tracking
