@@ -1081,7 +1081,6 @@ async def _common_key_generation_helper(
 
     response = GenerateKeyResponse(**response)
 
-    response.token = response.token_id  # remap token to use the hash, and leave the key in the `key` field [TODO]: clean up generate_key_helper_fn to do this
 
     asyncio.create_task(
         KeyManagementEventHooks.async_key_generated_hook(
@@ -3797,6 +3796,7 @@ async def generate_key_helper_fn(
             create_key_response = await prisma_client.insert_data(data=key_data, table_name="key")
 
             key_data["token_id"] = getattr(create_key_response, "token", None)
+            key_data["token"] = key_data["token_id"]  # remap token to use the hash, and leave the key in the `key` field
             key_data["litellm_budget_table"] = getattr(create_key_response, "litellm_budget_table", None)
             key_data["created_at"] = getattr(create_key_response, "created_at", None)
             key_data["updated_at"] = getattr(create_key_response, "updated_at", None)

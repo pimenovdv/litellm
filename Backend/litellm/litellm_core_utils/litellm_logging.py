@@ -2603,7 +2603,7 @@ class Logging(LiteLLMLoggingBaseClass):
                                 end_time=end_time,
                             )
                         else:
-                            await openMeterLogger.async_log_stream_event(  # [TODO]: move this to being an async log stream event function
+                            await openMeterLogger.async_log_stream_event(
                                 kwargs=self.model_call_details,
                                 response_obj=result,
                                 start_time=start_time,
@@ -2637,7 +2637,7 @@ class Logging(LiteLLMLoggingBaseClass):
                                 end_time=end_time,
                             )
                         else:
-                            await callback.async_log_stream_event(  # [TODO]: move this to being an async log stream event function
+                            await callback.async_log_stream_event(
                                 kwargs=model_call_details,
                                 response_obj=result,
                                 start_time=start_time,
