@@ -13,7 +13,7 @@ interface UserSpendData {
 interface ViewUserSpendProps {
   userSpend: number | null;
   userMaxBudget: number | null;
-  selectedTeam: any | null;
+  selectedTeam: { team_memberships?: { user_id: string; litellm_budget_table: { max_budget: number | null } }[]; max_budget?: number | null; team_alias?: string; models?: string[] } | null;
 }
 const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget, selectedTeam }) => {
   const { accessToken, userRole, userId: userID } = useAuthorized();
@@ -45,15 +45,12 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
                   "budget_duration": null
               }
                */
-          for (const member of selectedTeam.team_memberships) {
-            if (
-              member.user_id === userID &&
-              "max_budget" in member.litellm_budget_table &&
-              member.litellm_budget_table.max_budget !== null
-            ) {
-              setMaxBudget(member.litellm_budget_table.max_budget);
-              setMaxBudgetFlag = true;
-            }
+          const membership = selectedTeam.team_memberships.find(
+            (m: { user_id: string; litellm_budget_table: { max_budget: number | null } }) => m.user_id === userID && "max_budget" in m.litellm_budget_table && m.litellm_budget_table.max_budget !== null
+          );
+          if (membership) {
+            setMaxBudget(membership.litellm_budget_table.max_budget);
+            setMaxBudgetFlag = true;
           }
         }
         if (!setMaxBudgetFlag) {
@@ -63,7 +60,7 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({ userSpend, userMaxBudget,
     } else {
       setMaxBudget(userMaxBudget);
     }
-  }, [selectedTeam, userMaxBudget]);
+  }, [selectedTeam, userMaxBudget, userID]);
   const [userModels, setUserModels] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
