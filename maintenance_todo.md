@@ -409,3 +409,4 @@
 - [x] Implement `litellm.supports_web_search()` check and remove obsolete `TODO` in `Backend/litellm/router_utils/common_utils.py`.
 - [x] Fix ESLint warning in frontend/litellm-dashboard/scripts/check-lint-budgets.mjs. (intentionally disabled console warning)
 - [x] Fix 'max-depth' and 'exhaustive-deps' ESLint warnings in `frontend/litellm-dashboard/src/components/view_user_spend.tsx`.
+- [x] Implement JWT team role control and expose internal service role for better tracking.
