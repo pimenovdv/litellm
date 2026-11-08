@@ -410,3 +410,5 @@
 - [x] Fix ESLint warning in frontend/litellm-dashboard/scripts/check-lint-budgets.mjs. (intentionally disabled console warning)
 - [x] Fix 'max-depth' and 'exhaustive-deps' ESLint warnings in `frontend/litellm-dashboard/src/components/view_user_spend.tsx`.
 - [x] Implement JWT team role control and expose internal service role for better tracking.
+
+- [x] Refactor token id mapping in `generate_key_helper_fn` to resolve TODO, and clean up TODOs in `litellm_logging.py`.
