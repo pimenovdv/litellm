@@ -32,7 +32,7 @@ describe("useDeletePolicyAttachment", () => {
 
   it("should successfully delete a policy attachment and call onSuccess", async () => {
     const mockOnSuccess = vi.fn();
-    (deletePolicyAttachmentCall as any).mockResolvedValue({});
+    (deletePolicyAttachmentCall as unknown as import("vitest").Mock).mockResolvedValue({});
 
     const { result } = renderHook(
       () =>
@@ -57,7 +57,7 @@ describe("useDeletePolicyAttachment", () => {
   it("should handle error when deleting policy attachment", async () => {
     const mockOnError = vi.fn();
     const error = new Error("Delete failed");
-    (deletePolicyAttachmentCall as any).mockRejectedValue(error);
+    (deletePolicyAttachmentCall as unknown as import("vitest").Mock).mockRejectedValue(error);
 
     const { result } = renderHook(
       () =>

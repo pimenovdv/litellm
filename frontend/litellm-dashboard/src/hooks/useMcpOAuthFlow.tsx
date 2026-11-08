@@ -25,9 +25,9 @@ interface UseMcpOAuthFlowOptions {
         scopes?: string[];
       }
     | undefined;
-  getTemporaryPayload: () => Record<string, any> | null;
+  getTemporaryPayload: () => Record<string, unknown> | null;
   onTokenReceived: (
-    tokenResponse: Record<string, any>,
+    tokenResponse: Record<string, unknown>,
     registeredClient?: { clientId?: string; clientSecret?: string },
   ) => void;
   onBeforeRedirect?: () => void;
@@ -42,7 +42,7 @@ interface UseMcpOAuthFlowResult {
   startOAuthFlow: () => Promise<void>;
   status: McpOAuthStatus;
   error: string | null;
-  tokenResponse: Record<string, any> | null;
+  tokenResponse: Record<string, unknown> | null;
   reset: () => void;
 }
 
@@ -56,7 +56,7 @@ export const useMcpOAuthFlow = ({
 }: UseMcpOAuthFlowOptions): UseMcpOAuthFlowResult => {
   const [status, setStatus] = useState<McpOAuthStatus>("idle");
   const [error, setError] = useState<string | null>(null);
-  const [tokenResponse, setTokenResponse] = useState<Record<string, any> | null>(null);
+  const [tokenResponse, setTokenResponse] = useState<Record<string, unknown> | null>(null);
   const processingRef = useRef(false);
   const resetVersionRef = useRef(0);
 
@@ -235,7 +235,7 @@ export const useMcpOAuthFlow = ({
       return;
     }
 
-    let payload: Record<string, any> | null = null;
+    let payload: Record<string, unknown> | null = null;
     let flowState: StoredFlowState | null = null;
 
     try {

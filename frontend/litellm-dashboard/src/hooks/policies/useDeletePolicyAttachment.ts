@@ -5,7 +5,7 @@ import MessageManager from "@/components/molecules/message_manager";
 interface UseDeletePolicyAttachmentProps {
   accessToken: string | null;
   onSuccess?: () => void;
-  onError?: (error: Error | unknown) => void;
+  onError?: (error: unknown) => void;
 }
 
 export const useDeletePolicyAttachment = ({ accessToken, onSuccess, onError }: UseDeletePolicyAttachmentProps) => {

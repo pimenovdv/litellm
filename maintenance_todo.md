@@ -9,3 +9,8 @@
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/anthropic.py`.
 - [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/bedrock.py`.
 - [x] Fix ESLint warnings by replacing `any` type with explicit Error type in `frontend/litellm-dashboard/src/hooks/policies/useDeletePolicyAttachment.ts`.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/hooks/useMcpOAuthFlow.test.tsx`.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/hooks/useMcpOAuthFlow.tsx`.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/hooks/useToolsOAuthFlow.test.tsx`.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/tests/CreateKeyPage.expiredToken.test.tsx`.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/tests/setupTests.ts`.
