@@ -122,7 +122,7 @@ def _write_byok_cred_cache(user_id: str, server_id: str, credential: str | None)
 # Check if MCP is available
 # "mcp" requires python 3.10 or higher, but several litellm users use python 3.8
 # We're making this conditional import to avoid breaking users who use python 3.8.
-# TODO: Make this a util function for litellm client usage
+
 MCP_AVAILABLE: bool = True
 try:
     import weakref
@@ -526,7 +526,7 @@ if MCP_AVAILABLE:
 
     session_manager_stateful = StreamableHTTPSessionManager(
         app=server,
-        event_store=None,  # TODO: Add EventStore for reconnection/event replay if needed
+        event_store=None,
         json_response=False,  # enables SSE streaming
         stateless=False,
     )
