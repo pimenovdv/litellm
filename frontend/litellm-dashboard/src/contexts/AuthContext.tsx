@@ -92,7 +92,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    let decoded: { [k: string]: any } | null = null;
+    interface DecodedToken {
+      key?: string;
+      disabled_non_admin_personal_key_creation?: boolean;
+      user_role?: string;
+      user_email?: string;
+      login_method?: string;
+      premium_user?: boolean;
+      auth_header_name?: string;
+      user_id?: string;
+      [key: string]: unknown;
+    }
+    let decoded: DecodedToken | null = null;
     try {
       decoded = jwtDecode(token);
     } catch {
@@ -103,8 +114,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (!decoded) return;
 
-    setAccessToken(decoded.key);
-    setDisabledPersonalKeyCreation(decoded.disabled_non_admin_personal_key_creation);
+    setAccessToken(decoded.key ?? null);
+    setDisabledPersonalKeyCreation(decoded.disabled_non_admin_personal_key_creation ?? false);
 
     if (decoded.user_role) {
       setUserRole(formatUserRole(decoded.user_role));

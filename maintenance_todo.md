@@ -14,3 +14,4 @@
 - [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/hooks/useToolsOAuthFlow.test.tsx`.
 - [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/tests/CreateKeyPage.expiredToken.test.tsx`.
 - [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/tests/setupTests.ts`.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/components/view_logs/columns.tsx` and `frontend/litellm-dashboard/src/contexts/AuthContext.tsx`.
