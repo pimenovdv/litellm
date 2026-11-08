@@ -106,7 +106,7 @@ vi.mock("@tremor/react", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@tremor/react")>();
   return {
     ...actual,
-    Button: React.forwardRef<HTMLButtonElement, any>(({ children, ...props }, ref) =>
+    Button: React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(({ children, ...props }, ref) =>
       // Render as a native button to avoid Tremor-specific behaviors in tests
       React.createElement("button", { ...props, ref }, children),
     ),
@@ -201,7 +201,7 @@ Object.defineProperty(window, "matchMedia", {
 // Silence jsdom "getComputedStyle with pseudo-elements" not implemented warnings
 // by ignoring the second argument and delegating to the native implementation.
 const realGetComputedStyle = window.getComputedStyle.bind(window);
-window.getComputedStyle = ((elt: Element) => realGetComputedStyle(elt)) as any;
+window.getComputedStyle = ((elt: Element) => realGetComputedStyle(elt)) as unknown as typeof window.getComputedStyle;
 
 // Avoid "navigation to another Document" warnings when clicking <a> with blob: URLs
 // used by download flows in tests.

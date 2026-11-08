@@ -26,7 +26,7 @@ vi.mock("@/hooks/useFeatureFlags", () => {
   const FeatureFlagsCtx = React.createContext({ get: () => false, flags: {} });
 
   // Defensive provider: handle undefined props and allow optional value override
-  const FeatureFlagsProvider = (props: any) => {
+  const FeatureFlagsProvider = (props: { children?: React.ReactNode; value?: unknown }) => {
     const p = props || {};
     const value = p.value ?? { get: () => false, flags: {} };
     return React.createElement(FeatureFlagsCtx.Provider, { value }, p.children);
@@ -70,6 +70,8 @@ vi.mock("next/navigation", () => {
 // Networking layer
 vi.mock("@/components/networking", () => {
   return {
+    getProxyBaseUrl: vi.fn(() => ""), // MOCKED getProxyBaseUrl
+    getGlobalLitellmHeaderName: vi.fn(() => ""),
     // Called on mount; we don't care about its contents, only that it resolves
     getUiConfig: vi.fn().mockResolvedValue({}),
     // Fetched by useUISettings(); resolve with empty settings so nudges stay default-on
@@ -142,7 +144,7 @@ vi.mock("@/components/ui/ui-loading-spinner", () => ({
 vi.mock("@/contexts/ThemeContext", () => {
   const React = require("react");
   return {
-    ThemeProvider: ({ children }: any) => React.createElement(React.Fragment, null, children),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => React.createElement(React.Fragment, null, children),
   };
 });
 vi.mock("@/lib/cva.config", () => ({
@@ -192,9 +194,9 @@ beforeEach(() => {
   consumeReturnUrlMock.mockReturnValue(null);
 
   // Make location.replace spy-able to validate redirect
-  delete (window as any).location;
+  delete (window as unknown as { location?: Location }).location;
   // minimal location object with replace and assign stubs
-  (window as any).location = {
+  (window as unknown as { location: unknown }).location = {
     ...originalLocation,
     href: "http://localhost/",
     assign: vi.fn(),
@@ -204,8 +206,8 @@ beforeEach(() => {
 
 afterEach(() => {
   // Restore location to avoid leaking across test envs
-  delete (window as any).location;
-  (window as any).location = originalLocation;
+  delete (window as unknown as { location?: Location }).location;
+  (window as unknown as { location: unknown }).location = originalLocation;
 });
 
 /** ----------------------------
@@ -294,8 +296,8 @@ describe("CreateKeyPage auth behavior", () => {
     });
 
     // Current URL has params in a different order
-    delete (window as any).location;
-    (window as any).location = {
+    delete (window as unknown as { location?: Location }).location;
+    (window as unknown as { location: unknown }).location = {
       ...originalLocation,
       href: "http://localhost/ui?b=2&a=1",
       origin: "http://localhost",

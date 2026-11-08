@@ -48,7 +48,7 @@ function seedCompletedRedirect() {
 
 function renderFlow(onTokenReceived = vi.fn()) {
   return renderHook(
-    ({ onTokenReceived: cb }: { onTokenReceived: (t: any) => void }) =>
+    ({ onTokenReceived: cb }: { onTokenReceived: (t: unknown) => void }) =>
       useMcpOAuthFlow({
         accessToken: "admin-token",
         getCredentials: () => ({}),
@@ -119,7 +119,7 @@ describe("useMcpOAuthFlow reset", () => {
   it("clears the in-flight guard so a callback after a mid-exchange close is not swallowed", async () => {
     // First exchange hangs, mimicking the modal being closed while the token
     // endpoint is still in flight. processingRef is left true at that point.
-    vi.mocked(networking.exchangeMcpOAuthToken).mockReturnValueOnce(new Promise<any>(() => {}));
+    vi.mocked(networking.exchangeMcpOAuthToken).mockReturnValueOnce(new Promise<unknown>(() => {}));
     seedFlowState();
     seedResult("code-1");
 
