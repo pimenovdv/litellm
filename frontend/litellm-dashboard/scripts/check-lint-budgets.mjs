@@ -10,6 +10,7 @@ let failed = false;
 for (const [rule, { max, target }] of Object.entries(budgets)) {
   const count = counts[rule];
   const note = count > max ? "OVER BUDGET" : count <= target ? "at target" : `${max - count} of headroom`;
+  // eslint-disable-next-line no-console
   console.log(`${rule}: ${count} | max: ${max} | target: ${target} | ${note}`);
   if (count > max) {
     console.error(
