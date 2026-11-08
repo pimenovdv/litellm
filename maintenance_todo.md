@@ -405,3 +405,4 @@
 - [x] Resolve TODO to extract model from URL for azure openai routes in `Backend/litellm/proxy/auth/auth_utils.py` to fix missing model bypass.
 - [x] Resolve F821 undefined name warnings in Backend/litellm/proxy/management_endpoints/internal_user_endpoints.py by correctly defining `user_role` type hints with `Literal["user", "admin"]`.
 - [x] Clean up redundant TODO comments in Backend/litellm/passthrough/main.py and Backend/litellm/utils.py that represent stale tracking.
+- [x] Remove obsolete TODOs in `Backend/litellm/proxy/_experimental/mcp_server/server.py`, `mcp_server_manager.py`, and `Backend/litellm/proxy/auth/model_checks.py`.

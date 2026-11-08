@@ -213,7 +213,7 @@ def get_complete_model_list(
     else:
         append_unique(proxy_model_list)
         if include_model_access_groups:
-            append_unique(list(model_access_groups.keys()))  # TODO: keys order
+            append_unique(list(model_access_groups.keys()))
 
         if user_model:
             append_unique([user_model])
