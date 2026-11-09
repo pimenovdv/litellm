@@ -28,7 +28,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isModalVisible, setIs
     form.resetFields();
   };
 
-  const handleUpdate = async (formValues: Record<string, any>) => {
+  const handleUpdate = async (formValues: Record<string, unknown>) => {
     try {
       NotificationsManager.info("Making API Call");
       await updateBudget.mutateAsync(formValues);

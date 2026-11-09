@@ -46,7 +46,7 @@ describe("Budget Panel", () => {
     vi.mocked(useBudgets).mockReturnValue({
       data: mockBudgets,
       isLoading: false,
-    } as any);
+    } as unknown as ReturnType<typeof useBudgets>);
 
     renderWithProviders(<BudgetPanel accessToken="token-123" />);
 
@@ -69,7 +69,7 @@ describe("Budget Panel", () => {
         },
       ],
       isLoading: false,
-    } as any);
+    } as unknown as ReturnType<typeof useBudgets>);
 
     renderWithProviders(<BudgetPanel accessToken="token-123" />);
 
@@ -99,11 +99,11 @@ describe("Budget Panel", () => {
         },
       ],
       isLoading: false,
-    } as any);
+    } as unknown as ReturnType<typeof useBudgets>);
     vi.mocked(useDeleteBudget).mockReturnValue({
       mutateAsync: deleteMutateAsync,
       isPending: false,
-    } as any);
+    } as unknown as ReturnType<typeof useDeleteBudget>);
 
     renderWithProviders(<BudgetPanel accessToken="token-123" />);
 
@@ -132,7 +132,7 @@ describe("Budget Panel", () => {
     vi.mocked(useBudgets).mockReturnValue({
       data: [],
       isLoading: false,
-    } as any);
+    } as unknown as ReturnType<typeof useBudgets>);
 
     renderWithProviders(<BudgetPanel accessToken="token-123" />);
 
@@ -155,11 +155,11 @@ describe("Budget Panel", () => {
         },
       ],
       isLoading: false,
-    } as any);
+    } as unknown as ReturnType<typeof useBudgets>);
     vi.mocked(useDeleteBudget).mockReturnValue({
       mutateAsync: deleteMutateAsync,
       isPending: false,
-    } as any);
+    } as unknown as ReturnType<typeof useDeleteBudget>);
 
     renderWithProviders(<BudgetPanel accessToken="token-123" />);
 
@@ -197,7 +197,7 @@ describe("Budget Panel", () => {
         },
       ],
       isLoading: false,
-    } as any);
+    } as unknown as ReturnType<typeof useBudgets>);
 
     renderWithProviders(<BudgetPanel accessToken="token-123" />);
 

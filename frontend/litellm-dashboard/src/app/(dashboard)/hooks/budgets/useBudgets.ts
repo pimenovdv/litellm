@@ -29,7 +29,7 @@ export const useCreateBudget = () => {
   const { accessToken } = useAuthorized();
   const queryClient = useQueryClient();
 
-  return useMutation<unknown, Error, Record<string, any>>({
+  return useMutation<unknown, Error, Record<string, unknown>>({
     mutationFn: async (formValues) => {
       if (!accessToken) {
         throw new Error("Access token is required");
@@ -46,7 +46,7 @@ export const useUpdateBudget = () => {
   const { accessToken } = useAuthorized();
   const queryClient = useQueryClient();
 
-  return useMutation<unknown, Error, Record<string, any>>({
+  return useMutation<unknown, Error, Record<string, unknown>>({
     mutationFn: async (formValues) => {
       if (!accessToken) {
         throw new Error("Access token is required");
