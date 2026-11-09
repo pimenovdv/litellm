@@ -52,6 +52,7 @@ interface GuardrailSettings {
 }
 
 interface ContentFilterManagerProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   guardrailData: any;
   guardrailSettings: GuardrailSettings | null;
   isEditing: boolean;
@@ -90,6 +91,7 @@ const ContentFilterManager: React.FC<ContentFilterManagerProps> = ({
   // Load data from guardrail on mount or when guardrailData changes
   useEffect(() => {
     if (guardrailData?.litellm_params?.patterns) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const patterns = guardrailData.litellm_params.patterns.map((p: any, index: number) => ({
         id: `pattern-${index}`,
         type: p.pattern_type === "prebuilt" ? "prebuilt" : "custom",
@@ -106,6 +108,7 @@ const ContentFilterManager: React.FC<ContentFilterManagerProps> = ({
     }
 
     if (guardrailData?.litellm_params?.blocked_words) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const words = guardrailData.litellm_params.blocked_words.map((w: any, index: number) => ({
         id: `word-${index}`,
         keyword: w.keyword,
@@ -123,6 +126,7 @@ const ContentFilterManager: React.FC<ContentFilterManagerProps> = ({
       const contentCategoriesMap = guardrailSettings?.content_filter_settings?.content_categories
         ? Object.fromEntries(guardrailSettings.content_filter_settings.content_categories.map((c) => [c.name, c]))
         : {};
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const categories = guardrailData.litellm_params.categories.map((c: any, index: number) => {
         const meta = contentCategoriesMap[c.category];
         return {
@@ -301,9 +305,13 @@ export const formatContentFilterDataForAPI = (
   competitorIntentConfig?: CompetitorIntentConfig | null,
 ) => {
   const result: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     patterns: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     blocked_words: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     categories?: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     competitor_intent_config?: any;
   } = {
     patterns: patterns.map((p) => ({

@@ -14,6 +14,7 @@ interface BlockedWord {
 
 interface KeywordTableProps {
   keywords: BlockedWord[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onActionChange: (id: string, field: string, value: any) => void;
   onRemove: (id: string) => void;
 }
@@ -52,6 +53,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
       title: "",
       key: "actions",
       width: 100,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (_: any, record: BlockedWord) => (
         <Button type="text" danger size="small" icon={<DeleteOutlined />} onClick={() => onRemove(record.id)}>
           Delete

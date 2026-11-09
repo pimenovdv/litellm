@@ -61,6 +61,7 @@ interface ContentFilterConfigurationProps {
   onPatternActionChange: (id: string, action: "BLOCK" | "MASK") => void;
   onBlockedWordAdd: (word: BlockedWord) => void;
   onBlockedWordRemove: (id: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onBlockedWordUpdate: (id: string, field: string, value: any) => void;
   onFileUpload?: (content: string) => void;
   accessToken: string | null;
@@ -69,6 +70,7 @@ interface ContentFilterConfigurationProps {
   selectedContentCategories?: SelectedContentCategory[];
   onContentCategoryAdd?: (category: SelectedContentCategory) => void;
   onContentCategoryRemove?: (id: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContentCategoryUpdate?: (id: string, field: string, value: any) => void;
   pendingCategorySelection?: string;
   onPendingCategorySelectionChange?: (value: string) => void;

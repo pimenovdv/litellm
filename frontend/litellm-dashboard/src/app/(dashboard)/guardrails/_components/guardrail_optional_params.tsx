@@ -26,6 +26,7 @@ interface DictFieldProps {
   field: ProviderParam;
   fieldKey: string;
   fullFieldKey: string | string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any | null;
 }
 

@@ -35,6 +35,7 @@ interface ContentFilterDisplayProps {
   readOnly?: boolean;
   onPatternActionChange?: (id: string, action: "BLOCK" | "MASK") => void;
   onPatternRemove?: (id: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onBlockedWordUpdate?: (id: string, field: string, value: any) => void;
   onBlockedWordRemove?: (id: string) => void;
   onCategoryActionChange?: (id: string, action: "BLOCK" | "MASK") => void;

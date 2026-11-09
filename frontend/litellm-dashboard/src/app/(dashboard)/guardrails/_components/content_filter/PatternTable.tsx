@@ -71,6 +71,7 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
       title: "",
       key: "actions",
       width: 100,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (_: any, record: Pattern) => (
         <Button type="text" danger size="small" icon={<DeleteOutlined />} onClick={() => onRemove(record.id)}>
           Delete

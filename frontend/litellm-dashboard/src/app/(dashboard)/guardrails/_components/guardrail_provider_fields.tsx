@@ -119,6 +119,7 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
   const isContentFilterProvider = shouldRenderContentFilterConfigSettings(selectedProvider);
 
   // Convert object to array of entries and render fields
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderFields = (fields: { [key: string]: ProviderParam }, parentKey = "", parentValue?: any) => {
     return Object.entries(fields).map(([fieldKey, field]) => {
       const fullFieldKey = parentKey ? `${parentKey}.${fieldKey}` : fieldKey;

@@ -7,6 +7,7 @@ import { Button } from "antd";
 
 interface LLMJudgeFieldsProps {
   availableModels: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
 }
 
@@ -155,7 +156,9 @@ const LLMJudgeFields: React.FC<LLMJudgeFieldsProps> = ({ availableModels, form }
               {fields.length > 0 && (
                 <Form.Item shouldUpdate noStyle>
                   {() => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const allCriteria: any[] = form.getFieldValue("criteria") || [];
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const weightTotal = allCriteria.reduce((sum: number, c: any) => sum + (Number(c?.weight) || 0), 0);
                     const weightOk = weightTotal === 100;
                     return (

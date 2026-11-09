@@ -103,11 +103,13 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       title: "",
       key: "actions",
       width: 100,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (_: any, record: ContentCategory) => (
         <Button type="text" danger size="small" icon={<DeleteOutlined />} onClick={() => onRemove?.(record.id)}>
           Delete
         </Button>
       ),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
   }
 
