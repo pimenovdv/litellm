@@ -15,6 +15,7 @@ vi.mock("./add_guardrail_form", () => ({
 
 vi.mock("./guardrail_table", () => ({
   __esModule: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ guardrailsList, onDeleteClick }: any) => (
     <div>
       <div>Mock Guardrail Table</div>
@@ -96,6 +97,7 @@ describe("GuardrailsPanel", () => {
           guardrail_info: null,
           created_at: "2024-01-01T00:00:00Z",
           updated_at: "2024-01-01T00:00:00Z",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           guardrail_definition_location: "database" as any,
         },
       ],

@@ -152,6 +152,7 @@ export interface EditGuardrailData {
     mode?: string | string[];
     default_on?: boolean;
     custom_code?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
 }
@@ -354,6 +355,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
     try {
       if (isEditMode && editData) {
         // Update existing guardrail
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const updateData: any = {
           litellm_params: {
             custom_code: code,

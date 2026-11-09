@@ -26,6 +26,7 @@ interface ContentCategoryConfigurationProps {
   selectedCategories: SelectedCategory[];
   onCategoryAdd: (category: SelectedCategory) => void;
   onCategoryRemove: (id: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onCategoryUpdate: (id: string, field: string, value: any) => void;
   accessToken?: string | null;
   pendingSelection?: string;
@@ -218,6 +219,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       title: "",
       key: "actions",
       width: 80,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (_: any, record: SelectedCategory) => (
         <Button icon={<DeleteOutlined />} onClick={() => onCategoryRemove(record.id)} size="small">
           Remove

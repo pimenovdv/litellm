@@ -5,6 +5,7 @@ import GuardrailCard from "./guardrail_garden_card";
 import type { GuardrailCardInfo } from "./guardrail_garden_data";
 
 vi.mock("@ant-design/icons", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   CheckCircleFilled: ({ style, ...props }: any) => <span data-testid="check-icon" {...props} />,
 }));
 

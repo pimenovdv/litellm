@@ -98,10 +98,14 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
 
   // Content Filter data ref (managed by ContentFilterManager)
   const contentFilterDataRef = React.useRef<{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     patterns: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     blockedWords: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     categories: any[];
     competitorIntentEnabled?: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     competitorIntentConfig?: any;
   }>({
     patterns: [],
@@ -112,10 +116,14 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
   // Memoize onDataChange callback to prevent unnecessary re-renders
   const handleContentFilterDataChange = useCallback(
     (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       patterns: any[],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       blockedWords: any[],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       categories: any[],
       competitorIntentEnabled?: boolean,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       competitorIntentConfig?: any,
     ) => {
       contentFilterDataRef.current = {
@@ -266,11 +274,13 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
     }));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleGuardrailUpdate = async (values: any) => {
     try {
       if (!accessToken) return;
 
       // Prepare update data object - only include changed fields
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const updateData: any = {
         litellm_params: {},
       };

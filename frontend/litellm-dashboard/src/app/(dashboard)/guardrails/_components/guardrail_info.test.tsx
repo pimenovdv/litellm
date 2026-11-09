@@ -14,6 +14,7 @@ vi.mock("@/components/networking", () => ({
 // Mock ContentFilterManager
 vi.mock("./content_filter/ContentFilterManager", () => ({
   __esModule: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ onUnsavedChanges, onDataChange, isEditing }: any) => (
     <div data-testid="mock-content-filter-manager">
       {isEditing && (
@@ -28,6 +29,7 @@ vi.mock("./content_filter/ContentFilterManager", () => ({
       )}
     </div>
   ),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formatContentFilterDataForAPI: (patterns: any[], blockedWords: any[], categories?: any[]) => ({
     patterns,
     blocked_words: blockedWords,
@@ -261,6 +263,7 @@ describe("Guardrail Info", () => {
 
     // Verify call did NOT include patterns or blocked_words (because no changes)
     // updateGuardrailCall(accessToken, guardrailId, updateData) -> index 2 is updateData
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const firstCallArgs: any = vi.mocked(networking.updateGuardrailCall).mock.calls[0][2];
 
     // Verify attributes that definitely changed
@@ -294,6 +297,7 @@ describe("Guardrail Info", () => {
     });
 
     // Verify call INCLUDES patterns and blocked_words
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const secondCallArgs: any = vi.mocked(networking.updateGuardrailCall).mock.calls[0][2];
     expect(secondCallArgs.litellm_params).toBeDefined();
     expect(secondCallArgs.litellm_params.patterns).toEqual(["new_pattern"]);
