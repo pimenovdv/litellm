@@ -16,3 +16,4 @@
 - [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/tests/setupTests.ts`.
 - [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/components/view_logs/columns.tsx` and `frontend/litellm-dashboard/src/contexts/AuthContext.tsx`.
 - [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/components/view_logs/LogDetailsDrawer/PrettyMessagesView.tsx`.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/SSOSettings.tsx` and `frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/utils.ts`.
