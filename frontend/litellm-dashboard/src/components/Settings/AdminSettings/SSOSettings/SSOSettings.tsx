@@ -87,7 +87,7 @@ export default function SSOSettings() {
           label: "Client Secret",
           render: (values: SSOSettingsValues) => <RedactableField value={values.microsoft_client_secret} />,
         },
-        { label: "Tenant", render: (values: any) => renderSimpleValue(values.microsoft_tenant) },
+        { label: "Tenant", render: (values: SSOSettingsValues) => renderSimpleValue(values.microsoft_tenant) },
         { label: "Proxy Base URL", render: (values: SSOSettingsValues) => renderSimpleValue(values.proxy_base_url) },
       ],
     },

@@ -4,11 +4,11 @@ import { SSOSettingsValues } from "@/app/(dashboard)/hooks/sso/useSSOSettings";
  * Processes SSO settings form values and transforms them into the payload format expected by the API.
  * Handles role mappings transformation, field extraction, and conditional formatting based on the provider.
  *
- * @param {Record<string, any>} formValues - The raw form values from the SSO settings form.
- * @returns {Record<string, any>} The formatted payload ready to be sent to the API.
+ * @param {Record<string, unknown>} formValues - The raw form values from the SSO settings form.
+ * @returns {Record<string, unknown>} The formatted payload ready to be sent to the API.
 
  */
-export const processSSOSettingsPayload = (formValues: Record<string, any>): Record<string, any> => {
+export const processSSOSettingsPayload = (formValues: Record<string, unknown>): Record<string, unknown> => {
   const {
     proxy_admin_teams,
     admin_viewer_teams,
@@ -22,7 +22,7 @@ export const processSSOSettingsPayload = (formValues: Record<string, any>): Reco
     ...rest
   } = formValues;
 
-  const payload: any = {
+  const payload: Record<string, unknown> = {
     ...rest,
   };
 
