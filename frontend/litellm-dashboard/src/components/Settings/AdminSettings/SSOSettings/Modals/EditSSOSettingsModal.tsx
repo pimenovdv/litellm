@@ -80,7 +80,7 @@ const EditSSOSettingsModal: React.FC<EditSSOSettingsModalProps> = ({ isVisible, 
   }, [isVisible, ssoSettings.data, form]);
 
   // Enhanced form submission handler
-  const handleFormSubmit = async (formValues: Record<string, any>) => {
+  const handleFormSubmit = async (formValues: Record<string, unknown>) => {
     try {
       const payload = processSSOSettingsPayload(formValues);
 

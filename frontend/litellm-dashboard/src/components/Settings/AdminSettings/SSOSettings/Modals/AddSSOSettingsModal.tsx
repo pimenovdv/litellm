@@ -19,7 +19,7 @@ const AddSSOSettingsModal: React.FC<AddSSOSettingsModalProps> = ({ isVisible, on
   const { mutateAsync, isPending } = useEditSSOSettings();
 
   // Enhanced form submission handler
-  const handleFormSubmit = async (formValues: Record<string, any>) => {
+  const handleFormSubmit = async (formValues: Record<string, unknown>) => {
     const payload = processSSOSettingsPayload(formValues);
 
     await mutateAsync(payload, {

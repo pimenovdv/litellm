@@ -7,8 +7,8 @@ import { ssoProviderLogoMap, ssoProviderDisplayNames } from "../constants";
 import { Logo } from "@/components/molecules/logo/Logo";
 
 export interface BaseSSOSettingsFormProps {
-  form: any; // Replace with proper Form type if available
-  onFormSubmit: (formValues: Record<string, any>) => Promise<void>;
+  form: unknown; // Replace with proper Form type if available
+  onFormSubmit: (formValues: Record<string, unknown>) => Promise<void>;
 }
 
 // Define the SSO provider configuration type

@@ -22,3 +22,4 @@
 - [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/budgets/_components` files.
 - [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/caching/_components` files.
 - [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/cost-tracking/_components` files.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/components/Settings` and `frontend/litellm-dashboard/src/components/templates` files.

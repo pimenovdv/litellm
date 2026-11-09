@@ -33,13 +33,14 @@ vi.mock("openai", () => ({
 
 vi.mock("../../../common_components/DeleteResourceModal", () => ({
   __esModule: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ isOpen, onOk, onCancel, title, message, resourceInformation, confirmLoading }: any) => {
     if (!isOpen) return null;
     return (
       <div data-testid="delete-modal">
         <div>{title}</div>
         <div>{message}</div>
-        {resourceInformation?.map((info: any, idx: number) => (
+        {resourceInformation?.map((info: unknown, idx: number) => (
           <div key={idx}>
             {info.label}: {info.value}
           </div>
@@ -57,6 +58,7 @@ vi.mock("../../../common_components/DeleteResourceModal", () => ({
 
 vi.mock("./AddFallbacks", () => ({
   __esModule: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ value, onChange }: any) => {
     const handleClick = async () => {
       if (onChange) {
@@ -216,6 +218,7 @@ describe("Fallbacks", () => {
 
     await waitFor(() => {
       expect(networkingModule.setCallbacksCall).toHaveBeenCalled();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const callArgs = (networkingModule.setCallbacksCall as any).mock.calls[0];
       expect(callArgs[0]).toBe(mockAccessToken);
       expect(callArgs[1].router_settings.fallbacks).toHaveLength(1);

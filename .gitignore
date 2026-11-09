@@ -203,3 +203,4 @@ litellm/llms/manus/
 
 # Ignore mocked integrations to avoid warnings
 litellm/integrations/
+node_modules/
