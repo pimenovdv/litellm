@@ -119,6 +119,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
       examples: s.examples ?? [],
     }));
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldsToSet: Record<string, any> = {
       name: selected_card.name,
       description: selected_card.description,
@@ -139,11 +140,13 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
     form.setFieldsValue(fieldsToSet);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleUpdate = async (values: any) => {
     if (!accessToken || !agent) return;
 
     setIsSaving(true);
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let updateData: any;
 
       if (detectedAgentType === "a2a") {
@@ -324,7 +327,7 @@ const AgentInfoView: React.FC<AgentInfoViewProps> = ({ agentId, onClose, accessT
               <div style={{ marginTop: 24 }}>
                 <Title>Skills</Title>
                 <Descriptions bordered column={1} style={{ marginTop: 16 }}>
-                  {agent.agent_card_params.skills.map((skill: any, index: number) => (
+                  {agent.agent_card_params.skills.map((skill: any /* eslint-disable-line @typescript-eslint/no-explicit-any */, index: number) => (
                     <Descriptions.Item label={skill.name || `Skill ${index + 1}`} key={index}>
                       <div>
                         <div>

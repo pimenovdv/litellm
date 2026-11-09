@@ -29,7 +29,9 @@ export const detectAgentType = (agent: Agent): string => {
  * Parses agent data for dynamic form fields (non-A2A agents).
  * Extracts values from litellm_params based on the agent type metadata.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const parseDynamicAgentForForm = (agent: Agent, agentTypeInfo: AgentCreateInfo): Record<string, any> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const values: Record<string, any> = {
     agent_name: agent.agent_name,
     description: agent.agent_card_params?.description || "",

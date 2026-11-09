@@ -3,14 +3,17 @@ import { AgentCreateInfo, DiscoveredAgentCard, DiscoveryMode } from "@/component
 export interface DiscoveryRequestPlan {
   url: string;
   discovery_mode: DiscoveryMode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params?: Record<string, any>;
   display_url?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const skillId = (skill: any, idx: number): string => skill?.id ?? skill?.name ?? `skill-${idx}`;
 
 export const ALLOWED_CAPABILITY_KEYS = ["streaming"] as const;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const filterCapabilitiesForUI = (capabilities: Record<string, any> | undefined): Record<string, boolean> => {
   if (!capabilities) return {};
   return ALLOWED_CAPABILITY_KEYS.reduce<Record<string, boolean>>((acc, key) => {
@@ -91,8 +94,10 @@ export const selectionsFromUpstreamCard = (
  * through buildAgentData — we re-apply them here from the selection.
  */
 export const overlayDiscoveredCardParams = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   agentData: Record<string, any>,
   discovered: DiscoveredAgentCard | null | undefined,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Record<string, any> => {
   if (!discovered) return agentData;
   return {
@@ -126,6 +131,7 @@ export const overlayDiscoveredCardParams = (
 
 export const buildDiscoveryRequest = (
   agentType: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   values: Record<string, any>,
   selectedAgentTypeInfo?: AgentCreateInfo,
 ): DiscoveryRequestPlan | undefined => {

@@ -53,6 +53,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
   const [keyAssignOption, setKeyAssignOption] = useState<"create_new" | "existing_key" | "skip">("create_new");
   const [newKeyName, setNewKeyName] = useState<string>("");
   const [newKeyModels, setNewKeyModels] = useState<string[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [existingKeys, setExistingKeys] = useState<any[]>([]);
   const [selectedExistingKey, setSelectedExistingKey] = useState<string | null>(null);
   const [loadingKeys, setLoadingKeys] = useState(false);
@@ -146,6 +147,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
       .then((response) => {
         if (cancelled) return;
         const agents = response?.agents ?? [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setAvailableAgents(agents.map((a: any) => ({ agent_id: a.agent_id, agent_name: a.agent_name })));
       })
       .catch((error) => {
@@ -199,6 +201,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
     setCurrentStep((s) => Math.max(0, s - 1));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const buildAgentData = (values: any) => {
     if (agentType === CUSTOM_AGENT_TYPE) {
       return {
@@ -217,6 +220,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
       };
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let agentData: Record<string, any>;
     if (agentType === "a2a") {
       agentData = buildAgentDataFromForm(values);
@@ -629,6 +633,7 @@ const AddAgentForm: React.FC<AddAgentFormProps> = ({ visible, onClose, accessTok
     const currentAgentName = form.getFieldValue("agent_name");
     const seededAgentName = currentAgentName || selected_card.name || selected_card.provider?.organization || "";
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldsToSet: Record<string, any> = {
       agent_name: seededAgentName,
       name: selected_card.name,

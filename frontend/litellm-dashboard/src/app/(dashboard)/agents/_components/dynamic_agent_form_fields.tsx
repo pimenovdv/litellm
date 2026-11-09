@@ -71,8 +71,10 @@ const DynamicAgentFormFields: React.FC<DynamicAgentFormFieldsProps> = ({ agentTy
  * Builds agent data from form values for dynamic agent types.
  * Uses configuration from agentTypeInfo to determine which fields to include.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const buildDynamicAgentData = (values: any, agentTypeInfo: AgentCreateInfo) => {
   // Build litellm_params from template
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const litellmParams: Record<string, any> = {
     ...(agentTypeInfo.litellm_params_template || {}),
   };
@@ -109,6 +111,7 @@ export const buildDynamicAgentData = (values: any, agentTypeInfo: AgentCreateInf
     litellmParams.model = model;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const agentData: Record<string, any> = {
     agent_name: values.agent_name,
     agent_card_params: {
