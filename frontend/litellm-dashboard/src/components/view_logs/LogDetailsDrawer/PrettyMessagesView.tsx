@@ -10,8 +10,8 @@ import { OutputCard } from "./OutputCard";
 import { isRealtimeResponse, RealtimePrettyView } from "./RealtimePrettyView";
 
 interface PrettyMessagesViewProps {
-  request: any;
-  response: any;
+  request: unknown;
+  response: unknown;
   metrics?: {
     prompt_tokens?: number;
     completion_tokens?: number;
