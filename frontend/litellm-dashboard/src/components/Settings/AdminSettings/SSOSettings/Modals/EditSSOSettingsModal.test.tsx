@@ -45,13 +45,13 @@ const mockForm = {
 
 // Types
 type SSOData = {
-  values: Record<string, any>;
-} & Record<string, any>;
+  values: Record<string, unknown>;
+} & Record<string, unknown>;
 
 type SSOSettingsHookReturn = {
   data: SSOData | null;
   isLoading: boolean;
-  error: any;
+  error: unknown;
 };
 
 type EditSSOSettingsHookReturn = {
@@ -60,21 +60,21 @@ type EditSSOSettingsHookReturn = {
 };
 
 // Test data factories
-const createSSOData = (overrides: Record<string, any> = {}): SSOData => ({
+const createSSOData = (overrides: Record<string, unknown> = {}): SSOData => ({
   values: {
     user_email: "test@example.com",
     ...overrides,
   },
 });
 
-const createGoogleSSOData = (overrides: Record<string, any> = {}) =>
+const createGoogleSSOData = (overrides: Record<string, unknown> = {}) =>
   createSSOData({
     google_client_id: "test-google-id",
     google_client_secret: "test-google-secret",
     ...overrides,
   });
 
-const createMicrosoftSSOData = (overrides: Record<string, any> = {}) =>
+const createMicrosoftSSOData = (overrides: Record<string, unknown> = {}) =>
   createSSOData({
     microsoft_client_id: "test-microsoft-id",
     microsoft_client_secret: "test-microsoft-secret",
@@ -82,7 +82,7 @@ const createMicrosoftSSOData = (overrides: Record<string, any> = {}) =>
     ...overrides,
   });
 
-const createGenericSSOData = (overrides: Record<string, any> = {}) =>
+const createGenericSSOData = (overrides: Record<string, unknown> = {}) =>
   createSSOData({
     generic_client_id: "test-generic-id",
     generic_client_secret: "test-generic-secret",
@@ -90,7 +90,7 @@ const createGenericSSOData = (overrides: Record<string, any> = {}) =>
     ...overrides,
   });
 
-const createRoleMappingsSSOData = (overrides: Record<string, any> = {}) =>
+const createRoleMappingsSSOData = (overrides: Record<string, unknown> = {}) =>
   createGoogleSSOData({
     role_mappings: {
       group_claim: "groups",
@@ -105,7 +105,7 @@ const createRoleMappingsSSOData = (overrides: Record<string, any> = {}) =>
     ...overrides,
   });
 
-const createTeamMappingsSSOData = (overrides: Record<string, any> = {}) =>
+const createTeamMappingsSSOData = (overrides: Record<string, unknown> = {}) =>
   createGenericSSOData({
     team_mappings: {
       team_ids_jwt_field: overrides.team_ids_jwt_field || "teams",
@@ -130,14 +130,16 @@ const createMockHooks = (): {
 });
 
 vi.mock("antd", () => ({
-  Modal: ({ children, open, title, footer, onCancel, width, ...props }: any) => (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Modal: ({  children, open, title, footer, onCancel, width, ...props   }: any) => (
     <div data-testid={TEST_IDS.MODAL} data-open={open} data-title={title} data-width={width} {...props}>
       <div data-testid="modal-content">{children}</div>
       <div data-testid="modal-footer">{footer}</div>
       <button data-testid="modal-cancel" onClick={onCancel} />
     </div>
   ),
-  Button: ({ children, onClick, loading, disabled, ...props }: any) => (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Button: ({   children, onClick, loading, disabled, ...props   }: any) => (
     <button data-testid={TEST_IDS.BUTTON} onClick={onClick} data-loading={loading} disabled={disabled} {...props}>
       {children}
     </button>
@@ -145,7 +147,8 @@ vi.mock("antd", () => ({
   Form: {
     useForm: () => [mockForm],
   },
-  Space: ({ children, ...props }: any) => (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Space: ({   children, ...props   }: any) => (
     <div data-testid="space" {...props}>
       {children}
     </div>
@@ -153,7 +156,8 @@ vi.mock("antd", () => ({
 }));
 
 vi.mock("./BaseSSOSettingsForm", () => ({
-  default: ({ form, onFormSubmit }: any) => (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  default: ({  form, onFormSubmit   }: any) => (
     <div data-testid={TEST_IDS.BASE_SSO_FORM}>
       <button data-testid={TEST_IDS.TRIGGER_FORM_SUBMIT} onClick={() => onFormSubmit({ testField: "testValue" })}>
         Trigger Form Submit
@@ -307,6 +311,7 @@ describe("EditSSOSettingsModal", () => {
     const processedPayload = { processed: "payload" };
 
     beforeEach(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (processSSOSettingsPayload as any).mockReturnValue(processedPayload);
     });
 
@@ -363,6 +368,7 @@ describe("EditSSOSettingsModal", () => {
         useEditSSOSettings: { mutateAsync: mockMutateAsync, isPending: false },
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (parseErrorMessage as any).mockReturnValue("Parsed error message");
 
       renderComponent();
@@ -524,6 +530,7 @@ describe("EditSSOSettingsModal", () => {
         useEditSSOSettings: { mutateAsync: mockMutateAsync, isPending: false },
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (parseErrorMessage as any).mockReturnValue(undefined);
 
       renderComponent();
@@ -543,6 +550,7 @@ describe("EditSSOSettingsModal", () => {
         useEditSSOSettings: { mutateAsync: mockMutateAsync, isPending: false },
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (processSSOSettingsPayload as any).mockImplementation(() => {
         throw new Error("Processing failed");
       });
@@ -711,6 +719,7 @@ describe("EditSSOSettingsModal", () => {
         useEditSSOSettings: { mutateAsync: vi.fn(), isPending: false },
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (processSSOSettingsPayload as any).mockImplementation(() => {
         throw new Error("Processing error");
       });

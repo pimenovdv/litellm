@@ -45,17 +45,20 @@ describe("LoggingSettings", () => {
     mockUseStoreRequestInSpendLogs.mockReturnValue({
       mutate: mockMutate,
       isPending: false,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
     mockUseDeleteProxyConfigField.mockReturnValue({
       mutate: mockDeleteField,
       isPending: false,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
     mockUseProxyConfig.mockReturnValue({
       data: [],
       isLoading: false,
       refetch: mockRefetch,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
-    mockParseErrorMessage.mockImplementation((error: any) => error?.message || String(error));
+    mockParseErrorMessage.mockImplementation((error: unknown) => error?.message || String(error));
   });
 
   it("should render the card with title and form fields", () => {
@@ -193,6 +196,7 @@ describe("LoggingSettings", () => {
     mockUseStoreRequestInSpendLogs.mockReturnValue({
       mutate: mockMutate,
       isPending: true,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     renderWithProviders(<LoggingSettings />);
@@ -206,6 +210,7 @@ describe("LoggingSettings", () => {
     mockUseDeleteProxyConfigField.mockReturnValue({
       mutate: mockDeleteField,
       isPending: true,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     renderWithProviders(<LoggingSettings />);
@@ -237,6 +242,7 @@ describe("LoggingSettings", () => {
       ],
       isLoading: false,
       refetch: mockRefetch,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     renderWithProviders(<LoggingSettings />);
@@ -295,6 +301,7 @@ describe("LoggingSettings", () => {
       data: undefined,
       isLoading: true,
       refetch: mockRefetch,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     renderWithProviders(<LoggingSettings />);

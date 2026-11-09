@@ -41,8 +41,8 @@ import VectorStoreSelector from "../vector_store_management/VectorStoreSelector"
 interface KeyEditViewProps {
   keyData: KeyResponse;
   onCancel: () => void;
-  onSubmit: (values: any) => Promise<void>;
-  teams?: any[] | null;
+  onSubmit: (values: Record<string, unknown>) => Promise<void>;
+  teams?: unknown[] | null;
   accessToken: string | null;
   userID: string | null;
   userRole: string | null;
@@ -50,7 +50,7 @@ interface KeyEditViewProps {
 }
 
 // Add this helper function
-const getAvailableModelsForKey = (keyData: KeyResponse, teams: any[] | null): string[] => {
+const getAvailableModelsForKey = (keyData: KeyResponse, teams: unknown[] | null): string[] => {
   // If no teams data is available, return empty array
   if (!teams || !keyData.team_id) {
     return [];
@@ -277,7 +277,7 @@ export function KeyEditView({
     fetchTags();
   }, [accessToken]);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: Record<string, unknown>) => {
     try {
       setIsKeySaving(true);
 

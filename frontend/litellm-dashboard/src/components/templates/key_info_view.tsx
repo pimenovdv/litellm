@@ -33,7 +33,7 @@ interface KeyInfoViewProps {
   keyData: KeyResponse | undefined;
   onKeyDataUpdate?: (data: Partial<KeyResponse>) => void;
   onDelete?: () => void;
-  teams: any[] | null;
+  teams: unknown[] | null;
   backButtonText?: string;
 }
 
@@ -153,7 +153,7 @@ export default function KeyInfoView({
     );
   }
 
-  const handleKeyUpdate = async (formValues: Record<string, any>) => {
+  const handleKeyUpdate = async (formValues: Record<string, unknown>) => {
     try {
       if (!accessToken) return;
 

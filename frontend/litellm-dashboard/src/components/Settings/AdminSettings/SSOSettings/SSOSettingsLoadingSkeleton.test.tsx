@@ -4,24 +4,28 @@ import SSOSettingsLoadingSkeleton from "./SSOSettingsLoadingSkeleton";
 
 // Mock lucide-react icons
 vi.mock("lucide-react", () => ({
-  Shield: ({ className }: any) => <div data-testid="shield-icon" className={className} />,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Shield: ({  className   }: any) => <div data-testid="shield-icon" className={className} />,
 }));
 
 // Mock Ant Design components
 vi.mock("antd", () => ({
-  Card: ({ children, ...props }: any) => (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Card: ({  children, ...props   }: any) => (
     <div data-testid="card" {...props}>
       {children}
     </div>
   ),
   Descriptions: Object.assign(
-    ({ children, bordered, column, ...props }: any) => (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ({  children, bordered, column, ...props  }: any) => (
       <div data-testid="descriptions" data-bordered={bordered} data-column={JSON.stringify(column)} {...props}>
         {children}
       </div>
     ),
     {
-      Item: ({ children, label, ...props }: any) => (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Item: ({   children, label, ...props   }: any) => (
         <div data-testid="descriptions-item" {...props}>
           <div data-testid="descriptions-item-label">{label}</div>
           <div data-testid="descriptions-item-content">{children}</div>
@@ -30,24 +34,28 @@ vi.mock("antd", () => ({
     },
   ),
   Typography: {
-    Title: ({ children, level, ...props }: any) => (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Title: ({   children, level, ...props   }: any) => (
       <div data-testid="typography-title" data-level={level} {...props}>
         {children}
       </div>
     ),
-    Text: ({ children, type, ...props }: any) => (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Text: ({   children, type, ...props   }: any) => (
       <div data-testid="typography-text" data-type={type} {...props}>
         {children}
       </div>
     ),
   },
-  Space: ({ children, direction, size, className, ...props }: any) => (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Space: ({   children, direction, size, className, ...props   }: any) => (
     <div data-testid="space" data-direction={direction} data-size={size} className={className} {...props}>
       {children}
     </div>
   ),
   Skeleton: {
-    Button: ({ active, size, style, ...props }: any) => (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Button: ({   active, size, style, ...props   }: any) => (
       <div
         data-testid="skeleton-button"
         data-active={active}
@@ -58,7 +66,8 @@ vi.mock("antd", () => ({
         Button Skeleton
       </div>
     ),
-    Node: ({ active, style, ...props }: any) => (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Node: ({   active, style, ...props   }: any) => (
       <div data-testid="skeleton-node" data-active={active} data-style={JSON.stringify(style)} {...props}>
         Node Skeleton
       </div>

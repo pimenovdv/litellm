@@ -6,7 +6,8 @@ import MCPSemanticFilterTestPanel from "./MCPSemanticFilterTestPanel";
 import { TestResult } from "./semanticFilterTestUtils";
 
 vi.mock("@/components/common_components/ModelSelector", () => ({
-  default: ({ onChange, value, labelText, disabled }: any) => (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  default: ({  onChange, value, labelText, disabled   }: any) => (
     <div>
       <label htmlFor="model-selector">{labelText ?? "Select Model"}</label>
       <select id="model-selector" value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}>

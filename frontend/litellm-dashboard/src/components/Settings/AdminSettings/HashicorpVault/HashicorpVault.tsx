@@ -16,7 +16,7 @@ import HashicorpVaultEmptyPlaceholder from "./HashicorpVaultEmptyPlaceholder";
 
 const { Title, Text } = Typography;
 
-function detectAuthMethod(values: Record<string, any>): string {
+function detectAuthMethod(values: Record<string, unknown>): string {
   if (values.approle_role_id || values.approle_secret_id) return "AppRole";
   if (values.client_cert && values.client_key) return "TLS Certificate";
   if (values.vault_token) return "Token";

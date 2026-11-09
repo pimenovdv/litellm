@@ -10,11 +10,11 @@ import { QueryClient } from "@tanstack/react-query";
 import KeyInfoView from "./key_info_view";
 
 const editViewMocks = vi.hoisted(() => ({
-  onSubmit: undefined as ((v: Record<string, any>) => Promise<void>) | undefined,
+  onSubmit: undefined as ((v: Record<string, unknown>) => Promise<void>) | undefined,
 }));
 
 vi.mock("./key_edit_view", () => ({
-  KeyEditView: ({ onSubmit }: { onSubmit: (v: Record<string, any>) => Promise<void> }) => {
+  KeyEditView: ({ onSubmit }: { onSubmit: (v: Record<string, unknown>) => Promise<void> }) => {
     editViewMocks.onSubmit = onSubmit;
     return <div data-testid="key-edit-view-stub" />;
   },
