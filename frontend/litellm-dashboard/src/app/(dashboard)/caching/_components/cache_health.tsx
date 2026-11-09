@@ -5,6 +5,7 @@ import { CheckCircle2, XCircle, ClipboardCopy } from "lucide-react";
 import { ResponseTimeIndicator } from "./response_time_indicator";
 
 // Helper function to deep-parse a JSON string if possible
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const deepParse = (input: any) => {
   let parsed = input;
   if (typeof parsed === "string") {
@@ -71,15 +72,20 @@ interface RedisDetails {
 interface ErrorDetails {
   message: string;
   traceback: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   litellm_params?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   health_check_cache_params?: any;
 }
 
 // Update HealthCheckDetails component to handle errors
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
   // Initialize with safe default values
   let errorDetails: ErrorDetails | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let parsedLitellmParams: any = {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let parsedRedisParams: any = {};
 
   try {
@@ -270,6 +276,7 @@ const HealthCheckDetails: React.FC<{ response: any }> = ({ response }) => {
 
 export const CacheHealthTab: React.FC<{
   accessToken: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   healthCheckResponse: any;
   runCachingHealthCheck: () => void;
   responseTimeMs?: number | null;

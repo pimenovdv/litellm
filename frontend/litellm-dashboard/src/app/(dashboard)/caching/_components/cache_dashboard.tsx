@@ -84,7 +84,7 @@ interface CacheHealthResponse {
 }
 
 // Helper function to deep-parse a JSON string if possible
-const deepParse = (input: any) => {
+const deepParse = (input: unknown) => {
   let parsed = input;
   if (typeof parsed === "string") {
     try {
@@ -111,7 +111,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
   });
 
   const [lastRefreshed, setLastRefreshed] = useState("");
-  const [healthCheckResponse, setHealthCheckResponse] = useState<any>("");
+  const [healthCheckResponse, setHealthCheckResponse] = useState<unknown>("");
 
   useEffect(() => {
     if (!accessToken || !dateValue) {
@@ -235,20 +235,21 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
       setHealthCheckResponse("");
       const response = await cachingHealthCheckCall(accessToken !== null ? accessToken : "");
       setHealthCheckResponse(response);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error running health check:", error);
       let errorData;
-      if (error && error.message) {
+      if (error && typeof error === "object" && "message" in error && typeof (error as {message: string}).message === "string") {
+        const errorMessage = (error as { message: string }).message;
         try {
           // Parse the error message which may contain a nested error layer.
-          let parsedData = JSON.parse(error.message);
+          let parsedData = JSON.parse(errorMessage);
           // If the parsed object is wrapped (e.g. { error: { ... } }), unwrap it.
           if (parsedData.error) {
             parsedData = parsedData.error;
           }
           errorData = parsedData;
         } catch (e) {
-          errorData = { message: error.message };
+          errorData = { message: errorMessage };
         }
       } else {
         errorData = { message: "Unknown error occurred" };

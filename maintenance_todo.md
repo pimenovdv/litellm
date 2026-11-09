@@ -20,3 +20,5 @@
 - [x] Fix ESLint warnings by replacing `any` type with explicit type or eslint-disable in `frontend/litellm-dashboard/src/app/(dashboard)/agents/_components/agent_card_discovery.test.tsx` and `frontend/litellm-dashboard/src/app/(dashboard)/agents/_components/agent_config.ts`.
 - [x] Fix ESLint warnings by replacing `any` type with explicit type or eslint-disable in `frontend/litellm-dashboard/src/app/(dashboard)/agents/_components/agent_card_discovery.tsx` and related files.
 - [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/budgets/_components` files.
+- [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/caching/_components` files.
+- [ ] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/cost-tracking/_components` files.
