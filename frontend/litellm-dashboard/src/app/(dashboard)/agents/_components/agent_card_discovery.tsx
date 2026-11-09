@@ -150,6 +150,7 @@ const AgentCardDiscovery: React.FC<AgentCardDiscoveryProps> = ({
       lastSyncedSelectionRef.current = null;
       setCard(response.agent_card);
       resetSelections(response.agent_card);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       if (requestId !== discoverRequestIdRef.current) return;
       setError(e?.message ? String(e.message) : "Failed to discover agent card");
