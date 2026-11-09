@@ -21,14 +21,14 @@ vi.mock("@heroicons/react/outline", () => ({
 }));
 
 vi.mock("@tremor/react", () => ({
-  Table: ({ children }: any) => <table>{children}</table>,
-  TableHead: ({ children }: any) => <thead>{children}</thead>,
-  TableRow: ({ children }: any) => <tr>{children}</tr>,
-  TableHeaderCell: ({ children }: any) => <th>{children}</th>,
-  TableBody: ({ children }: any) => <tbody>{children}</tbody>,
-  TableCell: ({ children }: any) => <td>{children}</td>,
-  Text: ({ children }: any) => <span>{children}</span>,
-  TextInput: ({ value, onValueChange, onKeyDown, placeholder, ...rest }: any) => (
+  Table: ({ children }: { children: React.ReactNode }) => <table>{children}</table>,
+  TableHead: ({ children }: { children: React.ReactNode }) => <thead>{children}</thead>,
+  TableRow: ({ children }: { children: React.ReactNode }) => <tr>{children}</tr>,
+  TableHeaderCell: ({ children }: { children: React.ReactNode }) => <th>{children}</th>,
+  TableBody: ({ children }: { children: React.ReactNode }) => <tbody>{children}</tbody>,
+  TableCell: ({ children }: { children: React.ReactNode }) => <td>{children}</td>,
+  Text: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
+  TextInput: ({ value, onValueChange, onKeyDown, placeholder, ...rest }: { value?: string; onValueChange?: (val: string) => void; onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>; placeholder?: string; [key: string]: unknown }) => (
     <input
       value={value}
       onChange={(e) => onValueChange?.(e.target.value)}
@@ -37,7 +37,7 @@ vi.mock("@tremor/react", () => ({
       {...rest}
     />
   ),
-  Icon: ({ icon: IconComponent, onClick }: any) => {
+  Icon: ({ icon: IconComponent, onClick }: { icon?: React.ElementType & { displayName?: string; name?: string }; onClick?: React.MouseEventHandler<HTMLButtonElement> }) => {
     const name = IconComponent?.displayName ?? IconComponent?.name ?? "icon";
     return <button onClick={onClick} aria-label={name} />;
   },
