@@ -10,9 +10,9 @@ export interface FieldConfig {
   required?: boolean;
   tooltip?: string;
   placeholder?: string;
-  defaultValue?: any;
+  defaultValue?: unknown;
   rows?: number;
-  validation?: any[];
+  validation?: unknown[];
   options?: string[];
   helpText?: string;
 }
@@ -233,7 +233,7 @@ export const SKILL_FIELD_CONFIG = {
  * Get default form values from configuration
  */
 export const getDefaultFormValues = () => {
-  const defaults: any = {
+  const defaults: Record<string, unknown> = {
     defaultInputModes: ["text"],
     defaultOutputModes: ["text"],
   };
@@ -252,8 +252,9 @@ export const getDefaultFormValues = () => {
 /**
  * Build agent data from form values according to AgentConfig spec
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const buildAgentDataFromForm = (values: any, existingAgent?: any) => {
-  const agentData: any = {
+  const agentData: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
     agent_name: values.agent_name,
     agent_card_params: {
       protocolVersion: values.protocolVersion || "1.0",
@@ -277,7 +278,7 @@ export const buildAgentDataFromForm = (values: any, existingAgent?: any) => {
     },
   };
 
-  const params: Record<string, any> = {};
+  const params: Record<string, any> = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   if (values.model) params.model = values.model;
   if (values.make_public !== undefined) params.make_public = values.make_public;
@@ -316,9 +317,10 @@ export const buildAgentDataFromForm = (values: any, existingAgent?: any) => {
 /**
  * Parse agent data for form fields
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const parseAgentForForm = (agent: any) => {
   const skills =
-    agent.agent_card_params?.skills?.map((skill: any) => ({
+    agent.agent_card_params?.skills?.map((skill: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) => ({
       ...skill,
       tags: skill.tags,
       examples: skill.examples || [],

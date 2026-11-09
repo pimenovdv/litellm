@@ -6,7 +6,7 @@ import { renderWithProviders } from "@/../tests/test-utils";
 import AgentCardDiscovery from "./agent_card_discovery";
 
 vi.mock("@/components/networking", async () => {
-  const actual = await vi.importActual<any>("@/components/networking");
+  const actual = await vi.importActual<Record<string, unknown>>("@/components/networking");
   return {
     ...actual,
     discoverAgentCardCall: vi.fn(),
