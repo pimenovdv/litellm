@@ -16,7 +16,7 @@ vi.mock("../common/queryKeysFactory", () => ({
   createQueryKeys: vi.fn((resource: string) => ({
     all: [resource],
     lists: () => [resource, "list"],
-    list: (params?: any) => [resource, "list", { params }],
+    list: (params?: Record<string, unknown>) => [resource, "list", { params }],
     details: () => [resource, "detail"],
     detail: (uid: string) => [resource, "detail", uid],
   })),
@@ -79,7 +79,7 @@ describe("useCurrentUser", () => {
 
   it("should return user info data when query is successful", async () => {
     // Mock successful API call - v2 returns user object directly
-    (userGetInfoV2 as any).mockResolvedValue(mockUserInfoV2Response);
+    (userGetInfoV2 as unknown as import("vitest").Mock).mockResolvedValue(mockUserInfoV2Response);
 
     const { result } = renderHook(() => useCurrentUser(), { wrapper });
 
@@ -105,7 +105,7 @@ describe("useCurrentUser", () => {
     const testError = new Error(errorMessage);
 
     // Mock failed API call
-    (userGetInfoV2 as any).mockRejectedValue(testError);
+    (userGetInfoV2 as unknown as import("vitest").Mock).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useCurrentUser(), { wrapper });
 
@@ -198,7 +198,7 @@ describe("useCurrentUser", () => {
 
   it("should execute query when all auth values are present", async () => {
     // Mock successful API call
-    (userGetInfoV2 as any).mockResolvedValue(mockUserInfoV2Response);
+    (userGetInfoV2 as unknown as import("vitest").Mock).mockResolvedValue(mockUserInfoV2Response);
 
     // Ensure all auth values are present (already set in beforeEach)
     const { result } = renderHook(() => useCurrentUser(), { wrapper });
@@ -216,7 +216,7 @@ describe("useCurrentUser", () => {
     const timeoutError = new Error("Network timeout");
 
     // Mock network timeout
-    (userGetInfoV2 as any).mockRejectedValue(timeoutError);
+    (userGetInfoV2 as unknown as import("vitest").Mock).mockRejectedValue(timeoutError);
 
     const { result } = renderHook(() => useCurrentUser(), { wrapper });
 

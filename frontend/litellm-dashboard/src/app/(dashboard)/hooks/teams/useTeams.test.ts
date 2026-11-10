@@ -87,7 +87,7 @@ describe("useTeams", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should render", () => {
-    (fetchTeams as any).mockResolvedValue(mockTeams);
+    (fetchTeams as unknown as import("vitest").Mock).mockResolvedValue(mockTeams);
 
     const { result } = renderHook(() => useTeams(), { wrapper });
 
@@ -96,7 +96,7 @@ describe("useTeams", () => {
 
   it("should return teams data when query is successful", async () => {
     // Mock successful API call
-    (fetchTeams as any).mockResolvedValue(mockTeams);
+    (fetchTeams as unknown as import("vitest").Mock).mockResolvedValue(mockTeams);
 
     const { result } = renderHook(() => useTeams(), { wrapper });
 
@@ -121,7 +121,7 @@ describe("useTeams", () => {
     const testError = new Error(errorMessage);
 
     // Mock failed API call
-    (fetchTeams as any).mockRejectedValue(testError);
+    (fetchTeams as unknown as import("vitest").Mock).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useTeams(), { wrapper });
 
@@ -190,7 +190,7 @@ describe("useTeams", () => {
 
   it("should execute query when accessToken is present", async () => {
     // Mock successful API call
-    (fetchTeams as any).mockResolvedValue(mockTeams);
+    (fetchTeams as unknown as import("vitest").Mock).mockResolvedValue(mockTeams);
 
     // Ensure auth values are set (already done in beforeEach)
     const { result } = renderHook(() => useTeams(), { wrapper });
@@ -206,7 +206,7 @@ describe("useTeams", () => {
 
   it("should return empty teams array when API returns empty data", async () => {
     // Mock API returning empty teams array
-    (fetchTeams as any).mockResolvedValue([]);
+    (fetchTeams as unknown as import("vitest").Mock).mockResolvedValue([]);
 
     const { result } = renderHook(() => useTeams(), { wrapper });
 
@@ -224,7 +224,7 @@ describe("useTeams", () => {
     const timeoutError = new Error("Network timeout");
 
     // Mock network timeout
-    (fetchTeams as any).mockRejectedValue(timeoutError);
+    (fetchTeams as unknown as import("vitest").Mock).mockRejectedValue(timeoutError);
 
     const { result } = renderHook(() => useTeams(), { wrapper });
 
@@ -239,7 +239,7 @@ describe("useTeams", () => {
 
   it("should pass userId and userRole to fetchTeams", async () => {
     // Mock successful API call
-    (fetchTeams as any).mockResolvedValue(mockTeams);
+    (fetchTeams as unknown as import("vitest").Mock).mockResolvedValue(mockTeams);
 
     // Mock specific userId and userRole
     mockUseAuthorized.mockReturnValue({
@@ -265,7 +265,7 @@ describe("useTeams", () => {
 
   it("should handle null userId", async () => {
     // Mock successful API call
-    (fetchTeams as any).mockResolvedValue(mockTeams);
+    (fetchTeams as unknown as import("vitest").Mock).mockResolvedValue(mockTeams);
 
     // Mock null userId
     mockUseAuthorized.mockReturnValue({
@@ -320,7 +320,7 @@ describe("useTeam", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should render", () => {
-    (teamInfoCall as any).mockResolvedValue(mockTeams[0]);
+    (teamInfoCall as unknown as import("vitest").Mock).mockResolvedValue(mockTeams[0]);
 
     const { result } = renderHook(() => useTeam("team-1"), { wrapper });
 
@@ -328,7 +328,7 @@ describe("useTeam", () => {
   });
 
   it("should return team data when query is successful", async () => {
-    (teamInfoCall as any).mockResolvedValue(mockTeams[0]);
+    (teamInfoCall as unknown as import("vitest").Mock).mockResolvedValue(mockTeams[0]);
 
     const { result } = renderHook(() => useTeam("team-1"), { wrapper });
 
@@ -350,7 +350,7 @@ describe("useTeam", () => {
     const errorMessage = "Failed to fetch team";
     const testError = new Error(errorMessage);
 
-    (teamInfoCall as any).mockRejectedValue(testError);
+    (teamInfoCall as unknown as import("vitest").Mock).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useTeam("team-1"), { wrapper });
 
@@ -498,7 +498,7 @@ describe("teamListCall", () => {
       total_pages: 1,
     };
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -521,7 +521,7 @@ describe("teamListCall", () => {
   it("should include query parameters when options are provided", async () => {
     const mockResponse = { teams: mockTeams };
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -537,7 +537,7 @@ describe("teamListCall", () => {
 
     await teamListCall("test-access-token", 1, 10, options);
 
-    const callUrl = (global.fetch as any).mock.calls[0][0];
+    const callUrl = (global.fetch as unknown as import("vitest").Mock).mock.calls[0][0];
     expect(callUrl).toContain("organization_id=org-1");
     expect(callUrl).toContain("team_id=team-1");
     expect(callUrl).toContain("team_alias=Test+Team"); // URL encoding converts spaces to +
@@ -551,7 +551,7 @@ describe("teamListCall", () => {
   it("should filter out null and undefined parameters", async () => {
     const mockResponse = { teams: mockTeams };
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -564,7 +564,7 @@ describe("teamListCall", () => {
 
     await teamListCall("test-access-token", 1, 10, options);
 
-    const callUrl = (global.fetch as any).mock.calls[0][0];
+    const callUrl = (global.fetch as unknown as import("vitest").Mock).mock.calls[0][0];
     expect(callUrl).not.toContain("organization_id");
     expect(callUrl).not.toContain("team_id");
     expect(callUrl).toContain("user_id=user-1");
@@ -572,24 +572,24 @@ describe("teamListCall", () => {
 
   it("should use baseUrl when provided", async () => {
     const { getProxyBaseUrl } = await import("@/components/networking");
-    (getProxyBaseUrl as any).mockReturnValue("https://api.example.com");
+    (getProxyBaseUrl as unknown as import("vitest").Mock).mockReturnValue("https://api.example.com");
 
     const mockResponse = { teams: mockTeams };
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
 
     await teamListCall("test-access-token", 1, 10, {});
 
-    const callUrl = (global.fetch as any).mock.calls[0][0];
+    const callUrl = (global.fetch as unknown as import("vitest").Mock).mock.calls[0][0];
     expect(callUrl).toBe("https://api.example.com/v2/team/list?page=1&page_size=10");
   });
 
   it("should handle error response", async () => {
     const errorData = { error: "Failed to fetch teams" };
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorData,
     });
@@ -599,13 +599,13 @@ describe("teamListCall", () => {
 
   it("should handle network errors", async () => {
     const networkError = new Error("Network error");
-    (global.fetch as any).mockRejectedValue(networkError);
+    (global.fetch as unknown as import("vitest").Mock).mockRejectedValue(networkError);
 
     await expect(teamListCall("test-access-token", 1, 10, {})).rejects.toThrow("Network error");
   });
 
   it("should handle error when response.json() fails", async () => {
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => {
         throw new Error("Invalid JSON");
@@ -661,7 +661,7 @@ describe("useDeletedTeams", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should render", () => {
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => ({ teams: mockDeletedTeams }),
     });
@@ -672,7 +672,7 @@ describe("useDeletedTeams", () => {
   });
 
   it("should return deleted teams data when query is successful", async () => {
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => ({ teams: mockDeletedTeams }),
     });
@@ -692,7 +692,7 @@ describe("useDeletedTeams", () => {
   });
 
   it("should handle error when API call fails", async () => {
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => ({ error: "Failed to fetch deleted teams" }),
     });
@@ -731,7 +731,7 @@ describe("useDeletedTeams", () => {
   });
 
   it("should use placeholderData when paginating", async () => {
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => ({ teams: mockDeletedTeams }),
     });
@@ -751,7 +751,7 @@ describe("useDeletedTeams", () => {
   });
 
   it("should pass options to API call", async () => {
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => ({ teams: mockDeletedTeams }),
     });
@@ -768,7 +768,7 @@ describe("useDeletedTeams", () => {
       expect(global.fetch).toHaveBeenCalled();
     });
 
-    const callUrl = (global.fetch as any).mock.calls[0][0];
+    const callUrl = (global.fetch as unknown as import("vitest").Mock).mock.calls[0][0];
     expect(callUrl).toContain("organization_id=org-1");
     expect(callUrl).toContain("team_id=team-1");
     expect(callUrl).toContain("user_id=user-1");
@@ -776,7 +776,7 @@ describe("useDeletedTeams", () => {
   });
 
   it("should handle response when data is directly an array (not wrapped in teams property)", async () => {
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockDeletedTeams, // Direct array, not wrapped in { teams: ... }
     });

@@ -11,7 +11,7 @@ vi.mock("@/components/networking", () => ({
 }));
 
 // Mock data
-const mockUISettings: Record<string, any> = {
+const mockUISettings: Record<string, unknown> = {
   theme: "dark",
   language: "en",
   notifications: true,
@@ -40,7 +40,7 @@ describe("useUISettings", () => {
 
   it("should return UI settings data when query is successful", async () => {
     // Mock successful API call
-    (getUiSettings as any).mockResolvedValue(mockUISettings);
+    (getUiSettings as unknown as import("vitest").Mock).mockResolvedValue(mockUISettings);
 
     const { result } = renderHook(() => useUISettings(), { wrapper });
 
@@ -65,7 +65,7 @@ describe("useUISettings", () => {
     const testError = new Error(errorMessage);
 
     // Mock failed API call
-    (getUiSettings as any).mockRejectedValue(testError);
+    (getUiSettings as unknown as import("vitest").Mock).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useUISettings(), { wrapper });
 
@@ -86,7 +86,7 @@ describe("useUISettings", () => {
 
   it("should return empty object when API returns empty settings", async () => {
     // Mock API returning empty object
-    (getUiSettings as any).mockResolvedValue({});
+    (getUiSettings as unknown as import("vitest").Mock).mockResolvedValue({});
 
     const { result } = renderHook(() => useUISettings(), { wrapper });
 
@@ -104,7 +104,7 @@ describe("useUISettings", () => {
     const timeoutError = new Error("Network timeout");
 
     // Mock network timeout
-    (getUiSettings as any).mockRejectedValue(timeoutError);
+    (getUiSettings as unknown as import("vitest").Mock).mockRejectedValue(timeoutError);
 
     const { result } = renderHook(() => useUISettings(), { wrapper });
 
