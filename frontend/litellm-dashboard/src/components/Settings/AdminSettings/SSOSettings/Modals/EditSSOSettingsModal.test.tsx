@@ -130,16 +130,14 @@ const createMockHooks = (): {
 });
 
 vi.mock("antd", () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Modal: ({  children, open, title, footer, onCancel, width, ...props   }: any) => (
+  Modal: ({ children, open, title, footer, onCancel, width, ...props }: { children?: React.ReactNode; open?: boolean; title?: string | React.ReactNode; footer?: React.ReactNode; onCancel?: () => void; width?: string | number; [key: string]: unknown }) => (
     <div data-testid={TEST_IDS.MODAL} data-open={open} data-title={title} data-width={width} {...props}>
       <div data-testid="modal-content">{children}</div>
       <div data-testid="modal-footer">{footer}</div>
       <button data-testid="modal-cancel" onClick={onCancel} />
     </div>
   ),
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Button: ({   children, onClick, loading, disabled, ...props   }: any) => (
+  Button: ({ children, onClick, loading, disabled, ...props }: { children?: React.ReactNode; onClick?: () => void; loading?: boolean; disabled?: boolean; [key: string]: unknown }) => (
     <button data-testid={TEST_IDS.BUTTON} onClick={onClick} data-loading={loading} disabled={disabled} {...props}>
       {children}
     </button>
@@ -147,8 +145,7 @@ vi.mock("antd", () => ({
   Form: {
     useForm: () => [mockForm],
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Space: ({   children, ...props   }: any) => (
+  Space: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => (
     <div data-testid="space" {...props}>
       {children}
     </div>
@@ -156,8 +153,7 @@ vi.mock("antd", () => ({
 }));
 
 vi.mock("./BaseSSOSettingsForm", () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default: ({  form, onFormSubmit   }: any) => (
+  default: ({ form, onFormSubmit }: { form?: import('antd').FormInstance; onFormSubmit: (values: Record<string, unknown>) => void }) => (
     <div data-testid={TEST_IDS.BASE_SSO_FORM}>
       <button data-testid={TEST_IDS.TRIGGER_FORM_SUBMIT} onClick={() => onFormSubmit({ testField: "testValue" })}>
         Trigger Form Submit
@@ -311,8 +307,7 @@ describe("EditSSOSettingsModal", () => {
     const processedPayload = { processed: "payload" };
 
     beforeEach(() => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (processSSOSettingsPayload as any).mockReturnValue(processedPayload);
+      (processSSOSettingsPayload as unknown as import('vitest').Mock).mockReturnValue(processedPayload);
     });
 
     it("processes form values and submits successfully", async () => {
@@ -368,8 +363,7 @@ describe("EditSSOSettingsModal", () => {
         useEditSSOSettings: { mutateAsync: mockMutateAsync, isPending: false },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (parseErrorMessage as any).mockReturnValue("Parsed error message");
+      (parseErrorMessage as unknown as import('vitest').Mock).mockReturnValue("Parsed error message");
 
       renderComponent();
 
@@ -530,8 +524,7 @@ describe("EditSSOSettingsModal", () => {
         useEditSSOSettings: { mutateAsync: mockMutateAsync, isPending: false },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (parseErrorMessage as any).mockReturnValue(undefined);
+      (parseErrorMessage as unknown as import('vitest').Mock).mockReturnValue(undefined);
 
       renderComponent();
 
@@ -550,8 +543,7 @@ describe("EditSSOSettingsModal", () => {
         useEditSSOSettings: { mutateAsync: mockMutateAsync, isPending: false },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (processSSOSettingsPayload as any).mockImplementation(() => {
+      (processSSOSettingsPayload as unknown as import('vitest').Mock).mockImplementation(() => {
         throw new Error("Processing failed");
       });
 
@@ -719,8 +711,7 @@ describe("EditSSOSettingsModal", () => {
         useEditSSOSettings: { mutateAsync: vi.fn(), isPending: false },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (processSSOSettingsPayload as any).mockImplementation(() => {
+      (processSSOSettingsPayload as unknown as import('vitest').Mock).mockImplementation(() => {
         throw new Error("Processing error");
       });
 
