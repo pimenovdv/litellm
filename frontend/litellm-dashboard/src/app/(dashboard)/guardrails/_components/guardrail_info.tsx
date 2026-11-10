@@ -52,8 +52,8 @@ interface ProviderParamsResponse {
 }
 
 const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose, accessToken, isAdmin }) => {
-  const [guardrailData, setGuardrailData] = useState<any>(null);
-  const [guardrailProviderSpecificParams, setGuardrailProviderSpecificParams] = useState<any>(null);
+  const [guardrailData, setGuardrailData] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const [guardrailProviderSpecificParams, setGuardrailProviderSpecificParams] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
@@ -157,7 +157,7 @@ const GuardrailInfoView: React.FC<GuardrailInfoProps> = ({ guardrailId, onClose,
           const entities: string[] = [];
           const actions: { [key: string]: string } = {};
 
-          Object.entries(piiConfig).forEach(([entity, action]: [string, any]) => {
+          Object.entries(piiConfig).forEach(([entity, action]: [string, any]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             entities.push(entity);
             actions[entity] = typeof action === "string" ? action : "MASK";
           });

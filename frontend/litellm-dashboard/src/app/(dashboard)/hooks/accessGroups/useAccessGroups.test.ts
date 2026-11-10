@@ -65,7 +65,7 @@ describe("useAccessGroups", () => {
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: mockAccessToken,
       userRole: "Admin",
-    } as any);
+    } as unknown as ReturnType<typeof useAuthorizedModule.default>);
 
     global.fetch = fetchMock;
   });
@@ -115,7 +115,7 @@ describe("useAccessGroups", () => {
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: null,
       userRole: "Admin",
-    } as any);
+    } as unknown as ReturnType<typeof useAuthorizedModule.default>);
 
     const { result } = renderHook(() => useAccessGroups(), { wrapper });
 
@@ -130,7 +130,7 @@ describe("useAccessGroups", () => {
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: "",
       userRole: "Admin",
-    } as any);
+    } as unknown as ReturnType<typeof useAuthorizedModule.default>);
 
     const { result } = renderHook(() => useAccessGroups(), { wrapper });
 
@@ -145,7 +145,7 @@ describe("useAccessGroups", () => {
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: mockAccessToken,
       userRole: "Viewer",
-    } as any);
+    } as unknown as ReturnType<typeof useAuthorizedModule.default>);
 
     const { result } = renderHook(() => useAccessGroups(), { wrapper });
 
@@ -160,7 +160,7 @@ describe("useAccessGroups", () => {
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: mockAccessToken,
       userRole: null,
-    } as any);
+    } as unknown as ReturnType<typeof useAuthorizedModule.default>);
 
     const { result } = renderHook(() => useAccessGroups(), { wrapper });
 
@@ -175,7 +175,7 @@ describe("useAccessGroups", () => {
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: mockAccessToken,
       userRole: "proxy_admin",
-    } as any);
+    } as unknown as ReturnType<typeof useAuthorizedModule.default>);
 
     fetchMock.mockResolvedValue({
       ok: true,

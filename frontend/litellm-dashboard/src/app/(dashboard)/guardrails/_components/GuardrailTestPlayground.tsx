@@ -13,7 +13,7 @@ interface GuardrailItem {
     mode: string;
     default_on: boolean;
   };
-  guardrail_info: Record<string, any> | null;
+  guardrail_info: Record<string, unknown> | null;
   created_at?: string;
   updated_at?: string;
 }

@@ -268,7 +268,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
   };
 
   const [testInput, setTestInput] = useState(JSON.stringify(TEST_INPUT_EXAMPLES.pre_call.data, null, 2));
-  const [testResult, setTestResult] = useState<any>(null);
+  const [testResult, setTestResult] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [copiedPrimitive, setCopiedPrimitive] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
