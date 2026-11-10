@@ -45,19 +45,16 @@ describe("LoggingSettings", () => {
     mockUseStoreRequestInSpendLogs.mockReturnValue({
       mutate: mockMutate,
       isPending: false,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof useStoreRequestInSpendLogs>);
     mockUseDeleteProxyConfigField.mockReturnValue({
       mutate: mockDeleteField,
       isPending: false,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof useDeleteProxyConfigField>);
     mockUseProxyConfig.mockReturnValue({
       data: [],
       isLoading: false,
       refetch: mockRefetch,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof useProxyConfig>);
     mockParseErrorMessage.mockImplementation((error: unknown) => error?.message || String(error));
   });
 
@@ -196,8 +193,7 @@ describe("LoggingSettings", () => {
     mockUseStoreRequestInSpendLogs.mockReturnValue({
       mutate: mockMutate,
       isPending: true,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof useStoreRequestInSpendLogs>);
 
     renderWithProviders(<LoggingSettings />);
 
@@ -210,8 +206,7 @@ describe("LoggingSettings", () => {
     mockUseDeleteProxyConfigField.mockReturnValue({
       mutate: mockDeleteField,
       isPending: true,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof useDeleteProxyConfigField>);
 
     renderWithProviders(<LoggingSettings />);
 
@@ -242,8 +237,7 @@ describe("LoggingSettings", () => {
       ],
       isLoading: false,
       refetch: mockRefetch,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof useProxyConfig>);
 
     renderWithProviders(<LoggingSettings />);
 
@@ -301,8 +295,7 @@ describe("LoggingSettings", () => {
       data: undefined,
       isLoading: true,
       refetch: mockRefetch,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof useProxyConfig>);
 
     renderWithProviders(<LoggingSettings />);
 

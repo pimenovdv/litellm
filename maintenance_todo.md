@@ -10,3 +10,4 @@
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/MCPSemanticFilterSettings/MCPSemanticFilterSettings.test.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/MCPSemanticFilterSettings/MCPSemanticFilterTestPanel.test.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/Modals/EditSSOSettingsModal.test.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/LoggingSettings/LoggingSettings.test.tsx`.
