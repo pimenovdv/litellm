@@ -6,6 +6,8 @@ import PolicySelector from "@/components/policies/PolicySelector";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { TextInput, Button as TremorButton } from "@tremor/react";
 import { Form, Input, Select, Switch, Tooltip } from "antd";
+import { PremiumFeatureTooltip } from "../common_components/PremiumFeatureTooltip";
+
 import { useEffect, useState } from "react";
 import { rolesWithWriteAccess } from "../../utils/roles";
 import AgentSelector from "../agent_management/AgentSelector";
@@ -658,7 +660,7 @@ export function KeyEditView({
       </Form.Item>
 
       <Form.Item label="Prompts" name="prompts">
-        <Tooltip title={!premiumUser ? "Setting prompts by key is a premium feature" : ""} placement="top">
+        <PremiumFeatureTooltip premiumUser={premiumUser} featureName="prompts by key">
           <Select
             mode="tags"
             style={{ width: "100%" }}
@@ -672,7 +674,7 @@ export function KeyEditView({
             }
             options={promptsList.map((name) => ({ value: name, label: name }))}
           />
-        </Tooltip>
+        </PremiumFeatureTooltip>
       </Form.Item>
 
       <Form.Item
@@ -690,10 +692,7 @@ export function KeyEditView({
       </Form.Item>
 
       <Form.Item label="Allowed Pass Through Routes" name="allowed_passthrough_routes">
-        <Tooltip
-          title={!premiumUser ? "Setting allowed pass through routes by key is a premium feature" : ""}
-          placement="top"
-        >
+        <PremiumFeatureTooltip premiumUser={premiumUser} featureName="allowed pass through routes by key">
           <PassThroughRoutesSelector
             onChange={(values: string[]) => form.setFieldValue("allowed_passthrough_routes", values)}
             value={form.getFieldValue("allowed_passthrough_routes")}
@@ -708,7 +707,7 @@ export function KeyEditView({
             }
             disabled={!premiumUser}
           />
-        </Tooltip>
+        </PremiumFeatureTooltip>
       </Form.Item>
 
       <Form.Item label="Vector Stores" name="vector_stores">
