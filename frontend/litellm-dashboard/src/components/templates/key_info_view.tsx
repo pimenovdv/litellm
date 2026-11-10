@@ -26,6 +26,7 @@ import ObjectPermissionsView from "../object_permissions_view";
 import { RegenerateKeyModal } from "../organisms/RegenerateKeyModal";
 import { parseErrorMessage } from "../shared/errorUtils";
 import { KeyEditView } from "./key_edit_view";
+import { StringListDisplay } from "../common_components/StringListDisplay";
 
 interface KeyInfoViewProps {
   keyId: string;
@@ -832,60 +833,13 @@ export default function KeyInfoView({
                     </div>
                   )}
 
-                  <div>
-                    <Text className="font-medium">Tags</Text>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {Array.isArray(currentKeyData.metadata?.tags) && currentKeyData.metadata.tags.length > 0
-                        ? currentKeyData.metadata.tags.map((tag, index) => (
-                            <span key={index} className="px-2 mr-2 py-1 bg-blue-100 rounded-sm text-xs">
-                              {tag}
-                            </span>
-                          ))
-                        : "No tags specified"}
-                    </div>
-                  </div>
+                  <StringListDisplay label="Tags" items={currentKeyData.metadata?.tags} emptyText="No tags specified" />
 
-                  <div>
-                    <Text className="font-medium">Prompts</Text>
-                    <Text>
-                      {Array.isArray(currentKeyData.metadata?.prompts) && currentKeyData.metadata.prompts.length > 0
-                        ? currentKeyData.metadata.prompts.map((prompt, index) => (
-                            <span key={index} className="px-2 mr-2 py-1 bg-blue-100 rounded-sm text-xs">
-                              {prompt}
-                            </span>
-                          ))
-                        : "No prompts specified"}
-                    </Text>
-                  </div>
+                  <StringListDisplay label="Prompts" items={currentKeyData.metadata?.prompts} emptyText="No prompts specified" />
 
-                  <div>
-                    <Text className="font-medium">Allowed Routes</Text>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {Array.isArray(currentKeyData.allowed_routes) && currentKeyData.allowed_routes.length > 0 ? (
-                        currentKeyData.allowed_routes.map((route, index) => (
-                          <span key={index} className="px-2 py-1 bg-blue-100 rounded-sm text-xs">
-                            {route}
-                          </span>
-                        ))
-                      ) : (
-                        <Tag color="green">All routes allowed</Tag>
-                      )}
-                    </div>
-                  </div>
+                  <StringListDisplay label="Allowed Routes" items={currentKeyData.allowed_routes} emptyText={<Tag color="green">All routes allowed</Tag>} />
 
-                  <div>
-                    <Text className="font-medium">Allowed Pass Through Routes</Text>
-                    <Text>
-                      {Array.isArray(currentKeyData.metadata?.allowed_passthrough_routes) &&
-                      currentKeyData.metadata.allowed_passthrough_routes.length > 0
-                        ? currentKeyData.metadata.allowed_passthrough_routes.map((route, index) => (
-                            <span key={index} className="px-2 mr-2 py-1 bg-blue-100 rounded-sm text-xs">
-                              {route}
-                            </span>
-                          ))
-                        : "No pass through routes specified"}
-                    </Text>
-                  </div>
+                  <StringListDisplay label="Allowed Pass Through Routes" items={currentKeyData.metadata?.allowed_passthrough_routes} emptyText="No pass through routes specified" />
 
                   <div>
                     <Text className="font-medium">Disable Global Guardrails</Text>
@@ -898,20 +852,7 @@ export default function KeyInfoView({
                     </Text>
                   </div>
 
-                  <div>
-                    <Text className="font-medium">Models</Text>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {currentKeyData.models && currentKeyData.models.length > 0 ? (
-                        currentKeyData.models.map((model, index) => (
-                          <span key={index} className="px-2 py-1 bg-blue-100 rounded-sm text-xs">
-                            {model}
-                          </span>
-                        ))
-                      ) : (
-                        <Text>No models specified</Text>
-                      )}
-                    </div>
-                  </div>
+                  <StringListDisplay label="Models" items={currentKeyData.models} emptyText="No models specified" />
 
                   <div>
                     <Text className="font-medium">Rate Limits</Text>
