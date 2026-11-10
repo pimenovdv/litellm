@@ -19,15 +19,14 @@ interface ProviderParam {
 interface GuardrailOptionalParamsProps {
   optionalParams: ProviderParam;
   parentFieldKey: string;
-  values?: Record<string, any>;
+  values?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 interface DictFieldProps {
   field: ProviderParam;
   fieldKey: string;
   fullFieldKey: string | string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value: any | null;
+  value: any | null; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 const DictField: React.FC<DictFieldProps> = ({ field, fieldKey, fullFieldKey, value }) => {
@@ -218,7 +217,7 @@ const GuardrailOptionalParams: React.FC<GuardrailOptionalParamsProps> = ({
       </div>
 
       <div className="space-y-8">
-        {Object.entries(optionalParams.fields).map(([fieldKey, field]) => renderField(fieldKey, field))}
+        {Object.entries(optionalParams.fields).map(([fieldKey, field]) => renderField(fieldKey, field as ProviderParam))}
       </div>
     </div>
   );

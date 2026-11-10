@@ -3,7 +3,6 @@
 - [x] Refactor redundant logic in `frontend/litellm-dashboard/src/components/templates/key_info_view.tsx`.
 - [x] Refactor redundant logic in `frontend/litellm-dashboard/src/components/templates/key_edit_view.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/UISettings/UISettings.tsx`.
-
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/common_components/fetch_teams.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/Modals/BaseSSOSettingsForm.test.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/SSOSettingsLoadingSkeleton.test.tsx`.
@@ -11,3 +10,10 @@
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/MCPSemanticFilterSettings/MCPSemanticFilterTestPanel.test.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/Modals/EditSSOSettingsModal.test.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/LoggingSettings/LoggingSettings.test.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/GuardrailTestPlayground.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/custom_code/CustomCodeModal.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/guardrail_info.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/guardrail_info_helpers.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/guardrail_optional_params.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/guardrail_provider_fields.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/accessGroups/useAccessGroups.test.ts`.

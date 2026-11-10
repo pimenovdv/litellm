@@ -13,7 +13,7 @@ interface GuardrailProviderFieldsProps {
   selectedProvider: string | null;
   accessToken?: string | null;
   providerParams?: ProviderParamsResponse | null;
-  value?: Record<string, any> | null;
+  value?: Record<string, any> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 interface ProviderParam {

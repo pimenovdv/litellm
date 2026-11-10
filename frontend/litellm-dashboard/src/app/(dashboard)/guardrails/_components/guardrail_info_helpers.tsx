@@ -37,7 +37,7 @@ export enum GuardrailProviders {
 export let DynamicGuardrailProviders: Record<string, string> = {};
 
 // Function to populate dynamic providers from API response
-export const populateGuardrailProviders = (providerParamsResponse: Record<string, any>) => {
+export const populateGuardrailProviders = (providerParamsResponse: Record<string, any>) => { // eslint-disable-line @typescript-eslint/no-explicit-any
   const providers: Record<string, string> = {};
 
   // Legacy hardcoded providers for backward compatibility
@@ -86,7 +86,7 @@ export const guardrail_provider_map: Record<string, string> = {
 };
 
 // Function to populate provider map from API response - updates the original map
-export const populateGuardrailProviderMap = (providerParamsResponse: Record<string, any>) => {
+export const populateGuardrailProviderMap = (providerParamsResponse: Record<string, any>) => { // eslint-disable-line @typescript-eslint/no-explicit-any
   // Add dynamic providers from API response directly to the main map
   Object.entries(providerParamsResponse).forEach(([key, value]) => {
     if (value && typeof value === "object" && "ui_friendly_name" in value) {
