@@ -17,3 +17,4 @@
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/guardrail_optional_params.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/guardrail_provider_fields.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/accessGroups/useAccessGroups.test.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/agents/useAgents.test.ts`.

@@ -90,7 +90,7 @@ describe("useAgents", () => {
 
   it("should return agents data when query is successful", async () => {
     // Mock successful API call
-    (getAgentsList as any).mockResolvedValue(mockAgentsResponse);
+    (getAgentsList as unknown as import("vitest").Mock).mockResolvedValue(mockAgentsResponse);
 
     const { result } = renderHook(() => useAgents(), { wrapper });
 
@@ -115,7 +115,7 @@ describe("useAgents", () => {
     const testError = new Error(errorMessage);
 
     // Mock failed API call
-    (getAgentsList as any).mockRejectedValue(testError);
+    (getAgentsList as unknown as import("vitest").Mock).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useAgents(), { wrapper });
 
@@ -256,7 +256,7 @@ describe("useAgents", () => {
 
   it("should execute query when accessToken is present and userRole is Admin", async () => {
     // Mock successful API call
-    (getAgentsList as any).mockResolvedValue(mockAgentsResponse);
+    (getAgentsList as unknown as import("vitest").Mock).mockResolvedValue(mockAgentsResponse);
 
     // Ensure auth values are set (already done in beforeEach)
     const { result } = renderHook(() => useAgents(), { wrapper });
@@ -272,7 +272,7 @@ describe("useAgents", () => {
 
   it("should execute query when accessToken is present and userRole is proxy_admin", async () => {
     // Mock successful API call
-    (getAgentsList as any).mockResolvedValue(mockAgentsResponse);
+    (getAgentsList as unknown as import("vitest").Mock).mockResolvedValue(mockAgentsResponse);
 
     // Mock proxy_admin role
     mockUseAuthorized.mockReturnValue({
@@ -299,7 +299,7 @@ describe("useAgents", () => {
 
   it("should return empty agents array when API returns empty data", async () => {
     // Mock API returning empty agents array
-    (getAgentsList as any).mockResolvedValue({ agents: [] });
+    (getAgentsList as unknown as import("vitest").Mock).mockResolvedValue({ agents: [] });
 
     const { result } = renderHook(() => useAgents(), { wrapper });
 
@@ -317,7 +317,7 @@ describe("useAgents", () => {
     const timeoutError = new Error("Network timeout");
 
     // Mock network timeout
-    (getAgentsList as any).mockRejectedValue(timeoutError);
+    (getAgentsList as unknown as import("vitest").Mock).mockRejectedValue(timeoutError);
 
     const { result } = renderHook(() => useAgents(), { wrapper });
 
