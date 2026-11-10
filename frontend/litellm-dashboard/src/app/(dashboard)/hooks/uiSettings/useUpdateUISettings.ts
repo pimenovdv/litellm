@@ -8,7 +8,7 @@ export const useUpdateUISettings = (accessToken: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (settings: Record<string, any>) => {
+    mutationFn: async (settings: Record<string, unknown>) => {
       if (!accessToken) {
         throw new Error("Access token is required");
       }

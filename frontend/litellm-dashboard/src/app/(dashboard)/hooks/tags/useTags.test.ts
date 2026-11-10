@@ -92,7 +92,7 @@ describe("useTags", () => {
 
   it("should return tags data when query is successful", async () => {
     // Mock successful API call
-    (tagListCall as any).mockResolvedValue(mockTags);
+    (tagListCall as unknown as import("vitest").Mock).mockResolvedValue(mockTags);
 
     const { result } = renderHook(() => useTags(), { wrapper });
 
@@ -117,7 +117,7 @@ describe("useTags", () => {
     const testError = new Error(errorMessage);
 
     // Mock failed API call
-    (tagListCall as any).mockRejectedValue(testError);
+    (tagListCall as unknown as import("vitest").Mock).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useTags(), { wrapper });
 
@@ -234,7 +234,7 @@ describe("useTags", () => {
 
   it("should execute query when all auth values are present", async () => {
     // Mock successful API call
-    (tagListCall as any).mockResolvedValue(mockTags);
+    (tagListCall as unknown as import("vitest").Mock).mockResolvedValue(mockTags);
 
     // Ensure all auth values are present (already set in beforeEach)
     const { result } = renderHook(() => useTags(), { wrapper });
@@ -250,7 +250,7 @@ describe("useTags", () => {
 
   it("should return empty object when API returns empty data", async () => {
     // Mock API returning empty object
-    (tagListCall as any).mockResolvedValue({});
+    (tagListCall as unknown as import("vitest").Mock).mockResolvedValue({});
 
     const { result } = renderHook(() => useTags(), { wrapper });
 
@@ -268,7 +268,7 @@ describe("useTags", () => {
     const timeoutError = new Error("Network timeout");
 
     // Mock network timeout
-    (tagListCall as any).mockRejectedValue(timeoutError);
+    (tagListCall as unknown as import("vitest").Mock).mockRejectedValue(timeoutError);
 
     const { result } = renderHook(() => useTags(), { wrapper });
 

@@ -18,3 +18,10 @@
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/guardrails/_components/guardrail_provider_fields.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/accessGroups/useAccessGroups.test.ts`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/agents/useAgents.test.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/tags/useTags.test.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/teams/useTeams.test.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/uiConfig/useUIConfig.test.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/uiSettings/useUISettings.test.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/uiSettings/useUpdateUISettings.test.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/users/useCurrentUser.test.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/users/useUsers.test.ts`.
