@@ -16,7 +16,7 @@ interface RateLimitTypeFormItemProps {
   /** Initial value for the field */
   initialValue?: string | null;
   /** Form instance for setting field values */
-  form?: any;
+  form?: import("antd").FormInstance;
   /** Custom onChange handler */
   onChange?: (value: string) => void;
 }

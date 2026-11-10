@@ -6,7 +6,7 @@ import { TextInput } from "@tremor/react";
 const { Option } = Select;
 
 interface KeyLifecycleSettingsProps {
-  form: any; // Form instance from parent
+  form: import("antd").FormInstance; // Form instance from parent
   autoRotationEnabled: boolean;
   onAutoRotationChange: (enabled: boolean) => void;
   rotationInterval: string;

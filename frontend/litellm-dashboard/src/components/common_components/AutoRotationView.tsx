@@ -55,7 +55,7 @@ const AutoRotationView: React.FC<AutoRotationViewProps> = ({
         </div>
       </div>
 
-      {/* Rotation History - Show if there's any rotation data OR if auto-rotation is enabled */}
+      {/* Rotation History - Show if there is rotation data OR if auto-rotation is enabled */}
       {(autoRotate || lastRotationAt || keyRotationAt || nextRotationAt) && (
         <div className="space-y-3">
           {/* Last Rotation - Show when available */}

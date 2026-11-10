@@ -17,11 +17,11 @@ export interface RouterSettingsAccordionValue {
     timeout?: number | null;
     retry_after?: number | null;
     fallbacks?: Fallbacks | null;
-    context_window_fallbacks?: any | null;
-    retry_policy?: any | null;
-    model_group_alias?: { [key: string]: any } | null;
+    context_window_fallbacks?: unknown[] | null;
+    retry_policy?: unknown | null;
+    model_group_alias?: { [key: string]: string } | null;
     enable_tag_filtering?: boolean;
-    routing_strategy_args?: { [key: string]: any } | null;
+    routing_strategy_args?: { [key: string]: unknown } | null;
   };
 }
 
@@ -29,7 +29,7 @@ interface RouterSettingsAccordionProps {
   accessToken: string;
   value?: RouterSettingsAccordionValue;
   onChange?: (value: RouterSettingsAccordionValue) => void;
-  modelData?: any;
+  modelData?: Record<string, unknown>;
 }
 
 export interface RouterSettingsAccordionRef {
@@ -49,7 +49,7 @@ const RouterSettingsAccordion = forwardRef<RouterSettingsAccordionRef, RouterSet
     const [fallbackGroups, setFallbackGroups] = useState<FallbackGroup[]>([]);
     const [modelInfo, setModelInfo] = useState<ModelGroup[]>([]);
     const [availableRoutingStrategies, setAvailableRoutingStrategies] = useState<string[]>([]);
-    const [routerFieldsMetadata, setRouterFieldsMetadata] = useState<{ [key: string]: any }>({});
+    const [routerFieldsMetadata, setRouterFieldsMetadata] = useState<{ [key: string]: Record<string, unknown> }>({});
     const [routingStrategyDescriptions, setRoutingStrategyDescriptions] = useState<{ [key: string]: string }>({});
     const isInternalUpdateRef = useRef(false);
     const lastInitializedValueRef = useRef<string | null>(null);
@@ -117,7 +117,7 @@ const RouterSettingsAccordion = forwardRef<RouterSettingsAccordionRef, RouterSet
         const rs = value.router_settings;
         const { fallbacks: _, ...routerSettingsWithoutFallbacks } = rs;
         setFormValue({
-          routerSettings: routerSettingsWithoutFallbacks as { [key: string]: any },
+          routerSettings: routerSettingsWithoutFallbacks as { [key: string]: unknown },
           selectedStrategy: rs.routing_strategy || null,
           enableTagFiltering: rs.enable_tag_filtering ?? false,
         });
@@ -147,11 +147,12 @@ const RouterSettingsAccordion = forwardRef<RouterSettingsAccordionRef, RouterSet
       if (!accessToken) {
         return;
       }
-      getRouterSettingsCall(accessToken).then((data) => {
-        if (data.fields) {
+      getRouterSettingsCall(accessToken).then((responseData: unknown) => {
+        const data = responseData as { fields?: { field_name: string; ui_field_name?: string; field_description?: string; link?: string; options?: string[] }[], routing_strategy_descriptions?: { [key: string]: string } };
+        if (data && data.fields && Array.isArray(data.fields)) {
           // Build metadata map for easy lookup
-          const fieldsMap: { [key: string]: any } = {};
-          data.fields.forEach((field: any) => {
+          const fieldsMap: { [key: string]: Record<string, unknown> } = {};
+          data.fields?.forEach((field) => {
             fieldsMap[field.field_name] = {
               ui_field_name: field.ui_field_name,
               field_description: field.field_description,
@@ -162,7 +163,7 @@ const RouterSettingsAccordion = forwardRef<RouterSettingsAccordionRef, RouterSet
           setRouterFieldsMetadata(fieldsMap);
 
           // Extract routing strategies from the routing_strategy field's options
-          const routingStrategyField = data.fields.find((field: any) => field.field_name === "routing_strategy");
+          const routingStrategyField = data.fields?.find((field) => field.field_name === "routing_strategy");
           if (routingStrategyField?.options) {
             setAvailableRoutingStrategies(routingStrategyField.options);
           }
@@ -226,7 +227,7 @@ const RouterSettingsAccordion = forwardRef<RouterSettingsAccordionRef, RouterSet
 
       // Build router_settings object
       const routerSettings = formValue.routerSettings;
-      const settingsToUpdate: { [key: string]: any } = {
+      const settingsToUpdate: { [key: string]: unknown } = {
         ...routerSettings,
         enable_tag_filtering: formValue.enableTagFiltering,
         routing_strategy: formValue.selectedStrategy,
@@ -265,7 +266,7 @@ const RouterSettingsAccordion = forwardRef<RouterSettingsAccordionRef, RouterSet
               ) as HTMLInputElement;
               const ttlElement = document.querySelector(`input[name="ttl"]`) as HTMLInputElement;
 
-              const routingStrategyArgs: { [key: string]: any } = {};
+              const routingStrategyArgs: { [key: string]: unknown } = {};
               if (lowestLatencyBufferElement?.value) {
                 routingStrategyArgs["lowest_latency_buffer"] = Number(lowestLatencyBufferElement.value);
               }
@@ -284,7 +285,7 @@ const RouterSettingsAccordion = forwardRef<RouterSettingsAccordionRef, RouterSet
 
       // Ensure all required fields are present with null defaults if not set
       // Convert empty objects/undefined to null for proper type safety
-      const normalizeValue = (val: any, isNumber = false): any => {
+      const normalizeValue = (val: unknown, isNumber = false): unknown => {
         if (val === undefined || val === null) return null;
         if (typeof val === "object" && !Array.isArray(val) && Object.keys(val).length === 0) return null;
         if (isNumber && (typeof val !== "number" || Number.isNaN(val))) return null;
@@ -299,11 +300,11 @@ const RouterSettingsAccordion = forwardRef<RouterSettingsAccordionRef, RouterSet
         timeout: normalizeValue(updatedVariables.timeout, true) as number | null | undefined,
         retry_after: normalizeValue(updatedVariables.retry_after, true) as number | null | undefined,
         fallbacks: fallbacks.length > 0 ? fallbacks : null,
-        context_window_fallbacks: normalizeValue(updatedVariables.context_window_fallbacks),
+        context_window_fallbacks: normalizeValue(updatedVariables.context_window_fallbacks) as unknown[] | null,
         retry_policy: normalizeValue(updatedVariables.retry_policy),
-        model_group_alias: normalizeValue(updatedVariables.model_group_alias),
+        model_group_alias: normalizeValue(updatedVariables.model_group_alias) as { [key: string]: string } | null,
         enable_tag_filtering: formValue.enableTagFiltering,
-        routing_strategy_args: normalizeValue(updatedVariables.routing_strategy_args),
+        routing_strategy_args: normalizeValue(updatedVariables.routing_strategy_args) as { [key: string]: unknown } | null,
       };
     };
 

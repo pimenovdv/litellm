@@ -3,8 +3,8 @@ import { Text } from "@tremor/react";
 import LoggingSettings from "../team/LoggingSettings";
 
 interface PremiumLoggingSettingsProps {
-  value: any[];
-  onChange: (settings: any[]) => void;
+  value: Record<string, unknown>[];
+  onChange: (settings: Record<string, unknown>[]) => void;
   premiumUser?: boolean;
   disabledCallbacks?: string[];
   onDisabledCallbacksChange?: (disabledCallbacks: string[]) => void;
