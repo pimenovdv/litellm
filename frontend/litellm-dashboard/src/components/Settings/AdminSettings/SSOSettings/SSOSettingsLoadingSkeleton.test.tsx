@@ -1,31 +1,28 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import SSOSettingsLoadingSkeleton from "./SSOSettingsLoadingSkeleton";
 
 // Mock lucide-react icons
 vi.mock("lucide-react", () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Shield: ({  className   }: any) => <div data-testid="shield-icon" className={className} />,
+  Shield: ({ className }: { className?: string }) => <div data-testid="shield-icon" className={className} />,
 }));
 
 // Mock Ant Design components
 vi.mock("antd", () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Card: ({  children, ...props   }: any) => (
+  Card: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => (
     <div data-testid="card" {...props}>
       {children}
     </div>
   ),
   Descriptions: Object.assign(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ({  children, bordered, column, ...props  }: any) => (
+    ({ children, bordered, column, ...props }: { children?: React.ReactNode; bordered?: boolean; column?: unknown; [key: string]: unknown }) => (
       <div data-testid="descriptions" data-bordered={bordered} data-column={JSON.stringify(column)} {...props}>
         {children}
       </div>
     ),
     {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Item: ({   children, label, ...props   }: any) => (
+      Item: ({ children, label, ...props }: { children?: React.ReactNode; label?: string; [key: string]: unknown }) => (
         <div data-testid="descriptions-item" {...props}>
           <div data-testid="descriptions-item-label">{label}</div>
           <div data-testid="descriptions-item-content">{children}</div>
@@ -34,28 +31,24 @@ vi.mock("antd", () => ({
     },
   ),
   Typography: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Title: ({   children, level, ...props   }: any) => (
+    Title: ({ children, level, ...props }: { children?: React.ReactNode; level?: number; [key: string]: unknown }) => (
       <div data-testid="typography-title" data-level={level} {...props}>
         {children}
       </div>
     ),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Text: ({   children, type, ...props   }: any) => (
+    Text: ({ children, type, ...props }: { children?: React.ReactNode; type?: string; [key: string]: unknown }) => (
       <div data-testid="typography-text" data-type={type} {...props}>
         {children}
       </div>
     ),
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Space: ({   children, direction, size, className, ...props   }: any) => (
+  Space: ({ children, direction, size, className, ...props }: { children?: React.ReactNode; direction?: string; size?: string; className?: string; [key: string]: unknown }) => (
     <div data-testid="space" data-direction={direction} data-size={size} className={className} {...props}>
       {children}
     </div>
   ),
   Skeleton: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Button: ({   active, size, style, ...props   }: any) => (
+    Button: ({ active, size, style, ...props }: { active?: boolean; size?: string; style?: React.CSSProperties; [key: string]: unknown }) => (
       <div
         data-testid="skeleton-button"
         data-active={active}
@@ -66,8 +59,7 @@ vi.mock("antd", () => ({
         Button Skeleton
       </div>
     ),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Node: ({   active, style, ...props   }: any) => (
+    Node: ({ active, style, ...props }: { active?: boolean; style?: React.CSSProperties; [key: string]: unknown }) => (
       <div data-testid="skeleton-node" data-active={active} data-style={JSON.stringify(style)} {...props}>
         Node Skeleton
       </div>
