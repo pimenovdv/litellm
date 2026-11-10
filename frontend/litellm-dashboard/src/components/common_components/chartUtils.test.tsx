@@ -288,7 +288,7 @@ describe("CustomTooltip", () => {
     ];
     const props: CustomTooltipProps = {
       active: true,
-      payload: payloadWithoutDataKey as any,
+      payload: payloadWithoutDataKey as unknown as Payload<ValueType, NameType>,
       label: "2024-01-15",
     };
     render(<CustomTooltip {...props} />);
@@ -306,7 +306,7 @@ describe("CustomTooltip", () => {
     ];
     const props: CustomTooltipProps = {
       active: true,
-      payload: payloadWithoutPayload as any,
+      payload: payloadWithoutPayload as unknown as Payload<ValueType, NameType>,
       label: "2024-01-15",
     };
     render(<CustomTooltip {...props} />);

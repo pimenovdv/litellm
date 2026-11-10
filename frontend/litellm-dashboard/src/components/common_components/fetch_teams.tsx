@@ -5,7 +5,7 @@ export const fetchTeams = async (
   userID: string | null,
   userRole: string | null,
   currentOrg: Organization | null,
-  setTeams: (teams: any[]) => void,
+  setTeams: (teams: Record<string, unknown>[]) => void,
 ) => {
   let givenTeams;
   if (userRole != "Admin" && userRole != "Admin Viewer") {

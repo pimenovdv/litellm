@@ -25,13 +25,13 @@ interface OpenAPISchema {
 interface SchemaFormFieldsProps {
   schemaComponent: string;
   excludedFields?: string[];
-  form: any;
+  form: import("antd").FormInstance;
   overrideLabels?: { [key: string]: string };
   overrideTooltips?: { [key: string]: string };
   customValidation?: {
-    [key: string]: (rule: any, value: any) => Promise<void>;
+    [key: string]: (rule: unknown, value: unknown) => Promise<void>;
   };
-  defaultValues?: { [key: string]: any };
+  defaultValues?: { [key: string]: unknown };
 }
 
 // Define which fields should be parsed as JSON
@@ -120,7 +120,7 @@ const SchemaFormFields: React.FC<SchemaFormFieldsProps> = ({
 
         setSchemaProperties(componentSchema);
 
-        const defaultFormValues: { [key: string]: any } = {};
+        const defaultFormValues: { [key: string]: unknown } = {};
         Object.keys(componentSchema.properties)
           .filter((key) => !excludedFields.includes(key) && defaultValues[key] !== undefined)
           .forEach((key) => {
@@ -165,7 +165,7 @@ const SchemaFormFields: React.FC<SchemaFormFieldsProps> = ({
     }
     if (isJSONField(key, property)) {
       rules.push({
-        validator: async (_: any, value: string) => {
+        validator: async (_: unknown, value: string) => {
           if (value && !validateJSON(value)) {
             throw new Error("Please enter valid JSON");
           }

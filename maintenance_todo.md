@@ -1,25 +1,7 @@
-- [x] Optimize import times in `Backend/litellm/__init__.py` and `Backend/litellm/utils.py` by deferring lazy imports.
-- [x] Reduce redundant Prisma queries in proxy authentication middleware `Backend/litellm/proxy/auth/`.
-- [x] Add rigorous generic type definitions in `Backend/litellm/types/` for all Pydantic models.
-- [x] Refactor redundant logic in `Backend/litellm/router.py` handling fallback execution loops.
-- [x] Standardize logging formatting across `Backend/litellm/_logging.py` and `Backend/litellm/_service_logger.py`.
-- [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/openai.py`.
-- [x] Clean up redundant helper scripts from `Backend/litellm/scripts/` if they are fully superseded by CLI.
-- [x] Remove unused mock test fixtures in `tests/` that are not referenced in the refactored test suite.
-- [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/anthropic.py`.
-- [x] Add explicit `typing.Dict` and `typing.List` generic types to replace untyped collections in `Backend/litellm/types/llms/bedrock.py`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit Error type in `frontend/litellm-dashboard/src/hooks/policies/useDeletePolicyAttachment.ts`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/hooks/useMcpOAuthFlow.test.tsx`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/hooks/useMcpOAuthFlow.tsx`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/hooks/useToolsOAuthFlow.test.tsx`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/tests/CreateKeyPage.expiredToken.test.tsx`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/tests/setupTests.ts`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/components/view_logs/columns.tsx` and `frontend/litellm-dashboard/src/contexts/AuthContext.tsx`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/components/view_logs/LogDetailsDrawer/PrettyMessagesView.tsx`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/SSOSettings.tsx` and `frontend/litellm-dashboard/src/components/Settings/AdminSettings/SSOSettings/utils.ts`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type or eslint-disable in `frontend/litellm-dashboard/src/app/(dashboard)/agents/_components/agent_card_discovery.test.tsx` and `frontend/litellm-dashboard/src/app/(dashboard)/agents/_components/agent_config.ts`.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type or eslint-disable in `frontend/litellm-dashboard/src/app/(dashboard)/agents/_components/agent_card_discovery.tsx` and related files.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/budgets/_components` files.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/caching/_components` files.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/app/(dashboard)/cost-tracking/_components` files.
-- [x] Fix ESLint warnings by replacing `any` type with explicit type or unknown in `frontend/litellm-dashboard/src/components/Settings` and `frontend/litellm-dashboard/src/components/templates` files.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/common_components/RouterSettingsAccordion.tsx`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/common_components/check_openapi_schema.tsx`.
+- [ ] Refactor redundant logic in `frontend/litellm-dashboard/src/components/templates/key_info_view.tsx`.
+- [ ] Refactor redundant logic in `frontend/litellm-dashboard/src/components/templates/key_edit_view.tsx`.
+- [ ] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/Settings/AdminSettings/UISettings/UISettings.tsx`.
+
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/common_components/fetch_teams.tsx`.
