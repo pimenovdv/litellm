@@ -40,7 +40,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -54,7 +54,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -66,7 +66,7 @@ export default function UISettings() {
       onSuccess: () => {
         NotificationManager.success("Page visibility settings updated successfully");
       },
-      onError: (error) => {
+      onError: (error: unknown) => {
         NotificationManager.fromBackend(error);
       },
     });
@@ -79,7 +79,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -93,7 +93,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -108,7 +108,7 @@ export default function UISettings() {
           NotificationManager.success("UI settings updated successfully. Refreshing page...");
           setTimeout(() => window.location.reload(), 1000);
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -123,7 +123,7 @@ export default function UISettings() {
           NotificationManager.success("UI settings updated successfully. Refreshing page...");
           setTimeout(() => window.location.reload(), 1000);
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -137,7 +137,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -151,7 +151,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -165,7 +165,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -179,7 +179,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -193,7 +193,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -207,7 +207,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },
@@ -221,7 +221,7 @@ export default function UISettings() {
         onSuccess: () => {
           NotificationManager.success("UI settings updated successfully");
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           NotificationManager.fromBackend(error);
         },
       },

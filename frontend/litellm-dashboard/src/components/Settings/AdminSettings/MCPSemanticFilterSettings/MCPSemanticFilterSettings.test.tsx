@@ -60,14 +60,12 @@ describe("MCPSemanticFilterSettings", () => {
       isLoading: false,
       isError: false,
       error: null,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof vi.fn>);
     vi.mocked(useUpdateMCPSemanticFilterSettings).mockReturnValue({
       mutate: mockMutate,
       isPending: false,
       error: null,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof vi.fn>);
   });
 
   it("should render", async () => {
@@ -91,8 +89,7 @@ describe("MCPSemanticFilterSettings", () => {
       isLoading: true,
       isError: false,
       error: null,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof vi.fn>);
     await renderSettings({ accessToken: "test-token" });
     expect(screen.queryByText("Semantic Tool Filtering")).not.toBeInTheDocument();
   });
@@ -103,8 +100,7 @@ describe("MCPSemanticFilterSettings", () => {
       isLoading: false,
       isError: true,
       error: new Error("Network error"),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof vi.fn>);
     await renderSettings({ accessToken: "test-token" });
     expect(screen.getByText("Could not load MCP Semantic Filter settings")).toBeInTheDocument();
     expect(screen.getByText("Network error")).toBeInTheDocument();
@@ -116,8 +112,7 @@ describe("MCPSemanticFilterSettings", () => {
       isLoading: false,
       isError: true,
       error: new Error("Connection refused"),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof vi.fn>);
     await renderSettings({ accessToken: "test-token" });
     expect(screen.getByText("Connection refused")).toBeInTheDocument();
   });
@@ -156,8 +151,7 @@ describe("MCPSemanticFilterSettings", () => {
       mutate: mockMutate,
       isPending: false,
       error: new Error("Failed to update settings"),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown as ReturnType<typeof vi.fn>);
     await renderSettings({ accessToken: "test-token" });
     expect(screen.getByText("Could not update settings")).toBeInTheDocument();
     expect(screen.getByText("Failed to update settings")).toBeInTheDocument();

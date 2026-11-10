@@ -311,7 +311,7 @@ describe("renderProviderFields", () => {
     // to the provider default. Dropping the field from ssoProviderConfigs must
     // fail here rather than silently in production.
     const handleSubmit = vi.fn();
-    let form: unknown;
+    let form: import('antd').FormInstance;
     const TestWrapper = () => {
       const [formInstance] = Form.useForm();
       form = formInstance;
