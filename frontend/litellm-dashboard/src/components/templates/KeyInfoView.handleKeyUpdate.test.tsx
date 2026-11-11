@@ -20,10 +20,8 @@ vi.mock("@/app/(dashboard)/hooks/useAuthorized", () => ({
 // Networking: wire the hoisted fns so we can assert calls later
 vi.mock("../networking", () => {
   return {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    keyUpdateCall: (...args: any[]) => keyUpdateCallMock(...args),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    keyDeleteCall: (...args: any[]) => keyDeleteCallMock(...args),
+    keyUpdateCall: (...args: unknown[]) => keyUpdateCallMock(...args),
+    keyDeleteCall: (...args: unknown[]) => keyDeleteCallMock(...args),
   };
 });
 
@@ -69,16 +67,13 @@ vi.mock("../shared/errorUtils", () => ({
 vi.mock("@tremor/react", async () => {
   const React = await import("react");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const makeNamedPassthrough = (tag: any, name: string) => {
+  const makeNamedPassthrough = (tag: string, name: string) => {
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function Named(props: any) {
+    function Named(props: { children?: import('react').ReactNode; [key: string]: unknown }) {
       const { children, ...rest } = props;
       return React.createElement(tag, rest, children);
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (Named as any).displayName = name;
+    Named.displayName = name;
     return Named;
   };
 
@@ -94,38 +89,30 @@ vi.mock("@tremor/react", async () => {
   const Badge = makeNamedPassthrough("span", "Badge");
 
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function Button(props: any) {
+  function Button(props: { children?: import('react').ReactNode; onClick?: () => void; [key: string]: unknown }) {
     const { children, onClick, ...rest } = props;
     return React.createElement("button", { onClick, ...rest }, children);
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (Button as any).displayName = "Button";
+  Button.displayName = "Button";
 
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function Tab(props: any) {
+  function Tab(props: { children?: import('react').ReactNode; [key: string]: unknown }) {
     const { children, ...rest } = props;
     return React.createElement("button", { ...rest }, children);
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (Tab as any).displayName = "Tab";
+  Tab.displayName = "Tab";
 
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function TextInput(props: any) {
+  function TextInput(props: { [key: string]: unknown }) {
     return React.createElement("input", { ...props });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (TextInput as any).displayName = "TextInput";
+  TextInput.displayName = "TextInput";
 
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function TremorSelect(props: any) {
+  function TremorSelect(props: { children?: import('react').ReactNode; value?: string; onValueChange?: (val: string) => void; [key: string]: unknown }) {
     return React.createElement("select", { ...props });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (TremorSelect as any).displayName = "TremorSelect";
+  TremorSelect.displayName = "TremorSelect";
 
   return {
     Card,
@@ -154,42 +141,32 @@ vi.mock("antd", async (importOriginal) => {
   const Form = { useForm: () => [{}] };
 
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function Input(props: any) {
+  function Input(props: { [key: string]: unknown }) {
     return React.createElement("input", { ...props });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (Input as any).displayName = "AntdInput";
+  Input.displayName = "AntdInput";
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function InputNumber(props: any) {
+  function InputNumber(props: { [key: string]: unknown }) {
     return React.createElement("input", { ...props });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (InputNumber as any).displayName = "AntdInputNumber";
+  InputNumber.displayName = "AntdInputNumber";
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function Select(props: any) {
+  function Select(props: { children?: import('react').ReactNode; [key: string]: unknown }) {
     return React.createElement("select", { ...props });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (Select as any).displayName = "AntdSelect";
+  Select.displayName = "AntdSelect";
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function Tooltip({  children  }: any) {
+  function Tooltip({ children }: { children?: import('react').ReactNode; [key: string]: unknown }) {
     return React.createElement(React.Fragment, null, children);
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (Tooltip as any).displayName = "AntdTooltip";
+  Tooltip.displayName = "AntdTooltip";
 
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function Button(props: any) {
+  function Button(props: { children?: import('react').ReactNode; onClick?: () => void; [key: string]: unknown }) {
     const { children, onClick, ...rest } = props;
     return React.createElement("button", { onClick, ...rest }, children);
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (Button as any).displayName = "AntdButton";
+  Button.displayName = "AntdButton";
 
   return { ...actual, Form, Input, InputNumber, Select, Tooltip, Button };
 });
@@ -200,18 +177,15 @@ vi.mock("@heroicons/react/outline", async () => {
   function ArrowLeftIcon() {
     return React.createElement("span");
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ArrowLeftIcon as any).displayName = "ArrowLeftIcon";
+  ArrowLeftIcon.displayName = "ArrowLeftIcon";
   function TrashIcon() {
     return React.createElement("span");
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (TrashIcon as any).displayName = "TrashIcon";
+  TrashIcon.displayName = "TrashIcon";
   function RefreshIcon() {
     return React.createElement("span");
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (RefreshIcon as any).displayName = "RefreshIcon";
+  RefreshIcon.displayName = "RefreshIcon";
   return { ArrowLeftIcon, TrashIcon, RefreshIcon };
 });
 
@@ -220,13 +194,11 @@ vi.mock("lucide-react", async () => {
   function CopyIcon() {
     return React.createElement("span");
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (CopyIcon as any).displayName = "CopyIcon";
+  CopyIcon.displayName = "CopyIcon";
   function CheckIcon() {
     return React.createElement("span");
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (CheckIcon as any).displayName = "CheckIcon";
+  CheckIcon.displayName = "CheckIcon";
   return { CopyIcon, CheckIcon };
 });
 
@@ -236,8 +208,7 @@ vi.mock("../organisms/RegenerateKeyModal", async () => {
   function RegenerateKeyModal() {
     return null;
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (RegenerateKeyModal as any).displayName = "RegenerateKeyModal";
+  RegenerateKeyModal.displayName = "RegenerateKeyModal";
   return { RegenerateKeyModal };
 });
 vi.mock("../object_permissions_view", async () => {
@@ -245,8 +216,7 @@ vi.mock("../object_permissions_view", async () => {
   function ObjectPermissionsView() {
     return null;
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ObjectPermissionsView as any).displayName = "ObjectPermissionsView";
+  ObjectPermissionsView.displayName = "ObjectPermissionsView";
   return { __esModule: true, default: ObjectPermissionsView };
 });
 vi.mock("../logging_settings_view", async () => {
@@ -254,8 +224,7 @@ vi.mock("../logging_settings_view", async () => {
   function LoggingSettingsView() {
     return null;
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (LoggingSettingsView as any).displayName = "LoggingSettingsView";
+  LoggingSettingsView.displayName = "LoggingSettingsView";
   return { __esModule: true, default: LoggingSettingsView };
 });
 vi.mock("../common_components/AutoRotationView", async () => {
@@ -263,8 +232,7 @@ vi.mock("../common_components/AutoRotationView", async () => {
   function AutoRotationView() {
     return null;
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (AutoRotationView as any).displayName = "AutoRotationView";
+  AutoRotationView.displayName = "AutoRotationView";
   return { __esModule: true, default: AutoRotationView };
 });
 
@@ -325,23 +293,20 @@ vi.mock("@tanstack/react-query", async (importOriginal) => {
 // KeyEditView mock: triggers onSubmit with our injected form values
 vi.mock("./key_edit_view", async () => {
   const React = await import("react");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function KeyEditView(props: any) {
+  function KeyEditView(props: { onSubmit: (data: Record<string, unknown>) => void; [key: string]: unknown }) {
     return React.createElement(
       "div",
       null,
       React.createElement(
         "button",
         {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onClick: () => props.onSubmit((globalThis as any).__TEST_FORM_VALUES ?? {}),
+          onClick: () => props.onSubmit(((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES ?? {}),
         },
         "Mock Submit",
       ),
     );
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (KeyEditView as any).displayName = "KeyEditViewMock";
+  KeyEditView.displayName = "KeyEditViewMock";
   return { KeyEditView };
 });
 
@@ -396,8 +361,7 @@ const renderView = (premiumUser: boolean) => {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (globalThis as any).__TEST_FORM_VALUES = undefined;
+  ((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES = undefined;
 });
 
 // ---- Tests ----
@@ -427,8 +391,7 @@ describe("KeyInfoView handleKeyUpdate guardrails guard", () => {
 
     fireEvent.click(screen.getByText("Settings"));
     fireEvent.click(screen.getByText("Edit Settings"));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).__TEST_FORM_VALUES = {
+    ((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES = {
       token: "tok_123",
       guardrails: ["gr-1", "gr-2"],
       prompts: ["fast", "safe"],
@@ -453,8 +416,7 @@ describe("KeyInfoView handleKeyUpdate guardrails guard", () => {
 
     fireEvent.click(screen.getByText("Settings"));
     fireEvent.click(screen.getByText("Edit Settings"));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).__TEST_FORM_VALUES = {
+    ((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES = {
       token: "tok_123",
       guardrails: ["gr-1"],
       prompts: ["fast"],
@@ -478,8 +440,7 @@ describe("KeyInfoView handleKeyUpdate guardrails guard", () => {
 
     fireEvent.click(screen.getByText("Settings"));
     fireEvent.click(screen.getByText("Edit Settings"));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).__TEST_FORM_VALUES = {
+    ((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES = {
       token: "tok_123",
       guardrails: ["gr-1"],
       prompts: ["fast"],
@@ -505,8 +466,7 @@ describe("KeyInfoView handleKeyUpdate mcp_toolsets", () => {
 
     fireEvent.click(screen.getByText("Settings"));
     fireEvent.click(screen.getByText("Edit Settings"));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).__TEST_FORM_VALUES = {
+    ((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES = {
       token: "tok_123",
       max_budget: 40000,
       mcp_servers_and_groups: { servers: [], accessGroups: [], toolsets: ["ts-1"] },
@@ -528,8 +488,7 @@ describe("KeyInfoView handleKeyUpdate budget_duration", () => {
 
     fireEvent.click(screen.getByText("Settings"));
     fireEvent.click(screen.getByText("Edit Settings"));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).__TEST_FORM_VALUES = {
+    ((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES = {
       token: "tok_123",
       budget_duration: "30d",
     };
@@ -547,8 +506,7 @@ describe("KeyInfoView handleKeyUpdate budget_duration", () => {
 
     fireEvent.click(screen.getByText("Settings"));
     fireEvent.click(screen.getByText("Edit Settings"));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalThis as any).__TEST_FORM_VALUES = {
+    ((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES = {
       token: "tok_123",
       budget_duration: "monthly",
     };
@@ -569,8 +527,7 @@ describe("KeyInfoView handleKeyUpdate empty strings", () => {
 
       fireEvent.click(screen.getByText("Settings"));
       fireEvent.click(screen.getByText("Edit Settings"));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (globalThis as any).__TEST_FORM_VALUES = {
+      ((globalThis as unknown) as { __TEST_FORM_VALUES?: Record<string, unknown> }).__TEST_FORM_VALUES = {
         token: "tok_123",
         [limit]: "",
       };

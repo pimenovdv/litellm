@@ -68,8 +68,8 @@ vi.mock("antd", async (importOriginal) => {
     children,
     className,
   }: {
-    value: any;
-    onChange: (value: any) => void;
+    value: unknown;
+    onChange: (value: unknown) => void;
     mode?: string;
     children: React.ReactNode;
     className?: string;

@@ -7,7 +7,7 @@ import VectorStoreSelector from "./VectorStoreSelector";
 const mockVectorStoreListCall = vi.fn();
 
 vi.mock("../networking", () => ({
-  vectorStoreListCall: (...args: any[]) => mockVectorStoreListCall(...args),
+  vectorStoreListCall: (...args: unknown[]) => mockVectorStoreListCall(...args),
 }));
 
 // Mock antd Select component
@@ -19,7 +19,7 @@ vi.mock("antd", () => ({
 import { Select as MockedSelect } from "antd";
 
 // Configure the mock to render a simple div with data attributes
-(MockedSelect as any).mockImplementation((props: any) => {
+(MockedSelect as import('vitest').Mock).mockImplementation((props: { onChange?: (val: string[]) => void; value?: string[]; placeholder?: string; loading?: boolean; className?: string; disabled?: boolean; options?: { value: string; label: string; title: string }[]; mode?: string; showSearch?: boolean; optionFilterProp?: string; style?: React.CSSProperties; [key: string]: unknown }) => {
   const {
     onChange,
     value,
@@ -47,7 +47,7 @@ import { Select as MockedSelect } from "antd";
       data-options={JSON.stringify(options)}
       className={className}
       style={style}
-      onClick={(e: any) => {
+      onClick={(e: React.MouseEvent<HTMLDivElement>) => {
         // For testing purposes, allow simulating different selection behaviors
         // The test can control this by setting data attributes on the element
         const testSelection = e.target.getAttribute("data-test-selection");
@@ -59,7 +59,7 @@ import { Select as MockedSelect } from "antd";
         }
       }}
     >
-      {options?.map((opt: any) => (
+      {options?.map((opt: { value: string; label: string; title: string }) => (
         <div
           key={opt.value}
           data-option-value={opt.value}
@@ -207,10 +207,10 @@ describe("VectorStoreSelector", () => {
       const { rerender } = render(<VectorStoreSelector {...defaultProps} accessToken="" />);
       expect(mockVectorStoreListCall).not.toHaveBeenCalled();
 
-      rerender(<VectorStoreSelector {...defaultProps} accessToken={null as any} />);
+      rerender(<VectorStoreSelector {...defaultProps} accessToken={null as unknown as string} />);
       expect(mockVectorStoreListCall).not.toHaveBeenCalled();
 
-      rerender(<VectorStoreSelector {...defaultProps} accessToken={undefined as any} />);
+      rerender(<VectorStoreSelector {...defaultProps} accessToken={undefined as unknown as string} />);
       expect(mockVectorStoreListCall).not.toHaveBeenCalled();
     });
 
@@ -228,7 +228,7 @@ describe("VectorStoreSelector", () => {
     });
 
     it("should set loading state while fetching", async () => {
-      let resolvePromise: (value: any) => void;
+      let resolvePromise: (value: unknown) => void;
       const promise = new Promise((resolve) => {
         resolvePromise = resolve;
       });

@@ -165,7 +165,7 @@ const keysResult = (keys: KeyResponse[], data: Partial<KeysResponse> = {}, extra
     isError: false,
     refetch: vi.fn(),
     ...extra,
-  }) as any;
+  }) as import('@tanstack/react-query').UseQueryResult<import('./VirtualKeysTable').KeyResponse, Error>;
 
 const openFilters = () => fireEvent.click(screen.getByRole("button", { name: "Filters" }));
 

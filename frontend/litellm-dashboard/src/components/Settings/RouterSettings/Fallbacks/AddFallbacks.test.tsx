@@ -20,11 +20,10 @@ vi.mock("antd", async (importOriginal) => {
 
 vi.mock("./FallbackSelectionForm", () => ({
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FallbackSelectionForm: ({ groups, onGroupsChange }: any) => {
+  FallbackSelectionForm: ({ groups, onGroupsChange }: { groups: { id: string; primaryModel?: string; fallbackModels?: string[] }[]; onGroupsChange: (groups: { id: string; primaryModel?: string; fallbackModels?: string[] }[]) => void }) => {
     const handleUpdateGroup = () => {
       if (groups.length > 0) {
-        const updatedGroups = groups.map((group: unknown, index: number) => {
+        const updatedGroups = groups.map((group: { id: string; primaryModel?: string; fallbackModels?: string[] }, index: number) => {
           if (index === 0 && !group.primaryModel) {
             return {
               ...group,

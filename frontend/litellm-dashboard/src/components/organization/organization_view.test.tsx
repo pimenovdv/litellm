@@ -102,7 +102,7 @@ beforeEach(() => {
 });
 
 test("renders organization view after loading data", async () => {
-  mockUseOrganization.mockReturnValue({ data: mockOrg, isLoading: false } as any);
+  mockUseOrganization.mockReturnValue({ data: mockOrg, isLoading: false } as unknown as ReturnType<typeof mockUseOrganization>);
 
   const { findAllByText } = renderWithProviders(
     <OrganizationInfoView
@@ -122,7 +122,7 @@ test("renders organization view after loading data", async () => {
 });
 
 test("should display empty state when organization has no members", async () => {
-  mockUseOrganization.mockReturnValue({ data: mockOrg, isLoading: false } as any);
+  mockUseOrganization.mockReturnValue({ data: mockOrg, isLoading: false } as unknown as ReturnType<typeof mockUseOrganization>);
 
   const user = userEvent.setup();
   renderWithProviders(
@@ -153,7 +153,7 @@ test("should display team aliases when teams are available", async () => {
     ...mockOrg,
     teams: [{ team_id: "team_123" }, { team_id: "team_456" }],
   };
-  mockUseOrganization.mockReturnValue({ data: orgWithTeams, isLoading: false } as any);
+  mockUseOrganization.mockReturnValue({ data: orgWithTeams, isLoading: false } as unknown as ReturnType<typeof mockUseOrganization>);
 
   renderWithProviders(
     <OrganizationInfoView
@@ -187,7 +187,7 @@ test("should display team ID as fallback when alias is not found", async () => {
     ...mockOrg,
     teams: [{ team_id: "team_999" }],
   };
-  mockUseOrganization.mockReturnValue({ data: orgWithUnknownTeam, isLoading: false } as any);
+  mockUseOrganization.mockReturnValue({ data: orgWithUnknownTeam, isLoading: false } as unknown as ReturnType<typeof mockUseOrganization>);
 
   renderWithProviders(
     <OrganizationInfoView
@@ -207,7 +207,7 @@ test("should display team ID as fallback when alias is not found", async () => {
 });
 
 test("should keep unsaved settings edits when switching tabs and back", async () => {
-  mockUseOrganization.mockReturnValue({ data: mockOrg, isLoading: false } as any);
+  mockUseOrganization.mockReturnValue({ data: mockOrg, isLoading: false } as unknown as ReturnType<typeof mockUseOrganization>);
 
   const user = userEvent.setup();
   renderWithProviders(

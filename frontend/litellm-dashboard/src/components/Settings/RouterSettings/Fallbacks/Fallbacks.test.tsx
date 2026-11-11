@@ -33,14 +33,13 @@ vi.mock("openai", () => ({
 
 vi.mock("../../../common_components/DeleteResourceModal", () => ({
   __esModule: true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default: ({ isOpen, onOk, onCancel, title, message, resourceInformation, confirmLoading }: any) => {
+  default: ({ isOpen, onOk, onCancel, title, message, resourceInformation, confirmLoading }: { isOpen: boolean; onOk: () => void; onCancel: () => void; title: string; message: string; resourceInformation?: { label: string; value: string }[]; confirmLoading?: boolean; }) => {
     if (!isOpen) return null;
     return (
       <div data-testid="delete-modal">
         <div>{title}</div>
         <div>{message}</div>
-        {resourceInformation?.map((info: unknown, idx: number) => (
+        {resourceInformation?.map((info: { label: string; value: string }, idx: number) => (
           <div key={idx}>
             {info.label}: {info.value}
           </div>
@@ -58,8 +57,7 @@ vi.mock("../../../common_components/DeleteResourceModal", () => ({
 
 vi.mock("./AddFallbacks", () => ({
   __esModule: true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default: ({ value, onChange }: any) => {
+  default: ({ value, onChange }: { value: Record<string, string[]>[] | null; onChange?: (newFallbacks: Record<string, string[]>[]) => Promise<void> }) => {
     const handleClick = async () => {
       if (onChange) {
         try {
@@ -218,8 +216,7 @@ describe("Fallbacks", () => {
 
     await waitFor(() => {
       expect(networkingModule.setCallbacksCall).toHaveBeenCalled();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const callArgs = (networkingModule.setCallbacksCall as any).mock.calls[0];
+      const callArgs = (networkingModule.setCallbacksCall as import('vitest').Mock).mock.calls[0];
       expect(callArgs[0]).toBe(mockAccessToken);
       expect(callArgs[1].router_settings.fallbacks).toHaveLength(1);
     });
