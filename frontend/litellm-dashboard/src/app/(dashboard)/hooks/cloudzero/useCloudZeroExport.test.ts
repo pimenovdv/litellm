@@ -63,7 +63,7 @@ describe("useCloudZeroExport", () => {
 
   it("should successfully export data with custom operation", async () => {
     const mockResponse = { records_exported: 100, status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -91,7 +91,7 @@ describe("useCloudZeroExport", () => {
 
   it("should use default operation of replace_hourly when operation is not provided", async () => {
     const mockResponse = { records_exported: 50, status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -105,13 +105,13 @@ describe("useCloudZeroExport", () => {
     });
 
     expect(result.current.data).toEqual(mockResponse);
-    const callBody = JSON.parse((fetchSpy as any).mock.calls[0][1].body);
+    const callBody = JSON.parse((fetchSpy as import("vitest").Mock).mock.calls[0][1].body);
     expect(callBody.operation).toBe("replace_hourly");
   });
 
   it("should handle error response with error.message", async () => {
     const errorResponse = { error: { message: "Export failed" } };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -129,7 +129,7 @@ describe("useCloudZeroExport", () => {
 
   it("should handle error response with message field", async () => {
     const errorResponse = { message: "Invalid operation" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -147,7 +147,7 @@ describe("useCloudZeroExport", () => {
 
   it("should handle error response with detail field", async () => {
     const errorResponse = { detail: "Server error occurred" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -164,7 +164,7 @@ describe("useCloudZeroExport", () => {
   });
 
   it("should handle error response with invalid JSON", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => {
         throw new Error("Invalid JSON");
@@ -184,7 +184,7 @@ describe("useCloudZeroExport", () => {
 
   it("should handle network error", async () => {
     const networkError = new Error("Network request failed");
-    (fetchSpy as any).mockRejectedValue(networkError);
+    (fetchSpy as import("vitest").Mock).mockRejectedValue(networkError);
 
     const { result } = renderHook(() => useCloudZeroExport(mockAccessToken), { wrapper });
 
@@ -201,7 +201,7 @@ describe("useCloudZeroExport", () => {
     ["empty string", ""],
     ["null", null],
   ])("should throw error when accessToken is %s", async (_, invalidToken) => {
-    const { result } = renderHook(() => useCloudZeroExport(invalidToken as any), { wrapper });
+    const { result } = renderHook(() => useCloudZeroExport(invalidToken as unknown as string), { wrapper });
 
     result.current.mutate({ operation: "replace_daily" });
 
@@ -216,7 +216,7 @@ describe("useCloudZeroExport", () => {
   it("should use relative URL when proxyBaseUrl is not set", async () => {
     mockGetProxyBaseUrl.mockReturnValue("");
     const mockResponse = { records_exported: 50 };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
