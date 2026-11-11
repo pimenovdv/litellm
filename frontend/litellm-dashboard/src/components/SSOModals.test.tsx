@@ -261,7 +261,7 @@ describe("SSOModals", () => {
       },
     };
 
-    (getSSOSettings as any).mockResolvedValue(mockSSOData);
+    vi.mocked(getSSOSettings).mockResolvedValue(mockSSOData);
 
     const TestWrapper = () => {
       const [form] = Form.useForm();
@@ -305,11 +305,11 @@ describe("SSOModals", () => {
 
   it("should submit form with role mappings enabled", async () => {
     const mockHandleShowInstructions = vi.fn();
-    (updateSSOSettings as any).mockResolvedValue({});
+    vi.mocked(updateSSOSettings).mockResolvedValue({});
     // Mock getSSOSettings to return empty data so form starts clean
-    (getSSOSettings as any).mockResolvedValue({ values: {} });
+    vi.mocked(getSSOSettings).mockResolvedValue({ values: {} });
 
-    let formInstance: any = null;
+    let formInstance: import('antd').FormInstance | null = null;
 
     const TestWrapper = () => {
       const [form] = Form.useForm();
@@ -484,8 +484,8 @@ describe("SSOModals", () => {
 
   it("should show Clear button and clear SSO settings when configured", async () => {
     const mockHandleAddSSOOk = vi.fn();
-    (updateSSOSettings as any).mockResolvedValue({});
-    (NotificationsManager.success as any).mockImplementation(() => {});
+    vi.mocked(updateSSOSettings).mockResolvedValue({});
+    vi.mocked(NotificationsManager.success).mockImplementation(() => {});
 
     const TestWrapper = () => {
       const [form] = Form.useForm();
