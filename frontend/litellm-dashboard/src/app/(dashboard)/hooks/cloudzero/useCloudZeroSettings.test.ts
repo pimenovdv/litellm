@@ -21,7 +21,7 @@ const {
   const mockCreateQueryKeys = vi.fn((resource: string) => ({
     all: [resource],
     lists: () => [resource, "list"],
-    list: (params?: any) => [resource, "list", { params }],
+    list: (params?: unknown) => [resource, "list", { params }],
     details: () => [resource, "detail"],
     detail: (uid: string) => [resource, "detail", uid],
   }));
@@ -82,7 +82,7 @@ describe("useCloudZeroSettings", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should return CloudZero settings data when query is successful", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockCloudZeroSettings,
     });
@@ -109,7 +109,7 @@ describe("useCloudZeroSettings", () => {
   });
 
   it("should return null when settings are not configured (missing both api_key_masked and connection_id)", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => ({}),
     });
@@ -126,7 +126,7 @@ describe("useCloudZeroSettings", () => {
 
   it("should return settings when at least one required field is present", async () => {
     const settingsWithConnectionId = { connection_id: "test-connection-id" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => settingsWithConnectionId,
     });
@@ -151,7 +151,7 @@ describe("useCloudZeroSettings", () => {
 
     for (const errorResponse of errorCases) {
       vi.clearAllMocks();
-      (fetchSpy as any).mockResolvedValue({
+      (fetchSpy as import("vitest").Mock).mockResolvedValue({
         ok: false,
         json: async () => errorResponse,
       });
@@ -167,7 +167,7 @@ describe("useCloudZeroSettings", () => {
   });
 
   it("should handle error response with string error data", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => "Error string",
     });
@@ -182,7 +182,7 @@ describe("useCloudZeroSettings", () => {
   });
 
   it("should handle error response with invalid JSON", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       statusText: "Internal Server Error",
       json: async () => {
@@ -201,7 +201,7 @@ describe("useCloudZeroSettings", () => {
 
   it("should handle network error", async () => {
     const networkError = new Error("Network request failed");
-    (fetchSpy as any).mockRejectedValue(networkError);
+    (fetchSpy as import("vitest").Mock).mockRejectedValue(networkError);
 
     const { result } = renderHook(() => useCloudZeroSettings(mockAccessToken), { wrapper });
 
@@ -223,7 +223,7 @@ describe("useCloudZeroSettings", () => {
 
   it("should use relative URL when proxyBaseUrl is not set", async () => {
     mockGetProxyBaseUrl.mockReturnValue("");
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockCloudZeroSettings,
     });
@@ -269,7 +269,7 @@ describe("useCloudZeroUpdateSettings", () => {
 
   it("should successfully update settings with all parameters", async () => {
     const mockResponse = { message: "Settings updated successfully", status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -303,7 +303,7 @@ describe("useCloudZeroUpdateSettings", () => {
 
   it("should not include undefined fields in request body", async () => {
     const mockResponse = { message: "Updated" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -318,7 +318,7 @@ describe("useCloudZeroUpdateSettings", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    const callBody = JSON.parse((fetchSpy as any).mock.calls[0][1].body);
+    const callBody = JSON.parse((fetchSpy as import("vitest").Mock).mock.calls[0][1].body);
     expect(callBody).toEqual({ connection_id: "test-id" });
     expect(callBody).not.toHaveProperty("timezone");
     expect(callBody).not.toHaveProperty("api_key");
@@ -326,7 +326,7 @@ describe("useCloudZeroUpdateSettings", () => {
 
   it("should invalidate settings query on success", async () => {
     const mockResponse = { message: "Updated", status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -360,7 +360,7 @@ describe("useCloudZeroUpdateSettings", () => {
 
     for (const errorResponse of errorCases) {
       vi.clearAllMocks();
-      (fetchSpy as any).mockResolvedValue({
+      (fetchSpy as import("vitest").Mock).mockResolvedValue({
         ok: false,
         json: async () => errorResponse,
       });
@@ -380,7 +380,7 @@ describe("useCloudZeroUpdateSettings", () => {
   });
 
   it("should handle error response with string error data", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => "Error string",
     });
@@ -399,7 +399,7 @@ describe("useCloudZeroUpdateSettings", () => {
   });
 
   it("should handle error response with invalid JSON", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       statusText: "Bad Request",
       json: async () => {
@@ -422,7 +422,7 @@ describe("useCloudZeroUpdateSettings", () => {
 
   it("should handle network error", async () => {
     const networkError = new Error("Network request failed");
-    (fetchSpy as any).mockRejectedValue(networkError);
+    (fetchSpy as import("vitest").Mock).mockRejectedValue(networkError);
 
     const { result } = renderHook(() => useCloudZeroUpdateSettings(mockAccessToken), { wrapper });
 
@@ -438,7 +438,7 @@ describe("useCloudZeroUpdateSettings", () => {
   });
 
   it("should throw error when accessToken is missing", async () => {
-    const testCases = ["", null as any];
+    const testCases = ["", null as unknown as string];
 
     for (const accessToken of testCases) {
       vi.clearAllMocks();
@@ -460,7 +460,7 @@ describe("useCloudZeroUpdateSettings", () => {
   it("should use relative URL when proxyBaseUrl is not set", async () => {
     mockGetProxyBaseUrl.mockReturnValue("");
     const mockResponse = { message: "Updated", status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -510,7 +510,7 @@ describe("useCloudZeroDeleteSettings", () => {
 
   it("should successfully delete settings", async () => {
     const mockResponse = { message: "Settings deleted successfully", status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -535,7 +535,7 @@ describe("useCloudZeroDeleteSettings", () => {
 
   it("should invalidate settings query on success", async () => {
     const mockResponse = { message: "Deleted", status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -567,7 +567,7 @@ describe("useCloudZeroDeleteSettings", () => {
 
     for (const errorResponse of errorCases) {
       vi.clearAllMocks();
-      (fetchSpy as any).mockResolvedValue({
+      (fetchSpy as import("vitest").Mock).mockResolvedValue({
         ok: false,
         json: async () => errorResponse,
       });
@@ -585,7 +585,7 @@ describe("useCloudZeroDeleteSettings", () => {
   });
 
   it("should handle error response with string error data", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => "Error string",
     });
@@ -602,7 +602,7 @@ describe("useCloudZeroDeleteSettings", () => {
   });
 
   it("should handle error response with invalid JSON", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: false,
       statusText: "Internal Server Error",
       json: async () => {
@@ -623,7 +623,7 @@ describe("useCloudZeroDeleteSettings", () => {
 
   it("should handle network error", async () => {
     const networkError = new Error("Network request failed");
-    (fetchSpy as any).mockRejectedValue(networkError);
+    (fetchSpy as import("vitest").Mock).mockRejectedValue(networkError);
 
     const { result } = renderHook(() => useCloudZeroDeleteSettings(mockAccessToken), { wrapper });
 
@@ -637,7 +637,7 @@ describe("useCloudZeroDeleteSettings", () => {
   });
 
   it("should throw error when accessToken is missing", async () => {
-    const testCases = ["", null as any];
+    const testCases = ["", null as unknown as string];
 
     for (const accessToken of testCases) {
       vi.clearAllMocks();
@@ -657,7 +657,7 @@ describe("useCloudZeroDeleteSettings", () => {
   it("should use relative URL when proxyBaseUrl is not set", async () => {
     mockGetProxyBaseUrl.mockReturnValue("");
     const mockResponse = { message: "Deleted", status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
