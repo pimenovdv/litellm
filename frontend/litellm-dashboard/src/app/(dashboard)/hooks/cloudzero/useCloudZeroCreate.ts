@@ -8,7 +8,7 @@ interface CreateParams {
 }
 
 interface CreateResponse {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const performCloudZeroCreate = async (accessToken: string, params: CreateParams): Promise<CreateResponse> => {

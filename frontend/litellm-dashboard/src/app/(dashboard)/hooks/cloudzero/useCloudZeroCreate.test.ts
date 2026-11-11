@@ -63,7 +63,7 @@ describe("useCloudZeroCreate", () => {
 
   it("should successfully create CloudZero integration with all parameters", async () => {
     const mockResponse = { message: "Integration created successfully", status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -97,7 +97,7 @@ describe("useCloudZeroCreate", () => {
 
   it("should successfully create CloudZero integration with minimal parameters", async () => {
     const mockResponse = { message: "Integration created successfully", status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -128,7 +128,7 @@ describe("useCloudZeroCreate", () => {
 
   it("should use default timezone when not provided", async () => {
     const mockResponse = { message: "Integration created successfully" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -143,13 +143,13 @@ describe("useCloudZeroCreate", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    const callBody = JSON.parse((fetchSpy as any).mock.calls[0][1].body);
+    const callBody = JSON.parse((fetchSpy as unknown as import("vitest").Mock).mock.calls[0][1].body);
     expect(callBody.timezone).toBe("UTC");
   });
 
   it("should not include api_key in body when not provided", async () => {
     const mockResponse = { message: "Integration created successfully" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -165,13 +165,13 @@ describe("useCloudZeroCreate", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    const callBody = JSON.parse((fetchSpy as any).mock.calls[0][1].body);
+    const callBody = JSON.parse((fetchSpy as unknown as import("vitest").Mock).mock.calls[0][1].body);
     expect(callBody).not.toHaveProperty("api_key");
   });
 
   it("should handle error response with error.message", async () => {
     const errorResponse = { error: { message: "Connection ID already exists" } };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -191,7 +191,7 @@ describe("useCloudZeroCreate", () => {
 
   it("should handle error response with message field", async () => {
     const errorResponse = { message: "Invalid API key" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -211,7 +211,7 @@ describe("useCloudZeroCreate", () => {
 
   it("should handle error response with detail field", async () => {
     const errorResponse = { detail: "Server error occurred" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -230,7 +230,7 @@ describe("useCloudZeroCreate", () => {
   });
 
   it("should handle error response with invalid JSON", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => {
         throw new Error("Invalid JSON");
@@ -252,7 +252,7 @@ describe("useCloudZeroCreate", () => {
 
   it("should handle network error", async () => {
     const networkError = new Error("Network request failed");
-    (fetchSpy as any).mockRejectedValue(networkError);
+    (fetchSpy as unknown as import("vitest").Mock).mockRejectedValue(networkError);
 
     const { result } = renderHook(() => useCloudZeroCreate(mockAccessToken), { wrapper });
 
@@ -283,7 +283,7 @@ describe("useCloudZeroCreate", () => {
   });
 
   it("should throw error when accessToken is null", async () => {
-    const { result } = renderHook(() => useCloudZeroCreate(null as any), { wrapper });
+    const { result } = renderHook(() => useCloudZeroCreate(null as unknown as string), { wrapper });
 
     result.current.mutate({
       connection_id: "test-connection-id",
@@ -300,7 +300,7 @@ describe("useCloudZeroCreate", () => {
   it("should use relative URL when proxyBaseUrl is not set", async () => {
     mockGetProxyBaseUrl.mockReturnValue("");
     const mockResponse = { message: "Success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
