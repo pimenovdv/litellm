@@ -50,7 +50,7 @@ describe("useMCPServers", () => {
     const useAuthorizedModule = await import("@/app/(dashboard)/hooks/useAuthorized");
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: mockAccessToken,
-    } as any);
+    } as unknown as ReturnType<typeof import("@/app/(dashboard)/hooks/useAuthorized").default>);
   });
 
   it("should return hook result without errors", () => {
@@ -82,7 +82,7 @@ describe("useMCPServers", () => {
     const useAuthorizedModule = await import("@/app/(dashboard)/hooks/useAuthorized");
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: null,
-    } as any);
+    } as unknown as ReturnType<typeof import("@/app/(dashboard)/hooks/useAuthorized").default>);
 
     const { result } = renderHook(() => useMCPServers(), { wrapper });
 
@@ -96,7 +96,7 @@ describe("useMCPServers", () => {
     const useAuthorizedModule = await import("@/app/(dashboard)/hooks/useAuthorized");
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: "",
-    } as any);
+    } as unknown as ReturnType<typeof import("@/app/(dashboard)/hooks/useAuthorized").default>);
 
     const { result } = renderHook(() => useMCPServers(), { wrapper });
 

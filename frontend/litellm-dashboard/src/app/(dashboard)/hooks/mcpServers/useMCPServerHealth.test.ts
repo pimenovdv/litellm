@@ -78,7 +78,7 @@ describe("useMCPServerHealth", () => {
     const useAuthorizedModule = await import("../useAuthorized");
     vi.mocked(useAuthorizedModule.default).mockReturnValue({
       accessToken: null,
-    } as any);
+    } as unknown as ReturnType<typeof import("@/app/(dashboard)/hooks/useAuthorized").default>);
 
     const { result } = renderHook(() => useMCPServerHealth(), {
       wrapper,
