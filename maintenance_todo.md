@@ -27,3 +27,4 @@
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/users/useUsers.test.ts`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/CreateUserButton.tsx` and `frontend/litellm-dashboard/src/components/CreateUserButton.test.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/cloudzero/useCloudZeroCreate.ts` and `useCloudZeroDryRun.ts`.
+- [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/cloudzero/useCloudZeroExport.test.ts`.
