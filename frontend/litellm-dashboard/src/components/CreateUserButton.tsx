@@ -46,7 +46,7 @@ const generateUUID = (): string => {
 interface CreateuserProps {
   userID: string;
   accessToken: string;
-  teams: any[] | null;
+  teams: unknown[] | null;
   possibleUIRoles: null | Record<string, Record<string, string>>;
   onUserCreated?: (userId: string) => void;
   isEmbedded?: boolean;
@@ -178,8 +178,9 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
       NotificationsManager.success("API user Created");
       form.resetFields();
       localStorage.removeItem("userData" + userID);
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.detail || error?.message || "Error creating the user";
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { detail?: string } }, message?: string };
+      const errorMessage = err.response?.data?.detail || err?.message || "Error creating the user";
       NotificationsManager.fromBackend(errorMessage);
       console.error("Error creating the user:", error);
     }

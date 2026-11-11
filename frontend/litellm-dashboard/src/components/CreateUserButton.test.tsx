@@ -127,7 +127,7 @@ describe("CreateUserButton", () => {
         id: "inv-1",
         user_id: "new-user-123",
         has_user_setup_sso: false,
-      } as any);
+      } as unknown as ReturnType<typeof useCurrentUser>);
 
       renderWithProviders(
         <CreateUserButton
@@ -207,7 +207,7 @@ describe("CreateUserButton", () => {
         id: "inv-3",
         user_id: "new-user",
         has_user_setup_sso: false,
-      } as any);
+      } as unknown as ReturnType<typeof useCurrentUser>);
 
       renderWithProviders(
         <CreateUserButton
@@ -236,7 +236,7 @@ describe("CreateUserButton", () => {
         id: "inv-2",
         user_id: "new-user-789",
         has_user_setup_sso: false,
-      } as any);
+      } as unknown as ReturnType<typeof useCurrentUser>);
 
       renderWithProviders(
         <CreateUserButton {...defaultProps} possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }} />,
@@ -265,7 +265,7 @@ describe("CreateUserButton", () => {
         id: "inv-sso",
         user_id: "sso-user",
         has_user_setup_sso: false,
-      } as any);
+      } as unknown as ReturnType<typeof useCurrentUser>);
 
       renderWithProviders(
         <CreateUserButton {...defaultProps} possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }} />,
@@ -297,7 +297,7 @@ describe("CreateUserButton", () => {
       vi.mocked(useOrganizations).mockReturnValue({
         data: [{ organization_id: "org-1", organization_alias: "My Org" }],
         isLoading: false,
-      } as any);
+      } as unknown as ReturnType<typeof useOrganizations>);
 
       const user = userEvent.setup();
       mockUserCreateCall.mockResolvedValue({ data: { user_id: "org-user" } });
@@ -305,7 +305,7 @@ describe("CreateUserButton", () => {
         id: "inv-org",
         user_id: "org-user",
         has_user_setup_sso: false,
-      } as any);
+      } as unknown as ReturnType<typeof useCurrentUser>);
 
       renderWithProviders(
         <CreateUserButton {...defaultProps} possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }} />,
@@ -344,7 +344,7 @@ describe("CreateUserButton", () => {
       vi.mocked(useOrganizations).mockReturnValue({
         data: [{ organization_id: "org-1", organization_alias: "My Org" }],
         isLoading: false,
-      } as any);
+      } as unknown as ReturnType<typeof useOrganizations>);
 
       const user = userEvent.setup();
       mockUserCreateCall.mockResolvedValue({ data: { user_id: "no-member-add-user" } });
@@ -352,7 +352,7 @@ describe("CreateUserButton", () => {
         id: "inv-nma",
         user_id: "no-member-add-user",
         has_user_setup_sso: false,
-      } as any);
+      } as unknown as ReturnType<typeof useCurrentUser>);
 
       renderWithProviders(
         <CreateUserButton {...defaultProps} possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }} />,
@@ -441,7 +441,7 @@ describe("CreateUserButton", () => {
         id: "inv-default",
         user_id: "standalone-default-user",
         has_user_setup_sso: false,
-      } as any);
+      } as unknown as ReturnType<typeof useCurrentUser>);
 
       renderWithProviders(
         <CreateUserButton {...defaultProps} possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }} />,
@@ -476,7 +476,7 @@ describe("CreateUserButton", () => {
         id: "inv-off",
         user_id: "standalone-off-user",
         has_user_setup_sso: false,
-      } as any);
+      } as unknown as ReturnType<typeof useCurrentUser>);
 
       renderWithProviders(
         <CreateUserButton {...defaultProps} possibleUIRoles={{ proxy_user: { ui_label: "User", description: "" } }} />,
