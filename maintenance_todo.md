@@ -35,5 +35,6 @@
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/VirtualKeysPage/VirtualKeysTable.test.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/organization/organization_view.test.tsx`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/cloudzero/useCloudZeroSettings.test.ts`.
-- [ ] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/app/(dashboard)/hooks/credentials/useCredentials.test.ts`.
 - [x] Fix ESLint `any` warnings in `frontend/litellm-dashboard/src/components/templates/key_edit_view.test.tsx`
+- [x] Fix ESLint `any` warnings in frontend/litellm-dashboard/src/app/(dashboard)/hooks/mcpServers/*.test.ts
+- [ ] Fix ESLint `any` warnings in frontend/litellm-dashboard/src/app/(dashboard)/hooks/models/*.test.ts
