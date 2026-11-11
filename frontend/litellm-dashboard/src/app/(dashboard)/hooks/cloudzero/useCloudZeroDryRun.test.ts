@@ -63,7 +63,7 @@ describe("useCloudZeroDryRun", () => {
 
   it("should successfully perform dry run with custom limit", async () => {
     const mockResponse = { records_processed: 5, status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -91,7 +91,7 @@ describe("useCloudZeroDryRun", () => {
 
   it("should use default limit of 10 when limit is not provided", async () => {
     const mockResponse = { records_processed: 10, status: "success" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -105,13 +105,13 @@ describe("useCloudZeroDryRun", () => {
     });
 
     expect(result.current.data).toEqual(mockResponse);
-    const callBody = JSON.parse((fetchSpy as any).mock.calls[0][1].body);
+    const callBody = JSON.parse((fetchSpy as unknown as import("vitest").Mock).mock.calls[0][1].body);
     expect(callBody.limit).toBe(10);
   });
 
   it("should handle error response with error.message", async () => {
     const errorResponse = { error: { message: "Dry run failed" } };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -129,7 +129,7 @@ describe("useCloudZeroDryRun", () => {
 
   it("should handle error response with message field", async () => {
     const errorResponse = { message: "Invalid configuration" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -147,7 +147,7 @@ describe("useCloudZeroDryRun", () => {
 
   it("should handle error response with detail field", async () => {
     const errorResponse = { detail: "Server error" };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => errorResponse,
     });
@@ -164,7 +164,7 @@ describe("useCloudZeroDryRun", () => {
   });
 
   it("should handle error response with invalid JSON", async () => {
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: false,
       json: async () => {
         throw new Error("Invalid JSON");
@@ -184,7 +184,7 @@ describe("useCloudZeroDryRun", () => {
 
   it("should handle network error", async () => {
     const networkError = new Error("Network request failed");
-    (fetchSpy as any).mockRejectedValue(networkError);
+    (fetchSpy as unknown as import("vitest").Mock).mockRejectedValue(networkError);
 
     const { result } = renderHook(() => useCloudZeroDryRun(mockAccessToken), { wrapper });
 
@@ -201,7 +201,7 @@ describe("useCloudZeroDryRun", () => {
     ["empty string", ""],
     ["null", null],
   ])("should throw error when accessToken is %s", async (_, invalidToken) => {
-    const { result } = renderHook(() => useCloudZeroDryRun(invalidToken as any), { wrapper });
+    const { result } = renderHook(() => useCloudZeroDryRun(invalidToken as unknown as string), { wrapper });
 
     result.current.mutate({ limit: 5 });
 
@@ -216,7 +216,7 @@ describe("useCloudZeroDryRun", () => {
   it("should use relative URL when proxyBaseUrl is not set", async () => {
     mockGetProxyBaseUrl.mockReturnValue("");
     const mockResponse = { records_processed: 10 };
-    (fetchSpy as any).mockResolvedValue({
+    (fetchSpy as unknown as import("vitest").Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });

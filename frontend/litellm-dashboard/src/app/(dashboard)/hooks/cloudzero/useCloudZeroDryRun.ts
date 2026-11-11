@@ -6,7 +6,7 @@ interface DryRunParams {
 }
 
 interface DryRunResponse {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const performCloudZeroDryRun = async (accessToken: string, params: DryRunParams = {}): Promise<DryRunResponse> => {
