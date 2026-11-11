@@ -37,6 +37,7 @@ vi.mock("../networking", async () => {
     }),
     fetchMCPServers: vi.fn().mockResolvedValue([]),
     fetchMCPAccessGroups: vi.fn().mockResolvedValue([]),
+    // eslint-disable-next-line local/no-large-inline-object-arg
     listMCPTools: vi.fn().mockResolvedValue({
       tools: [],
       error: null,
