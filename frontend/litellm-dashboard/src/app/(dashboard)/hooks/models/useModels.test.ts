@@ -80,7 +80,7 @@ describe("useModelsInfo", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should render without crashing", () => {
-    (modelInfoCall as any).mockResolvedValue(mockPaginatedModelInfoResponse);
+    vi.mocked(modelInfoCall).mockResolvedValue(mockPaginatedModelInfoResponse);
 
     const { result } = renderHook(() => useModelsInfo(), { wrapper });
 
@@ -88,7 +88,7 @@ describe("useModelsInfo", () => {
   });
 
   it("should return models data when query is successful", async () => {
-    (modelInfoCall as any).mockResolvedValue(mockPaginatedModelInfoResponse);
+    vi.mocked(modelInfoCall).mockResolvedValue(mockPaginatedModelInfoResponse);
 
     const { result } = renderHook(() => useModelsInfo(), { wrapper });
 
@@ -118,7 +118,7 @@ describe("useModelsInfo", () => {
   });
 
   it("should use custom page and size parameters", async () => {
-    (modelInfoCall as any).mockResolvedValue(mockPaginatedModelInfoResponse);
+    vi.mocked(modelInfoCall).mockResolvedValue(mockPaginatedModelInfoResponse);
 
     const { result } = renderHook(() => useModelsInfo(2, 25), { wrapper });
 
@@ -144,7 +144,7 @@ describe("useModelsInfo", () => {
     const errorMessage = "Failed to fetch models";
     const testError = new Error(errorMessage);
 
-    (modelInfoCall as any).mockRejectedValue(testError);
+    vi.mocked(modelInfoCall).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useModelsInfo(), { wrapper });
 
@@ -271,7 +271,7 @@ describe("useModelHub", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should render without crashing", () => {
-    (modelHubCall as any).mockResolvedValue({ data: [] });
+    vi.mocked(modelHubCall).mockResolvedValue({ data: [] });
 
     const { result } = renderHook(() => useModelHub(), { wrapper });
 
@@ -280,7 +280,7 @@ describe("useModelHub", () => {
 
   it("should return model hub data when query is successful", async () => {
     const mockHubData = { data: [{ id: "hub-1", name: "Test Hub" }] };
-    (modelHubCall as any).mockResolvedValue(mockHubData);
+    vi.mocked(modelHubCall).mockResolvedValue(mockHubData);
 
     const { result } = renderHook(() => useModelHub(), { wrapper });
 
@@ -302,7 +302,7 @@ describe("useModelHub", () => {
     const errorMessage = "Failed to fetch model hub";
     const testError = new Error(errorMessage);
 
-    (modelHubCall as any).mockRejectedValue(testError);
+    vi.mocked(modelHubCall).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useModelHub(), { wrapper });
 
@@ -369,7 +369,7 @@ describe("useAllProxyModels", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should render without crashing", () => {
-    (modelAvailableCall as any).mockResolvedValue(mockAllProxyModelsResponse);
+    vi.mocked(modelAvailableCall).mockResolvedValue(mockAllProxyModelsResponse);
 
     const { result } = renderHook(() => useAllProxyModels(), { wrapper });
 
@@ -377,7 +377,7 @@ describe("useAllProxyModels", () => {
   });
 
   it("should return all proxy models data when query is successful", async () => {
-    (modelAvailableCall as any).mockResolvedValue(mockAllProxyModelsResponse);
+    vi.mocked(modelAvailableCall).mockResolvedValue(mockAllProxyModelsResponse);
 
     const { result } = renderHook(() => useAllProxyModels(), { wrapper });
 
@@ -408,7 +408,7 @@ describe("useAllProxyModels", () => {
     const errorMessage = "Failed to fetch proxy models";
     const testError = new Error(errorMessage);
 
-    (modelAvailableCall as any).mockRejectedValue(testError);
+    vi.mocked(modelAvailableCall).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useAllProxyModels(), { wrapper });
 
@@ -515,7 +515,7 @@ describe("useUserModels", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("maps the available-models response to a list of model ids", async () => {
-    (modelAvailableCall as any).mockResolvedValue({
+    vi.mocked(modelAvailableCall).mockResolvedValue({
       data: [{ id: "gpt-4" }, { id: "claude-3-opus" }],
     });
 
@@ -579,7 +579,7 @@ describe("useSelectedTeamModels", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should render without crashing", () => {
-    (modelAvailableCall as any).mockResolvedValue(mockAllProxyModelsResponse);
+    vi.mocked(modelAvailableCall).mockResolvedValue(mockAllProxyModelsResponse);
 
     const { result } = renderHook(() => useSelectedTeamModels("team-1"), { wrapper });
 
@@ -587,7 +587,7 @@ describe("useSelectedTeamModels", () => {
   });
 
   it("should return team models data when query is successful", async () => {
-    (modelAvailableCall as any).mockResolvedValue(mockAllProxyModelsResponse);
+    vi.mocked(modelAvailableCall).mockResolvedValue(mockAllProxyModelsResponse);
 
     const { result } = renderHook(() => useSelectedTeamModels("team-1"), { wrapper });
 
@@ -609,7 +609,7 @@ describe("useSelectedTeamModels", () => {
     const errorMessage = "Failed to fetch team models";
     const testError = new Error(errorMessage);
 
-    (modelAvailableCall as any).mockRejectedValue(testError);
+    vi.mocked(modelAvailableCall).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useSelectedTeamModels("team-1"), { wrapper });
 
@@ -750,7 +750,7 @@ describe("useInfiniteModelInfo", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("should return defined result", () => {
-    (modelInfoCall as any).mockResolvedValue(mockPageOneResponse);
+    vi.mocked(modelInfoCall).mockResolvedValue(mockPageOneResponse);
 
     const { result } = renderHook(() => useInfiniteModelInfo(), { wrapper });
 
@@ -763,7 +763,7 @@ describe("useInfiniteModelInfo", () => {
   });
 
   it("should return paginated data and call modelInfoCall with page 1 initially", async () => {
-    (modelInfoCall as any).mockResolvedValue(mockPageOneResponse);
+    vi.mocked(modelInfoCall).mockResolvedValue(mockPageOneResponse);
 
     const { result } = renderHook(() => useInfiniteModelInfo(), { wrapper });
 
@@ -782,7 +782,7 @@ describe("useInfiniteModelInfo", () => {
   });
 
   it("should use custom size parameter", async () => {
-    (modelInfoCall as any).mockResolvedValue(mockPageOneResponse);
+    vi.mocked(modelInfoCall).mockResolvedValue(mockPageOneResponse);
 
     const { result } = renderHook(() => useInfiniteModelInfo(25), { wrapper });
 
@@ -794,7 +794,7 @@ describe("useInfiniteModelInfo", () => {
   });
 
   it("should pass search parameter to modelInfoCall", async () => {
-    (modelInfoCall as any).mockResolvedValue(mockPageOneResponse);
+    vi.mocked(modelInfoCall).mockResolvedValue(mockPageOneResponse);
 
     const { result } = renderHook(() => useInfiniteModelInfo(50, "gpt"), { wrapper });
 
@@ -806,7 +806,7 @@ describe("useInfiniteModelInfo", () => {
   });
 
   it("should fetch next page when fetchNextPage is called", async () => {
-    (modelInfoCall as any).mockResolvedValueOnce(mockPageOneResponse).mockResolvedValueOnce(mockPageTwoResponse);
+    vi.mocked(modelInfoCall).mockResolvedValueOnce(mockPageOneResponse).mockResolvedValueOnce(mockPageTwoResponse);
 
     const { result } = renderHook(() => useInfiniteModelInfo(), { wrapper });
 
@@ -832,7 +832,7 @@ describe("useInfiniteModelInfo", () => {
       current_page: 1,
       total_pages: 1,
     };
-    (modelInfoCall as any).mockResolvedValue(lastPageResponse);
+    vi.mocked(modelInfoCall).mockResolvedValue(lastPageResponse);
 
     const { result } = renderHook(() => useInfiniteModelInfo(), { wrapper });
 
@@ -846,7 +846,7 @@ describe("useInfiniteModelInfo", () => {
   it("should handle error when modelInfoCall fails", async () => {
     const errorMessage = "Failed to fetch models";
     const testError = new Error(errorMessage);
-    (modelInfoCall as any).mockRejectedValue(testError);
+    vi.mocked(modelInfoCall).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useInfiniteModelInfo(), { wrapper });
 
@@ -992,7 +992,7 @@ describe("useAutoRouterModelGroups", () => {
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 
   it("resolves the set of auto-router model groups from the deployment list", async () => {
-    (modelInfoCall as any).mockResolvedValue({
+    vi.mocked(modelInfoCall).mockResolvedValue({
       data: [
         { model_name: "smart-router", litellm_params: { model: "auto_router/complexity_router" } },
         { model_name: "claude-haiku", litellm_params: { model: "anthropic/claude-haiku-4-5" } },
@@ -1011,7 +1011,7 @@ describe("useAutoRouterModelGroups", () => {
   });
 
   it("requests a single large page when the proxy reports only one page of deployments", async () => {
-    (modelInfoCall as any).mockResolvedValue({
+    vi.mocked(modelInfoCall).mockResolvedValue({
       data: [],
       total_count: 0,
       current_page: 1,
@@ -1027,7 +1027,7 @@ describe("useAutoRouterModelGroups", () => {
   });
 
   it("follows total_pages so an auto-router past the first page is still found", async () => {
-    (modelInfoCall as any).mockImplementation((_t: string, _u: string, _r: string, page: number) => {
+    vi.mocked(modelInfoCall).mockImplementation((_t: string, _u: string, _r: string, page: number) => {
       if (page === 1) {
         return Promise.resolve({
           data: [{ model_name: "claude-haiku", litellm_params: { model: "anthropic/claude-haiku-4-5" } }],
@@ -1064,7 +1064,7 @@ describe("useAutoRouterModelGroups", () => {
   });
 
   it("returns an empty set before the model list resolves", () => {
-    (modelInfoCall as any).mockReturnValue(new Promise(() => {}));
+    vi.mocked(modelInfoCall).mockReturnValue(new Promise(() => {}));
 
     const { result } = renderHook(() => useAutoRouterModelGroups(), { wrapper });
 
@@ -1072,7 +1072,7 @@ describe("useAutoRouterModelGroups", () => {
   });
 
   it("returns an empty set when the model list request fails", async () => {
-    (modelInfoCall as any).mockRejectedValue(new Error("boom"));
+    vi.mocked(modelInfoCall).mockRejectedValue(new Error("boom"));
 
     const { result } = renderHook(() => useAutoRouterModelGroups(), { wrapper });
 
