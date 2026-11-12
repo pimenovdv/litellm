@@ -11,7 +11,7 @@ vi.mock("@/components/networking", () => ({
 }));
 
 // Mock data
-const mockModelCostData: Record<string, any> = {
+const mockModelCostData: Record<string, unknown> = {
   "gpt-3.5-turbo": {
     litellm_provider: "openai",
     input_cost_per_token: 0.0015,
@@ -45,7 +45,7 @@ describe("useModelCostMap", () => {
 
   it("should return model cost map data when query is successful", async () => {
     // Mock successful API call
-    (modelCostMap as any).mockResolvedValue(mockModelCostData);
+    vi.mocked(modelCostMap).mockResolvedValue(mockModelCostData);
 
     const { result } = renderHook(() => useModelCostMap(), { wrapper });
 
@@ -69,7 +69,7 @@ describe("useModelCostMap", () => {
     const testError = new Error(errorMessage);
 
     // Mock failed API call
-    (modelCostMap as any).mockRejectedValue(testError);
+    vi.mocked(modelCostMap).mockRejectedValue(testError);
 
     const { result } = renderHook(() => useModelCostMap(), { wrapper });
 
@@ -89,7 +89,7 @@ describe("useModelCostMap", () => {
 
   it("should return empty object when API returns empty data", async () => {
     // Mock API returning empty object
-    (modelCostMap as any).mockResolvedValue({});
+    vi.mocked(modelCostMap).mockResolvedValue({});
 
     const { result } = renderHook(() => useModelCostMap(), { wrapper });
 
@@ -107,7 +107,7 @@ describe("useModelCostMap", () => {
     const timeoutError = new Error("Network timeout");
 
     // Mock network timeout
-    (modelCostMap as any).mockRejectedValue(timeoutError);
+    vi.mocked(modelCostMap).mockRejectedValue(timeoutError);
 
     const { result } = renderHook(() => useModelCostMap(), { wrapper });
 
@@ -122,7 +122,7 @@ describe("useModelCostMap", () => {
 
   it("should have correct query configuration", async () => {
     // Mock successful API call
-    (modelCostMap as any).mockResolvedValue(mockModelCostData);
+    vi.mocked(modelCostMap).mockResolvedValue(mockModelCostData);
 
     const { result } = renderHook(() => useModelCostMap(), { wrapper });
 
